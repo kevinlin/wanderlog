@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { TripData, LoadingState } from '@/types';
-import { loadTripData, validateTripData } from '@/services/tripDataService';
+import { loadTripData } from '@/services/tripDataService';
 
 interface UseTripDataReturn extends LoadingState {
   tripData: TripData | null;
@@ -21,10 +21,6 @@ export const useTripData = (): UseTripDataReturn => {
       setError(null);
       
       const data = await loadTripData();
-      
-      if (!validateTripData(data)) {
-        throw new Error('Invalid trip data format');
-      }
       
       setTripData(data);
     } catch (err) {

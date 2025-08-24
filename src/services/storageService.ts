@@ -1,8 +1,10 @@
-import { StopStatus, ActivityStatus, ActivityOrder } from '@/types';
+import { StopStatus, ActivityStatus, ActivityOrder, UserModifications, WeatherCache } from '@/types';
 
 const STORAGE_KEYS = {
-  STOP_STATUS: 'wanderlog_stop_status',
-  LAST_VIEWED_STOP: 'wanderlog_last_viewed_stop',
+  USER_MODIFICATIONS: 'wanderlog_user_modifications',
+  WEATHER_CACHE: 'wanderlog_weather_cache',
+  STOP_STATUS: 'wanderlog_stop_status', // Legacy - for backward compatibility
+  LAST_VIEWED_STOP: 'wanderlog_last_viewed_stop', // Legacy - for backward compatibility
   APP_VERSION: 'wanderlog_app_version',
 } as const;
 
@@ -119,4 +121,173 @@ export const isStorageAvailable = (): boolean => {
   } catch {
     return false;
   }
+};
+
+// New UserModifications-based API (aligns with design specification)
+
+/**
+ * Get user modifications from localStorage
+ */
+export const getUserModifications = (): UserModifications => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.USER_MODIFICATIONS);
+    if (stored) {
+      return JSON.parse(stored);
+    }
+    
+    // Migration: convert legacy StopStatus to UserModifications format
+    const legacyStopStatus = getStopStatus();
+    if (Object.keys(legacyStopStatus).length > 0) {
+      const userMods = migrateStopStatusToUserModifications(legacyStopStatus);
+      saveUserModifications(userMods);
+      return userMods;
+    }
+    
+    return {
+      activityStatus: {},
+      activityOrders: {},
+    };
+  } catch (error) {
+    console.warn('Failed to load user modifications from localStorage:', error);
+    return {
+      activityStatus: {},
+      activityOrders: {},
+    };
+  }
+};
+
+/**
+ * Save user modifications to localStorage
+ */
+export const saveUserModifications = (modifications: UserModifications): void => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.USER_MODIFICATIONS, JSON.stringify(modifications));
+  } catch (error) {
+    console.warn('Failed to save user modifications to localStorage:', error);
+  }
+};
+
+/**
+ * Update activity status in user modifications
+ */
+export const updateActivityDoneStatus = (activityId: string, done: boolean): void => {
+  const modifications = getUserModifications();
+  modifications.activityStatus[activityId] = done;
+  saveUserModifications(modifications);
+};
+
+/**
+ * Update activity order for a base
+ */
+export const updateActivityOrderForBase = (baseId: string, activityIds: string[]): void => {
+  const modifications = getUserModifications();
+  modifications.activityOrders[baseId] = activityIds.map((_, index) => index);
+  saveUserModifications(modifications);
+};
+
+/**
+ * Set last viewed base
+ */
+export const setLastViewedBase = (baseId: string): void => {
+  const modifications = getUserModifications();
+  modifications.lastViewedBase = baseId;
+  modifications.lastViewedDate = new Date().toISOString();
+  saveUserModifications(modifications);
+};
+
+/**
+ * Get weather cache from localStorage
+ */
+export const getWeatherCache = (): WeatherCache => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.WEATHER_CACHE);
+    return stored ? JSON.parse(stored) : {};
+  } catch (error) {
+    console.warn('Failed to load weather cache from localStorage:', error);
+    return {};
+  }
+};
+
+/**
+ * Save weather cache to localStorage
+ */
+export const saveWeatherCache = (cache: WeatherCache): void => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.WEATHER_CACHE, JSON.stringify(cache));
+  } catch (error) {
+    console.warn('Failed to save weather cache to localStorage:', error);
+  }
+};
+
+/**
+ * Update weather data for a specific base
+ */
+export const updateWeatherForBase = (baseId: string, weatherData: import('@/types').WeatherData, cacheExpirationHours: number = 6): void => {
+  const cache = getWeatherCache();
+  const now = Date.now();
+  
+  cache[baseId] = {
+    data: weatherData,
+    lastFetched: now,
+    expires: now + (cacheExpirationHours * 60 * 60 * 1000),
+  };
+  
+  saveWeatherCache(cache);
+};
+
+/**
+ * Check if weather data is cached and not expired
+ */
+export const isWeatherCacheValid = (baseId: string): boolean => {
+  const cache = getWeatherCache();
+  const cacheEntry = cache[baseId];
+  
+  if (!cacheEntry) {
+    return false;
+  }
+  
+  return Date.now() < cacheEntry.expires;
+};
+
+/**
+ * Get cached weather data if valid
+ */
+export const getCachedWeather = (baseId: string): import('@/types').WeatherData | null => {
+  if (!isWeatherCacheValid(baseId)) {
+    return null;
+  }
+  
+  const cache = getWeatherCache();
+  return cache[baseId]?.data || null;
+};
+
+/**
+ * Migration helper: convert legacy StopStatus to UserModifications format
+ */
+const migrateStopStatusToUserModifications = (stopStatus: StopStatus): UserModifications => {
+  const userModifications: UserModifications = {
+    activityStatus: {},
+    activityOrders: {},
+  };
+  
+  Object.entries(stopStatus).forEach(([stopId, stopData]) => {
+    // Migrate activity status
+    Object.entries(stopData.activities).forEach(([activityId, status]) => {
+      userModifications.activityStatus[activityId] = status.done;
+    });
+    
+    // Migrate activity order
+    const orderEntries = Object.entries(stopData.activityOrder);
+    if (orderEntries.length > 0) {
+      userModifications.activityOrders[stopId] = orderEntries.map(([, order]) => order);
+    }
+  });
+  
+  // Migrate last viewed stop
+  const lastViewed = getLastViewedStop();
+  if (lastViewed) {
+    userModifications.lastViewedBase = lastViewed;
+  }
+  
+  return userModifications;
 };

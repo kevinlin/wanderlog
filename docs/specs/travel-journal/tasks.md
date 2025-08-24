@@ -25,24 +25,38 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Create map-related types (Coordinates, ScenicWaypoint) in src/types/map.ts
     - **Requirements Reference**: Requirement 5.1, 5.2 (data persistence structure)
 
-- [ ] 2. **Data Services and Core Infrastructure**
-  - [ ] 2.1 Implement TripDataService for JSON data loading
+- [x] 2. **Data Services and Core Infrastructure**
+  - [x] 2.1 Implement TripDataService for JSON data loading
     - Create tripDataService.ts with loadTripData and validateTripData methods
-    - Implement JSON schema validation for trip data structure
-    - Add error handling for invalid JSON format
+    - Implement JSON schema validation for trip data structure using comprehensive validationUtils
+    - Add error handling for invalid JSON format with detailed error reporting
+    - Add optional filename parameter and enhanced error messages
     - **Requirements Reference**: Requirement 8.4 (JSON schema validation), Requirement 5.6 (JSON export structure)
 
-  - [ ] 2.2 Implement StorageService for LocalStorage operations
-    - Create storageService.ts with getUserModifications, saveUserModifications methods
-    - Implement weather cache storage and retrieval functions
+  - [x] 2.2 Implement StorageService for LocalStorage operations
+    - Create storageService.ts with getUserModifications, saveUserModifications methods (new UserModifications format)
+    - Implement weather cache storage and retrieval functions with expiration handling
     - Add LocalStorage availability detection and fallback handling
+    - Include migration from legacy StopStatus format to new UserModifications format
+    - Add comprehensive weather caching with validation and expiration
     - **Requirements Reference**: Requirement 5.1, 5.2, 5.3 (LocalStorage persistence), Requirement 8.3 (LocalStorage unavailable handling)
 
-  - [ ] 2.3 Create utility functions for date and map operations
-    - Implement dateUtils.ts with New Zealand timezone-aware date functions
-    - Create mapUtils.ts with coordinate distance calculations
-    - Implement validation utilities in validationUtils.ts
+  - [x] 2.3 Create utility functions for date and map operations
+    - Implement dateUtils.ts with New Zealand timezone-aware date functions (already exists)
+    - Create mapUtils.ts with coordinate distance calculations, bearing, bounds, and map URL generation
+    - Implement comprehensive validation utilities in validationUtils.ts with XSS protection
+    - Add exportUtils.ts enhancements for new UserModifications format
     - **Requirements Reference**: Requirement 2.3 (NZ local time), Requirement 3.4 (travel time calculations)
+
+  - [x] 2.4 Set up testing framework and write comprehensive tests
+    - Install and configure Vitest, JSDOM, and React Testing Library
+    - Create test setup with localStorage mocking and test utilities
+    - Write unit tests for TripDataService (JSON loading, validation, error handling)
+    - Write unit tests for StorageService (UserModifications, weather cache, migration)
+    - Write unit tests for validationUtils (all validation functions, XSS protection)
+    - Write unit tests for mapUtils (distance calculations, coordinate utilities, URL generation)
+    - All 76 tests passing with good coverage of core functionality
+    - **Requirements Reference**: All requirements - testing ensures requirement compliance
 
 - [ ] 3. **Global State Management and Context**
   - [ ] 3.1 Implement AppStateContext with useReducer
