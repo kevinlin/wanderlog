@@ -8,8 +8,8 @@ export const sortActivitiesByOrder = (
   customOrder?: { [activityId: string]: number }
 ): Activity[] => {
   return [...activities].sort((a, b) => {
-    const orderA = customOrder?.[a.activity_id] ?? a.manual_order ?? a.order;
-    const orderB = customOrder?.[b.activity_id] ?? b.manual_order ?? b.order;
+    const orderA = customOrder?.[a.activity_id] ?? a.manual_order ?? a.order ?? 0;
+    const orderB = customOrder?.[b.activity_id] ?? b.manual_order ?? b.order ?? 0;
     return orderA - orderB;
   });
 };
@@ -22,7 +22,7 @@ export const getActivityStatus = (
   stopStatus: StopStatus,
   stopId: string
 ): boolean => {
-  return stopStatus[stopId]?.activities[activity.activity_id]?.done ?? activity.status.done;
+  return stopStatus[stopId]?.activities[activity.activity_id]?.done ?? activity.status?.done ?? false;
 };
 
 /**
@@ -60,7 +60,7 @@ export const generateGoogleMapsUrl = (
   activity: Activity,
   accommodation?: { location: { lat: number; lng: number } }
 ): string => {
-  const destination = activity.location.address || `${activity.location.lat},${activity.location.lng}`;
+  const destination = activity.location?.address || (activity.location?.lat && activity.location?.lng ? `${activity.location.lat},${activity.location.lng}` : '');
   const baseUrl = 'https://www.google.com/maps/dir/';
   
   if (accommodation) {

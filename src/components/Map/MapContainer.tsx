@@ -42,9 +42,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 }) => {
   const [, setMap] = useState<google.maps.Map | null>(null);
   const [directionsResponse] = useState<google.maps.DirectionsResult | null>(null);
+  const [isMapLoaded, setIsMapLoaded] = useState(false);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
+    setIsMapLoaded(true);
     
     // Fit map to show all stops
     if (stops.length > 0) {
@@ -52,7 +54,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       stops.forEach(stop => {
         bounds.extend(stop.location);
         stop.activities.forEach(activity => {
-          if (activity.location.lat && activity.location.lng) {
+          if (activity.location?.lat && activity.location?.lng) {
             bounds.extend({ lat: activity.location.lat, lng: activity.location.lng });
           }
         });
@@ -74,15 +76,25 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       color = '#6B7280'; // gray-500
     }
 
+    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="${color}" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+        <circle cx="12" cy="9" r="2.5" fill="white"/>
+      </svg>
+    `)}`;
+
+    // Check if Google Maps is loaded
+    if (typeof window !== 'undefined' && window.google && window.google.maps) {
+      return {
+        url: iconUrl,
+        scaledSize: new window.google.maps.Size(isSelected ? 32 : 24, isSelected ? 32 : 24),
+        anchor: new window.google.maps.Point(isSelected ? 16 : 12, isSelected ? 32 : 24),
+      };
+    }
+
+    // Fallback for when Google Maps hasn't loaded yet
     return {
-      url: `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="${color}" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
-          <circle cx="12" cy="9" r="2.5" fill="white"/>
-        </svg>
-      `)}`,
-      scaledSize: new window.google.maps.Size(isSelected ? 32 : 24, isSelected ? 32 : 24),
-      anchor: new window.google.maps.Point(isSelected ? 16 : 12, isSelected ? 32 : 24),
+      url: iconUrl,
     };
   };
 
@@ -118,29 +130,34 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           fullscreenControl: false,
         }}
       >
-        {/* Accommodation markers */}
-        {stops.map((stop) => (
-          <Marker
-            key={`accommodation-${stop.stop_id}`}
-            position={stop.location}
-            title={`${stop.name} - ${stop.accommodation.name}`}
-            icon={getMarkerIcon('accommodation', stop.stop_id === currentStopId, 'current')}
-            onClick={() => onStopSelect(stop.stop_id)}
-          />
-        ))}
+        {/* Only render markers after map is loaded */}
+        {isMapLoaded && (
+          <>
+            {/* Accommodation markers */}
+            {stops.map((stop) => (
+              <Marker
+                key={`accommodation-${stop.stop_id}`}
+                position={stop.location}
+                title={`${stop.name} - ${stop.accommodation.name}`}
+                icon={getMarkerIcon('accommodation', stop.stop_id === currentStopId, 'current')}
+                onClick={() => onStopSelect(stop.stop_id)}
+              />
+            ))}
 
-        {/* Activity markers for current stop */}
-        {currentStop?.activities.map((activity) => (
-          activity.location.lat && activity.location.lng ? (
-            <Marker
-              key={`activity-${activity.activity_id}`}
-              position={{ lat: activity.location.lat, lng: activity.location.lng }}
-              title={activity.activity_name}
-              icon={getMarkerIcon('activity', activity.activity_id === selectedActivityId, 'current')}
-              onClick={() => onActivitySelect(activity.activity_id)}
-            />
-          ) : null
-        ))}
+            {/* Activity markers for current stop */}
+            {currentStop?.activities.map((activity) => (
+              activity.location?.lat && activity.location?.lng ? (
+                <Marker
+                  key={`activity-${activity.activity_id}`}
+                  position={{ lat: activity.location.lat, lng: activity.location.lng }}
+                  title={activity.activity_name}
+                  icon={getMarkerIcon('activity', activity.activity_id === selectedActivityId, 'current')}
+                  onClick={() => onActivitySelect(activity.activity_id)}
+                />
+              ) : null
+            ))}
+          </>
+        )}
 
         {/* Directions renderer for routes between stops */}
         {directionsResponse && (

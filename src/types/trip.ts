@@ -1,6 +1,74 @@
-export interface Location {
-  lat: number;
-  lng: number;
+// Trip data models for Wanderlog Travel Journal
+import { Coordinates, ScenicWaypoint } from './map';
+
+export interface TripData {
+  trip_name: string;
+  timezone: string;
+  stops: TripBase[];
+  // Legacy fields for backward compatibility
+  travellers?: string[];
+  vehicle?: string;
+  constraints?: TripConstraints;
+}
+
+export interface TripBase {
+  stop_id: string;
+  name: string;
+  date: {
+    from: string; // YYYY-MM-DD
+    to: string;   // YYYY-MM-DD
+  };
+  location: Coordinates;
+  duration_days: number;
+  travel_time_from_previous?: string;
+  scenic_waypoints?: ScenicWaypoint[];
+  accommodation: Accommodation;
+  activities: Activity[];
+  // Legacy field for backward compatibility
+  weather?: Weather;
+}
+
+export interface Accommodation {
+  name: string;
+  address: string;
+  check_in: string;    // YYYY-MM-DD HH:mm
+  check_out: string;   // YYYY-MM-DD HH:mm
+  confirmation?: string;
+  url?: string;
+  thumbnail_url?: string;
+  // Legacy fields for backward compatibility
+  location?: Coordinates;
+  room?: string;
+  phone?: string;
+  host?: string;
+  rooms?: string;
+  google_place_id?: string | null;
+}
+
+export interface Activity {
+  activity_id: string;
+  activity_name: string;
+  location?: {
+    lat?: number;
+    lng?: number;
+    address?: string;
+  };
+  duration?: string;
+  travel_time_from_accommodation?: string;
+  url?: string;
+  remarks?: string;
+  thumbnail_url?: string;
+  manual_order?: number;
+  status?: {
+    done: boolean;
+  };
+  // Legacy fields for backward compatibility
+  order?: number;
+  google_place_id?: string | null;
+}
+
+// Legacy interface mappings for backward compatibility
+export interface Location extends Coordinates {
   address?: string;
 }
 
@@ -9,45 +77,8 @@ export interface DateRange {
   to: string;   // YYYY-MM-DD format
 }
 
-export interface ScenicWaypoint {
-  lat: number;
-  lng: number;
-  label: string;
-}
-
-export interface Accommodation {
-  name: string;
-  address: string;
-  check_in: string;    // YYYY-MM-DD hh:mm format
-  check_out: string;   // YYYY-MM-DD hh:mm format
-  confirmation: string;
-  url: string;
-  thumbnail_url: string | null;
-  location?: Location;
-  room?: string;
-  phone?: string;
-  host?: string;
-  rooms?: string;
-  google_place_id?: string | null;
-}
-
 export interface ActivityStatus {
   done: boolean;
-}
-
-export interface Activity {
-  activity_id: string;
-  order: number;
-  manual_order: number;
-  status: ActivityStatus;
-  activity_name: string;
-  location: Location;
-  travel_time_from_accommodation: string;
-  duration: string;
-  url: string;
-  remarks: string;
-  thumbnail_url: string | null;
-  google_place_id?: string | null;
 }
 
 export interface Weather {
@@ -57,18 +88,8 @@ export interface Weather {
   notes: string;
 }
 
-export interface TripStop {
-  stop_id: string;
-  name: string;
-  location: Location;
-  date: DateRange;
-  duration_days: number;
-  travel_time_from_previous: string | null;
-  scenic_waypoints: ScenicWaypoint[];
-  accommodation: Accommodation;
-  weather: Weather;
-  activities: Activity[];
-}
+// TripStop is now just an alias to TripBase for backward compatibility
+export type TripStop = TripBase;
 
 export interface TripConstraints {
   max_daily_driving_hours: string;
@@ -76,7 +97,8 @@ export interface TripConstraints {
   exceptions: string[];
 }
 
-export interface TripData {
+// Legacy TripData interface for backward compatibility
+export interface LegacyTripData {
   trip_name: string;
   timezone: string;
   travellers: string[];
@@ -103,18 +125,4 @@ export interface AppState {
   currentStopId: string;
   stopStatus: StopStatus;
   selectedActivityId: string | null;
-}
-
-// Map-related types
-export interface MapBounds {
-  north: number;
-  south: number;
-  east: number;
-  west: number;
-}
-
-export interface RouteSegment {
-  from: Location;
-  to: Location;
-  waypoints: ScenicWaypoint[];
 }

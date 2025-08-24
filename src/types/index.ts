@@ -1,4 +1,8 @@
+// Central export file for all types
 export * from './trip';
+export * from './map';
+export * from './weather';
+export * from './storage';
 
 // Common UI types
 export interface LoadingState {

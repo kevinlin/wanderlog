@@ -55,7 +55,7 @@ function App() {
           <div className="max-w-7xl mx-auto">
             <h1 className="text-2xl font-bold text-gray-900">{tripData.trip_name}</h1>
             <p className="text-sm text-gray-600 mt-1">
-              Family of {tripData.travellers.length} • {tripData.vehicle}
+              {tripData.travellers && tripData.vehicle && `Family of ${tripData.travellers.length} • ${tripData.vehicle}`}
             </p>
           </div>
         </header>

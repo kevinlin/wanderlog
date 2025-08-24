@@ -22,19 +22,25 @@ export const loadTripData = async (): Promise<TripData> => {
 /**
  * Validates trip data against expected schema
  */
-export const validateTripData = (data: any): data is TripData => {
+export const validateTripData = (data: unknown): data is TripData => {
+  if (!data || typeof data !== 'object') {
+    return false;
+  }
+  
+  const d = data as Record<string, unknown>;
+  
   return (
-    data &&
-    typeof data.trip_name === 'string' &&
-    typeof data.timezone === 'string' &&
-    Array.isArray(data.travellers) &&
-    Array.isArray(data.stops) &&
-    data.stops.every((stop: any) => 
-      stop.stop_id && 
-      stop.name && 
-      stop.location && 
-      stop.date &&
-      Array.isArray(stop.activities)
-    )
+    typeof d.trip_name === 'string' &&
+    typeof d.timezone === 'string' &&
+    Array.isArray(d.travellers) &&
+    Array.isArray(d.stops) &&
+    d.stops.every((stop: unknown) => {
+      const s = stop as Record<string, unknown>;
+      return s.stop_id && 
+        s.name && 
+        s.location && 
+        s.date &&
+        Array.isArray(s.activities);
+    })
   );
 };

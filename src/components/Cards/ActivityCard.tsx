@@ -57,7 +57,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                 {activity.activity_name}
               </h4>
               
-              {activity.location.address && (
+              {activity.location?.address && (
                 <p className="text-sm text-gray-600 mb-2">
                   📍 {activity.location.address}
                 </p>
