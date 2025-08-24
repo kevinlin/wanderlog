@@ -4,7 +4,7 @@ import { TripStop } from '@/types';
 
 interface MapContainerProps {
   stops: TripStop[];
-  currentStopId: string;
+  currentStopId: string | null;
   selectedActivityId: string | null;
   onActivitySelect: (activityId: string) => void;
   onStopSelect: (stopId: string) => void;

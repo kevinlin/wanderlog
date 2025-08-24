@@ -30,13 +30,15 @@ function App() {
   }
 
   const currentStop = tripData.stops.find(stop => stop.stop_id === currentStopId);
-  const sortedActivities = currentStop ? sortActivitiesByOrder(
+  const sortedActivities = currentStop && currentStopId ? sortActivitiesByOrder(
     currentStop.activities,
     stopStatus[currentStopId]?.activityOrder
   ) : [];
 
   const handleActivityToggle = (activityId: string, done: boolean) => {
-    updateActivityStatus(currentStopId, activityId, done);
+    if (currentStopId) {
+      updateActivityStatus(currentStopId, activityId, done);
+    }
   };
 
   const handleActivitySelect = (activityId: string) => {
@@ -107,7 +109,7 @@ function App() {
                             activity={activity}
                             accommodation={currentStop.accommodation}
                             isSelected={activity.activity_id === selectedActivityId}
-                            isDone={getActivityStatus(activity, stopStatus, currentStopId)}
+                            isDone={currentStopId ? getActivityStatus(activity, stopStatus, currentStopId) : false}
                             onToggleDone={handleActivityToggle}
                             onSelect={handleActivitySelect}
                           />

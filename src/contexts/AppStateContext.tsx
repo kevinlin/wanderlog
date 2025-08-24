@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useReducer, ReactNode, useEffect } from 'react';
-import { TripData, TripBase } from '@/types';
+import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { TripData } from '@/types';
 import { UserModifications } from '@/types/storage';
 import { WeatherCache } from '@/types/weather';
 

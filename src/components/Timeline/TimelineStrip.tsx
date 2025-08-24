@@ -4,7 +4,7 @@ import { getStopTimeStatus } from '@/utils/dateUtils';
 
 interface TimelineStripProps {
   stops: TripStop[];
-  currentStopId: string;
+  currentStopId: string | null;
   onStopSelect: (stopId: string) => void;
 }
 
