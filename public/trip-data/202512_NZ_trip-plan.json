@@ -1,0 +1,652 @@
+{
+  "trip_name": "NZ South Island Road Trip — 13–29 Dec 2025 (Family of 5)",
+  "timezone": "Pacific/Auckland",
+  "travellers": ["Sharon", "Partner", "Lucas (12)", "Lydia (11)", "Jeremy (9)"],
+  "vehicle": "MPV (pickup/return: Christchurch Airport)",
+  "constraints": {
+    "max_daily_driving_hours": "3–4h",
+    "min_nights_per_stop": 2,
+    "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"]
+  },
+  "stops": [
+    {
+      "stop_id": "christchurch-arrival",
+      "name": "Christchurch (Arrival)",
+      "location": { "lat": -43.530955, "lng": 172.6366455 },
+      "date": { "from": "2025-12-13", "to": "2025-12-14" },
+      "duration_days": 1,
+      "travel_time_from_previous": null,
+      "scenic_waypoints": [],
+      "accommodation": {
+        "name": "Sudima Christchurch Airport",
+        "address": "550 Memorial Ave, Christchurch 8053, New Zealand",
+        "check_in": "2025-12-13 15:00",
+        "check_out": "2025-12-14 11:00",
+        "confirmation": "1924863700",
+        "room": "Superior Twin",
+        "phone": "+64 3 358 3139",
+        "url": "https://www.sudimahotels.com/christchurch-airport/",
+        "thumbnail_url": null,
+        "google_place_id": null
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "christchurch-arrival-act-1",
+          "order": 1,
+          "manual_order": 1,
+          "status": { "done": false },
+          "activity_name": "Riverside Market (food hall & groceries)",
+          "location": { "address": "96 Oxford Terrace, Christchurch 8011" },
+          "travel_time_from_accommodation": "20–25m drive",
+          "duration": "1–2h",
+          "url": "https://riverside.nz/",
+          "remarks": "7-day indoor market; good for lunch/dinner and grocery top-ups",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-arrival-act-2",
+          "order": 2,
+          "manual_order": 2,
+          "status": { "done": false },
+          "activity_name": "Margaret Mahy Family Playground",
+          "location": { "address": "177 Armagh Street, Christchurch 8011" },
+          "travel_time_from_accommodation": "20–25m drive",
+          "duration": "1–2h",
+          "url": "https://ccc.govt.nz/rec-and-sport/parks-and-gardens/margaret-mahy-family-playground/",
+          "remarks": "Huge free playground; burn off flight energy",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    },
+    {
+      "stop_id": "lake-tekapo",
+      "name": "Lake Tekapo",
+      "location": { "lat": -44.00697, "lng": 170.48383 },
+      "date": { "from": "2025-12-14", "to": "2025-12-16" },
+      "duration_days": 2,
+      "travel_time_from_previous": "3h 0m (from Christchurch)",
+      "scenic_waypoints": [],
+      "accommodation": {
+        "name": "The Cairns Alpine Resort & Golf Club",
+        "address": "48 D'Archiac Drive, Lake Tekapo 7999, New Zealand",
+        "check_in": "2025-12-14 15:00",
+        "check_out": "2025-12-16 10:00",
+        "confirmation": "175483357669783",
+        "room": "The Bunker (3-bedroom unit)",
+        "phone": "+64 3 680 6952",
+        "url": "https://www.thecairns.co.nz/",
+        "thumbnail_url": null,
+        "google_place_id": null
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "lake-tekapo-act-1",
+          "order": 1,
+          "manual_order": 1,
+          "status": { "done": false },
+          "activity_name": "Tekapo Springs (hot pools & kids aqua play)",
+          "location": { "address": "6 Lakeside Dr, Lake Tekapo 7999" },
+          "travel_time_from_accommodation": "5–7m drive",
+          "duration": "1.5–3h",
+          "url": "https://tekaposprings.co.nz/",
+          "remarks": "Book pools; ice rink/tube park seasonal",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "lake-tekapo-act-2",
+          "order": 2,
+          "manual_order": 2,
+          "status": { "done": false },
+          "activity_name": "Church of the Good Shepherd (photos & short walk)",
+          "location": { "lat": -44.0048, "lng": 170.4776 },
+          "travel_time_from_accommodation": "5m drive / 25m walk",
+          "duration": "30–45m",
+          "url": "https://tekapo.church/",
+          "remarks": "Sunset light is nice; be respectful around the church",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "lake-tekapo-act-3",
+          "order": 3,
+          "manual_order": 3,
+          "status": { "done": false },
+          "activity_name": "Dark Sky Project | Stargazing (Mt John or Lakefront)",
+          "location": { "address": "1 Motuariki Ln, Lake Tekapo 7999" },
+          "travel_time_from_accommodation": "5–10m drive",
+          "duration": "1.5–2.5h",
+          "url": "https://www.darkskyproject.co.nz/",
+          "remarks": "Family-friendly astronomy tour; weather dependent",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "lake-tekapo-act-4",
+          "order": 4,
+          "manual_order": 4,
+          "status": { "done": false },
+          "activity_name": "Mt John Summit Walk (short hike, views)",
+          "location": { "lat": -43.9919, "lng": 170.4631 },
+          "travel_time_from_accommodation": "15–20m drive to carpark",
+          "duration": "45–90m (short route)",
+          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/lake-tekapo-area/tracks/mt-john-summit-walk/",
+          "remarks": "Windy up top; take jackets and water",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    },
+    {
+      "stop_id": "queenstown",
+      "name": "Queenstown",
+      "location": { "lat": -45.0311622, "lng": 168.662643 },
+      "date": { "from": "2025-12-16", "to": "2025-12-21" },
+      "duration_days": 5,
+      "travel_time_from_previous": "3h 15m (from Tekapo via Lindis Pass)",
+      "scenic_waypoints": [
+        {
+          "lat": -44.8,
+          "lng": 169.4,
+          "label": "Lindis Pass Scenic Viewpoint (placeholder)"
+        }
+      ],
+      "accommodation": {
+        "name": "Marina Gem – Lakefront 3-Bedroom Apartment (Airbnb)",
+        "address": "875 Frankton Road, Queenstown 9300, New Zealand",
+        "check_in": "2025-12-16 15:00",
+        "check_out": "2025-12-21 10:00",
+        "confirmation": "HMJE5ASMEP",
+        "host": "Ray",
+        "url": "https://abnb.me/TQkt89kjGJb",
+        "thumbnail_url": null,
+        "google_place_id": null
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "queenstown-act-1",
+          "order": 1,
+          "manual_order": 1,
+          "status": { "done": false },
+          "activity_name": "Skyline Gondola & Luge",
+          "location": { "lat": -45.0327, "lng": 168.6581, "address": "Brecon St, Queenstown" },
+          "travel_time_from_accommodation": "10–12m drive",
+          "duration": "2–4h",
+          "url": "https://queenstown.skyline.co.nz/",
+          "remarks": "Book gondola + multiple luge rides; great for kids",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "queenstown-act-2",
+          "order": 2,
+          "manual_order": 2,
+          "status": { "done": false },
+          "activity_name": "Creative Queenstown Market (Saturdays)",
+          "location": { "address": "Earnslaw Park, Queenstown" },
+          "travel_time_from_accommodation": "12m drive",
+          "duration": "1–2h",
+          "url": "https://www.queenstownmarket.nz/",
+          "remarks": "Summer 9am–4pm; local crafts/food",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "queenstown-act-3",
+          "order": 3,
+          "manual_order": 3,
+          "status": { "done": false },
+          "activity_name": "TSS Earnslaw to Walter Peak Farm (RealNZ)",
+          "location": { "address": "Steamer Wharf, Queenstown; Walter Peak High Country Farm" },
+          "travel_time_from_accommodation": "12m drive to wharf",
+          "duration": "3–4h (incl. cruise + farm tour/dining)",
+          "url": "https://www.realnz.com/en/experiences/tss-earnslaw-walter-peak-experiences/",
+          "remarks": "Family favourite; animals, shearing demo; book ahead",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "queenstown-act-4",
+          "order": 4,
+          "manual_order": 4,
+          "status": { "done": false },
+          "activity_name": "Kiwi Park (native wildlife)",
+          "location": { "address": "51 Brecon Street, Queenstown 9300" },
+          "travel_time_from_accommodation": "10–12m drive",
+          "duration": "1–2h",
+          "url": "https://kiwibird.co.nz/",
+          "remarks": "Keeper talks; tuatara; below Skyline Gondola",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "queenstown-act-5",
+          "order": 5,
+          "manual_order": 5,
+          "status": { "done": false },
+          "activity_name": "Shotover Jet (jet boating)",
+          "location": { "address": "Arthurs Point, Queenstown" },
+          "travel_time_from_accommodation": "15m drive",
+          "duration": "1–1.5h total (25m on water)",
+          "url": "https://www.shotoverjet.com/",
+          "remarks": "Minimum height varies by conditions (often ~1.0m). Warm layers recommended",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "queenstown-act-6",
+          "order": 6,
+          "manual_order": 6,
+          "status": { "done": false },
+          "activity_name": "Arrowtown village & gold panning",
+          "location": { "address": "Buckingham St & Dudley’s Cottage, Arrowtown" },
+          "travel_time_from_accommodation": "20–25m drive",
+          "duration": "2–3h",
+          "url": "https://www.lakesdistrictmuseum.co.nz/",
+          "remarks": "Historic main street; easy riverside walk; pan for gold",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "queenstown-act-7",
+          "order": 7,
+          "manual_order": 7,
+          "status": { "done": false },
+          "activity_name": "Queenstown Gardens & Lakefront Playground + Patagonia Chocolates",
+          "location": {
+            "lat": -45.0370802622603,
+            "lng": 168.660821914673,
+            "address": "Queenstown Gardens / 50 Beach St"
+          },
+          "travel_time_from_accommodation": "10–12m drive",
+          "duration": "1–2h",
+          "url": "https://www.patagoniachocolates.co.nz/",
+          "remarks": "Beach & playground at Marine Parade; ice cream & hot chocolates nearby",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    },
+    {
+      "stop_id": "te-anau",
+      "name": "Te Anau",
+      "location": { "lat": -45.41464889, "lng": 167.7156717 },
+      "date": { "from": "2025-12-21", "to": "2025-12-23" },
+      "duration_days": 2,
+      "travel_time_from_previous": "2h 0m (from Queenstown)",
+      "scenic_waypoints": [],
+      "accommodation": {
+        "name": "Distinction Te Anau Hotel & Villas",
+        "address": "64 Lakefront Drive, Te Anau 9600, New Zealand",
+        "check_in": "2025-12-21 15:00",
+        "check_out": "2025-12-23 11:00",
+        "confirmation": "1928590483",
+        "room": "2-Bedroom Villa",
+        "phone": "+64 3 249 9700",
+        "url": "https://www.distinctionhotels.co.nz/hotels/distinction-te-anau-hotel-villas",
+        "thumbnail_url": null,
+        "google_place_id": null
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "te-anau-act-1",
+          "order": 1,
+          "manual_order": 1,
+          "status": { "done": false },
+          "activity_name": "Te Anau Glowworm Caves (RealNZ)",
+          "location": { "address": "Departs RealNZ Visitor Centre, 85 Lakefront Dr, Te Anau" },
+          "travel_time_from_accommodation": "2–3m drive / 10m walk",
+          "duration": "2–2.5h",
+          "url": "https://www.realnz.com/en/experiences/glowworm-caves/te-anau-glowworm-caves/",
+          "remarks": "Warm layers and non-slip shoes; photography not permitted inside caves",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "te-anau-act-2",
+          "order": 2,
+          "manual_order": 2,
+          "status": { "done": false },
+          "activity_name": "Milford Road scenic stops (Mirror Lakes, Lake Gunn Nature Walk)",
+          "location": {
+            "mirror_lakes": { "lat": -45.033333, "lng": 168.0 },
+            "lake_gunn": { "lat": -44.883, "lng": 168.083 }
+          },
+          "travel_time_from_accommodation": "Mirror Lakes ~45–50m; Lake Gunn ~1h 5m drive",
+          "duration": "Mirror Lakes 15–30m; Lake Gunn loop 45m",
+          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
+          "remarks": "Check weather & avalanche advisories on Milford Road",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "te-anau-act-3",
+          "order": 3,
+          "manual_order": 3,
+          "status": { "done": false },
+          "activity_name": "Milford Sound cruise (optional day trip)",
+          "location": { "address": "Milford Sound Visitor Terminal, Milford Sound 9679" },
+          "travel_time_from_accommodation": "2h 0m drive (each way)",
+          "duration": "1h 45m–2h cruise (+stops)",
+          "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/",
+          "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    },
+    {
+      "stop_id": "wanaka",
+      "name": "Wānaka",
+      "location": { "lat": -44.6941691, "lng": 169.1364637 },
+      "date": { "from": "2025-12-23", "to": "2025-12-25" },
+      "duration_days": 2,
+      "travel_time_from_previous": "3h 45m (from Te Anau via Queenstown/Crown Range)",
+      "scenic_waypoints": [
+        {
+          "lat": -44.9,
+          "lng": 168.9,
+          "label": "Crown Range Summit Lookout (placeholder)"
+        }
+      ],
+      "accommodation": {
+        "name": "Timberstone House (Airbnb)",
+        "address": "2 Allenby Place, Wānaka 9305, New Zealand",
+        "check_in": "2025-12-23 15:00",
+        "check_out": "2025-12-25 10:00",
+        "confirmation": "HMDEJSDEMY",
+        "url": "https://abnb.me/UCZNoQhV5zb",
+        "thumbnail_url": null,
+        "google_place_id": null
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "wanaka-act-1",
+          "order": 1,
+          "manual_order": 1,
+          "status": { "done": false },
+          "activity_name": "Dinosaur Park (Lakefront Playground)",
+          "location": { "address": "Ardmore St, Wānaka 9305" },
+          "travel_time_from_accommodation": "5–7m drive / 25m walk",
+          "duration": "45–90m",
+          "url": "https://www.lakewanaka.co.nz/plan/wanaka-for-families/",
+          "remarks": "Great lakefront playground for kids; swim if it’s warm",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "wanaka-act-2",
+          "order": 2,
+          "manual_order": 2,
+          "status": { "done": false },
+          "activity_name": "Puzzling World (Illusion Rooms & Great Maze)",
+          "location": { "address": "188 Wānaka–Luggate Hwy (SH84), Wānaka 9382" },
+          "travel_time_from_accommodation": "5–7m drive",
+          "duration": "1.5–2.5h",
+          "url": "https://www.puzzlingworld.co.nz/",
+          "remarks": "Book a combo ticket; open daily (closed Xmas Day)",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "wanaka-act-3",
+          "order": 3,
+          "manual_order": 3,
+          "status": { "done": false },
+          "activity_name": "Mount Iron Track (loop walk, views)",
+          "location": { "address": "Mt Iron carpark, SH84, Wānaka" },
+          "travel_time_from_accommodation": "6–8m drive",
+          "duration": "1–1.5h loop (4.5km)",
+          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/otago/places/wanaka-area/things-to-do/mount-iron-track/",
+          "remarks": "Sunrise/sunset views; take water and hats",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "wanaka-act-4",
+          "order": 4,
+          "manual_order": 4,
+          "status": { "done": false },
+          "activity_name": "Cardrona Hotel lunch stop (scenic drive)",
+          "location": { "address": "2312 Cardrona Valley Rd, RD2, Wānaka 9382" },
+          "travel_time_from_accommodation": "25–30m drive",
+          "duration": "1–2h",
+          "url": "https://www.cardronahotel.co.nz/",
+          "remarks": "Historic pub garden; good stop if driving Crown Range",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    },
+    {
+      "stop_id": "timaru-caroline-bay",
+      "name": "Timaru (Caroline Bay)",
+      "location": { "lat": -44.396972, "lng": 171.254973 },
+      "date": { "from": "2025-12-25", "to": "2025-12-27" },
+      "duration_days": 2,
+      "travel_time_from_previous": "3h 30m (from Wānaka via SH8/SH79)",
+      "scenic_waypoints": [],
+      "accommodation": {
+        "name": "Bay Viaduct Motor Lodge",
+        "address": "2 Andrews St, Timaru 7910, New Zealand",
+        "check_in": "2025-12-25 15:00",
+        "check_out": "2025-12-27 11:00",
+        "confirmation": "1928599123",
+        "room": "Executive 2-Bedroom Apartment with Spa",
+        "phone": "+64 3 688 6145",
+        "url": "https://bayviaduct.co.nz/",
+        "thumbnail_url": null,
+        "google_place_id": null
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "timaru-act-1",
+          "order": 1,
+          "manual_order": 1,
+          "status": { "done": false },
+          "activity_name": "Caroline Bay Playground & Beach",
+          "location": { "address": "Caroline Bay, Timaru 7910" },
+          "travel_time_from_accommodation": "3–5m drive / 15–20m walk",
+          "duration": "1–3h",
+          "url": "https://www.cplay.co.nz/",
+          "remarks": "Shallow sandy bay; big new playground; penguin viewing area nearby",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "timaru-act-2",
+          "order": 2,
+          "manual_order": 2,
+          "status": { "done": false },
+          "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
+          "location": { "address": "Caroline Bay Soundshell, Timaru" },
+          "travel_time_from_accommodation": "3–5m drive / 20m walk",
+          "duration": "Flexible",
+          "url": "https://carolinebay.co.nz/",
+          "remarks": "Runs 26 Dec 2025 – 11 Jan 2026; rides, shows, fireworks (NYE)",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "timaru-act-3",
+          "order": 3,
+          "manual_order": 3,
+          "status": { "done": false },
+          "activity_name": "South Canterbury Museum",
+          "location": { "address": "4 Perth St, Timaru 7910" },
+          "travel_time_from_accommodation": "5–7m drive",
+          "duration": "45–90m",
+          "url": "https://museum.timaru.govt.nz/",
+          "remarks": "Local history & natural heritage; free entry",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "timaru-act-4",
+          "order": 4,
+          "manual_order": 4,
+          "status": { "done": false },
+          "activity_name": "Aigantighe Art Gallery",
+          "location": { "address": "49 Wai-iti Rd, Timaru 7910" },
+          "travel_time_from_accommodation": "5–7m drive",
+          "duration": "45–90m",
+          "url": "https://www.aigantighe.co.nz/",
+          "remarks": "Sculpture garden is always open; free entry",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    },
+    {
+      "stop_id": "christchurch-end",
+      "name": "Christchurch (End)",
+      "location": { "lat": -43.530955, "lng": 172.6366455 },
+      "date": { "from": "2025-12-27", "to": "2025-12-29" },
+      "duration_days": 2,
+      "travel_time_from_previous": "2h 15m (from Timaru)",
+      "scenic_waypoints": [],
+      "accommodation": {
+        "name": "Novotel Christchurch Cathedral Square",
+        "address": "50 Cathedral Square, Christchurch 8011, New Zealand",
+        "check_in": "2025-12-27 14:00",
+        "check_out": "2025-12-29 11:00",
+        "confirmation": "PPTPDRLH",
+        "rooms": "2× Superior Room (2 Double Beds)",
+        "phone": "+64 3 372 2111",
+        "url": "https://all.accor.com/hotel/6592/index.en.shtml",
+        "thumbnail_url": null,
+        "google_place_id": null
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "christchurch-end-act-1",
+          "order": 1,
+          "manual_order": 1,
+          "status": { "done": false },
+          "activity_name": "Christchurch Farmers’ Market (Sat mornings)",
+          "location": { "address": "16 Kahu Rd, Riccarton, Christchurch 8041" },
+          "travel_time_from_accommodation": "10–15m drive",
+          "duration": "1–2h",
+          "url": "https://www.christchurchfarmersmarket.co.nz/",
+          "remarks": "Saturdays 9am–12pm at Riccarton House & Bush",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-end-act-2",
+          "order": 2,
+          "manual_order": 2,
+          "status": { "done": false },
+          "activity_name": "International Antarctic Centre",
+          "location": { "address": "38 Orchard Rd, Christchurch 8052" },
+          "travel_time_from_accommodation": "20–25m drive",
+          "duration": "2–3h",
+          "url": "https://www.iceberg.co.nz/",
+          "remarks": "Penguin Rescue, Hägglund ride; near airport",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-end-act-3",
+          "order": 3,
+          "manual_order": 3,
+          "status": { "done": false },
+          "activity_name": "Willowbank Wildlife Reserve",
+          "location": { "address": "60 Hussey Rd, Northwood, Christchurch 8051" },
+          "travel_time_from_accommodation": "20–25m drive",
+          "duration": "1.5–3h",
+          "url": "https://www.willowbank.co.nz/",
+          "remarks": "Kiwi viewing; nocturnal house; kids love the eels",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-end-act-4",
+          "order": 4,
+          "manual_order": 4,
+          "status": { "done": false },
+          "activity_name": "Orana Wildlife Park (open-range zoo)",
+          "location": { "address": "McLeans Island Rd, Harewood, Christchurch 8051" },
+          "travel_time_from_accommodation": "25–30m drive",
+          "duration": "2–4h",
+          "url": "https://www.oranawildlifepark.co.nz/",
+          "remarks": "Giraffe feeding, lions; allow half-day if keen",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-end-act-5",
+          "order": 5,
+          "manual_order": 5,
+          "status": { "done": false },
+          "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
+          "location": { "address": "Marine Parade, New Brighton, Christchurch" },
+          "travel_time_from_accommodation": "20–25m drive",
+          "duration": "1–3h",
+          "url": "https://www.ccc.govt.nz/rec-and-sport/beaches-and-coast/",
+          "remarks": "Good beach time for kids; combine with hot pools if desired",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-end-act-6",
+          "order": 6,
+          "manual_order": 6,
+          "status": { "done": false },
+          "activity_name": "Riverside Market (meals & souvenirs)",
+          "location": { "address": "96 Oxford Terrace, Christchurch 8011" },
+          "travel_time_from_accommodation": "5–8m walk",
+          "duration": "1–2h",
+          "url": "https://riverside.nz/",
+          "remarks": "Indoor food hall; easy dinner spot near hotel",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    }
+  ]
+}
