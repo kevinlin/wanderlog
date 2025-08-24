@@ -74,6 +74,7 @@ src/
 │   ├── Map/                    # Map-related components
 │   │   ├── MapContainer.tsx
 │   │   ├── TripRoute.tsx
+│   │   ├── CityPin.tsx
 │   │   ├── AccommodationPin.tsx
 │   │   └── ActivityPin.tsx
 │   ├── Timeline/               # Timeline navigation components
@@ -153,7 +154,11 @@ interface MapContainerProps {
 **Key Features**:
 - Google Maps integration with custom styling
 - Route polylines with scenic waypoints
-- Accommodation and activity pins with status-based styling
+- Location-specific pin icons:
+  - City/town locations: Yellow star pins (Starred place style)
+  - Accommodation locations: Lodge-style pins
+  - Activity locations: Activity-type specific pins (default: green flag "Want to go" style)
+- Pin status-based styling and interactions
 - Click handlers for pin selection and map interaction
 
 #### 3. TimelineStrip Component
@@ -205,6 +210,21 @@ interface DraggableActivityProps {
   children: React.ReactNode;
 }
 ```
+
+#### 6. Pin Components
+**Purpose**: Map marker components with location-specific styling.
+
+**Pin Icon Specifications**:
+- **City/Town Pins**: Yellow star icon (Google Maps "Starred place" style)
+- **Accommodation Pins**: Lodge/hotel icon with status-based coloring
+- **Activity Pins**: Type-specific icons with fallback to green flag ("Want to go" style):
+  - Restaurant: Fork and knife icon
+  - Attraction: Camera/sightseeing icon  
+  - Shopping: Shopping bag icon
+  - Outdoor: Mountain/hiking icon
+  - Cultural: Museum/building icon
+  - Transport: Vehicle icon
+  - Other/Default: Green flag icon
 
 ### Custom Hooks
 
@@ -296,6 +316,7 @@ interface Accommodation {
 interface Activity {
   activity_id: string;
   activity_name: string;
+  activity_type?: ActivityType;
   location?: {
     lat?: number;
     lng?: number;
@@ -310,6 +331,16 @@ interface Activity {
   status?: {
     done: boolean;
   };
+}
+
+enum ActivityType {
+  RESTAURANT = 'restaurant',
+  ATTRACTION = 'attraction', 
+  SHOPPING = 'shopping',
+  OUTDOOR = 'outdoor',
+  CULTURAL = 'cultural',
+  TRANSPORT = 'transport',
+  OTHER = 'other'
 }
 
 interface ScenicWaypoint {

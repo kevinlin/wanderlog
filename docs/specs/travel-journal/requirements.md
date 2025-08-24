@@ -15,9 +15,10 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 2. WHEN trip data is loaded, THEN the system SHALL render route polylines between all trip bases using Google Directions API
 3. WHEN route polylines are displayed, THEN they SHALL include scenic waypoints (e.g., Lindis Pass, Crown Range) as intermediate points
 4. WHEN the map is displayed, THEN it SHALL use a custom travel-journal styling with softer pastel colors and reduced POI clutter
-5. WHEN accommodation locations are available, THEN the system SHALL display accommodation pins at each base location
-6. WHEN activity locations are available, THEN the system SHALL display activity pins for each activity with valid coordinates
-7. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
+5. WHEN accommodation locations are available, THEN the system SHALL display lodge-style pins at each base location
+6. WHEN activity locations are available, THEN the system SHALL display activity-specific pins based on activity type (default: green flag for "Want to go" style) for each activity with valid coordinates
+7. WHEN city/town locations are displayed, THEN the system SHALL display yellow star pins (Starred place style) for base locations
+8. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
 
 ### 2. Timeline Navigation and Date Management
 

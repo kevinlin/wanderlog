@@ -21,9 +21,10 @@ This document outlines the step-by-step implementation tasks for building the Wa
 
   - [x] 1.3 Create core TypeScript interfaces and types
     - Implement TripData, TripBase, Accommodation, Activity interfaces in src/types/trip.ts
+    - Add ActivityType enum for pin icon categorization (restaurant, attraction, shopping, outdoor, cultural, transport, other)
     - Implement UserModifications, WeatherData, WeatherCache interfaces
     - Create map-related types (Coordinates, ScenicWaypoint) in src/types/map.ts
-    - **Requirements Reference**: Requirement 5.1, 5.2 (data persistence structure)
+    - **Requirements Reference**: Requirement 5.1, 5.2 (data persistence structure), Requirement 1.6, 1.7 (activity and city pin types)
 
 - [x] 2. **Data Services and Core Infrastructure**
   - [x] 2.1 Implement TripDataService for JSON data loading
@@ -48,6 +49,13 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add exportUtils.ts enhancements for new UserModifications format
     - **Requirements Reference**: Requirement 2.3 (NZ local time), Requirement 3.4 (travel time calculations)
 
+  - [ ] 2.5 Implement activity type inference system
+    - Create activityUtils.ts with inferActivityType function
+    - Implement keyword-based activity type detection from activity names
+    - Add fallback logic for unknown activity types (default to 'other')
+    - Support manual activity type overrides in trip data
+    - **Requirements Reference**: Requirement 1.6 (activity-specific pins)
+
   - [x] 2.4 Set up testing framework and write comprehensive tests
     - Install and configure Vitest, JSDOM, and React Testing Library
     - Create test setup with localStorage mocking and test utilities
@@ -55,7 +63,8 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Write unit tests for StorageService (UserModifications, weather cache, migration)
     - Write unit tests for validationUtils (all validation functions, XSS protection)
     - Write unit tests for mapUtils (distance calculations, coordinate utilities, URL generation)
-    - All 76 tests passing with good coverage of core functionality
+    - [ ] Add unit tests for activityUtils (activity type inference, keyword matching)
+    - All 76+ tests passing with good coverage of core functionality
     - **Requirements Reference**: All requirements - testing ensures requirement compliance
 
 - [x] 3. **Global State Management and Context**
@@ -71,17 +80,18 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implement useLocalStorage hook for persistent state operations with migration support
     - **Requirements Reference**: Requirement 5.4 (state restoration), Requirement 9.3 (loading indicators)
 
-- [ ] 4. **Layout Components and Error Handling**
-  - [ ] 4.1 Create error boundary and loading components
-    - Implement ErrorBoundary.tsx with JavaScript error catching
-    - Create LoadingSpinner.tsx component with travel journal styling
-    - Implement ErrorMessage.tsx for displaying user-friendly error messages
+- [x] 4. **Layout Components and Error Handling**
+  - [x] 4.1 Create error boundary and loading components
+    - ✅ Implement ErrorBoundary.tsx with JavaScript error catching, travel journal styling, enhanced error reporting with unique error IDs, comprehensive logging, and retry functionality
+    - ✅ Create LoadingSpinner.tsx component with travel journal styling including adventure-themed variant with compass animations, multiple sizes, and enhanced travel-themed loading states
+    - ✅ Implement ErrorMessage.tsx for displaying user-friendly error messages with contextual error types (network, data, permission), helpful suggestions, and travel journal aesthetics
     - **Requirements Reference**: Requirement 8.6 (JavaScript error handling), Requirement 9.3 (loading indicators)
 
-  - [ ] 4.2 Create main App component structure
-    - Implement App.tsx with global context providers
-    - Add trip data loading on application initialization
-    - Implement error boundary wrapping and global error handling
+  - [x] 4.2 Create main App component structure
+    - ✅ Updated App.tsx to properly use AppStateProvider and global context management
+    - ✅ Implement proper trip data loading with global state initialization
+    - ✅ Enhanced error boundary wrapping and comprehensive global error handling with graceful degradation
+    - ✅ Migrated from legacy useAppState hook to proper global state management using AppStateContext
     - **Requirements Reference**: Requirement 5.4 (state restoration on load), Requirement 8.6 (error handling)
 
 - [ ] 5. **Google Maps Integration**
@@ -91,11 +101,20 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add map loading error handling with grid background fallback
     - **Requirements Reference**: Requirement 1.1, 1.4 (Google Maps display, custom styling), Requirement 8.1 (map loading failure)
 
-  - [ ] 5.2 Create map pin components
-    - Implement AccommodationPin.tsx with status-based coloring
-    - Create ActivityPin.tsx with click handlers for selection
+  - [ ] 5.2 Create map pin components with type-specific icons
+    - Implement CityPin.tsx with yellow star icon (Starred place style)
+    - Create AccommodationPin.tsx with lodge icon and status-based coloring
+    - Implement ActivityPin.tsx with activity-type specific icons:
+      - Restaurant: Fork and knife icon
+      - Attraction: Camera/sightseeing icon
+      - Shopping: Shopping bag icon
+      - Outdoor: Mountain/hiking icon
+      - Cultural: Museum/building icon
+      - Transport: Vehicle icon
+      - Other/Default: Green flag icon ("Want to go" style)
     - Add pin highlighting when corresponding cards are selected
-    - **Requirements Reference**: Requirement 1.5, 1.6 (accommodation and activity pins), Requirement 3.4 (pin-card synchronization)
+    - Implement click handlers for all pin types
+    - **Requirements Reference**: Requirement 1.5, 1.6, 1.7 (accommodation, activity, and city pins), Requirement 3.4 (pin-card synchronization)
 
   - [ ] 5.3 Implement route visualization with Google Directions API
     - Create TripRoute.tsx component for polyline rendering
