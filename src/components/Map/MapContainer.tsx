@@ -191,12 +191,18 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     if (status === 'past') opacity = 0.4;
     else if (status === 'upcoming') opacity = 0.7;
 
-  //   return {
-  //     url: iconUrl,
-  //     scaledSize: new window.google.maps.Size(isSelected ? 28 : 24, isSelected ? 28 : 24),
-  //     anchor: new window.google.maps.Point(isSelected ? 14 : 12, isSelected ? 14 : 12),
-  //   };
-  // };
+    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFD700" fill-opacity="${opacity}" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2L14.09 8.26L22 9L16 14.74L17.18 22L12 18.5L6.82 22L8 14.74L2 9L9.91 8.26L12 2Z"/>
+      </svg>
+    `)}`;
+
+    return {
+      url: iconUrl,
+      scaledSize: new window.google.maps.Size(isSelected ? 28 : 24, isSelected ? 28 : 24),
+      anchor: new window.google.maps.Point(isSelected ? 14 : 12, isSelected ? 14 : 12),
+    };
+  };
 
   // Accommodation pin (lodge-style)
   const getAccommodationPinIcon = (baseId: string, isSelected: boolean) => {
@@ -273,16 +279,35 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         {/* Only render markers after map is loaded */}
         {isMapLoaded && tripData?.stops && (
           <>
-            {/* Accommodation markers (lodge-style pins) */}
+            {/* City/Town markers (yellow star pins) - Primary location markers */}
             {tripData.stops.map((base) => (
               <Marker
-                key={`accommodation-${base.stop_id}`}
+                key={`city-${base.stop_id}`}
                 position={base.location}
-                title={`${base.name} - ${base.accommodation.name}`}
-                icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId)}
+                title={base.name}
+                icon={getCityPinIcon(base.stop_id, base.stop_id === currentBaseId)}
                 onClick={() => onBaseSelect(base.stop_id)}
               />
             ))}
+
+            {/* Accommodation markers (lodge-style pins) - Slightly offset for visibility */}
+            {tripData.stops.map((base) => {
+              // Slightly offset accommodation pins to avoid overlap with city pins
+              const accommodationPosition = {
+                lat: base.location.lat - 0.002, // Small offset south
+                lng: base.location.lng + 0.002  // Small offset east
+              };
+              
+              return (
+                <Marker
+                  key={`accommodation-${base.stop_id}`}
+                  position={accommodationPosition}
+                  title={`${base.name} - ${base.accommodation.name}`}
+                  icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId)}
+                  onClick={() => onBaseSelect(base.stop_id)}
+                />
+              );
+            })}
 
             {/* Activity markers for current base (type-specific pins) */}
             {currentBase?.activities
