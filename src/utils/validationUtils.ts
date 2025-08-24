@@ -1,5 +1,5 @@
 // Validation utilities for Wanderlog Travel Journal
-import { Coordinates } from '@/types';
+import { Coordinates, ActivityType } from '@/types';
 
 /**
  * Validates if an object has the basic structure of trip data
@@ -222,6 +222,14 @@ export const isValidActivity = (data: unknown, errors: string[], warnings: strin
 
   if (d.activity_name === undefined || typeof d.activity_name !== 'string') {
     errors.push('activity_name must be a string');
+  }
+
+  // Optional activity_type field
+  if (d.activity_type !== undefined) {
+    const validTypes = Object.values(ActivityType);
+    if (!validTypes.includes(d.activity_type as ActivityType)) {
+      errors.push(`activity_type must be one of: ${validTypes.join(', ')}`);
+    }
   }
 
   // Optional fields - only validate type if present

@@ -49,7 +49,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add exportUtils.ts enhancements for new UserModifications format
     - **Requirements Reference**: Requirement 2.3 (NZ local time), Requirement 3.4 (travel time calculations)
 
-  - [ ] 2.5 Implement activity type inference system
+  - [x] 2.5 Implement activity type inference system
     - Create activityUtils.ts with inferActivityType function
     - Implement keyword-based activity type detection from activity names
     - Add fallback logic for unknown activity types (default to 'other')
@@ -63,8 +63,8 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Write unit tests for StorageService (UserModifications, weather cache, migration)
     - Write unit tests for validationUtils (all validation functions, XSS protection)
     - Write unit tests for mapUtils (distance calculations, coordinate utilities, URL generation)
-    - [ ] Add unit tests for activityUtils (activity type inference, keyword matching)
-    - All 76+ tests passing with good coverage of core functionality
+    - [x] Add unit tests for activityUtils (activity type inference, keyword matching)
+    - All 95+ tests passing with good coverage of core functionality
     - **Requirements Reference**: All requirements - testing ensures requirement compliance
 
 - [x] 3. **Global State Management and Context**
@@ -94,14 +94,14 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Migrated from legacy useAppState hook to proper global state management using AppStateContext
     - **Requirements Reference**: Requirement 5.4 (state restoration on load), Requirement 8.6 (error handling)
 
-- [ ] 5. **Google Maps Integration**
-  - [ ] 5.1 Implement basic MapContainer component
+- [x] 5. **Google Maps Integration**
+  - [x] 5.1 Implement basic MapContainer component
     - Create MapContainer.tsx with @react-google-maps/api integration
     - Implement custom map styling with pastel colors and reduced POI clutter
     - Add map loading error handling with grid background fallback
     - **Requirements Reference**: Requirement 1.1, 1.4 (Google Maps display, custom styling), Requirement 8.1 (map loading failure)
 
-  - [ ] 5.2 Create map pin components with type-specific icons
+  - [x] 5.2 Create map pin components with type-specific icons
     - Implement CityPin.tsx with yellow star icon (Starred place style)
     - Create AccommodationPin.tsx with lodge icon and status-based coloring
     - Implement ActivityPin.tsx with activity-type specific icons:
@@ -116,7 +116,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implement click handlers for all pin types
     - **Requirements Reference**: Requirement 1.5, 1.6, 1.7 (accommodation, activity, and city pins), Requirement 3.4 (pin-card synchronization)
 
-  - [ ] 5.3 Implement route visualization with Google Directions API
+  - [x] 5.3 Implement route visualization with Google Directions API
     - Create TripRoute.tsx component for polyline rendering
     - Implement route fetching with scenic waypoints inclusion
     - Add fallback to straight-line polylines when Directions API fails

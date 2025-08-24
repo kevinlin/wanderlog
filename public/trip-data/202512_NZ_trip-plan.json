@@ -49,20 +49,6 @@
           "remarks": "7-day indoor market; good for lunch/dinner and grocery top-ups",
           "thumbnail_url": null,
           "google_place_id": null
-        },
-        {
-          "activity_id": "christchurch-arrival-act-2",
-          "order": 2,
-          "manual_order": 2,
-          "status": { "done": false },
-          "activity_name": "Margaret Mahy Family Playground",
-          "location": { "address": "177 Armagh Street, Christchurch 8011" },
-          "travel_time_from_accommodation": "20–25m drive",
-          "duration": "1–2h",
-          "url": "https://ccc.govt.nz/rec-and-sport/parks-and-gardens/margaret-mahy-family-playground/",
-          "remarks": "Huge free playground; burn off flight energy",
-          "thumbnail_url": null,
-          "google_place_id": null
         }
       ]
     },
@@ -563,9 +549,27 @@
       },
       "activities": [
         {
-          "activity_id": "christchurch-end-act-1",
+          "activity_id": "christchurch-arrival-act-2",
           "order": 1,
           "manual_order": 1,
+          "status": {
+            "done": false
+          },
+          "activity_name": "Margaret Mahy Family Playground",
+          "location": {
+            "address": "177 Armagh Street, Christchurch 8011"
+          },
+          "travel_time_from_accommodation": "10m walk",
+          "duration": "1–2h",
+          "url": "https://ccc.govt.nz/rec-and-sport/parks-and-gardens/margaret-mahy-family-playground/",
+          "remarks": "Huge free playground; burn off flight energy",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-end-act-1",
+          "order": 2,
+          "manual_order": 2,
           "status": { "done": false },
           "activity_name": "Christchurch Farmers’ Market (Sat mornings)",
           "location": { "address": "16 Kahu Rd, Riccarton, Christchurch 8041" },
@@ -578,8 +582,8 @@
         },
         {
           "activity_id": "christchurch-end-act-2",
-          "order": 2,
-          "manual_order": 2,
+          "order": 3,
+          "manual_order": 3,
           "status": { "done": false },
           "activity_name": "International Antarctic Centre",
           "location": { "address": "38 Orchard Rd, Christchurch 8052" },
@@ -592,8 +596,8 @@
         },
         {
           "activity_id": "christchurch-end-act-3",
-          "order": 3,
-          "manual_order": 3,
+          "order": 4,
+          "manual_order": 4,
           "status": { "done": false },
           "activity_name": "Willowbank Wildlife Reserve",
           "location": { "address": "60 Hussey Rd, Northwood, Christchurch 8051" },
@@ -606,8 +610,8 @@
         },
         {
           "activity_id": "christchurch-end-act-4",
-          "order": 4,
-          "manual_order": 4,
+          "order": 5,
+          "manual_order": 5,
           "status": { "done": false },
           "activity_name": "Orana Wildlife Park (open-range zoo)",
           "location": { "address": "McLeans Island Rd, Harewood, Christchurch 8051" },
@@ -620,8 +624,8 @@
         },
         {
           "activity_id": "christchurch-end-act-5",
-          "order": 5,
-          "manual_order": 5,
+          "order": 6,
+          "manual_order": 6,
           "status": { "done": false },
           "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
           "location": { "address": "Marine Parade, New Brighton, Christchurch" },
@@ -634,8 +638,8 @@
         },
         {
           "activity_id": "christchurch-end-act-6",
-          "order": 6,
-          "manual_order": 6,
+          "order": 7,
+          "manual_order": 7,
           "status": { "done": false },
           "activity_name": "Riverside Market (meals & souvenirs)",
           "location": { "address": "96 Oxford Terrace, Christchurch 8011" },

@@ -131,11 +131,11 @@ function App() {
           {/* Map */}
           <div className="flex-1">
             <MapContainer
-              stops={appTripData.stops}
-              currentStopId={state.currentBase}
+              tripData={appTripData}
+              currentBaseId={state.currentBase}
               selectedActivityId={state.selectedActivity}
               onActivitySelect={handleActivitySelect}
-              onStopSelect={handleStopSelect}
+              onBaseSelect={handleStopSelect}
             />
           </div>
 

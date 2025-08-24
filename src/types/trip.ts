@@ -45,9 +45,22 @@ export interface Accommodation {
   google_place_id?: string | null;
 }
 
+export const ActivityType = {
+  RESTAURANT: 'restaurant',
+  ATTRACTION: 'attraction', 
+  SHOPPING: 'shopping',
+  OUTDOOR: 'outdoor',
+  CULTURAL: 'cultural',
+  TRANSPORT: 'transport',
+  OTHER: 'other'
+} as const;
+
+export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
+
 export interface Activity {
   activity_id: string;
   activity_name: string;
+  activity_type?: ActivityType;
   location?: {
     lat?: number;
     lng?: number;
