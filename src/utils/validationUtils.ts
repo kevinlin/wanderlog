@@ -1,5 +1,5 @@
 // Validation utilities for Wanderlog Travel Journal
-import { Coordinates, TripBase } from '@/types';
+import { Coordinates } from '@/types';
 
 /**
  * Validates if an object has the basic structure of trip data
