@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { TripData, LoadingState } from '@/types';
 import { loadTripData } from '@/services/tripDataService';
+import { useAppStateContext } from '@/contexts/AppStateContext';
 
 interface UseTripDataReturn extends LoadingState {
   tripData: TripData | null;
@@ -8,38 +9,39 @@ interface UseTripDataReturn extends LoadingState {
 }
 
 /**
- * Hook to load and manage trip data
+ * Hook to load and manage trip data using global state context
  */
 export const useTripData = (): UseTripDataReturn => {
-  const [tripData, setTripData] = useState<TripData | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { state, dispatch } = useAppStateContext();
 
-  const fetchTripData = async () => {
+  const fetchTripData = useCallback(async () => {
     try {
-      setIsLoading(true);
-      setError(null);
+      dispatch({ type: 'SET_LOADING', payload: true });
+      dispatch({ type: 'SET_ERROR', payload: null });
       
       const data = await loadTripData();
       
-      setTripData(data);
+      dispatch({ type: 'SET_TRIP_DATA', payload: data });
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Unknown error occurred';
-      setError(errorMessage);
+      dispatch({ type: 'SET_ERROR', payload: errorMessage });
       console.error('Failed to load trip data:', err);
     } finally {
-      setIsLoading(false);
+      dispatch({ type: 'SET_LOADING', payload: false });
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
-    fetchTripData();
-  }, []);
+    // Only fetch if we don't have trip data yet
+    if (!state.tripData && !state.loading) {
+      fetchTripData();
+    }
+  }, [state.tripData, state.loading, fetchTripData]);
 
   return {
-    tripData,
-    isLoading,
-    error,
+    tripData: state.tripData,
+    isLoading: state.loading,
+    error: state.error,
     refetch: fetchTripData,
   };
 };
