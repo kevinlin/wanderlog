@@ -9,7 +9,7 @@ export const isValidTripData = (data: unknown, errors: string[], warnings: strin
     errors.push('data must be a valid JSON object');
     return false;
   }
-  
+
   const d = data as Record<string, unknown>;
 
   if (d.trip_name === undefined || typeof d.trip_name !== 'string') {
@@ -25,7 +25,7 @@ export const isValidTripData = (data: unknown, errors: string[], warnings: strin
   } else if (d.stops.length === 0) {
     warnings.push('Trip has no stops defined');
   }
-  
+
   return (
     typeof d.trip_name === 'string' &&
     typeof d.timezone === 'string' &&
@@ -42,13 +42,13 @@ export const isValidStop = (data: unknown, errors: string[], warnings: string[])
     errors.push('stop must be a valid JSON object');
     return false;
   }
-  
+
   const d = data as Record<string, unknown>;
   if (d.stop_id === undefined || typeof d.stop_id !== 'string') {
     errors.push('stop_id must be a string');
   }
 
-   if (d.name === undefined || typeof d.name !== 'string') {
+  if (d.name === undefined || typeof d.name !== 'string') {
     errors.push('name must be a string');
   }
 
@@ -56,16 +56,20 @@ export const isValidStop = (data: unknown, errors: string[], warnings: string[])
     errors.push('date must be a valid date');
   }
 
-  if (d.location === undefined || !isValidCoordinates(d.location)) {
+  if (d.location === undefined) {
+    warnings.push('location is not defined');
+  } else if (!isValidCoordinates(d.location)) {
     errors.push('location must be a valid coordinates');
   }
 
-  if (d.duration_days === undefined || typeof d.duration_days !== 'number') {
+  if (d.duration_days === undefined) {
+    warnings.push('duration_days is not defined');
+  } else if (typeof d.duration_days !== 'number') {
     errors.push('duration_days must be a number');
   }
 
-  if (d.accommodation === undefined || !isValidAccommodation(d.accommodation, errors, warnings)) {
-    errors.push('accommodation must be a valid accommodation');
+  if (d.accommodation === undefined) {
+    warnings.push('accommodation is not defined');
   }
 
   if (!Array.isArray(d.activities)) {
@@ -73,7 +77,7 @@ export const isValidStop = (data: unknown, errors: string[], warnings: string[])
   } else if (d.activities.length === 0) {
     warnings.push('Stop has no activities defined');
   }
-  
+
   return (
     typeof d.stop_id === 'string' &&
     typeof d.name === 'string' &&
@@ -82,7 +86,7 @@ export const isValidStop = (data: unknown, errors: string[], warnings: string[])
     typeof d.duration_days === 'number' &&
     isValidAccommodation(d.accommodation, errors, warnings) &&
     Array.isArray(d.activities) &&
-    d.activities.every(activity => isValidActivity(activity, errors))
+    d.activities.every(activity => isValidActivity(activity, errors, warnings))
   );
 };
 
@@ -93,9 +97,9 @@ export const isValidDateRange = (data: unknown): boolean => {
   if (!data || typeof data !== 'object') {
     return false;
   }
-  
+
   const d = data as Record<string, unknown>;
-  
+
   return (
     typeof d.from === 'string' &&
     typeof d.to === 'string' &&
@@ -111,12 +115,12 @@ export const isValidDateString = (dateString: unknown): boolean => {
   if (typeof dateString !== 'string') {
     return false;
   }
-  
+
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (!dateRegex.test(dateString)) {
     return false;
   }
-  
+
   const date = new Date(dateString + 'T00:00:00');
   return !isNaN(date.getTime());
 };
@@ -128,9 +132,9 @@ export const isValidCoordinates = (data: unknown): data is Coordinates => {
   if (!data || typeof data !== 'object') {
     return false;
   }
-  
+
   const d = data as Record<string, unknown>;
-  
+
   return (
     typeof d.lat === 'number' &&
     typeof d.lng === 'number' &&
@@ -149,7 +153,7 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
     errors.push('accommodation must be a valid JSON object');
     return false;
   }
-  
+
   const d = data as Record<string, unknown>;
 
   if (d.name === undefined || typeof d.name !== 'string') {
@@ -159,7 +163,7 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
   if (d.address === undefined || typeof d.address !== 'string') {
     errors.push('address must be a string');
   }
-  
+
   if (d.check_in === undefined || typeof d.check_in !== 'string') {
     errors.push('check_in must be a string');
   }
@@ -168,44 +172,48 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
     errors.push('check_out must be a string');
   }
 
-  if (d.confirmation === undefined) {
+  if (!d.confirmation) {
     warnings.push('confirmation is not defined');
   } else if (typeof d.confirmation !== 'string') {
     errors.push('confirmation must be a string');
   }
 
-  if (d.url === undefined) {
+  if (!d.url) {
     warnings.push('url is not defined');
   } else if (typeof d.url !== 'string') {
     errors.push('url must be a string');
   }
 
-  if (d.thumbnail_url === undefined) {
+  if (!d.thumbnail_url) {
     warnings.push('thumbnail_url is not defined');
   } else if (typeof d.thumbnail_url !== 'string') {
     errors.push('thumbnail_url must be a string');
   }
 
-  return (
-    typeof d.name === 'string' &&
+  const isValid = typeof d.name === 'string' &&
     typeof d.address === 'string' &&
     typeof d.check_in === 'string' &&
     typeof d.check_out === 'string' &&
     // Optional fields
-    (d.confirmation === undefined || typeof d.confirmation === 'string') &&
-    (d.url === undefined || typeof d.url === 'string') &&
-    (d.thumbnail_url === undefined || typeof d.thumbnail_url === 'string')
-  );
+    (!d.confirmation || typeof d.confirmation === 'string') &&
+    (!d.url || typeof d.url === 'string') &&
+    (!d.thumbnail_url || typeof d.thumbnail_url === 'string');
+
+  if (!isValid) {
+    console.log("Invalid accommodation:", d);
+  }
+
+  return isValid;
 };
 
 /**
  * Validates activity structure
  */
-export const isValidActivity = (data: unknown, errors: string[]): boolean => {
+export const isValidActivity = (data: unknown, errors: string[], warnings: string[]): boolean => {
   if (!data || typeof data !== 'object') {
     return false;
   }
-  
+
   const d = data as Record<string, unknown>;
 
   if (d.activity_id === undefined || typeof d.activity_id !== 'string') {
@@ -217,31 +225,45 @@ export const isValidActivity = (data: unknown, errors: string[]): boolean => {
   }
 
   // Optional fields - only validate type if present
-  if (d.duration !== undefined && typeof d.duration !== 'string') {
+  if (!d.duration) {
+    warnings.push('duration is not present');
+  } else if (typeof d.duration !== 'string') {
     errors.push('duration must be a string');
   }
 
-  if (d.travel_time_from_accommodation !== undefined && typeof d.travel_time_from_accommodation !== 'string') {
+  if (!d.travel_time_from_accommodation) {
+    warnings.push('travel_time_from_accommodation is not present');
+  } else if (typeof d.travel_time_from_accommodation !== 'string') {
     errors.push('travel_time_from_accommodation must be a string');
   }
 
-  if (d.url !== undefined && typeof d.url !== 'string') {
+  if (!d.url) {
+    warnings.push('url is not present');
+  } else if (typeof d.url !== 'string') {
     errors.push('url must be a string');
   }
 
-  if (d.remarks !== undefined && typeof d.remarks !== 'string') {
+  if (!d.remarks) {
+    warnings.push('remarks is not present');
+  } else if (typeof d.remarks !== 'string') {
     errors.push('remarks must be a string');
   }
 
-  if (d.thumbnail_url !== undefined && typeof d.thumbnail_url !== 'string') {
+  if (!d.thumbnail_url) {
+    warnings.push('thumbnail_url is not present');
+  } else if (typeof d.thumbnail_url !== 'string') {
     errors.push('thumbnail_url must be a string');
   }
 
-  if (d.manual_order !== undefined && typeof d.manual_order !== 'number') {
+  if (!d.manual_order) {
+    warnings.push('manual_order is not present');
+  } else if (typeof d.manual_order !== 'number') {
     errors.push('manual_order must be a number');
   }
 
-  if (d.status !== undefined && !isValidActivityStatus(d.status)) {
+  if (!d.status) {
+    warnings.push('status is not present');
+  } else if (!isValidActivityStatus(d.status)) {
     errors.push('status must be a valid activity status');
   }
 
@@ -258,19 +280,26 @@ export const isValidActivity = (data: unknown, errors: string[]): boolean => {
       (d.location as Record<string, unknown>).address === undefined || typeof (d.location as Record<string, unknown>).address === 'string'
     )
   );
-  
-  return (
-    typeof d.activity_id === 'string' &&
+  if (!hasValidLocation) {
+    errors.push('location must be a valid coordinates' + JSON.stringify(d.location));
+  }
+
+  const isValid = typeof d.activity_id === 'string' &&
     typeof d.activity_name === 'string' &&
     hasValidLocation &&
-    (d.duration === undefined || typeof d.duration === 'string') &&
-    (d.travel_time_from_accommodation === undefined || typeof d.travel_time_from_accommodation === 'string') &&
-    (d.url === undefined || typeof d.url === 'string') &&
-    (d.remarks === undefined || typeof d.remarks === 'string') &&
-    (d.thumbnail_url === undefined || typeof d.thumbnail_url === 'string') &&
-    (d.manual_order === undefined || typeof d.manual_order === 'number') &&
-    (d.status === undefined || isValidActivityStatus(d.status))
-  );
+    (!d.duration || typeof d.duration === 'string') &&
+    (!d.travel_time_from_accommodation || typeof d.travel_time_from_accommodation === 'string') &&
+    (!d.url || typeof d.url === 'string') &&
+    (!d.remarks || typeof d.remarks === 'string') &&
+    (!d.thumbnail_url || typeof d.thumbnail_url === 'string') &&
+    (!d.manual_order || typeof d.manual_order === 'number') &&
+    (!d.status || isValidActivityStatus(d.status));
+
+  if (!isValid) {
+    console.log("Invalid activity:", d);
+  }
+
+  return isValid;
 };
 
 /**
@@ -280,9 +309,9 @@ export const isValidActivityStatus = (data: unknown): boolean => {
   if (!data || typeof data !== 'object') {
     return false;
   }
-  
+
   const d = data as Record<string, unknown>;
-  
+
   return typeof d.done === 'boolean';
 };
 
@@ -325,7 +354,7 @@ export const validateAndSanitizeInput = (input: unknown, maxLength: number = 100
   if (typeof input !== 'string') {
     return '';
   }
-  
+
   const sanitized = sanitizeString(input);
   return sanitized.length > maxLength ? sanitized.substring(0, maxLength) : sanitized;
 };

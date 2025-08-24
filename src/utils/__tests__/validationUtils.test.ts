@@ -183,7 +183,8 @@ describe('ValidationUtils', () => {
 
     it('should validate correct activity', () => {
       const errors: string[] = [];
-      expect(isValidActivity(validActivity, errors)).toBe(true);
+      const warnings: string[] = [];
+      expect(isValidActivity(validActivity, errors, warnings)).toBe(true);
     });
 
     it('should validate activity with optional fields', () => {
@@ -203,14 +204,16 @@ describe('ValidationUtils', () => {
         status: { done: false },
       };
       const errors: string[] = [];
-      expect(isValidActivity(activityWithOptionals, errors)).toBe(true);
+      const warnings: string[] = [];
+      expect(isValidActivity(activityWithOptionals, errors, warnings)).toBe(true);
     });
 
     it('should reject activity with missing required fields', () => {
       const invalidActivity = { ...validActivity };
       delete (invalidActivity as Record<string, unknown>).activity_id;
       const errors: string[] = [];
-      expect(isValidActivity(invalidActivity, errors)).toBe(false);
+      const warnings: string[] = [];
+      expect(isValidActivity(invalidActivity, errors, warnings)).toBe(false);
     });
   });
 
