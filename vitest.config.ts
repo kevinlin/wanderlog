@@ -35,5 +35,8 @@ export default defineConfig({
         '**/types.ts',
       ],
     },
+    outputFile: {
+      junit: './test-results.xml',
+    },
   },
 });

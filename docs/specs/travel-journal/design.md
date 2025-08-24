@@ -484,38 +484,6 @@ export default defineConfig({
 });
 ```
 
-### GitHub Actions Workflow
-```yaml
-name: Deploy to GitHub Pages
-on:
-  push:
-    branches: [ main ]
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 8
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
-        env:
-          VITE_GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/deploy-pages@v4
-```
-
 ### Environment Variables
 - **VITE_GOOGLE_MAPS_API_KEY**: Google Maps API key injected at build time
 - **NODE_ENV**: Environment setting for development/production builds
