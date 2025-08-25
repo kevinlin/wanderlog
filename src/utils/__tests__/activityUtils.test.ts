@@ -189,14 +189,14 @@ describe('ActivityUtils', () => {
       expect(uniqueColors.size).toBe(colors.length);
     });
 
-    it('should return specific expected colors', () => {
-      expect(getActivityTypeColor(ActivityType.RESTAURANT)).toBe('#FF6B6B');
-      expect(getActivityTypeColor(ActivityType.ATTRACTION)).toBe('#4ECDC4');
-      expect(getActivityTypeColor(ActivityType.SHOPPING)).toBe('#FFE66D');
-      expect(getActivityTypeColor(ActivityType.OUTDOOR)).toBe('#95E1D3');
-      expect(getActivityTypeColor(ActivityType.CULTURAL)).toBe('#A8E6CF');
-      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#DDA0DD');
-      expect(getActivityTypeColor(ActivityType.OTHER)).toBe('#87CEEB');
+    it('should return specific expected colors from Tailwind Colors v4 palette', () => {
+      expect(getActivityTypeColor(ActivityType.RESTAURANT)).toBe('#f97316'); // Orange-500
+      expect(getActivityTypeColor(ActivityType.ATTRACTION)).toBe('#8b5cf6'); // Violet-500
+      expect(getActivityTypeColor(ActivityType.SHOPPING)).toBe('#f59e0b'); // Amber-500
+      expect(getActivityTypeColor(ActivityType.OUTDOOR)).toBe('#10b981'); // Emerald-500
+      expect(getActivityTypeColor(ActivityType.CULTURAL)).toBe('#06b6d4'); // Cyan-500
+      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#6366f1'); // Indigo-500
+      expect(getActivityTypeColor(ActivityType.OTHER)).toBe('#0ea5e9'); // Sky-500
     });
   });
 });
