@@ -147,44 +147,45 @@ This document outlines the step-by-step implementation tasks for building the Wa
 
 - [x] 7. **Expandable Activities Panel Component**
   - [x] 7.1 Create floating ActivitiesPanel component structure
-    - ✅ Implement ActivitiesPanel.tsx as floating panel positioned at top-right corner with frosted glass styling
-    - ✅ Apply consistent styling: `absolute top-4 right-4 rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
-    - ✅ Implement expandable/collapsible functionality with smooth transitions (300ms ease-in-out)
-    - ✅ Default state: Display only accommodation card with expand control at bottom
-    - ✅ Expanded state: Extend to bottom of screen (`top-4` to `bottom-4`) with collapse control and scroll overflow
+    - Implement ActivitiesPanel.tsx as floating panel positioned at top-right corner with frosted glass styling
+    - Apply consistent styling: `absolute top-4 right-4 rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
+    - Implement expandable/collapsible functionality with smooth transitions (300ms ease-in-out)
+    - Default state: Display only accommodation card with expand control at bottom
+    - Expanded state: Extend to bottom of screen (`top-4` to `bottom-4`) with collapse control and scroll overflow
     - **Requirements Reference**: Requirement 3.1, 3.2, 3.3, 3.4, 3.5 (floating activities panel, expandable design), Requirement 10.2 (frosted glass styling)
 
   - [x] 7.2 Create ActivityCard component with new color palette
-    - ✅ Implement ActivityCard.tsx with comprehensive activity information display
-    - ✅ Add travel time calculation and display from accommodation
-    - ✅ Implement "Mark Done" checkbox with visual feedback using new color palette (Emerald-500 for completed: `bg-emerald-500/40`)
-    - ✅ Apply hover states with Orange-500 (`hover:bg-orange-500/90`)
+    - Implement ActivityCard.tsx with comprehensive activity information display
+    - Add travel time calculation and display from accommodation
+    - Implement "Mark Done" checkbox with visual feedback using new color palette (Emerald-500 for completed: `bg-emerald-500/40`)
+    - Apply hover states with Orange-500 (`hover:bg-orange-500/90`)
     - **Requirements Reference**: Requirement 3.6 (activity card content), Requirement 3.12, 3.13 (completion status, visual indication with new colors)
 
   - [x] 7.3 Implement activity interactions within expandable panel
-    - ✅ Add activity card highlighting when map pins are selected using Sky-500 (`bg-sky-500`)
-    - ✅ Implement "Navigate in Google Maps" action with external URL opening
-    - ✅ Create scrollable activity list within expanded panel
-    - ✅ Add smooth scroll-to-activity functionality when pins are selected
+    - Add activity card highlighting when map pins are selected using Sky-500 (`bg-sky-500`)
+    - Implement "Navigate in Google Maps" action with external URL opening
+    - Create scrollable activity list within expanded panel
+    - Add smooth scroll-to-activity functionality when pins are selected
     - **Requirements Reference**: Requirement 3.8, 3.9 (activity-pin synchronization), Requirement 3.14 (Google Maps navigation)
 
   - [x] 7.4 Add drag-and-drop functionality within expandable panel
-    - ✅ Implement DraggableActivitiesList component using @dnd-kit/core within the scrollable panel
-    - ✅ Create drag handles and visual feedback during dragging with new color palette
-    - ✅ Add reordering persistence to LocalStorage with manual_order field via AppStateContext
-    - ✅ Ensure drag-and-drop works properly within the constrained panel height
+    - Implement DraggableActivitiesList component using @dnd-kit/core within the scrollable panel
+    - Create drag handles and visual feedback during dragging with new color palette
+    - Add reordering persistence to LocalStorage with manual_order field via AppStateContext
+    - Ensure drag-and-drop works properly within the constrained panel height
     - **Requirements Reference**: Requirement 3.10, 3.11 (drag-drop reordering, order persistence)
 
-- [ ] 8. **Accommodation Display Components (Within Activities Panel)**
-  - [ ] 8.1 Create AccommodationCard component for panel integration
+- [x] 8. **Accommodation Display Components (Within Activities Panel)**
+  - [x] 8.1 Create AccommodationCard component for panel integration
     - Implement AccommodationCard.tsx with accommodation details for display within the ActivitiesPanel
     - Add check-in/check-out time display and confirmation information
     - Implement thumbnail image display when available
     - Apply new color palette for interactive elements (Orange-500 for hover states)
     - Ensure card fits properly within the collapsed panel state
+    - Added support for host and rooms fields display when available
     - **Requirements Reference**: Requirement 4.2, 4.5 (accommodation information, thumbnail display), Requirement 10.3 (new color palette)
 
-  - [ ] 8.2 Integrate accommodation display with activities panel and map
+  - [x] 8.2 Integrate accommodation display with activities panel and map
     - Position accommodation card prominently at top of the ActivitiesPanel (visible in both collapsed and expanded states)
     - Add accommodation pin display on map for each base with new color palette
     - Ensure visual consistency with frosted glass aesthetic and new color scheme

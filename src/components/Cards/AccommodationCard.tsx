@@ -83,6 +83,20 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
               </a>
             </div>
           )}
+
+          {accommodation.host && (
+            <div className="mb-3">
+              <p className="text-xs text-gray-500 font-medium">Host</p>
+              <p className="text-sm text-gray-900">{accommodation.host}</p>
+            </div>
+          )}
+
+          {accommodation.rooms && (
+            <div className="mb-3">
+              <p className="text-xs text-gray-500 font-medium">Rooms</p>
+              <p className="text-sm text-gray-900">{accommodation.rooms}</p>
+            </div>
+          )}
         </div>
 
         {accommodation.thumbnail_url && (
