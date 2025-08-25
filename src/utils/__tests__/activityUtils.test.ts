@@ -2,9 +2,10 @@ import { describe, it, expect } from 'vitest';
 import { 
   inferActivityType, 
   enrichActivityWithType, 
-  enrichActivitiesWithTypes,
-  getActivityTypeIcon,
-  getActivityTypeColor
+  enrichActivitiesWithTypes, 
+  getActivityTypeIcon, 
+  getActivityTypeColor,
+  getActivityTypeSvgPath
 } from '../activityUtils';
 import { Activity, ActivityType } from '@/types/trip';
 
@@ -197,6 +198,48 @@ describe('ActivityUtils', () => {
       expect(getActivityTypeColor(ActivityType.CULTURAL)).toBe('#06b6d4'); // Cyan-500
       expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#6366f1'); // Indigo-500
       expect(getActivityTypeColor(ActivityType.OTHER)).toBe('#0ea5e9'); // Sky-500
+    });
+  });
+
+  describe('getActivityTypeSvgPath', () => {
+    it('should return restaurant icon path for restaurant type', () => {
+      const path = getActivityTypeSvgPath(ActivityType.RESTAURANT);
+      expect(path).toBe('M8 2v20h2V2H8zm4 0v20h2v-4h4V2h-6zm2 2h2v12h-2V4z');
+    });
+
+    it('should return attraction icon path for attraction type', () => {
+      const path = getActivityTypeSvgPath(ActivityType.ATTRACTION);
+      expect(path).toBe('M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V7a2 2 0 00-2-2H4zm8 2a4 4 0 100 8 4 4 0 000-8z');
+    });
+
+    it('should return shopping icon path for shopping type', () => {
+      const path = getActivityTypeSvgPath(ActivityType.SHOPPING);
+      expect(path).toBe('M6 2a2 2 0 00-2 2v2a2 2 0 002 2h.5L8 22h8l1.5-14H18a2 2 0 002-2V4a2 2 0 00-2-2H6zm2 4V4h8v2H8z');
+    });
+
+    it('should return outdoor icon path for outdoor type', () => {
+      const path = getActivityTypeSvgPath(ActivityType.OUTDOOR);
+      expect(path).toBe('M2.5 16L4 14l1.5 2 3-4 3 4 1.5-2 3 4 3-4L21.5 16H2.5zM12 6a2 2 0 100-4 2 2 0 000 4z');
+    });
+
+    it('should return cultural icon path for cultural type', () => {
+      const path = getActivityTypeSvgPath(ActivityType.CULTURAL);
+      expect(path).toBe('M6.5 2a.5.5 0 01.5.5V3h10v-.5a.5.5 0 011 0V3h1a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1h1v-.5a.5.5 0 01.5-.5zM6 5v2h12V5H6zm0 4v2h2V9H6zm4 0v2h2V9h-2zm4 0v2h2V9h-2zM6 13v2h2v-2H6zm4 0v2h2v-2h-2zm4 0v2h2v-2h-2z');
+    });
+
+    it('should return transport icon path for transport type', () => {
+      const path = getActivityTypeSvgPath(ActivityType.TRANSPORT);
+      expect(path).toBe('M5 17a2 2 0 104 0 2 2 0 00-4 0zm10 0a2 2 0 104 0 2 2 0 00-4 0zM4 5a1 1 0 011-1h14a1 1 0 011 1v8a1 1 0 01-1 1H5a1 1 0 01-1-1V5z');
+    });
+
+    it('should return flag icon path for other type', () => {
+      const path = getActivityTypeSvgPath(ActivityType.OTHER);
+      expect(path).toBe('M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1v12z');
+    });
+
+    it('should return flag icon path for undefined type', () => {
+      const path = getActivityTypeSvgPath(undefined as any);
+      expect(path).toBe('M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1v12z');
     });
   });
 });

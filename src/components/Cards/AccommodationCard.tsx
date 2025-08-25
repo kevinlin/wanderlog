@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Accommodation } from '@/types';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { accommodationHasLocationIssues } from '@/utils/validationUtils';
+import { LocationWarning } from '@/components/Layout/LocationWarning';
 
 interface AccommodationCardProps {
   accommodation: Accommodation;
@@ -12,6 +14,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
   stopName,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const showLocationWarning = accommodationHasLocationIssues(accommodation);
   const checkInDate = new Date(accommodation.check_in);
   const checkOutDate = new Date(accommodation.check_out);
 
@@ -103,6 +106,16 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
                 <div className="mb-3">
                   <p className="text-xs text-gray-500 font-medium">Rooms</p>
                   <p className="text-sm text-gray-900">{accommodation.rooms}</p>
+                </div>
+              )}
+
+              {/* Location warning */}
+              {showLocationWarning && (
+                <div className="mb-3">
+                  <LocationWarning
+                    type="accommodation"
+                    message="This accommodation cannot be displayed on the map due to missing or invalid location data."
+                  />
                 </div>
               )}
             </>

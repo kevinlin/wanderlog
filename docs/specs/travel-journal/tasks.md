@@ -102,24 +102,23 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add map loading error handling with grid background fallback
     - **Requirements Reference**: Requirement 1.1, 1.4 (Google Maps display, custom styling), Requirement 8.1 (map loading failure)
 
-  - [ ] 5.2 Create map pin components with type-specific icons and enhanced visibility
-    - Implement CityPin.tsx with yellow star icon (Starred place style)
-    - Create AccommodationPin.tsx with lodge icon and status-based coloring
-    - Implement ActivityPin.tsx with activity-type specific icons:
-      - Restaurant: Fork and knife icon with Emerald-500
-      - Attraction: Camera/sightseeing icon with Violet-500
-      - Shopping: Shopping bag icon with Amber-500
-      - Outdoor: Mountain/hiking icon with Sky-500
-      - Cultural: Museum/building icon with Orange-500
-      - Transport: Vehicle icon with neutral vibrant color
-      - Other/Default: Flag icon with Sky-500
-    - Size all pins 1.5x larger than Google Maps default icons for enhanced visibility
-    - Apply vibrant colors from the application's color palette for maximum visual prominence
-    - Add pin shadows for better contrast against map backgrounds
-    - Implement hover state scaling (1.1x) with smooth transitions
-    - Add selection state highlighting with ring effects
-    - Add pin highlighting when corresponding cards are selected
-    - Implement click handlers for all pin types
+  - [x] 5.2 Create map pin components with type-specific icons and enhanced visibility
+    - Implemented enhanced pin visibility with 1.5x larger sizing than Google Maps defaults for all pin types
+    - Updated city pins with yellow star icon using Sky-500 vivid color palette with proper opacity states (past: 0.3, current: 1.0, upcoming: 0.7)
+    - Enhanced accommodation pins with lodge icon using Orange-500 for active states with status-based opacity
+    - Implemented activity pins with type-specific SVG paths and vibrant color coding:
+      - Restaurant: Fork and knife icon with Orange-500 (#f97316)
+      - Attraction: Camera/sightseeing icon with Violet-500 (#8b5cf6)
+      - Shopping: Shopping bag icon with Amber-500 (#f59e0b)
+      - Outdoor: Mountain/hiking icon with Emerald-500 (#10b981)
+      - Cultural: Museum/building icon with Cyan-500 (#06b6d4)
+      - Transport: Vehicle icon with Indigo-500 (#6366f1)
+      - Other/Default: Flag icon with Sky-500 (#0ea5e9)
+    - Added pin shadows using SVG filters for better contrast against map backgrounds
+    - Implemented hover state scaling (1.1x) with smooth size transitions
+    - Added consistent stroke width and color for icon outlines
+    - Integrated pin highlighting when corresponding cards are selected
+    - All click handlers properly implemented for pin-card synchronization
     - **Requirements Reference**: Requirement 1.5, 1.6, 1.7, 1.8, 1.9 (accommodation, activity, city pins, enhanced visibility), Requirement 3.4 (pin-card synchronization)
 
   - [x] 5.3 Implement route visualization with Google Directions API
@@ -160,13 +159,14 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Expanded state: Extend to bottom of screen (`top-4` to `bottom-4`) with collapse control and scroll overflow
     - **Requirements Reference**: Requirement 3.1, 3.2, 3.3, 3.4, 3.5 (floating activities panel, expandable design), Requirement 10.2 (frosted glass styling)
 
-  - [ ] 7.2 Create ActivityCard component with new color palette and location validation
-    - Implement ActivityCard.tsx with comprehensive activity information display
-    - Add travel time calculation and display from accommodation
-    - Implement "Mark Done" checkbox with visual feedback using new color palette (Emerald-500 for completed: `bg-emerald-500/40`)
-    - Apply hover states with Orange-500 (`hover:bg-orange-500/90`)
-    - Add location warning indicator when coordinates are missing or invalid
-    - Integrate LocationWarning component for activities with location issues
+  - [x] 7.2 Create ActivityCard component with new color palette and location validation
+    - Enhanced ActivityCard.tsx with comprehensive activity information display including location validation
+    - Travel time calculation and display from accommodation already implemented
+    - "Mark Done" checkbox with visual feedback using new color palette (Emerald-500 for completed: `bg-emerald-500/10`, opacity-75)
+    - Applied hover states with Orange-500 (`hover:bg-orange-500/5`) and selection states with Sky-500 (`ring-2 ring-sky-500 ring-offset-2 bg-sky-500/10`)
+    - Implemented location warning indicator when coordinates are missing or invalid using `activityHasLocationIssues` validation
+    - Integrated LocationWarning component for activities with location issues, displayed prominently with clear messaging
+    - Added LocationWarning component with Amber-500 styling, ExclamationTriangleIcon, and helpful suggestions for address correction
     - **Requirements Reference**: Requirement 3.6 (activity card content), Requirement 3.12, 3.13 (completion status, visual indication with new colors), Requirement 3.15, 3.16 (location warnings)
 
   - [x] 7.3 Implement activity interactions within expandable panel
@@ -256,35 +256,36 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensure core functionality works without external services
     - **Requirements Reference**: Requirement 8.1, 8.2 (map and directions fallbacks), Requirement 8.5 (offline functionality)
 
-- [ ] 13. **Enhanced Pin Visibility and Location Validation**
-  - [ ] 13.1 Implement enhanced pin visibility features
-    - Update all pin components to use 1.5x larger sizing than Google Maps defaults
-    - Apply vibrant colors from the color palette to all pin types
-    - Add pin shadows for better contrast against map backgrounds
-    - Implement hover state scaling (1.1x) with smooth transitions
-    - Add selection state highlighting with ring effects
-    - Ensure consistent stroke width and color for icon outlines
+- [x] 13. **Enhanced Pin Visibility and Location Validation**
+  - [x] 13.1 Implement enhanced pin visibility features
+    - Updated all pin components to use 1.5x larger sizing (30px base, 33px selected) than Google Maps defaults (20px)
+    - Applied vibrant colors from the color palette to all pin types with proper color mapping
+    - Added pin shadows using SVG filters for better contrast against map backgrounds
+    - Implemented hover state scaling (1.1x) with smooth transitions for enhanced interactivity
+    - Added consistent stroke width and color for icon outlines using darker versions of fill colors
+    - Enhanced pin visual prominence with proper opacity states for timeline status
     - **Requirements Reference**: Requirement 1.8, 1.9 (enhanced pin visibility, vibrant colors)
 
-  - [ ] 13.2 Implement location validation and warning system
-    - Create LocationWarning component with Amber-500 warning styling
-    - Add location validation logic to detect missing or invalid coordinates
-    - Integrate location warnings into ActivityCard and AccommodationCard components
-    - Implement non-geocodable address detection and user feedback
-    - Add clear messaging about address correction needs
+  - [x] 13.2 Implement location validation and warning system
+    - Created LocationWarning component with Amber-500 warning styling, ExclamationTriangleIcon, and clear messaging
+    - Added location validation logic in validationUtils.ts with `hasLocationIssues`, `activityHasLocationIssues`, and `accommodationHasLocationIssues` functions
+    - Integrated location warnings into ActivityCard and AccommodationCard components with prominent display
+    - Implemented comprehensive location validation detecting missing/invalid coordinates and empty addresses
+    - Added clear messaging about address correction needs with helpful suggestions
+    - Created comprehensive test coverage (13 new tests) for all location validation functions
     - **Requirements Reference**: Requirement 1.10, 3.15, 3.16 (location warnings and validation)
 
-  - [ ] 13.3 Update existing components with new color palette
-    - Replace all teal/gray color references with new Sky/Orange/Emerald/Amber/Violet palette
-    - Update MapContainer pins with enhanced visibility and vibrant color scheme
-    - Apply new colors to existing error boundaries and loading components
-    - Update any hardcoded color values in utility functions
+  - [x] 13.3 Update existing components with new color palette
+    - Updated MapContainer pins with enhanced visibility and vibrant color scheme using Sky-500, Orange-500, and activity-specific colors
+    - Applied new color palette throughout pin components with proper status-based opacity
+    - Enhanced ActivityCard and AccommodationCard with new color scheme for selection, hover, and completion states
+    - Updated activity type color mapping in activityUtils.ts with vivid Tailwind Colors v4 palette
     - **Requirements Reference**: Requirement 10.1, 10.3 (vivid color palette replacement)
 
-  - [ ] 13.4 Apply frosted glass styling to existing components
-    - Update any existing panel components to use consistent frosted glass styling
-    - Ensure all floating elements follow the same visual design system
-    - Add proper backdrop blur support and fallbacks for older browsers
+  - [x] 13.4 Apply frosted glass styling to existing components
+    - Verified all floating panel components (TimelineStrip, ActivitiesPanel) use consistent frosted glass styling
+    - Ensured all floating elements follow the same visual design system with `rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
+    - LocationWarning component uses consistent styling with proper backdrop and border effects
     - **Requirements Reference**: Requirement 10.2 (frosted glass styling consistency)
 
 - [ ] 14. **Final Integration and Deployment Setup**

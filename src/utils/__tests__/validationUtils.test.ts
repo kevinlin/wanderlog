@@ -12,6 +12,9 @@ import {
   isValidEmail,
   sanitizeString,
   validateAndSanitizeInput,
+  hasLocationIssues,
+  activityHasLocationIssues,
+  accommodationHasLocationIssues
 } from '../validationUtils';
 import { TripData, TripBase, Coordinates, Accommodation, Activity } from '@/types';
 
@@ -288,6 +291,90 @@ describe('ValidationUtils', () => {
       const longString = 'a'.repeat(2000);
       const result = validateAndSanitizeInput(longString, 100);
       expect(result.length).toBe(100);
+    });
+  });
+
+  describe('Location Validation', () => {
+    describe('hasLocationIssues', () => {
+      it('should return true for undefined location', () => {
+        expect(hasLocationIssues(undefined)).toBe(true);
+      });
+
+      it('should return false for valid coordinates', () => {
+        const location = { lat: -45.0, lng: 170.0 };
+        expect(hasLocationIssues(location)).toBe(false);
+      });
+
+      it('should return false for valid address only', () => {
+        const location = { address: '123 Main St, Queenstown' };
+        expect(hasLocationIssues(location)).toBe(false);
+      });
+
+      it('should return true for invalid coordinates and no address', () => {
+        const location = { lat: NaN, lng: 200 };
+        expect(hasLocationIssues(location)).toBe(true);
+      });
+
+      it('should return true for empty address and no coordinates', () => {
+        const location = { address: '   ' };
+        expect(hasLocationIssues(location)).toBe(true);
+      });
+
+      it('should return false for valid coordinates and address', () => {
+        const location = { lat: -45.0, lng: 170.0, address: '123 Main St' };
+        expect(hasLocationIssues(location)).toBe(false);
+      });
+
+      it('should handle latitude out of bounds', () => {
+        const location = { lat: -100, lng: 170.0 };
+        expect(hasLocationIssues(location)).toBe(true);
+      });
+
+      it('should handle longitude out of bounds', () => {
+        const location = { lat: -45.0, lng: 200 };
+        expect(hasLocationIssues(location)).toBe(true);
+      });
+    });
+
+    describe('activityHasLocationIssues', () => {
+      it('should return true for activity with no location', () => {
+        const activity = { activity_id: 'test', activity_name: 'Test' };
+        expect(activityHasLocationIssues(activity)).toBe(true);
+      });
+
+      it('should return false for activity with valid location', () => {
+        const activity = { 
+          activity_id: 'test', 
+          activity_name: 'Test',
+          location: { lat: -45.0, lng: 170.0 }
+        };
+        expect(activityHasLocationIssues(activity)).toBe(false);
+      });
+
+      it('should return false for activity with valid address', () => {
+        const activity = { 
+          activity_id: 'test', 
+          activity_name: 'Test',
+          location: { address: '123 Main St, Queenstown' }
+        };
+        expect(activityHasLocationIssues(activity)).toBe(false);
+      });
+    });
+
+    describe('accommodationHasLocationIssues', () => {
+      it('should return true for accommodation with no location', () => {
+        const accommodation = { name: 'Test Hotel', address: '123 Test St' };
+        expect(accommodationHasLocationIssues(accommodation)).toBe(true);
+      });
+
+      it('should return false for accommodation with valid coordinates', () => {
+        const accommodation = { 
+          name: 'Test Hotel', 
+          address: '123 Test St',
+          location: { lat: -45.0, lng: 170.0 }
+        };
+        expect(accommodationHasLocationIssues(accommodation)).toBe(false);
+      });
     });
   });
 });

@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer, Polyline } from '@react-google-maps/api';
 import { TripData, ActivityType } from '@/types/trip';
-import { enrichActivityWithType, getActivityTypeColor } from '@/utils/activityUtils';
+import { enrichActivityWithType, getActivityTypeColor, getActivityTypeSvgPath } from '@/utils/activityUtils';
 import * as dateUtils from '@/utils/dateUtils';
 
 interface MapContainerProps {
@@ -183,64 +183,123 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     return 'current';
   };
 
-  // City/Town pin (yellow star - "Starred place" style)
+  // City/Town pin (yellow star - "Starred place" style) - Enhanced visibility with 1.5x size
   const getCityPinIcon = (baseId: string, isSelected: boolean) => {
     const status = getBaseStatus(baseId);
+    let color = '#0ea5e9'; // Sky-500 for vivid accent
+    let strokeColor = '#0284c7'; // Sky-600 for outline
     let opacity = 1.0;
     
-    if (status === 'past') opacity = 0.4;
+    if (status === 'past') opacity = 0.3;
+    else if (status === 'current') opacity = 1.0;
     else if (status === 'upcoming') opacity = 0.7;
 
+    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
+    const selectedSize = 33; // 1.1x hover scaling
+    const size = isSelected ? selectedSize : baseSize;
+    
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="#FFD700" fill-opacity="${opacity}" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2L14.09 8.26L22 9L16 14.74L17.18 22L12 18.5L6.82 22L8 14.74L2 9L9.91 8.26L12 2Z"/>
+      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+          </filter>
+        </defs>
+        <path d="M12 2L14.09 8.26L22 9L16 14.74L17.18 22L12 18.5L6.82 22L8 14.74L2 9L9.91 8.26L12 2Z" 
+              fill="${color}" 
+              fill-opacity="${opacity}"
+              stroke="${strokeColor}" 
+              stroke-width="1" 
+              filter="url(#shadow)"/>
       </svg>
     `)}`;
 
     return {
       url: iconUrl,
-      scaledSize: new window.google.maps.Size(isSelected ? 28 : 24, isSelected ? 28 : 24),
-      anchor: new window.google.maps.Point(isSelected ? 14 : 12, isSelected ? 14 : 12),
+      scaledSize: new window.google.maps.Size(size, size),
+      anchor: new window.google.maps.Point(size / 2, size / 2),
     };
   };
 
-  // Accommodation pin (lodge-style)
+  // Accommodation pin (lodge-style) - Enhanced visibility with 1.5x size and Orange-500
   const getAccommodationPinIcon = (baseId: string, isSelected: boolean) => {
     const status = getBaseStatus(baseId);
-    let color = '#8B4513'; // Brown for lodge
+    let color = '#f97316'; // Orange-500 for active states
+    let strokeColor = '#ea580c'; // Orange-600 for outline
+    let opacity = 1.0;
     
-    if (status === 'past') color = '#9CA3AF'; 
-    else if (status === 'current') color = '#4A9E9E'; // teal
-    else if (status === 'upcoming') color = '#6B7280';
+    if (status === 'past') {
+      color = '#f97316';
+      opacity = 0.3;
+    } else if (status === 'current') {
+      color = '#f97316';
+      opacity = 1.0;
+    } else if (status === 'upcoming') {
+      color = '#f97316';
+      opacity = 0.7;
+    }
+
+    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
+    const selectedSize = 36; // 1.2x hover scaling
+    const size = isSelected ? selectedSize : baseSize;
 
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="${color}" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
+      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+          </filter>
+        </defs>
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" 
+              fill="${color}" 
+              fill-opacity="${opacity}"
+              stroke="${strokeColor}" 
+              stroke-width="1" 
+              filter="url(#shadow)"/>
       </svg>
     `)}`;
 
     return {
       url: iconUrl,
-      scaledSize: new window.google.maps.Size(isSelected ? 28 : 20, isSelected ? 28 : 20),
-      anchor: new window.google.maps.Point(isSelected ? 14 : 10, isSelected ? 28 : 20),
+      scaledSize: new window.google.maps.Size(size, size),
+      anchor: new window.google.maps.Point(size / 2, size),
     };
   };
 
-  // Activity pin (MapPin icon from Heroicons)
+  // Activity pin with type-specific icons - Enhanced visibility with 1.5x size
   const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean) => {
     const color = getActivityTypeColor(activityType);
+    const svgPath = getActivityTypeSvgPath(activityType);
     
-    // MapPin icon SVG path from Heroicons
+    // Calculate stroke color (darker version of fill color)
+    const strokeHex = color.length === 7 ? 
+      '#' + color.slice(1).match(/.{2}/g)?.map(hex => 
+        Math.max(0, parseInt(hex, 16) - 40).toString(16).padStart(2, '0')
+      ).join('') || color : color;
+
+    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
+    const selectedSize = 33; // 1.1x hover scaling
+    const size = isSelected ? selectedSize : baseSize;
+    
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="${color}" xmlns="http://www.w3.org/2000/svg">
-        <path fill-rule="evenodd" d="M11.54 22.351l.07.04.028.016a.76.76 0 00.723 0l.028-.015.071-.041a16.975 16.975 0 001.144-.742 19.58 19.58 0 002.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 00-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 002.682 2.282 16.975 16.975 0 001.145.742zM12 13.5a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/>
+      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+          </filter>
+        </defs>
+        <path d="${svgPath}" 
+              fill="${color}" 
+              stroke="${strokeHex}" 
+              stroke-width="1" 
+              filter="url(#shadow)"/>
       </svg>
     `)}`;
 
     return {
       url: iconUrl,
-      scaledSize: new window.google.maps.Size(isSelected ? 28 : 20, isSelected ? 28 : 20),
-      anchor: new window.google.maps.Point(isSelected ? 14 : 10, isSelected ? 28 : 20),
+      scaledSize: new window.google.maps.Size(size, size),
+      anchor: new window.google.maps.Point(size / 2, size),
     };
   };
 

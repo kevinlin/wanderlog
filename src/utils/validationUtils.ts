@@ -324,6 +324,42 @@ export const isValidActivityStatus = (data: unknown): boolean => {
 };
 
 /**
+ * Checks if location data is missing or invalid
+ */
+export const hasLocationIssues = (location?: { lat?: number; lng?: number; address?: string }): boolean => {
+  if (!location) return true;
+  
+  // Check if coordinates are missing or invalid
+  const hasValidCoordinates = typeof location.lat === 'number' && 
+                              typeof location.lng === 'number' &&
+                              !isNaN(location.lat) && 
+                              !isNaN(location.lng) &&
+                              location.lat >= -90 && location.lat <= 90 &&
+                              location.lng >= -180 && location.lng <= 180;
+  
+  // Check if address is meaningful (not just empty or whitespace)
+  const hasValidAddress = typeof location.address === 'string' && 
+                         location.address.trim().length > 0;
+  
+  // Location has issues if it lacks both valid coordinates AND a meaningful address
+  return !hasValidCoordinates && !hasValidAddress;
+};
+
+/**
+ * Checks if activity has location issues
+ */
+export const activityHasLocationIssues = (activity: { location?: { lat?: number; lng?: number; address?: string } }): boolean => {
+  return hasLocationIssues(activity.location);
+};
+
+/**
+ * Checks if accommodation has location issues
+ */
+export const accommodationHasLocationIssues = (accommodation: { location?: { lat?: number; lng?: number } }): boolean => {
+  return hasLocationIssues(accommodation.location);
+};
+
+/**
  * Validates URL format
  */
 export const isValidUrl = (url: string): boolean => {

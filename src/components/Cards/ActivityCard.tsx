@@ -1,6 +1,8 @@
 import React from 'react';
 import { Activity, Accommodation } from '@/types';
 import { generateGoogleMapsUrl } from '@/utils/tripUtils';
+import { activityHasLocationIssues } from '@/utils/validationUtils';
+import { LocationWarning } from '@/components/Layout/LocationWarning';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -19,6 +21,8 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   onToggleDone,
   onSelect,
 }) => {
+  const showLocationWarning = activityHasLocationIssues(activity);
+
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
     onToggleDone(activity.activity_id, e.target.checked);
@@ -78,6 +82,16 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                 <p className="text-sm text-gray-700 mb-3 italic">
                   💡 {activity.remarks}
                 </p>
+              )}
+
+              {/* Location warning */}
+              {showLocationWarning && (
+                <div className="mb-3">
+                  <LocationWarning
+                    type="activity"
+                    message="This activity cannot be displayed on the map due to missing or invalid location data."
+                  />
+                </div>
               )}
             </div>
 
