@@ -333,6 +333,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           streetViewControl: false,
           mapTypeControl: false,
           fullscreenControl: false,
+          // Mobile touch optimizations
+          gestureHandling: 'greedy', // Allow single-finger panning
+          zoomControlOptions: {
+            position: window.google?.maps?.ControlPosition?.RIGHT_BOTTOM,
+          },
+          // Enhanced touch interactions
+          clickableIcons: false, // Disable default POI clicks to avoid conflicts
+          keyboardShortcuts: false, // Disable keyboard shortcuts on mobile
         }}
       >
         {/* Only render markers after map is loaded */}

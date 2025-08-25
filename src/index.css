@@ -10,4 +10,40 @@ body {
   background-color: #f8fafc;
   color: #1e293b;
   line-height: 1.6;
+  /* Mobile touch optimizations */
+  -webkit-touch-callout: none; /* Disable callout on iOS */
+  -webkit-tap-highlight-color: transparent; /* Remove tap highlight */
+  touch-action: manipulation; /* Optimize touch interactions */
+}
+
+/* Smooth scrolling for mobile */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbars on mobile while keeping functionality */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari, Opera */
+}
+
+/* Touch-friendly focus styles */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+/* Prevent text selection on touch UI elements */
+.select-none {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Overscroll behavior for containers */
+.overscroll-contain {
+  overscroll-behavior: contain;
 }

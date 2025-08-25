@@ -23,10 +23,10 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-l-4 border-sky-500">
+    <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-3 sm:mb-4 border-l-4 border-sky-500">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-          <h3 className="text-lg font-semibold text-gray-900 mb-1">
+          <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
             {accommodation.name}
           </h3>
           <p className="text-sm text-gray-600 mb-2">{stopName}</p>
@@ -34,7 +34,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
             <>
               <p className="text-sm text-gray-700 mb-3">{accommodation.address}</p>
               
-              <div className="grid grid-cols-2 gap-4 mb-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-3">
                 <div>
                   <p className="text-xs text-gray-500 font-medium">Check-in</p>
                   <p className="text-sm text-gray-900">
@@ -123,10 +123,10 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
         </div>
 
         {/* Toggle Button */}
-        <div className="ml-4 flex-shrink-0">
+        <div className="ml-3 sm:ml-4 flex-shrink-0">
           <button
             onClick={toggleExpanded}
-            className="p-2 hover:bg-sky-500/20 rounded-lg transition-colors"
+            className="p-2 hover:bg-sky-500/20 active:bg-sky-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
             aria-label={isExpanded ? "Collapse accommodation details" : "Expand accommodation details"}
           >
             {isExpanded ? (
@@ -139,19 +139,19 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
             <img 
               src={accommodation.thumbnail_url} 
               alt={accommodation.name}
-              className="w-20 h-20 object-cover rounded-lg mt-2"
+              className="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg mt-2"
             />
           )}
         </div>
       </div>
 
       {isExpanded && (
-        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-0 pt-3 border-t border-gray-100">
           <a
             href={accommodation.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sky-500 hover:text-sky-600 text-sm font-medium"
+            className="text-sky-500 hover:text-sky-600 active:text-sky-700 text-sm font-medium touch-manipulation min-h-[44px] sm:min-h-auto flex items-center justify-center sm:justify-start"
           >
             View Website →
           </a>
@@ -160,7 +160,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(accommodation.address)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-700 px-3 py-1 rounded text-sm transition-colors"
+            className="bg-orange-500/20 hover:bg-orange-500/30 active:bg-orange-500/40 text-orange-700 px-3 py-2 sm:py-1 rounded text-sm transition-colors touch-manipulation min-h-[44px] sm:min-h-auto flex items-center justify-center"
           >
             📍 Directions
           </a>

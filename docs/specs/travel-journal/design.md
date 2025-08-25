@@ -567,8 +567,13 @@ The application uses a vivid, modern, and dynamic color scheme based on Tailwind
 
 **Interactive States:**
 - **Hover**: Orange-500 with 90% opacity (`hover:bg-orange-500/90`)
-- **Active**: Enhanced saturation and shadow effects
+- **Active**: Enhanced saturation and shadow effects (`active:bg-orange-500/40`)
 - **Focus**: Sky-500 with ring utilities (`focus:ring-sky-500`)
+
+**Mobile Touch States:**
+- **Touch Targets**: Minimum 44px height and width for all interactive elements (`min-h-[44px] min-w-[44px]`)
+- **Touch Manipulation**: Applied globally with `touch-action: manipulation` for optimal touch response
+- **Active Feedback**: Enhanced active states for immediate visual feedback on touch
 
 ### Frosted Glass Styling
 Consistent styling applied to all floating panels:
@@ -587,21 +592,59 @@ Consistent styling applied to all floating panels:
 ### Layout Specifications
 
 **Floating Panel Positioning:**
-- **Timeline Panel**: `absolute top-4 left-4` with responsive adjustments
-- **Activities Panel**: `absolute top-4 right-4` with responsive adjustments
-- **Gap Specifications**: Minimum 1rem (16px) gap from screen edges on all breakpoints
+- **Timeline Panel**: `absolute top-2 left-2 sm:top-4 sm:left-4` with responsive adjustments
+- **Activities Panel**: `absolute top-2 right-2 sm:top-4 sm:right-4` with responsive adjustments
+- **Gap Specifications**: 
+  - Mobile: 0.5rem (8px) gap from screen edges
+  - Desktop: 1rem (16px) gap from screen edges on sm+ breakpoints
 
 **Panel Dimensions:**
-- **Timeline Panel**: Auto-width based on content, max-width constraints for mobile
+- **Timeline Panel**: 
+  - Mobile: `max-w-[calc(100vw-1rem)]` with horizontal scrolling
+  - Desktop: `max-w-2xl lg:max-w-4xl` based on content
 - **Activities Panel**: 
+  - Mobile: `w-full max-w-[calc(100vw-1rem)]` for full-width experience
+  - Desktop: `w-96` fixed width
   - Collapsed: Auto-height for accommodation card only
-  - Expanded: `top-4` to `bottom-4` with scroll overflow
+  - Expanded: `top-2 sm:top-4` to `bottom-2 sm:bottom-4` with scroll overflow
 
 ### Animation Specifications
 - **Panel Expand/Collapse**: 300ms ease-in-out transition
 - **Hover Effects**: 150ms ease-out transition
 - **Pin Highlighting**: 200ms ease-in-out scale and color transitions
 - **Activity Status Changes**: 250ms fade transition
+- **Touch Feedback**: 200ms transition for active states and scale effects
+- **Drag and Drop**: 200ms transform transition with scale effects during dragging
+
+### Mobile-Specific Design Patterns
+
+#### Touch Interaction Guidelines
+- **Minimum Touch Targets**: All interactive elements implement 44px minimum height/width following iOS and Android guidelines
+- **Touch Feedback**: Immediate visual feedback through active states and subtle scale effects
+- **Gesture Support**: 
+  - Timeline swipe navigation with proper distance thresholds (50px minimum)
+  - Drag and drop with enhanced activation constraints (10px distance, 100ms delay)
+  - Overscroll containment to prevent unwanted page bouncing
+
+#### Responsive Layout Strategy
+- **Mobile-First Approach**: Base styles optimized for mobile, enhanced for larger screens
+- **Breakpoint Strategy**: Single `sm:` breakpoint at 640px for tablet/desktop enhancements
+- **Content Prioritization**: 
+  - Accommodation card always visible in collapsed state
+  - Activities accessible through expandable interface
+  - Essential actions (navigate, mark done) prominently displayed
+
+#### Mobile Performance Optimizations
+- **Touch Action Optimization**: `touch-action: manipulation` prevents double-tap zoom delays
+- **Smooth Scrolling**: `-webkit-overflow-scrolling: touch` for native momentum scrolling
+- **Tap Highlight Removal**: `-webkit-tap-highlight-color: transparent` for custom feedback
+- **Overscroll Behavior**: `overscroll-behavior: contain` prevents parent container scrolling
+
+#### Accessibility Considerations
+- **Focus Management**: Visible focus indicators for keyboard navigation
+- **Screen Reader Support**: Proper ARIA labels and semantic HTML structure
+- **Color Contrast**: All color combinations maintain WCAG AA compliance
+- **Touch Target Spacing**: Adequate spacing between interactive elements to prevent accidental taps
 
 ## Testing Strategy
 

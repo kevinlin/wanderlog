@@ -57,8 +57,8 @@ const SortableActivityItem: React.FC<SortableActivityItemProps> = ({
       ref={setNodeRef}
       style={style}
       className={`
-        ${isDragging ? 'opacity-50 z-50' : ''}
-        touch-none
+        ${isDragging ? 'opacity-50 z-50 scale-105' : ''}
+        touch-none transition-transform duration-200
       `}
       {...attributes}
     >
@@ -66,20 +66,20 @@ const SortableActivityItem: React.FC<SortableActivityItemProps> = ({
       <div className="relative">
         <div
           {...listeners}
-          className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 
+          className="absolute left-1 sm:left-2 top-1/2 transform -translate-y-1/2 z-10 
                      cursor-grab active:cursor-grabbing
-                     p-2 hover:bg-sky-500/20 rounded-lg transition-colors
-                     touch-none"
+                     p-2 sm:p-2 hover:bg-sky-500/20 active:bg-sky-500/30 rounded-lg transition-all duration-200
+                     touch-none min-h-[44px] min-w-[44px] flex items-center justify-center"
           aria-label="Drag to reorder activity"
         >
-          {/* Drag handle icon */}
-          <svg className="w-4 h-4 text-gray-400 hover:text-sky-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
+          {/* Drag handle icon - enhanced for mobile */}
+          <svg className="w-5 h-5 sm:w-4 sm:h-4 text-gray-400 hover:text-sky-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" d="M8 9h8m-8 6h8" />
           </svg>
         </div>
         
         {/* Activity Card with left padding for drag handle */}
-        <div className="pl-10">
+        <div className="pl-12 sm:pl-10">
           <ActivityCard
             activity={activity}
             accommodation={accommodation}
@@ -117,7 +117,9 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: {
-        distance: 8,
+        distance: 10, // Increased for better touch handling
+        delay: 100,   // Add delay to distinguish from scrolling
+        tolerance: 5, // Allow some tolerance for touch jitter
       },
     }),
     useSensor(KeyboardSensor, {
