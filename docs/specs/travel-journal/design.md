@@ -77,7 +77,7 @@ src/
 │   ├── Map/                    # Map-related components
 │   │   ├── MapContainer.tsx
 │   │   ├── TripRoute.tsx
-│   │   ├── CityPin.tsx
+
 │   │   ├── AccommodationPin.tsx
 │   │   └── ActivityPin.tsx
 │   ├── Timeline/               # Timeline navigation components
@@ -158,7 +158,7 @@ interface MapContainerProps {
 - Google Maps integration with custom styling
 - Route polylines with scenic waypoints
 - Location-specific pin icons:
-  - City/town locations: Yellow star pins (Starred place style)
+
   - Accommodation locations: Lodge-style pins
   - Activity locations: Activity-type specific pins (default: green flag "Want to go" style)
 - Pin status-based styling and interactions
@@ -271,7 +271,7 @@ interface DraggableActivityProps {
 **Pin Icon Specifications**:
 - **Size**: All pins SHALL be sized 1.5x larger than Google Maps default built-in icons for enhanced visibility
 - **Colors**: All pins SHALL use vibrant colors from the application's color palette for maximum visual prominence
-- **City/Town Pins**: Yellow star icon (Google Maps "Starred place" style) with vivid Sky-500 accent colors
+
 - **Accommodation Pins**: Lodge/hotel icon with status-based coloring using Orange-500 for active states
 - **Activity Pins**: Type-specific icons with fallback to flag icon, colored with vivid palette:
   - Restaurant: Fork and knife icon with Emerald-500

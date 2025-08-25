@@ -17,7 +17,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN the map is displayed, THEN it SHALL use a custom travel-journal styling with softer pastel colors and reduced POI clutter
 5. WHEN accommodation locations are available, THEN the system SHALL display lodge-style pins at each base location
 6. WHEN activity locations are available, THEN the system SHALL display activity-specific pins based on activity type (default: green flag for "Want to go" style) for each activity with valid coordinates
-7. WHEN city/town locations are displayed, THEN the system SHALL display yellow star pins (Starred place style) for base locations
+7. WHEN base locations are displayed, THEN the system SHALL display accommodation pins (lodge-style) as the primary location markers
 8. WHEN pins are displayed on the map, THEN they SHALL be sized larger than Google Maps built-in icons for enhanced visibility
 9. WHEN pins are displayed on the map, THEN they SHALL use vibrant colors from the application's color palette for maximum visual prominence
 10. WHEN activities or accommodations have invalid or missing location data, THEN the system SHALL display warning indicators in the ActivitiesPanel to alert users that addresses need to be corrected

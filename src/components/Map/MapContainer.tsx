@@ -183,43 +183,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     return 'current';
   };
 
-  // City/Town pin (yellow star - "Starred place" style) - Enhanced visibility with 1.5x size
-  const getCityPinIcon = (baseId: string, isSelected: boolean) => {
-    const status = getBaseStatus(baseId);
-    let color = '#0ea5e9'; // Sky-500 for vivid accent
-    let strokeColor = '#0284c7'; // Sky-600 for outline
-    let opacity = 1.0;
-    
-    if (status === 'past') opacity = 0.3;
-    else if (status === 'current') opacity = 1.0;
-    else if (status === 'upcoming') opacity = 0.7;
 
-    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
-    const selectedSize = 33; // 1.1x hover scaling
-    const size = isSelected ? selectedSize : baseSize;
-    
-    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
-          </filter>
-        </defs>
-        <path d="M12 2L14.09 8.26L22 9L16 14.74L17.18 22L12 18.5L6.82 22L8 14.74L2 9L9.91 8.26L12 2Z" 
-              fill="${color}" 
-              fill-opacity="${opacity}"
-              stroke="${strokeColor}" 
-              stroke-width="1" 
-              filter="url(#shadow)"/>
-      </svg>
-    `)}`;
-
-    return {
-      url: iconUrl,
-      scaledSize: new window.google.maps.Size(size, size),
-      anchor: new window.google.maps.Point(size / 2, size / 2),
-    };
-  };
 
   // Accommodation pin (lodge-style) - Enhanced visibility with 1.5x size and Orange-500
   const getAccommodationPinIcon = (baseId: string, isSelected: boolean) => {
@@ -346,35 +310,18 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         {/* Only render markers after map is loaded */}
         {isMapLoaded && tripData?.stops && (
           <>
-            {/* City/Town markers (yellow star pins) - Primary location markers */}
+
+
+            {/* Accommodation markers (lodge-style pins) */}
             {tripData.stops.map((base) => (
               <Marker
-                key={`city-${base.stop_id}`}
+                key={`accommodation-${base.stop_id}`}
                 position={base.location}
-                title={base.name}
-                icon={getCityPinIcon(base.stop_id, base.stop_id === currentBaseId)}
+                title={`${base.name} - ${base.accommodation.name}`}
+                icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId)}
                 onClick={() => onBaseSelect(base.stop_id)}
               />
             ))}
-
-            {/* Accommodation markers (lodge-style pins) - Slightly offset for visibility */}
-            {tripData.stops.map((base) => {
-              // Slightly offset accommodation pins to avoid overlap with city pins
-              const accommodationPosition = {
-                lat: base.location.lat - 0.002, // Small offset south
-                lng: base.location.lng + 0.002  // Small offset east
-              };
-              
-              return (
-                <Marker
-                  key={`accommodation-${base.stop_id}`}
-                  position={accommodationPosition}
-                  title={`${base.name} - ${base.accommodation.name}`}
-                  icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId)}
-                  onClick={() => onBaseSelect(base.stop_id)}
-                />
-              );
-            })}
 
             {/* Activity markers for current base (type-specific pins) */}
             {currentBase?.activities

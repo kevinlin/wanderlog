@@ -104,7 +104,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
 
   - [x] 5.2 Create map pin components with type-specific icons and enhanced visibility
     - Implemented enhanced pin visibility with 1.5x larger sizing than Google Maps defaults for all pin types
-    - Updated city pins with yellow star icon using Sky-500 vivid color palette with proper opacity states (past: 0.3, current: 1.0, upcoming: 0.7)
+    - Removed city pins - accommodation pins now serve as the primary location markers
     - Enhanced accommodation pins with lodge icon using Orange-500 for active states with status-based opacity
     - Implemented activity pins with type-specific SVG paths and vibrant color coding:
       - Restaurant: Fork and knife icon with Orange-500 (#f97316)
