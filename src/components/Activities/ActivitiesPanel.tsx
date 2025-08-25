@@ -123,11 +123,6 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           />
         </div>
 
-        {/* Weather Card - Always Visible */}
-        <div className="px-4 pb-4">
-          <WeatherCard weatherData={weatherData} />
-        </div>
-
         {/* Expand/Collapse Control */}
         {!isExpanded && (
           <div className="px-4 pb-4">
@@ -164,6 +159,9 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             </div>
 
             {/* Scrollable Activities List with Drag & Drop */}
+            <div className="px-4 pb-4">
+              <WeatherCard weatherData={weatherData} />
+            </div>
             <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-4 pb-2">
               <DraggableActivitiesList
                 activities={activities}
