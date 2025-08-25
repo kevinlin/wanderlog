@@ -339,7 +339,7 @@ describe('ValidationUtils', () => {
     describe('activityHasLocationIssues', () => {
       it('should return true for activity with no location', () => {
         const activity = { activity_id: 'test', activity_name: 'Test' };
-        expect(activityHasLocationIssues(activity)).toBe(true);
+        expect(activityHasLocationIssues(activity as Activity)).toBe(true);
       });
 
       it('should return false for activity with valid location', () => {
@@ -364,7 +364,7 @@ describe('ValidationUtils', () => {
     describe('accommodationHasLocationIssues', () => {
       it('should return true for accommodation with no location', () => {
         const accommodation = { name: 'Test Hotel', address: '123 Test St' };
-        expect(accommodationHasLocationIssues(accommodation)).toBe(true);
+        expect(accommodationHasLocationIssues(accommodation as Accommodation)).toBe(true);
       });
 
       it('should return false for accommodation with valid coordinates', () => {
