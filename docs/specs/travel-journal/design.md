@@ -206,7 +206,27 @@ interface ActivitiesPanelProps {
 - Expanded state: Extends to bottom of screen with collapse control, becomes scrollable
 - Smooth expand/collapse animations
 
-#### 5. ActivityCard Component
+#### 5. AccommodationCard Component
+**Purpose**: Collapsible/expandable accommodation display within the activities panel.
+
+```typescript
+interface AccommodationCardProps {
+  accommodation: Accommodation;
+  stopName: string;
+}
+```
+
+**Key Features**:
+- Collapsible/expandable interface with state management
+- Collapsed state: Shows only accommodation name and stop name
+- Expanded state: Shows comprehensive accommodation information
+- Toggle button using ChevronDownIcon/ChevronUpIcon from @heroicons/react
+- Smooth transitions between collapsed and expanded states
+- Thumbnail image display only when expanded
+- Website link and directions button only shown when expanded
+- Consistent styling with other panel components
+
+#### 6. ActivityCard Component
 **Purpose**: Detailed activity display within the activities panel.
 
 ```typescript
@@ -226,7 +246,7 @@ interface ActivityCardProps {
 - "Navigate in Google Maps" action
 - Thumbnail image display
 
-#### 6. DraggableActivity Component
+#### 7. DraggableActivity Component
 **Purpose**: Drag-and-drop wrapper for activity reordering within the expandable panel.
 
 ```typescript
@@ -238,7 +258,7 @@ interface DraggableActivityProps {
 }
 ```
 
-#### 7. Pin Components
+#### 8. Pin Components
 **Purpose**: Map marker components with location-specific styling using vivid color palette.
 
 **Pin Icon Specifications**:

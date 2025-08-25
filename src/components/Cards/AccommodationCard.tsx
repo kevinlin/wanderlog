@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Accommodation } from '@/types';
+import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 
 interface AccommodationCardProps {
   accommodation: Accommodation;
@@ -10,8 +11,13 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
   accommodation,
   stopName,
 }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
   const checkInDate = new Date(accommodation.check_in);
   const checkOutDate = new Date(accommodation.check_out);
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-l-4 border-sky-500">
@@ -21,114 +27,132 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
             {accommodation.name}
           </h3>
           <p className="text-sm text-gray-600 mb-2">{stopName}</p>
-          <p className="text-sm text-gray-700 mb-3">{accommodation.address}</p>
-          
-          <div className="grid grid-cols-2 gap-4 mb-3">
-            <div>
-              <p className="text-xs text-gray-500 font-medium">Check-in</p>
-              <p className="text-sm text-gray-900">
-                {checkInDate.toLocaleDateString('en-NZ', { 
-                  weekday: 'short',
-                  month: 'short', 
-                  day: 'numeric' 
-                })}
-              </p>
-              <p className="text-sm text-gray-700">
-                {checkInDate.toLocaleTimeString('en-NZ', { 
-                  hour: '2-digit', 
-                  minute: '2-digit' 
-                })}
-              </p>
-            </div>
-            <div>
-              <p className="text-xs text-gray-500 font-medium">Check-out</p>
-              <p className="text-sm text-gray-900">
-                {checkOutDate.toLocaleDateString('en-NZ', { 
-                  weekday: 'short',
-                  month: 'short', 
-                  day: 'numeric' 
-                })}
-              </p>
-              <p className="text-sm text-gray-700">
-                {checkOutDate.toLocaleTimeString('en-NZ', { 
-                  hour: '2-digit', 
-                  minute: '2-digit' 
-                })}
-              </p>
-            </div>
-          </div>
+          {isExpanded && (
+            <>
+              <p className="text-sm text-gray-700 mb-3">{accommodation.address}</p>
+              
+              <div className="grid grid-cols-2 gap-4 mb-3">
+                <div>
+                  <p className="text-xs text-gray-500 font-medium">Check-in</p>
+                  <p className="text-sm text-gray-900">
+                    {checkInDate.toLocaleDateString('en-NZ', { 
+                      weekday: 'short',
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    {checkInDate.toLocaleTimeString('en-NZ', { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500 font-medium">Check-out</p>
+                  <p className="text-sm text-gray-900">
+                    {checkOutDate.toLocaleDateString('en-NZ', { 
+                      weekday: 'short',
+                      month: 'short', 
+                      day: 'numeric' 
+                    })}
+                  </p>
+                  <p className="text-sm text-gray-700">
+                    {checkOutDate.toLocaleTimeString('en-NZ', { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })}
+                  </p>
+                </div>
+              </div>
 
-          {accommodation.confirmation && (
-            <div className="mb-3">
-              <p className="text-xs text-gray-500 font-medium">Confirmation</p>
-              <p className="text-sm text-gray-900 font-mono">{accommodation.confirmation}</p>
-            </div>
-          )}
+              {accommodation.confirmation && (
+                <div className="mb-3">
+                  <p className="text-xs text-gray-500 font-medium">Confirmation</p>
+                  <p className="text-sm text-gray-900 font-mono">{accommodation.confirmation}</p>
+                </div>
+              )}
 
-          {accommodation.room && (
-            <div className="mb-3">
-              <p className="text-xs text-gray-500 font-medium">Room</p>
-              <p className="text-sm text-gray-900">{accommodation.room}</p>
-            </div>
-          )}
+              {accommodation.room && (
+                <div className="mb-3">
+                  <p className="text-xs text-gray-500 font-medium">Room</p>
+                  <p className="text-sm text-gray-900">{accommodation.room}</p>
+                </div>
+              )}
 
-          {accommodation.phone && (
-            <div className="mb-3">
-              <p className="text-xs text-gray-500 font-medium">Phone</p>
-              <a 
-                href={`tel:${accommodation.phone}`}
-                className="text-sm text-sky-500 hover:text-sky-600 hover:underline"
-              >
-                {accommodation.phone}
-              </a>
-            </div>
-          )}
+              {accommodation.phone && (
+                <div className="mb-3">
+                  <p className="text-xs text-gray-500 font-medium">Phone</p>
+                  <a 
+                    href={`tel:${accommodation.phone}`}
+                    className="text-sm text-sky-500 hover:text-sky-600 hover:underline"
+                  >
+                    {accommodation.phone}
+                  </a>
+                </div>
+              )}
 
-          {accommodation.host && (
-            <div className="mb-3">
-              <p className="text-xs text-gray-500 font-medium">Host</p>
-              <p className="text-sm text-gray-900">{accommodation.host}</p>
-            </div>
-          )}
+              {accommodation.host && (
+                <div className="mb-3">
+                  <p className="text-xs text-gray-500 font-medium">Host</p>
+                  <p className="text-sm text-gray-900">{accommodation.host}</p>
+                </div>
+              )}
 
-          {accommodation.rooms && (
-            <div className="mb-3">
-              <p className="text-xs text-gray-500 font-medium">Rooms</p>
-              <p className="text-sm text-gray-900">{accommodation.rooms}</p>
-            </div>
+              {accommodation.rooms && (
+                <div className="mb-3">
+                  <p className="text-xs text-gray-500 font-medium">Rooms</p>
+                  <p className="text-sm text-gray-900">{accommodation.rooms}</p>
+                </div>
+              )}
+            </>
           )}
         </div>
 
-        {accommodation.thumbnail_url && (
-          <div className="ml-4 flex-shrink-0">
+        {/* Toggle Button */}
+        <div className="ml-4 flex-shrink-0">
+          <button
+            onClick={toggleExpanded}
+            className="p-2 hover:bg-sky-500/20 rounded-lg transition-colors"
+            aria-label={isExpanded ? "Collapse accommodation details" : "Expand accommodation details"}
+          >
+            {isExpanded ? (
+              <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+            ) : (
+              <ChevronDownIcon className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
+          {accommodation.thumbnail_url && isExpanded && (
             <img 
               src={accommodation.thumbnail_url} 
               alt={accommodation.name}
-              className="w-20 h-20 object-cover rounded-lg"
+              className="w-20 h-20 object-cover rounded-lg mt-2"
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
-      <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-        <a
-          href={accommodation.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-sky-500 hover:text-sky-600 text-sm font-medium"
-        >
-          View Website →
-        </a>
-        
-        <a
-          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(accommodation.address)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-700 px-3 py-1 rounded text-sm transition-colors"
-        >
-          📍 Directions
-        </a>
-      </div>
+      {isExpanded && (
+        <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+          <a
+            href={accommodation.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sky-500 hover:text-sky-600 text-sm font-medium"
+          >
+            View Website →
+          </a>
+          
+          <a
+            href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(accommodation.address)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-700 px-3 py-1 rounded text-sm transition-colors"
+          >
+            📍 Directions
+          </a>
+        </div>
+      )}
     </div>
   );
 };
