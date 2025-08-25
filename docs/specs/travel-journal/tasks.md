@@ -206,17 +206,18 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add useWeather hook for global state integration
     - **Requirements Reference**: Requirement 6.2 (weather data display), Requirement 6.4, 6.5 (error handling, performance)
 
-- [ ] 10. **Data Export Functionality**
-  - [ ] 10.1 Implement ExportService for JSON generation
-    - Create exportService.ts with exportTripData method
-    - Merge LocalStorage modifications (done status, manual order) into original data
-    - Implement downloadAsJSON function for file download
+- [x] 10. **Data Export Functionality**
+  - [x] 10.1 Implement ExportService for JSON generation
+    - Created exportService.ts with ExportService class containing exportTripData, downloadAsJSON, exportAndDownload, and generateFilename methods
+    - Implemented merging of LocalStorage modifications (done status, manual order) into original data using existing exportUtils functions
+    - Added proper filename generation with sanitization and timestamp support
     - **Requirements Reference**: Requirement 5.5, 5.6 (export functionality, merge LocalStorage states)
 
-  - [ ] 10.2 Add export UI and user interaction
-    - Create "Download Updated Trip JSON" button in main interface
-    - Implement file download trigger with proper filename
-    - Add user feedback for successful export operations
+  - [x] 10.2 Add export UI and user interaction
+    - Added "Download Updated Trip JSON" button in ActivitiesPanel expanded state with emerald color scheme
+    - Implemented file download trigger with proper filename generation using trip name and timestamp
+    - Added toast notification system with success feedback for export operations
+    - Created Toast component with different types (success, error, warning, info) and auto-dismiss functionality
     - **Requirements Reference**: Requirement 5.5 (download function availability)
 
 - [ ] 11. **Mobile Optimization and Responsive Design**
@@ -245,61 +246,29 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensure core functionality works without external services
     - **Requirements Reference**: Requirement 8.1, 8.2 (map and directions fallbacks), Requirement 8.5 (offline functionality)
 
-- [ ] 13. **Performance Optimization**
-  - [ ] 13.1 Implement performance optimizations
-    - Add React.memo to expensive components (MapContainer, ActivityCard)
-    - Implement useCallback and useMemo for expensive calculations
-    - Add lazy loading for images and non-critical components
-    - **Requirements Reference**: Requirement 9.2, 9.5 (image optimization, performance impact minimization)
-
-  - [ ] 13.2 Optimize API calls and caching
-    - Implement route polyline prefetching on application load
-    - Add intelligent weather data caching with expiration
-    - Optimize LocalStorage operations for performance
-    - **Requirements Reference**: Requirement 9.1 (route prefetching), Requirement 6.5 (weather caching performance)
-
-- [ ] 14. **Testing Implementation**
-  - [ ] 14.1 Write unit tests for core services
-    - Create tests for TripDataService JSON validation and loading
-    - Implement tests for StorageService LocalStorage operations
-    - Add tests for utility functions (dateUtils, mapUtils, validation)
-    - **Requirements Reference**: All requirements - testing ensures requirement compliance
-
-  - [ ] 14.2 Write component tests
-    - Create tests for MapContainer with mock Google Maps API
-    - Implement tests for TimelineStrip navigation and auto-focus
-    - Add tests for ActivityCard interactions and drag-and-drop
-    - **Requirements Reference**: Component-specific requirements verification
-
-  - [ ] 14.3 Write integration tests for user flows
-    - Create tests for complete base selection and activity management flow
-    - Implement tests for data persistence and export functionality
-    - Add tests for error handling and fallback mechanisms
-    - **Requirements Reference**: End-to-end requirement validation
-
-- [ ] 15. **Color Theme Migration and Visual Updates**
-  - [ ] 15.1 Update existing components with new color palette
+- [ ] 13. **Color Theme Migration and Visual Updates**
+  - [ ] 13.1 Update existing components with new color palette
     - Replace all teal/gray color references with new Sky/Orange/Emerald/Amber/Violet palette
     - Update MapContainer pins with new color scheme
     - Apply new colors to existing error boundaries and loading components
     - Update any hardcoded color values in utility functions
     - **Requirements Reference**: Requirement 10.1, 10.3 (vivid color palette replacement)
 
-  - [ ] 15.2 Apply frosted glass styling to existing components
+  - [ ] 13.2 Apply frosted glass styling to existing components
     - Update any existing panel components to use consistent frosted glass styling
     - Ensure all floating elements follow the same visual design system
     - Add proper backdrop blur support and fallbacks for older browsers
     - **Requirements Reference**: Requirement 10.2 (frosted glass styling consistency)
 
-- [ ] 16. **Final Integration and Deployment Setup**
-  - [ ] 16.1 Wire all components together in main App with new layout
+- [ ] 14. **Final Integration and Deployment Setup**
+  - [ ] 14.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background
     - Ensure proper positioning and responsive behavior of floating panels
     - Implement proper z-index stacking for panel interactions
     - Add final error boundary and loading state management with new colors
     - **Requirements Reference**: All requirements - final integration ensures complete functionality
 
-  - [ ] 16.2 Configure deployment settings
+  - [ ] 14.2 Configure deployment settings
     - Set up environment variable injection for VITE_GOOGLE_MAPS_API_KEY
     - Configure Vite build settings for GitHub Pages deployment
     - Create production build configuration with optimizations

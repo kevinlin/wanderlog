@@ -1,8 +1,9 @@
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
+import { Toast, ToastState } from '@/components/Layout/Toast';
 import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
@@ -16,6 +17,7 @@ import { Activity } from '@/types';
 function App() {
   const { tripData, isLoading, error, refetch } = useTripData();
   const { state, dispatch } = useAppStateContext();
+  const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
 
   // Initialize trip data in global state when loaded
   useEffect(() => {
@@ -122,6 +124,18 @@ function App() {
     });
   };
 
+  const showToast = (message: string, type: ToastState['type'] = 'info') => {
+    setToast({ message, type, show: true });
+  };
+
+  const handleToastClose = () => {
+    setToast(prev => ({ ...prev, show: false }));
+  };
+
+  const handleExportSuccess = () => {
+    showToast('Trip data exported successfully! 🎉', 'success');
+  };
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 relative">
@@ -153,9 +167,22 @@ function App() {
             baseLocation={currentStop.location}
             selectedActivityId={state.selectedActivity}
             activityStatus={state.userModifications.activityStatus}
+            tripData={appTripData}
+            userModifications={state.userModifications}
             onActivitySelect={handleActivitySelect}
             onToggleDone={handleActivityToggle}
             onReorder={handleActivityReorder}
+            onExportSuccess={handleExportSuccess}
+          />
+        )}
+
+        {/* Toast Notifications */}
+        {toast.show && (
+          <Toast
+            message={toast.message}
+            type={toast.type}
+            show={toast.show}
+            onClose={handleToastClose}
           />
         )}
       </div>
