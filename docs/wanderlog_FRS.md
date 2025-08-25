@@ -117,7 +117,7 @@ The application will display an **interactive map-based travel journal** with da
           "url": "string",
           "remarks": "string",
           "thumbnail_url": "string|null",
-          "manual_order": number,
+          "order": number,
           "status": {"done": boolean}
         }
       ]

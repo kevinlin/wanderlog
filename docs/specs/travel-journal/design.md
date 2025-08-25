@@ -354,7 +354,7 @@ interface Activity {
   url?: string;
   remarks?: string;
   thumbnail_url?: string;
-  manual_order?: number;
+  order?: number;
   status?: {
     done: boolean;
   };

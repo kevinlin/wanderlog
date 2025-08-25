@@ -171,7 +171,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
   - [x] 7.4 Add drag-and-drop functionality within expandable panel
     - Implement DraggableActivitiesList component using @dnd-kit/core within the scrollable panel
     - Create drag handles and visual feedback during dragging with new color palette
-    - Add reordering persistence to LocalStorage with manual_order field via AppStateContext
+    - Add reordering persistence to LocalStorage with `order` field via AppStateContext
     - Ensure drag-and-drop works properly within the constrained panel height
     - **Requirements Reference**: Requirement 3.10, 3.11 (drag-drop reordering, order persistence)
 

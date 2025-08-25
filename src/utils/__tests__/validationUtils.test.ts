@@ -200,7 +200,7 @@ describe('ValidationUtils', () => {
         url: 'https://example.com',
         remarks: 'Great activity',
         thumbnail_url: 'https://example.com/image.jpg',
-        manual_order: 1,
+        order: 1,
         status: { done: false },
       };
       const errors: string[] = [];

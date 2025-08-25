@@ -8,8 +8,8 @@ export const sortActivitiesByOrder = (
   customOrder?: { [activityId: string]: number }
 ): Activity[] => {
   return [...activities].sort((a, b) => {
-    const orderA = customOrder?.[a.activity_id] ?? a.manual_order ?? a.order ?? 0;
-    const orderB = customOrder?.[b.activity_id] ?? b.manual_order ?? b.order ?? 0;
+    const orderA = customOrder?.[a.activity_id] ?? a.order ?? a.order ?? 0;
+    const orderB = customOrder?.[b.activity_id] ?? b.order ?? b.order ?? 0;
     return orderA - orderB;
   });
 };

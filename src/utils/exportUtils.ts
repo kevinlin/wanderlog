@@ -77,11 +77,11 @@ export const mergeUserModificationsWithTripData = (
           status: {
             done: isDone !== undefined ? isDone : (activity.status?.done ?? false),
           },
-          manual_order: customOrder ? customOrder[index] : (activity.manual_order ?? index),
+          order: customOrder ? customOrder[index] : (activity.order ?? index),
         };
       }).sort((a, b) => {
-        const orderA = a.manual_order ?? 0;
-        const orderB = b.manual_order ?? 0;
+        const orderA = a.order ?? 0;
+        const orderB = b.order ?? 0;
         return orderA - orderB;
       }),
     })),
@@ -106,11 +106,11 @@ export const mergeStopStatusWithTripData = (
         return {
           ...activity,
           status: statusOverride || activity.status,
-          manual_order: orderOverride !== undefined ? orderOverride : activity.manual_order,
+          order: orderOverride !== undefined ? orderOverride : activity.order,
         };
       }).sort((a, b) => {
-        const orderA = stopStatus[stop.stop_id]?.activityOrder[a.activity_id] ?? a.manual_order;
-        const orderB = stopStatus[stop.stop_id]?.activityOrder[b.activity_id] ?? b.manual_order;
+        const orderA = stopStatus[stop.stop_id]?.activityOrder[a.activity_id] ?? a.order;
+        const orderB = stopStatus[stop.stop_id]?.activityOrder[b.activity_id] ?? b.order;
         return orderA - orderB;
       }),
     })),

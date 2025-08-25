@@ -39,7 +39,6 @@
         {
           "activity_id": "christchurch-arrival-act-1",
           "order": 1,
-          "manual_order": 1,
           "status": { "done": false },
           "activity_name": "Riverside Market (food hall & groceries)",
           "location": { "address": "96 Oxford Terrace, Christchurch 8011" },
@@ -83,7 +82,6 @@
         {
           "activity_id": "lake-tekapo-act-1",
           "order": 1,
-          "manual_order": 1,
           "status": { "done": false },
           "activity_name": "Tekapo Springs (hot pools & kids aqua play)",
           "location": { "address": "6 Lakeside Dr, Lake Tekapo 7999" },
@@ -97,7 +95,6 @@
         {
           "activity_id": "lake-tekapo-act-2",
           "order": 2,
-          "manual_order": 2,
           "status": { "done": false },
           "activity_name": "Church of the Good Shepherd (photos & short walk)",
           "location": { "lat": -44.0048, "lng": 170.4776 },
@@ -111,7 +108,6 @@
         {
           "activity_id": "lake-tekapo-act-3",
           "order": 3,
-          "manual_order": 3,
           "status": { "done": false },
           "activity_name": "Dark Sky Project | Stargazing (Mt John or Lakefront)",
           "location": { "address": "1 Motuariki Ln, Lake Tekapo 7999" },
@@ -125,7 +121,6 @@
         {
           "activity_id": "lake-tekapo-act-4",
           "order": 4,
-          "manual_order": 4,
           "status": { "done": false },
           "activity_name": "Mt John Summit Walk (short hike, views)",
           "location": { "lat": -43.9919, "lng": 170.4631 },
@@ -173,7 +168,6 @@
         {
           "activity_id": "queenstown-act-1",
           "order": 1,
-          "manual_order": 1,
           "status": { "done": false },
           "activity_name": "Skyline Gondola & Luge",
           "location": { "lat": -45.0327, "lng": 168.6581, "address": "Brecon St, Queenstown" },
@@ -187,7 +181,6 @@
         {
           "activity_id": "queenstown-act-2",
           "order": 2,
-          "manual_order": 2,
           "status": { "done": false },
           "activity_name": "Creative Queenstown Market (Saturdays)",
           "location": { "address": "Earnslaw Park, Queenstown" },
@@ -201,7 +194,6 @@
         {
           "activity_id": "queenstown-act-3",
           "order": 3,
-          "manual_order": 3,
           "status": { "done": false },
           "activity_name": "TSS Earnslaw to Walter Peak Farm (RealNZ)",
           "location": { "address": "Steamer Wharf, Queenstown; Walter Peak High Country Farm" },
@@ -215,7 +207,6 @@
         {
           "activity_id": "queenstown-act-4",
           "order": 4,
-          "manual_order": 4,
           "status": { "done": false },
           "activity_name": "Kiwi Park (native wildlife)",
           "location": { "address": "51 Brecon Street, Queenstown 9300" },
@@ -229,7 +220,6 @@
         {
           "activity_id": "queenstown-act-5",
           "order": 5,
-          "manual_order": 5,
           "status": { "done": false },
           "activity_name": "Shotover Jet (jet boating)",
           "location": { "address": "Arthurs Point, Queenstown" },
@@ -243,7 +233,6 @@
         {
           "activity_id": "queenstown-act-6",
           "order": 6,
-          "manual_order": 6,
           "status": { "done": false },
           "activity_name": "Arrowtown village & gold panning",
           "location": { "address": "Buckingham St & Dudley’s Cottage, Arrowtown" },
@@ -257,7 +246,6 @@
         {
           "activity_id": "queenstown-act-7",
           "order": 7,
-          "manual_order": 7,
           "status": { "done": false },
           "activity_name": "Queenstown Gardens & Lakefront Playground + Patagonia Chocolates",
           "location": {
@@ -304,7 +292,6 @@
         {
           "activity_id": "te-anau-act-1",
           "order": 1,
-          "manual_order": 1,
           "status": { "done": false },
           "activity_name": "Te Anau Glowworm Caves (RealNZ)",
           "location": { "address": "Departs RealNZ Visitor Centre, 85 Lakefront Dr, Te Anau" },
@@ -318,7 +305,6 @@
         {
           "activity_id": "te-anau-act-2",
           "order": 2,
-          "manual_order": 2,
           "status": { "done": false },
           "activity_name": "Milford Road scenic stops (Mirror Lakes, Lake Gunn Nature Walk)",
           "location": {
@@ -335,7 +321,6 @@
         {
           "activity_id": "te-anau-act-3",
           "order": 3,
-          "manual_order": 3,
           "status": { "done": false },
           "activity_name": "Milford Sound cruise (optional day trip)",
           "location": { "address": "Milford Sound Visitor Terminal, Milford Sound 9679" },
@@ -382,7 +367,6 @@
         {
           "activity_id": "wanaka-act-1",
           "order": 1,
-          "manual_order": 1,
           "status": { "done": false },
           "activity_name": "Dinosaur Park (Lakefront Playground)",
           "location": { "address": "Ardmore St, Wānaka 9305" },
@@ -396,7 +380,6 @@
         {
           "activity_id": "wanaka-act-2",
           "order": 2,
-          "manual_order": 2,
           "status": { "done": false },
           "activity_name": "Puzzling World (Illusion Rooms & Great Maze)",
           "location": { "address": "188 Wānaka–Luggate Hwy (SH84), Wānaka 9382" },
@@ -410,7 +393,6 @@
         {
           "activity_id": "wanaka-act-3",
           "order": 3,
-          "manual_order": 3,
           "status": { "done": false },
           "activity_name": "Mount Iron Track (loop walk, views)",
           "location": { "address": "Mt Iron carpark, SH84, Wānaka" },
@@ -424,7 +406,6 @@
         {
           "activity_id": "wanaka-act-4",
           "order": 4,
-          "manual_order": 4,
           "status": { "done": false },
           "activity_name": "Cardrona Hotel lunch stop (scenic drive)",
           "location": { "address": "2312 Cardrona Valley Rd, RD2, Wānaka 9382" },
@@ -467,7 +448,6 @@
         {
           "activity_id": "timaru-act-1",
           "order": 1,
-          "manual_order": 1,
           "status": { "done": false },
           "activity_name": "Caroline Bay Playground & Beach",
           "location": { "address": "Caroline Bay, Timaru 7910" },
@@ -481,7 +461,6 @@
         {
           "activity_id": "timaru-act-2",
           "order": 2,
-          "manual_order": 2,
           "status": { "done": false },
           "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
           "location": { "address": "Caroline Bay Soundshell, Timaru" },
@@ -495,7 +474,6 @@
         {
           "activity_id": "timaru-act-3",
           "order": 3,
-          "manual_order": 3,
           "status": { "done": false },
           "activity_name": "South Canterbury Museum",
           "location": { "address": "4 Perth St, Timaru 7910" },
@@ -509,7 +487,6 @@
         {
           "activity_id": "timaru-act-4",
           "order": 4,
-          "manual_order": 4,
           "status": { "done": false },
           "activity_name": "Aigantighe Art Gallery",
           "location": { "address": "49 Wai-iti Rd, Timaru 7910" },
@@ -552,7 +529,6 @@
         {
           "activity_id": "christchurch-arrival-act-2",
           "order": 1,
-          "manual_order": 1,
           "status": {
             "done": false
           },
@@ -570,7 +546,6 @@
         {
           "activity_id": "christchurch-end-act-1",
           "order": 2,
-          "manual_order": 2,
           "status": { "done": false },
           "activity_name": "Christchurch Farmers’ Market (Sat mornings)",
           "location": { "address": "16 Kahu Rd, Riccarton, Christchurch 8041" },
@@ -584,7 +559,6 @@
         {
           "activity_id": "christchurch-end-act-2",
           "order": 3,
-          "manual_order": 3,
           "status": { "done": false },
           "activity_name": "International Antarctic Centre",
           "location": { "address": "38 Orchard Rd, Christchurch 8052" },
@@ -598,7 +572,6 @@
         {
           "activity_id": "christchurch-end-act-3",
           "order": 4,
-          "manual_order": 4,
           "status": { "done": false },
           "activity_name": "Willowbank Wildlife Reserve",
           "location": { "address": "60 Hussey Rd, Northwood, Christchurch 8051" },
@@ -612,7 +585,6 @@
         {
           "activity_id": "christchurch-end-act-4",
           "order": 5,
-          "manual_order": 5,
           "status": { "done": false },
           "activity_name": "Orana Wildlife Park (open-range zoo)",
           "location": { "address": "McLeans Island Rd, Harewood, Christchurch 8051" },
@@ -626,7 +598,6 @@
         {
           "activity_id": "christchurch-end-act-5",
           "order": 6,
-          "manual_order": 6,
           "status": { "done": false },
           "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
           "location": { "address": "Marine Parade, New Brighton, Christchurch" },
@@ -640,7 +611,6 @@
         {
           "activity_id": "christchurch-end-act-6",
           "order": 7,
-          "manual_order": 7,
           "status": { "done": false },
           "activity_name": "Riverside Market (meals & souvenirs)",
           "location": { "address": "96 Oxford Terrace, Christchurch 8011" },

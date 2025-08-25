@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ExportService } from '../exportService';
-import { TripData, UserModifications } from '@/types';
+import { Activity, TripData, TripStop,UserModifications } from '@/types';
 
 // Mock the mergeUserModificationsWithTripData function
 vi.mock('@/utils/exportUtils', () => ({
@@ -8,9 +8,9 @@ vi.mock('@/utils/exportUtils', () => ({
     // Simple mock implementation that applies modifications
     return {
       ...tripData,
-      stops: tripData.stops.map(stop => ({
+      stops: tripData.stops.map((stop: TripStop) => ({
         ...stop,
-        activities: stop.activities.map(activity => ({
+        activities: stop.activities.map((activity: Activity) => ({
           ...activity,
           status: {
             done: modifications.activityStatus[activity.activity_id] ?? false,
@@ -86,7 +86,7 @@ describe('ExportService', () => {
       
       expect(result).toBeDefined();
       expect(result.trip_name).toBe('Test Trip');
-      expect(result.stops[0].activities[0].status.done).toBe(true);
+      expect(result?.stops[0]?.activities[0]?.status?.done).toBe(true);
     });
 
     it('should return merged data with correct structure', () => {
@@ -137,30 +137,14 @@ describe('ExportService', () => {
     });
 
     it('should create valid JSON export structure', () => {
-      let capturedBlobData: string;
       vi.stubGlobal('URL', {
-        createObjectURL: vi.fn((blob: Blob) => {
-          // Mock reading the blob data
-          const reader = new FileReader();
-          reader.onload = () => {
-            capturedBlobData = reader.result as string;
-          };
-          reader.readAsText(blob);
-          return 'mock-blob-url';
-        }),
+        createObjectURL: vi.fn(() => 'mock-blob-url'),
         revokeObjectURL: vi.fn(),
       });
 
       ExportService.downloadAsJSON(mockTripData);
       
-      // Verify the JSON structure by parsing the data directly
-      const dataStr = JSON.stringify({
-        tripData: mockTripData,
-        exportDate: expect.any(String),
-        version: '1.0.0',
-      }, null, 2);
-      
-      // Just verify that the function creates a blob with the right type
+      // Verify that the function creates a blob with the right type
       expect(URL.createObjectURL).toHaveBeenCalledWith(
         expect.objectContaining({
           type: 'application/json'

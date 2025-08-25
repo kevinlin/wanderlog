@@ -263,10 +263,10 @@ export const isValidActivity = (data: unknown, errors: string[], warnings: strin
     errors.push('thumbnail_url must be a string');
   }
 
-  if (!d.manual_order) {
-    warnings.push('manual_order is not present');
-  } else if (typeof d.manual_order !== 'number') {
-    errors.push('manual_order must be a number');
+  if (!d.order) {
+    warnings.push('order is not present');
+  } else if (typeof d.order !== 'number') {
+    errors.push('order must be a number');
   }
 
   if (!d.status) {
@@ -300,7 +300,7 @@ export const isValidActivity = (data: unknown, errors: string[], warnings: strin
     (!d.url || typeof d.url === 'string') &&
     (!d.remarks || typeof d.remarks === 'string') &&
     (!d.thumbnail_url || typeof d.thumbnail_url === 'string') &&
-    (!d.manual_order || typeof d.manual_order === 'number') &&
+    (!d.order || typeof d.order === 'number') &&
     (!d.status || isValidActivityStatus(d.status));
 
   if (!isValid) {
