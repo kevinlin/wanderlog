@@ -191,17 +191,19 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensure visual consistency with frosted glass aesthetic and new color scheme
     - **Requirements Reference**: Requirement 4.1, 4.3, 4.4 (prominent display, single pin per base, visual consistency)
 
-- [ ] 9. **Weather Integration**
-  - [ ] 9.1 Implement WeatherService for Open-Meteo API
+- [x] 9. **Weather Integration**
+  - [x] 9.1 Implement WeatherService for Open-Meteo API
     - Create weatherService.ts with fetchWeatherData method
     - Implement weather data caching in LocalStorage with expiration
     - Add error handling for weather API failures
     - **Requirements Reference**: Requirement 6.1, 6.3 (weather API fetch, caching), Requirement 6.4 (API failure handling)
 
-  - [ ] 9.2 Create WeatherCard component and integration
+  - [x] 9.2 Create WeatherCard component and integration
     - Implement WeatherCard.tsx with temperature and precipitation display
     - Add weather data fetching for each base location
     - Create "Weather unavailable" placeholder for API failures
+    - Integrate weather display into ActivitiesPanel component
+    - Add useWeather hook for global state integration
     - **Requirements Reference**: Requirement 6.2 (weather data display), Requirement 6.4, 6.5 (error handling, performance)
 
 - [ ] 10. **Data Export Functionality**

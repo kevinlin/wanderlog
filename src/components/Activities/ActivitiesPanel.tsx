@@ -1,13 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Activity, Accommodation } from '@/types';
+import { Coordinates } from '@/types/map';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
+import { WeatherCard } from '@/components/Cards/WeatherCard';
 import { DraggableActivitiesList } from './DraggableActivity';
+import { useWeather } from '@/hooks/useWeather';
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 
 interface ActivitiesPanelProps {
   accommodation: Accommodation;
   activities: Activity[];
   stopName: string;
+  baseId: string;
+  baseLocation: Coordinates;
   selectedActivityId?: string | null;
   activityStatus: Record<string, boolean>;
   onActivitySelect: (activityId: string) => void;
@@ -20,6 +25,8 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   accommodation,
   activities,
   stopName,
+  baseId,
+  baseLocation,
   selectedActivityId,
   activityStatus,
   onActivitySelect,
@@ -30,10 +37,21 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const activityRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  
+  // Weather data management
+  const { fetchWeather, getWeatherForBase } = useWeather();
+  const weatherData = getWeatherForBase(baseId);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
   };
+
+  // Fetch weather data when component mounts or baseId changes
+  useEffect(() => {
+    fetchWeather(baseLocation, baseId).catch((error) => {
+      console.warn(`Failed to fetch weather for ${baseId}:`, error);
+    });
+  }, [baseId, baseLocation, fetchWeather]);
 
   // Auto-expand and scroll to activity when one is selected from map
   useEffect(() => {
@@ -77,11 +95,16 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         ${isExpanded ? 'h-full flex flex-col' : ''}
       `}>
         {/* Accommodation Card - Always Visible */}
-        <div className="p-4">
+        <div className="p-4 pb-2">
           <AccommodationCard
             accommodation={accommodation}
             stopName={stopName}
           />
+        </div>
+
+        {/* Weather Card - Always Visible */}
+        <div className="px-4 pb-4">
+          <WeatherCard weatherData={weatherData} />
         </div>
 
         {/* Expand/Collapse Control */}

@@ -144,11 +144,13 @@ function App() {
         />
 
         {/* Expandable Activities Panel */}
-        {currentStop && (
+        {currentStop && state.currentBase && (
           <ActivitiesPanel
             accommodation={currentStop.accommodation}
             activities={sortedActivities}
             stopName={currentStop.name}
+            baseId={state.currentBase}
+            baseLocation={currentStop.location}
             selectedActivityId={state.selectedActivity}
             activityStatus={state.userModifications.activityStatus}
             onActivitySelect={handleActivitySelect}
