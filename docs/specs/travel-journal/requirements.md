@@ -134,7 +134,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 2. WHEN floating panels are rendered, THEN they SHALL use consistent frosted glass styling with the following specifications:
    - Rounded corners using `rounded-xl` class
    - Semi-transparent white background using `bg-white/30`
-   - Backdrop blur effect using `backdrop-blur-md`
+   - Backdrop blur effect using `backdrop-blur`
    - Subtle border using `border border-white/20`
    - Medium shadow using `shadow-md`
 3. WHEN color coding is applied, THEN the system SHALL use the selected vivid color palette for:

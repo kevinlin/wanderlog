@@ -122,31 +122,33 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add fallback to straight-line polylines when Directions API fails
     - **Requirements Reference**: Requirement 1.2, 1.3 (route polylines, scenic waypoints), Requirement 8.2 (Directions API fallback)
 
-- [ ] 6. **Timeline Navigation Component (Floating Panel)**
-  - [ ] 6.1 Create floating TimelineStrip component structure
-    - Implement TimelineStrip.tsx as floating panel positioned at top-left corner with frosted glass styling
-    - Apply consistent styling: `absolute top-4 left-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md`
-    - Create TimelineBase.tsx for individual base representation
-    - Add proportional sizing based on stay duration
+- [x] 6. **Timeline Navigation Component (Floating Panel)**
+  - [x] 6.1 Create floating TimelineStrip component structure
+    - [x] Implement TimelineStrip.tsx as floating panel positioned at top-left corner with frosted glass styling
+    - [x] Apply consistent styling: `absolute top-4 left-4 rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
+    - [x] Update App.tsx to position timeline as floating panel over full-screen map
+    - [x] Add proportional sizing based on stay duration
     - **Requirements Reference**: Requirement 2.1, 2.2 (floating timeline panel, proportional length), Requirement 10.2 (frosted glass styling)
 
-  - [ ] 6.2 Implement timeline navigation and auto-focus with new color palette
-    - Add New Zealand timezone detection for current day calculation
-    - Implement auto-focus on today's base with Sky-500 highlighting (`bg-sky-500`)
-    - Create timeline base selection handlers with map integration
-    - Apply new color scheme: past bases (`bg-sky-500/30`), current (`bg-sky-500`), upcoming (`bg-sky-500/70`)
+  - [x] 6.2 Implement timeline navigation and auto-focus with new color palette
+    - [x] New Zealand timezone detection for current day calculation (already implemented in dateUtils.ts)
+    - [x] Auto-focus on today's base with Sky-500 highlighting (`bg-sky-500`) (already implemented in App.tsx)
+    - [x] Timeline base selection handlers with map integration (already implemented)
+    - [x] Apply new color scheme: past bases (`bg-sky-500/30`), current (`bg-sky-500`), upcoming (`bg-sky-500/70`)
     - **Requirements Reference**: Requirement 2.3 (NZ local time auto-focus), Requirement 2.6 (timeline base selection), Requirement 10.3 (vivid color palette)
 
-  - [ ] 6.3 Add mobile touch support and responsive design
-    - Implement swipe gesture handling for timeline navigation
-    - Create responsive timeline layout with appropriate gap maintenance on mobile devices
-    - Add smooth transitions (300ms ease-in-out) for state changes
+  - [x] 6.3 Add mobile touch support and responsive design
+    - [x] Implement swipe gesture handling for timeline navigation (swipe left/right to navigate between stops)
+    - [x] Create responsive timeline layout with appropriate gap maintenance on mobile devices (top-2 left-2 on mobile, top-4 left-4 on larger screens)
+    - [x] Add smooth transitions (300ms ease-in-out) for state changes
+    - [x] Improve touch targets with min-h-[44px] for better mobile usability
+    - [x] Add touch-manipulation and select-none classes for better mobile interaction
     - **Requirements Reference**: Requirement 2.4, 2.5 (swipe navigation), Requirement 7.3 (touch optimizations)
 
 - [ ] 7. **Expandable Activities Panel Component**
   - [ ] 7.1 Create floating ActivitiesPanel component structure
     - Implement ActivitiesPanel.tsx as floating panel positioned at top-right corner with frosted glass styling
-    - Apply consistent styling: `absolute top-4 right-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md`
+    - Apply consistent styling: `absolute top-4 right-4 rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
     - Implement expandable/collapsible functionality with smooth transitions (300ms ease-in-out)
     - Default state: Display only accommodation card with expand control at bottom
     - Expanded state: Extend to bottom of screen (`top-4` to `bottom-4`) with collapse control and scroll overflow

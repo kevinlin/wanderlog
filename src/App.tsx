@@ -108,75 +108,72 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="bg-white border-b border-gray-200 p-4">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold text-gray-900">{appTripData.trip_name}</h1>
-            <p className="text-sm text-gray-600 mt-1">
-              {appTripData.travellers && appTripData.vehicle && `Family of ${appTripData.travellers.length} • ${appTripData.vehicle}`}
-            </p>
-          </div>
-        </header>
+      <div className="min-h-screen bg-gray-50 relative">
+        {/* Full Screen Map */}
+        <div className="h-screen w-full">
+          <MapContainer
+            tripData={appTripData}
+            currentBaseId={state.currentBase}
+            selectedActivityId={state.selectedActivity}
+            onActivitySelect={handleActivitySelect}
+            onBaseSelect={handleStopSelect}
+          />
+        </div>
 
-        {/* Timeline Strip */}
+        {/* Floating Timeline Strip */}
         <TimelineStrip
           stops={appTripData.stops}
           currentStopId={state.currentBase}
           onStopSelect={handleStopSelect}
         />
 
-        {/* Main Content */}
-        <div className="flex h-[calc(100vh-140px)]">
-          {/* Map */}
-          <div className="flex-1">
-            <MapContainer
-              tripData={appTripData}
-              currentBaseId={state.currentBase}
-              selectedActivityId={state.selectedActivity}
-              onActivitySelect={handleActivitySelect}
-              onBaseSelect={handleStopSelect}
-            />
-          </div>
-
-          {/* Sidebar */}
-          <div className="w-96 bg-white border-l border-gray-200 overflow-y-auto">
-            <div className="p-4">
-              {currentStop && (
-                <>
-                  {/* Accommodation Card */}
-                  <AccommodationCard
-                    accommodation={currentStop.accommodation}
-                    stopName={currentStop.name}
-                  />
-
-                  {/* Activities Section */}
-                  <div className="mt-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Activities ({sortedActivities.length})
-                    </h3>
-                    
-                    {sortedActivities.length === 0 ? (
-                      <p className="text-gray-500 text-center py-8">No activities planned for this stop.</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {sortedActivities.map((activity) => (
-                          <ActivityCard
-                            key={activity.activity_id}
-                            activity={activity}
-                            accommodation={currentStop.accommodation}
-                            isSelected={activity.activity_id === state.selectedActivity}
-                            isDone={state.userModifications.activityStatus[activity.activity_id] || false}
-                            onToggleDone={handleActivityToggle}
-                            onSelect={handleActivitySelect}
-                          />
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </>
+        {/* Temporary Sidebar - will be converted to floating panel in later task */}
+        <div className="absolute top-4 right-4 w-96 bg-white/30 backdrop-blur border border-white/20 shadow-md rounded-xl max-h-[calc(100vh-2rem)] overflow-y-auto">
+          <div className="p-4">
+            {/* Trip Header in floating panel */}
+            <div className="mb-4 pb-3 border-b border-white/20">
+              <h1 className="text-lg font-bold text-gray-900">{appTripData.trip_name}</h1>
+              {appTripData.travellers && appTripData.vehicle && (
+                <p className="text-xs text-gray-700 mt-1">
+                  Family of {appTripData.travellers.length} • {appTripData.vehicle}
+                </p>
               )}
             </div>
+
+            {currentStop && (
+              <>
+                {/* Accommodation Card */}
+                <AccommodationCard
+                  accommodation={currentStop.accommodation}
+                  stopName={currentStop.name}
+                />
+
+                {/* Activities Section */}
+                <div className="mt-6">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                    Activities ({sortedActivities.length})
+                  </h3>
+                  
+                  {sortedActivities.length === 0 ? (
+                    <p className="text-gray-500 text-center py-8">No activities planned for this stop.</p>
+                  ) : (
+                    <div className="space-y-3">
+                      {sortedActivities.map((activity) => (
+                        <ActivityCard
+                          key={activity.activity_id}
+                          activity={activity}
+                          accommodation={currentStop.accommodation}
+                          isSelected={activity.activity_id === state.selectedActivity}
+                          isDone={state.userModifications.activityStatus[activity.activity_id] || false}
+                          onToggleDone={handleActivityToggle}
+                          onSelect={handleActivitySelect}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>

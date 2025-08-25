@@ -178,7 +178,7 @@ interface TimelineStripProps {
 
 **Key Features**:
 - Floating panel positioned at top-left with appropriate screen edge gaps
-- Frosted glass styling: `rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md`
+- Frosted glass styling, i.e. `rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
 - Proportional base representation based on stay duration
 - Auto-focus on current day using NZ timezone
 - Touch/swipe gesture support for mobile
@@ -521,7 +521,7 @@ Consistent styling applied to all floating panels:
 
 ```css
 .frosted-panel {
-  @apply rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md;
+  @apply rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md;
 }
 ```
 
