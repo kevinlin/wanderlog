@@ -240,7 +240,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     }
 
     const baseSize = 30; // 1.5x larger than Google Maps default (20px)
-    const selectedSize = 36; // 1.2x hover scaling
+    const selectedSize = 33; // 1.1x hover scaling
     const size = isSelected ? selectedSize : baseSize;
 
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
