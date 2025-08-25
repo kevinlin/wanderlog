@@ -85,7 +85,8 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implement ErrorBoundary.tsx with JavaScript error catching, travel journal styling, enhanced error reporting with unique error IDs, comprehensive logging, and retry functionality
     - Create LoadingSpinner.tsx component with travel journal styling including adventure-themed variant with compass animations, multiple sizes, and enhanced travel-themed loading states
     - Implement ErrorMessage.tsx for displaying user-friendly error messages with contextual error types (network, data, permission), helpful suggestions, and travel journal aesthetics
-    - **Requirements Reference**: Requirement 8.6 (JavaScript error handling), Requirement 9.3 (loading indicators)
+    - Create LocationWarning.tsx component for displaying location data warnings in activities and accommodation cards
+    - **Requirements Reference**: Requirement 8.6 (JavaScript error handling), Requirement 9.3 (loading indicators), Requirement 1.10, 3.15, 3.16 (location warnings)
 
   - [x] 4.2 Create main App component structure
     - Updated App.tsx to properly use AppStateProvider and global context management
@@ -101,20 +102,25 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add map loading error handling with grid background fallback
     - **Requirements Reference**: Requirement 1.1, 1.4 (Google Maps display, custom styling), Requirement 8.1 (map loading failure)
 
-  - [x] 5.2 Create map pin components with type-specific icons
+  - [ ] 5.2 Create map pin components with type-specific icons and enhanced visibility
     - Implement CityPin.tsx with yellow star icon (Starred place style)
     - Create AccommodationPin.tsx with lodge icon and status-based coloring
     - Implement ActivityPin.tsx with activity-type specific icons:
-      - Restaurant: Fork and knife icon
-      - Attraction: Camera/sightseeing icon
-      - Shopping: Shopping bag icon
-      - Outdoor: Mountain/hiking icon
-      - Cultural: Museum/building icon
-      - Transport: Vehicle icon
-      - Other/Default: Green flag icon ("Want to go" style)
+      - Restaurant: Fork and knife icon with Emerald-500
+      - Attraction: Camera/sightseeing icon with Violet-500
+      - Shopping: Shopping bag icon with Amber-500
+      - Outdoor: Mountain/hiking icon with Sky-500
+      - Cultural: Museum/building icon with Orange-500
+      - Transport: Vehicle icon with neutral vibrant color
+      - Other/Default: Flag icon with Sky-500
+    - Size all pins 1.5x larger than Google Maps default icons for enhanced visibility
+    - Apply vibrant colors from the application's color palette for maximum visual prominence
+    - Add pin shadows for better contrast against map backgrounds
+    - Implement hover state scaling (1.1x) with smooth transitions
+    - Add selection state highlighting with ring effects
     - Add pin highlighting when corresponding cards are selected
     - Implement click handlers for all pin types
-    - **Requirements Reference**: Requirement 1.5, 1.6, 1.7 (accommodation, activity, and city pins), Requirement 3.4 (pin-card synchronization)
+    - **Requirements Reference**: Requirement 1.5, 1.6, 1.7, 1.8, 1.9 (accommodation, activity, city pins, enhanced visibility), Requirement 3.4 (pin-card synchronization)
 
   - [x] 5.3 Implement route visualization with Google Directions API
     - Create TripRoute.tsx component for polyline rendering
@@ -154,12 +160,14 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Expanded state: Extend to bottom of screen (`top-4` to `bottom-4`) with collapse control and scroll overflow
     - **Requirements Reference**: Requirement 3.1, 3.2, 3.3, 3.4, 3.5 (floating activities panel, expandable design), Requirement 10.2 (frosted glass styling)
 
-  - [x] 7.2 Create ActivityCard component with new color palette
+  - [ ] 7.2 Create ActivityCard component with new color palette and location validation
     - Implement ActivityCard.tsx with comprehensive activity information display
     - Add travel time calculation and display from accommodation
     - Implement "Mark Done" checkbox with visual feedback using new color palette (Emerald-500 for completed: `bg-emerald-500/40`)
     - Apply hover states with Orange-500 (`hover:bg-orange-500/90`)
-    - **Requirements Reference**: Requirement 3.6 (activity card content), Requirement 3.12, 3.13 (completion status, visual indication with new colors)
+    - Add location warning indicator when coordinates are missing or invalid
+    - Integrate LocationWarning component for activities with location issues
+    - **Requirements Reference**: Requirement 3.6 (activity card content), Requirement 3.12, 3.13 (completion status, visual indication with new colors), Requirement 3.15, 3.16 (location warnings)
 
   - [x] 7.3 Implement activity interactions within expandable panel
     - Add activity card highlighting when map pins are selected using Sky-500 (`bg-sky-500`)
@@ -176,14 +184,16 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - **Requirements Reference**: Requirement 3.10, 3.11 (drag-drop reordering, order persistence)
 
 - [x] 8. **Accommodation Display Components (Within Activities Panel)**
-  - [x] 8.1 Create AccommodationCard component for panel integration
+  - [x] 8.1 Create AccommodationCard component for panel integration with location validation
     - Implement AccommodationCard.tsx with accommodation details for display within the ActivitiesPanel
     - Add check-in/check-out time display and confirmation information
     - Implement thumbnail image display when available
     - Apply new color palette for interactive elements (Orange-500 for hover states)
     - Ensure card fits properly within the collapsed panel state
     - Added support for host and rooms fields display when available
-    - **Requirements Reference**: Requirement 4.2, 4.5 (accommodation information, thumbnail display), Requirement 10.3 (new color palette)
+    - Add location warning indicator when coordinates are missing or invalid
+    - Integrate LocationWarning component for accommodations with location issues
+    - **Requirements Reference**: Requirement 4.2, 4.5 (accommodation information, thumbnail display), Requirement 10.3 (new color palette), Requirement 1.10, 3.15, 3.16 (location warnings)
 
   - [x] 8.2 Integrate accommodation display with activities panel and map
     - Position accommodation card prominently at top of the ActivitiesPanel (visible in both collapsed and expanded states)
@@ -246,15 +256,32 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensure core functionality works without external services
     - **Requirements Reference**: Requirement 8.1, 8.2 (map and directions fallbacks), Requirement 8.5 (offline functionality)
 
-- [ ] 13. **Color Theme Migration and Visual Updates**
-  - [ ] 13.1 Update existing components with new color palette
+- [ ] 13. **Enhanced Pin Visibility and Location Validation**
+  - [ ] 13.1 Implement enhanced pin visibility features
+    - Update all pin components to use 1.5x larger sizing than Google Maps defaults
+    - Apply vibrant colors from the color palette to all pin types
+    - Add pin shadows for better contrast against map backgrounds
+    - Implement hover state scaling (1.1x) with smooth transitions
+    - Add selection state highlighting with ring effects
+    - Ensure consistent stroke width and color for icon outlines
+    - **Requirements Reference**: Requirement 1.8, 1.9 (enhanced pin visibility, vibrant colors)
+
+  - [ ] 13.2 Implement location validation and warning system
+    - Create LocationWarning component with Amber-500 warning styling
+    - Add location validation logic to detect missing or invalid coordinates
+    - Integrate location warnings into ActivityCard and AccommodationCard components
+    - Implement non-geocodable address detection and user feedback
+    - Add clear messaging about address correction needs
+    - **Requirements Reference**: Requirement 1.10, 3.15, 3.16 (location warnings and validation)
+
+  - [ ] 13.3 Update existing components with new color palette
     - Replace all teal/gray color references with new Sky/Orange/Emerald/Amber/Violet palette
-    - Update MapContainer pins with new color scheme
+    - Update MapContainer pins with enhanced visibility and vibrant color scheme
     - Apply new colors to existing error boundaries and loading components
     - Update any hardcoded color values in utility functions
     - **Requirements Reference**: Requirement 10.1, 10.3 (vivid color palette replacement)
 
-  - [ ] 13.2 Apply frosted glass styling to existing components
+  - [ ] 13.4 Apply frosted glass styling to existing components
     - Update any existing panel components to use consistent frosted glass styling
     - Ensure all floating elements follow the same visual design system
     - Add proper backdrop blur support and fallbacks for older browsers

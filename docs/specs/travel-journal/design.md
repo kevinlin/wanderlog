@@ -72,7 +72,8 @@ src/
 │   ├── Layout/                 # Layout and error handling components
 │   │   ├── ErrorBoundary.tsx
 │   │   ├── LoadingSpinner.tsx
-│   │   └── ErrorMessage.tsx
+│   │   ├── ErrorMessage.tsx
+│   │   └── LocationWarning.tsx
 │   ├── Map/                    # Map-related components
 │   │   ├── MapContainer.tsx
 │   │   ├── TripRoute.tsx
@@ -207,12 +208,13 @@ interface ActivitiesPanelProps {
 - Smooth expand/collapse animations
 
 #### 5. AccommodationCard Component
-**Purpose**: Collapsible/expandable accommodation display within the activities panel.
+**Purpose**: Collapsible/expandable accommodation display within the activities panel with location validation.
 
 ```typescript
 interface AccommodationCardProps {
   accommodation: Accommodation;
   stopName: string;
+  showLocationWarning?: boolean;
 }
 ```
 
@@ -224,10 +226,12 @@ interface AccommodationCardProps {
 - Smooth transitions between collapsed and expanded states
 - Thumbnail image display only when expanded
 - Website link and directions button only shown when expanded
+- Location warning indicator when coordinates are missing or invalid
+- Warning message with suggestions for address correction
 - Consistent styling with other panel components
 
 #### 6. ActivityCard Component
-**Purpose**: Detailed activity display within the activities panel.
+**Purpose**: Detailed activity display within the activities panel with location validation.
 
 ```typescript
 interface ActivityCardProps {
@@ -236,6 +240,7 @@ interface ActivityCardProps {
   isSelected: boolean;
   onToggleDone: (activityId: string) => void;
   onNavigate: (coordinates: Coordinates) => void;
+  showLocationWarning?: boolean;
 }
 ```
 
@@ -245,6 +250,8 @@ interface ActivityCardProps {
 - "Mark Done" functionality with visual feedback using vivid color palette
 - "Navigate in Google Maps" action
 - Thumbnail image display
+- Location warning indicator when coordinates are missing or invalid
+- Warning message with suggestions for address correction
 
 #### 7. DraggableActivity Component
 **Purpose**: Drag-and-drop wrapper for activity reordering within the expandable panel.
@@ -259,19 +266,46 @@ interface DraggableActivityProps {
 ```
 
 #### 8. Pin Components
-**Purpose**: Map marker components with location-specific styling using vivid color palette.
+**Purpose**: Map marker components with enhanced visibility and location-specific styling using vivid color palette.
 
 **Pin Icon Specifications**:
-- **City/Town Pins**: Yellow star icon (Google Maps "Starred place" style) with vivid accent colors
-- **Accommodation Pins**: Lodge/hotel icon with status-based coloring using the new color palette
+- **Size**: All pins SHALL be sized 1.5x larger than Google Maps default built-in icons for enhanced visibility
+- **Colors**: All pins SHALL use vibrant colors from the application's color palette for maximum visual prominence
+- **City/Town Pins**: Yellow star icon (Google Maps "Starred place" style) with vivid Sky-500 accent colors
+- **Accommodation Pins**: Lodge/hotel icon with status-based coloring using Orange-500 for active states
 - **Activity Pins**: Type-specific icons with fallback to flag icon, colored with vivid palette:
-  - Restaurant: Fork and knife icon
-  - Attraction: Camera/sightseeing icon  
-  - Shopping: Shopping bag icon
-  - Outdoor: Mountain/hiking icon
-  - Cultural: Museum/building icon
-  - Transport: Vehicle icon
-  - Other/Default: Flag icon with primary accent color
+  - Restaurant: Fork and knife icon with Emerald-500
+  - Attraction: Camera/sightseeing icon with Violet-500
+  - Shopping: Shopping bag icon with Amber-500
+  - Outdoor: Mountain/hiking icon with Sky-500
+  - Cultural: Museum/building icon with Orange-500
+  - Transport: Vehicle icon with neutral vibrant color
+  - Other/Default: Flag icon with primary accent color (Sky-500)
+
+**Enhanced Visibility Features**:
+- Pin shadows for better contrast against map backgrounds
+- Hover state scaling (1.1x) with smooth transitions
+- Selection state highlighting with ring effects
+- Consistent stroke width and color for icon outlines
+
+#### 9. LocationWarning Component
+**Purpose**: Warning indicator for activities and accommodations with invalid or missing location data.
+
+```typescript
+interface LocationWarningProps {
+  type: 'activity' | 'accommodation';
+  message?: string;
+  className?: string;
+}
+```
+
+**Key Features**:
+- Prominent warning icon with Amber-500 color for attention
+- Clear messaging about location data issues
+- Suggestions for correcting address information
+- Non-blocking design that doesn't prevent other functionality
+- Consistent styling with travel journal aesthetic
+- Responsive design for mobile and desktop
 
 ### Custom Hooks
 

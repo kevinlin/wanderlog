@@ -18,9 +18,12 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 5. WHEN accommodation locations are available, THEN the system SHALL display lodge-style pins at each base location
 6. WHEN activity locations are available, THEN the system SHALL display activity-specific pins based on activity type (default: green flag for "Want to go" style) for each activity with valid coordinates
 7. WHEN city/town locations are displayed, THEN the system SHALL display yellow star pins (Starred place style) for base locations
-8. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
-9. WHEN UI components are displayed over the map, THEN they SHALL be positioned as floating panels with appropriate gaps from screen edges
-10. WHEN floating panels are rendered, THEN they SHALL use frosted glass styling with rounded corners, semi-transparent white background, backdrop blur, subtle borders, and medium shadows
+8. WHEN pins are displayed on the map, THEN they SHALL be sized larger than Google Maps built-in icons for enhanced visibility
+9. WHEN pins are displayed on the map, THEN they SHALL use vibrant colors from the application's color palette for maximum visual prominence
+10. WHEN activities or accommodations have invalid or missing location data, THEN the system SHALL display warning indicators in the ActivitiesPanel to alert users that addresses need to be corrected
+11. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
+12. WHEN UI components are displayed over the map, THEN they SHALL be positioned as floating panels with appropriate gaps from screen edges
+13. WHEN floating panels are rendered, THEN they SHALL use frosted glass styling with rounded corners, semi-transparent white background, backdrop blur, subtle borders, and medium shadows
 
 ### 2. Timeline Navigation and Date Management
 
@@ -55,6 +58,8 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 12. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
 13. WHEN activities have completion status, THEN they SHALL be visually indicated using the new color palette (completed activities with reduced opacity or accent coloring)
 14. WHEN an activity includes a URL, THEN users SHALL be able to access a "Navigate in Google Maps" action
+15. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
+16. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
 
 ### 4. Accommodation Display and Management
 
