@@ -5,13 +5,12 @@ import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
-import { AccommodationCard } from '@/components/Cards/AccommodationCard';
-import { ActivityCard } from '@/components/Cards/ActivityCard';
+import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
 import { useTripData } from '@/hooks/useTripData';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 import { getCurrentStop } from '@/utils/dateUtils';
-import { getUserModifications } from '@/services/storageService';
+import { getUserModifications, saveUserModifications } from '@/services/storageService';
 import { Activity } from '@/types';
 
 function App() {
@@ -47,6 +46,11 @@ function App() {
       }
     }
   }, [tripData, state.currentBase, state.userModifications.lastViewedBase, dispatch]);
+
+  // Save user modifications to localStorage whenever they change
+  useEffect(() => {
+    saveUserModifications(state.userModifications);
+  }, [state.userModifications]);
 
   // Use global state values
   const loading = isLoading || state.loading;
@@ -106,6 +110,18 @@ function App() {
     dispatch({ type: 'SELECT_BASE', payload: stopId });
   };
 
+  const handleActivityReorder = (fromIndex: number, toIndex: number) => {
+    if (!state.currentBase) return;
+    dispatch({ 
+      type: 'REORDER_ACTIVITIES', 
+      payload: { 
+        baseId: state.currentBase, 
+        fromIndex, 
+        toIndex 
+      } 
+    });
+  };
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 relative">
@@ -127,55 +143,19 @@ function App() {
           onStopSelect={handleStopSelect}
         />
 
-        {/* Temporary Sidebar - will be converted to floating panel in later task */}
-        <div className="absolute top-4 right-4 w-96 bg-white/30 backdrop-blur border border-white/20 shadow-md rounded-xl max-h-[calc(100vh-2rem)] overflow-y-auto">
-          <div className="p-4">
-            {/* Trip Header in floating panel */}
-            <div className="mb-4 pb-3 border-b border-white/20">
-              <h1 className="text-lg font-bold text-gray-900">{appTripData.trip_name}</h1>
-              {appTripData.travellers && appTripData.vehicle && (
-                <p className="text-xs text-gray-700 mt-1">
-                  Family of {appTripData.travellers.length} • {appTripData.vehicle}
-                </p>
-              )}
-            </div>
-
-            {currentStop && (
-              <>
-                {/* Accommodation Card */}
-                <AccommodationCard
-                  accommodation={currentStop.accommodation}
-                  stopName={currentStop.name}
-                />
-
-                {/* Activities Section */}
-                <div className="mt-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                    Activities ({sortedActivities.length})
-                  </h3>
-                  
-                  {sortedActivities.length === 0 ? (
-                    <p className="text-gray-500 text-center py-8">No activities planned for this stop.</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {sortedActivities.map((activity) => (
-                        <ActivityCard
-                          key={activity.activity_id}
-                          activity={activity}
-                          accommodation={currentStop.accommodation}
-                          isSelected={activity.activity_id === state.selectedActivity}
-                          isDone={state.userModifications.activityStatus[activity.activity_id] || false}
-                          onToggleDone={handleActivityToggle}
-                          onSelect={handleActivitySelect}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
-        </div>
+        {/* Expandable Activities Panel */}
+        {currentStop && (
+          <ActivitiesPanel
+            accommodation={currentStop.accommodation}
+            activities={sortedActivities}
+            stopName={currentStop.name}
+            selectedActivityId={state.selectedActivity}
+            activityStatus={state.userModifications.activityStatus}
+            onActivitySelect={handleActivitySelect}
+            onToggleDone={handleActivityToggle}
+            onReorder={handleActivityReorder}
+          />
+        )}
       </div>
     </ErrorBoundary>
   );

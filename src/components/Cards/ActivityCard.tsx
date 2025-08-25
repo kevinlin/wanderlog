@@ -35,9 +35,9 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
       onClick={() => onSelect(activity.activity_id)}
       className={`
         bg-white rounded-lg shadow-md p-4 mb-3 cursor-pointer transition-all duration-200
-        ${isSelected ? 'ring-2 ring-alpine-teal ring-offset-2' : ''}
-        ${isDone ? 'opacity-75 bg-gray-50' : ''}
-        hover:shadow-lg
+        ${isSelected ? 'ring-2 ring-sky-500 ring-offset-2 bg-sky-500/10' : ''}
+        ${isDone ? 'opacity-75 bg-emerald-500/10' : ''}
+        hover:shadow-lg hover:bg-orange-500/5
       `}
     >
       <div className="flex items-start space-x-3">
@@ -46,7 +46,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             type="checkbox"
             checked={isDone}
             onChange={handleCheckboxChange}
-            className="w-5 h-5 text-alpine-teal border-gray-300 rounded focus:ring-alpine-teal focus:ring-2"
+            className="w-5 h-5 text-emerald-500 border-gray-300 rounded focus:ring-emerald-500 focus:ring-2"
           />
         </div>
 
@@ -98,14 +98,14 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-alpine-teal hover:text-opacity-80 text-sm font-medium"
+              className="text-sky-500 hover:text-sky-600 text-sm font-medium"
             >
               View Details →
             </a>
             
             <button
               onClick={handleNavigate}
-              className="bg-alpine-teal hover:bg-opacity-90 text-white px-3 py-1 rounded text-sm transition-colors"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-3 py-1 rounded text-sm transition-colors"
             >
               🧭 Navigate
             </button>

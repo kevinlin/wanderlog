@@ -14,7 +14,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
   const checkOutDate = new Date(accommodation.check_out);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-l-4 border-alpine-teal">
+    <div className="bg-white rounded-lg shadow-md p-4 mb-4 border-l-4 border-sky-500">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <h3 className="text-lg font-semibold text-gray-900 mb-1">
@@ -77,7 +77,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
               <p className="text-xs text-gray-500 font-medium">Phone</p>
               <a 
                 href={`tel:${accommodation.phone}`}
-                className="text-sm text-alpine-teal hover:underline"
+                className="text-sm text-sky-500 hover:text-sky-600 hover:underline"
               >
                 {accommodation.phone}
               </a>
@@ -101,7 +101,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
           href={accommodation.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-alpine-teal hover:text-opacity-80 text-sm font-medium"
+          className="text-sky-500 hover:text-sky-600 text-sm font-medium"
         >
           View Website →
         </a>
@@ -110,7 +110,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
           href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(accommodation.address)}`}
           target="_blank"
           rel="noopener noreferrer"
-          className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded text-sm transition-colors"
+          className="bg-orange-500/20 hover:bg-orange-500/30 text-orange-700 px-3 py-1 rounded text-sm transition-colors"
         >
           📍 Directions
         </a>

@@ -63,6 +63,7 @@
       "accommodation": {
         "name": "The Cairns Alpine Resort & Golf Club",
         "address": "48 D'Archiac Drive, Lake Tekapo 7999, New Zealand",
+        "location": { "lat": -43.96891, "lng": 170.47105 },
         "check_in": "2025-12-14 15:00",
         "check_out": "2025-12-16 10:00",
         "confirmation": "175483357669783",
