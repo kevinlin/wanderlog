@@ -5,11 +5,13 @@
 The Wanderlog Travel Journal is a React-based Single Page Application (SPA) that provides an immersive, map-centric travel planning and tracking experience. The application combines Google Maps integration with comprehensive activity management, timeline navigation, and persistent data storage to create a digital travel companion.
 
 ### Design Principles
-- **Map-First Interface**: Google Maps serves as the primary background with floating UI elements
+- **Map-First Interface**: Google Maps serves as the primary background with floating UI components positioned as overlays
+- **Frosted Glass Design**: Floating panels use semi-transparent backgrounds with backdrop blur effects for modern aesthetics
 - **Mobile-First Responsive Design**: Optimized for mobile travelers with touch-friendly interactions
+- **Expandable Interface**: Accommodation/activities panel supports collapsed and expanded states for efficient space utilization
+- **Vivid Color Palette**: Modern, dynamic color scheme using Tailwind Colors v4 for enhanced visual appeal
 - **Data Persistence**: Client-side storage with export capabilities for user modifications
 - **Progressive Enhancement**: Graceful degradation when external services are unavailable
-- **Travel Journal Aesthetic**: Warm, inviting color palette with journal-style UI elements
 
 ## Architecture
 
@@ -162,7 +164,7 @@ interface MapContainerProps {
 - Click handlers for pin selection and map interaction
 
 #### 3. TimelineStrip Component
-**Purpose**: Horizontal timeline for base navigation with swipe support.
+**Purpose**: Floating timeline panel positioned at top-left corner with frosted glass styling.
 
 ```typescript
 interface TimelineStripProps {
@@ -170,17 +172,42 @@ interface TimelineStripProps {
   currentBase: string;
   onBaseSelect: (baseId: string) => void;
   timezone: string;
+  className?: string; // For floating panel positioning
 }
 ```
 
 **Key Features**:
+- Floating panel positioned at top-left with appropriate screen edge gaps
+- Frosted glass styling: `rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md`
 - Proportional base representation based on stay duration
 - Auto-focus on current day using NZ timezone
 - Touch/swipe gesture support for mobile
-- Status-based visual indicators
+- Status-based visual indicators using vivid color palette
 
-#### 4. ActivityCard Component
-**Purpose**: Detailed activity display with interaction capabilities.
+#### 4. ActivitiesPanel Component
+**Purpose**: Expandable/collapsible floating panel for accommodation and activities display.
+
+```typescript
+interface ActivitiesPanelProps {
+  accommodation: Accommodation;
+  activities: Activity[];
+  isExpanded: boolean;
+  onToggleExpanded: () => void;
+  onActivitySelect: (activityId: string) => void;
+  onToggleDone: (activityId: string) => void;
+  className?: string; // For floating panel positioning
+}
+```
+
+**Key Features**:
+- Floating panel positioned at top-right with appropriate screen edge gaps
+- Frosted glass styling consistent with timeline panel
+- Default state: Shows only accommodation card with expand control
+- Expanded state: Extends to bottom of screen with collapse control, becomes scrollable
+- Smooth expand/collapse animations
+
+#### 5. ActivityCard Component
+**Purpose**: Detailed activity display within the activities panel.
 
 ```typescript
 interface ActivityCardProps {
@@ -195,12 +222,12 @@ interface ActivityCardProps {
 **Key Features**:
 - Comprehensive activity information display
 - Travel time calculation from accommodation
-- "Mark Done" functionality with visual feedback
+- "Mark Done" functionality with visual feedback using vivid color palette
 - "Navigate in Google Maps" action
 - Thumbnail image display
 
-#### 5. DraggableActivity Component
-**Purpose**: Drag-and-drop wrapper for activity reordering.
+#### 6. DraggableActivity Component
+**Purpose**: Drag-and-drop wrapper for activity reordering within the expandable panel.
 
 ```typescript
 interface DraggableActivityProps {
@@ -211,20 +238,20 @@ interface DraggableActivityProps {
 }
 ```
 
-#### 6. Pin Components
-**Purpose**: Map marker components with location-specific styling.
+#### 7. Pin Components
+**Purpose**: Map marker components with location-specific styling using vivid color palette.
 
 **Pin Icon Specifications**:
-- **City/Town Pins**: Yellow star icon (Google Maps "Starred place" style)
-- **Accommodation Pins**: Lodge/hotel icon with status-based coloring
-- **Activity Pins**: Type-specific icons with fallback to green flag ("Want to go" style):
+- **City/Town Pins**: Yellow star icon (Google Maps "Starred place" style) with vivid accent colors
+- **Accommodation Pins**: Lodge/hotel icon with status-based coloring using the new color palette
+- **Activity Pins**: Type-specific icons with fallback to flag icon, colored with vivid palette:
   - Restaurant: Fork and knife icon
   - Attraction: Camera/sightseeing icon  
   - Shopping: Shopping bag icon
   - Outdoor: Mountain/hiking icon
   - Cultural: Museum/building icon
   - Transport: Vehicle icon
-  - Other/Default: Green flag icon
+  - Other/Default: Flag icon with primary accent color
 
 ### Custom Hooks
 
@@ -464,6 +491,63 @@ class ExportService {
 - **JSON Schema Validation**: Validate trip data structure on load
 - **Type Guards**: Runtime type checking for external data
 - **Graceful Degradation**: Handle missing optional fields
+
+## Visual Design System
+
+### Color Palette
+The application uses a vivid, modern, and dynamic color scheme based on Tailwind Colors v4, replacing the previous teal/gray theme:
+
+**Primary Colors:**
+- **Primary Accent**: Sky-500 (`bg-sky-500`, `text-sky-500`) - Vibrant blue for current timeline base, active states, and primary actions
+- **Secondary Accent**: Orange-500 (`bg-orange-500`, `text-orange-500`) - Energetic orange for secondary actions, hover states, and interactive elements
+- **Success**: Emerald-500 (`bg-emerald-500`, `text-emerald-500`) - Rich green for completed activities and positive feedback
+- **Warning**: Amber-500 (`bg-amber-500`, `text-amber-500`) - Bright amber for pending or attention-required states
+- **Info**: Violet-500 (`bg-violet-500`, `text-violet-500`) - Modern violet for informational elements and neutral actions
+
+**Status Colors:**
+- **Past/Completed**: 
+  - Timeline bases: Sky-500 with 30% opacity (`bg-sky-500/30`)
+  - Completed activities: Emerald-500 with 40% opacity (`bg-emerald-500/40`)
+- **Current/Active**: Full intensity Sky-500 (`bg-sky-500`)
+- **Upcoming/Pending**: Sky-500 with 70% opacity (`bg-sky-500/70`)
+
+**Interactive States:**
+- **Hover**: Orange-500 with 90% opacity (`hover:bg-orange-500/90`)
+- **Active**: Enhanced saturation and shadow effects
+- **Focus**: Sky-500 with ring utilities (`focus:ring-sky-500`)
+
+### Frosted Glass Styling
+Consistent styling applied to all floating panels:
+
+```css
+.frosted-panel {
+  @apply rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md;
+}
+```
+
+**Additional Variations:**
+- **Hover State**: `bg-white/40` with `shadow-lg`
+- **Active State**: `bg-white/50` with enhanced border opacity
+- **Dark Mode Support**: `bg-black/20` with `border-black/30`
+
+### Layout Specifications
+
+**Floating Panel Positioning:**
+- **Timeline Panel**: `absolute top-4 left-4` with responsive adjustments
+- **Activities Panel**: `absolute top-4 right-4` with responsive adjustments
+- **Gap Specifications**: Minimum 1rem (16px) gap from screen edges on all breakpoints
+
+**Panel Dimensions:**
+- **Timeline Panel**: Auto-width based on content, max-width constraints for mobile
+- **Activities Panel**: 
+  - Collapsed: Auto-height for accommodation card only
+  - Expanded: `top-4` to `bottom-4` with scroll overflow
+
+### Animation Specifications
+- **Panel Expand/Collapse**: 300ms ease-in-out transition
+- **Hover Effects**: 150ms ease-out transition
+- **Pin Highlighting**: 200ms ease-in-out scale and color transitions
+- **Activity Status Changes**: 250ms fade transition
 
 ## Testing Strategy
 

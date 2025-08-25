@@ -11,7 +11,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 **User Story:** As a traveler, I want to view my entire trip on an interactive map with route visualization, so that I can understand the geographical context and flow of my journey.
 
 **Acceptance Criteria:**
-1. WHEN the application loads, THEN it SHALL display a Google Maps interface as the primary background
+1. WHEN the application loads, THEN it SHALL display a Google Maps interface as the primary background with floating UI components overlaid
 2. WHEN trip data is loaded, THEN the system SHALL render route polylines between all trip bases using Google Directions API
 3. WHEN route polylines are displayed, THEN they SHALL include scenic waypoints (e.g., Lindis Pass, Crown Range) as intermediate points
 4. WHEN the map is displayed, THEN it SHALL use a custom travel-journal styling with softer pastel colors and reduced POI clutter
@@ -19,34 +19,42 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 6. WHEN activity locations are available, THEN the system SHALL display activity-specific pins based on activity type (default: green flag for "Want to go" style) for each activity with valid coordinates
 7. WHEN city/town locations are displayed, THEN the system SHALL display yellow star pins (Starred place style) for base locations
 8. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
+9. WHEN UI components are displayed over the map, THEN they SHALL be positioned as floating panels with appropriate gaps from screen edges
+10. WHEN floating panels are rendered, THEN they SHALL use frosted glass styling with rounded corners, semi-transparent white background, backdrop blur, subtle borders, and medium shadows
 
 ### 2. Timeline Navigation and Date Management
 
 **User Story:** As a traveler, I want to navigate through my trip timeline and see my current progress, so that I can easily jump to any day and understand where I am in my journey.
 
 **Acceptance Criteria:**
-1. WHEN the application loads, THEN it SHALL display a horizontal timeline strip showing all trip bases
-2. WHEN timeline elements are displayed, THEN each base SHALL have length proportional to the duration of stay
-3. WHEN the current date is determined, THEN the system SHALL automatically focus on today's base using New Zealand local time
-4. WHEN bases are displayed in the timeline, THEN they SHALL be color-coded based on status (past: 40% opacity grey, current: teal brand color, upcoming: 70-80% opacity normal)
-5. WHEN a user interacts with the timeline, THEN it SHALL support both swipe gestures and tap navigation
-6. WHEN a timeline base is selected, THEN the map SHALL center on the corresponding location and display relevant pins
-7. WHEN timeline navigation occurs, THEN the system SHALL persist the last viewed day/base in LocalStorage
+1. WHEN the application loads, THEN it SHALL display a horizontal timeline strip as a floating panel positioned at the top-left corner of the map
+2. WHEN the timeline panel is displayed, THEN it SHALL be positioned with appropriate gap from screen edges and use frosted glass styling
+3. WHEN timeline elements are displayed, THEN each base SHALL have length proportional to the duration of stay
+4. WHEN the current date is determined, THEN the system SHALL automatically focus on today's base using New Zealand local time
+5. WHEN bases are displayed in the timeline, THEN they SHALL be color-coded based on status using the new vivid color palette (past: reduced opacity, current: primary accent color, upcoming: medium opacity)
+6. WHEN a user interacts with the timeline, THEN it SHALL support both swipe gestures and tap navigation
+7. WHEN a timeline base is selected, THEN the map SHALL center on the corresponding location and display relevant pins
+8. WHEN timeline navigation occurs, THEN the system SHALL persist the last viewed day/base in LocalStorage
 
 ### 3. Activity Management and Organization
 
 **User Story:** As a traveler, I want to view, organize, and track my activities with detailed information and completion status, so that I can efficiently manage my itinerary and remember what I've accomplished.
 
 **Acceptance Criteria:**
-1. WHEN activities are displayed, THEN each activity card SHALL include title, thumbnail, address/location, travel time from accommodation, duration, URL link, and remarks
-2. WHEN an activity has location coordinates, THEN the system SHALL display a corresponding pin on the map
-3. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted and the map SHALL center on that location
-4. WHEN a map pin is tapped, THEN the corresponding activity card SHALL be highlighted and scrolled into view
-5. WHEN activities are displayed, THEN users SHALL be able to reorder them using drag-and-drop functionality
-6. WHEN activity reordering occurs, THEN the new order SHALL be persisted in LocalStorage and reflected in exported data
-7. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
-8. WHEN activities have completion status, THEN they SHALL be visually indicated (completed activities greyed out or marked)
-9. WHEN an activity includes a URL, THEN users SHALL be able to access a "Navigate in Google Maps" action
+1. WHEN the application loads, THEN the accommodation/activities panel SHALL be positioned as a floating component at the top-right corner of the map with appropriate gap from screen edges
+2. WHEN the activities panel is displayed, THEN it SHALL use frosted glass styling consistent with other floating panels
+3. WHEN the activities panel is in default state, THEN it SHALL display only the accommodation card with an expand control at the bottom
+4. WHEN the expand control is activated, THEN the panel SHALL extend to the bottom of the screen (map) maintaining the same gap, and become scrollable for viewing all activity cards
+5. WHEN the activities panel is expanded, THEN it SHALL include a collapse control at the end to return to the default state
+6. WHEN activities are displayed, THEN each activity card SHALL include title, thumbnail, address/location, travel time from accommodation, duration, URL link, and remarks
+7. WHEN an activity has location coordinates, THEN the system SHALL display a corresponding pin on the map
+8. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted and the map SHALL center on that location
+9. WHEN a map pin is tapped, THEN the corresponding activity card SHALL be highlighted and scrolled into view
+10. WHEN activities are displayed, THEN users SHALL be able to reorder them using drag-and-drop functionality
+11. WHEN activity reordering occurs, THEN the new order SHALL be persisted in LocalStorage and reflected in exported data
+12. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
+13. WHEN activities have completion status, THEN they SHALL be visually indicated using the new color palette (completed activities with reduced opacity or accent coloring)
+14. WHEN an activity includes a URL, THEN users SHALL be able to access a "Navigate in Google Maps" action
 
 ### 4. Accommodation Display and Management
 
@@ -117,7 +125,27 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN API calls are made, THEN they SHALL implement appropriate timeouts and retry logic
 5. WHEN LocalStorage operations occur, THEN they SHALL be optimized to minimize performance impact
 
-### 10. Deployment and Configuration
+### 10. Visual Design and Color Theme
+
+**User Story:** As a user, I want the application to have a modern, vivid, and dynamic visual design that enhances the travel experience and provides excellent visual hierarchy.
+
+**Acceptance Criteria:**
+1. WHEN the application is styled, THEN it SHALL use a vivid, modern, and dynamic color palette from Tailwind Colors v4 to replace the current teal/gray theme
+2. WHEN floating panels are rendered, THEN they SHALL use consistent frosted glass styling with the following specifications:
+   - Rounded corners using `rounded-xl` class
+   - Semi-transparent white background using `bg-white/30`
+   - Backdrop blur effect using `backdrop-blur-md`
+   - Subtle border using `border border-white/20`
+   - Medium shadow using `shadow-md`
+3. WHEN color coding is applied, THEN the system SHALL use the selected vivid color palette for:
+   - Timeline base status indicators
+   - Activity completion states
+   - Pin highlighting and selection states
+   - Interactive element feedback
+4. WHEN visual hierarchy is established, THEN colors SHALL be used consistently across all components to maintain design coherence
+5. WHEN accessibility is considered, THEN color combinations SHALL maintain adequate contrast ratios for readability
+
+### 11. Deployment and Configuration
 
 **User Story:** As a developer/maintainer, I want the application to be properly configured for GitHub Pages deployment with secure API key management, so that the application can be reliably hosted and maintained.
 

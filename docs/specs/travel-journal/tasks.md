@@ -122,55 +122,70 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add fallback to straight-line polylines when Directions API fails
     - **Requirements Reference**: Requirement 1.2, 1.3 (route polylines, scenic waypoints), Requirement 8.2 (Directions API fallback)
 
-- [ ] 6. **Timeline Navigation Component**
-  - [ ] 6.1 Create TimelineStrip component structure
-    - Implement TimelineStrip.tsx with horizontal scrolling layout
+- [ ] 6. **Timeline Navigation Component (Floating Panel)**
+  - [ ] 6.1 Create floating TimelineStrip component structure
+    - Implement TimelineStrip.tsx as floating panel positioned at top-left corner with frosted glass styling
+    - Apply consistent styling: `absolute top-4 left-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md`
     - Create TimelineBase.tsx for individual base representation
     - Add proportional sizing based on stay duration
-    - **Requirements Reference**: Requirement 2.1, 2.2 (timeline strip, proportional length)
+    - **Requirements Reference**: Requirement 2.1, 2.2 (floating timeline panel, proportional length), Requirement 10.2 (frosted glass styling)
 
-  - [ ] 6.2 Implement timeline navigation and auto-focus
+  - [ ] 6.2 Implement timeline navigation and auto-focus with new color palette
     - Add New Zealand timezone detection for current day calculation
-    - Implement auto-focus on today's base with visual highlighting
+    - Implement auto-focus on today's base with Sky-500 highlighting (`bg-sky-500`)
     - Create timeline base selection handlers with map integration
-    - **Requirements Reference**: Requirement 2.3 (NZ local time auto-focus), Requirement 2.6 (timeline base selection)
+    - Apply new color scheme: past bases (`bg-sky-500/30`), current (`bg-sky-500`), upcoming (`bg-sky-500/70`)
+    - **Requirements Reference**: Requirement 2.3 (NZ local time auto-focus), Requirement 2.6 (timeline base selection), Requirement 10.3 (vivid color palette)
 
-  - [ ] 6.3 Add mobile touch support and status coloring
+  - [ ] 6.3 Add mobile touch support and responsive design
     - Implement swipe gesture handling for timeline navigation
-    - Add status-based coloring (past: 40% opacity, current: teal, upcoming: 70-80% opacity)
-    - Create responsive timeline layout for mobile devices
-    - **Requirements Reference**: Requirement 2.4, 2.5 (status coloring, swipe navigation), Requirement 7.3 (touch optimizations)
+    - Create responsive timeline layout with appropriate gap maintenance on mobile devices
+    - Add smooth transitions (300ms ease-in-out) for state changes
+    - **Requirements Reference**: Requirement 2.4, 2.5 (swipe navigation), Requirement 7.3 (touch optimizations)
 
-- [ ] 7. **Activity Management Components**
-  - [ ] 7.1 Create ActivityCard component
+- [ ] 7. **Expandable Activities Panel Component**
+  - [ ] 7.1 Create floating ActivitiesPanel component structure
+    - Implement ActivitiesPanel.tsx as floating panel positioned at top-right corner with frosted glass styling
+    - Apply consistent styling: `absolute top-4 right-4 rounded-xl bg-white/30 backdrop-blur-md border border-white/20 shadow-md`
+    - Implement expandable/collapsible functionality with smooth transitions (300ms ease-in-out)
+    - Default state: Display only accommodation card with expand control at bottom
+    - Expanded state: Extend to bottom of screen (`top-4` to `bottom-4`) with collapse control and scroll overflow
+    - **Requirements Reference**: Requirement 3.1, 3.2, 3.3, 3.4, 3.5 (floating activities panel, expandable design), Requirement 10.2 (frosted glass styling)
+
+  - [ ] 7.2 Create ActivityCard component with new color palette
     - Implement ActivityCard.tsx with comprehensive activity information display
     - Add travel time calculation and display from accommodation
-    - Implement "Mark Done" checkbox with visual feedback
-    - **Requirements Reference**: Requirement 3.1 (activity card content), Requirement 3.7, 3.8 (completion status, visual indication)
+    - Implement "Mark Done" checkbox with visual feedback using new color palette (Emerald-500 for completed: `bg-emerald-500/40`)
+    - Apply hover states with Orange-500 (`hover:bg-orange-500/90`)
+    - **Requirements Reference**: Requirement 3.6 (activity card content), Requirement 3.12, 3.13 (completion status, visual indication with new colors)
 
-  - [ ] 7.2 Implement activity list and card interactions
-    - Create ActivityList.tsx for displaying multiple activities
-    - Add activity card highlighting when map pins are selected
+  - [ ] 7.3 Implement activity interactions within expandable panel
+    - Add activity card highlighting when map pins are selected using Sky-500 (`bg-sky-500`)
     - Implement "Navigate in Google Maps" action with external URL opening
-    - **Requirements Reference**: Requirement 3.3, 3.4 (activity-pin synchronization), Requirement 3.9 (Google Maps navigation)
+    - Create scrollable activity list within expanded panel
+    - Add smooth scroll-to-activity functionality when pins are selected
+    - **Requirements Reference**: Requirement 3.8, 3.9 (activity-pin synchronization), Requirement 3.14 (Google Maps navigation)
 
-  - [ ] 7.3 Add drag-and-drop functionality for activity reordering
-    - Implement DraggableActivity.tsx wrapper using @dnd-kit/core
-    - Create drag handles and visual feedback during dragging
+  - [ ] 7.4 Add drag-and-drop functionality within expandable panel
+    - Implement DraggableActivity.tsx wrapper using @dnd-kit/core within the scrollable panel
+    - Create drag handles and visual feedback during dragging with new color palette
     - Add reordering persistence to LocalStorage with manual_order field
-    - **Requirements Reference**: Requirement 3.5, 3.6 (drag-drop reordering, order persistence)
+    - Ensure drag-and-drop works properly within the constrained panel height
+    - **Requirements Reference**: Requirement 3.10, 3.11 (drag-drop reordering, order persistence)
 
-- [ ] 8. **Accommodation Display Components**
-  - [ ] 8.1 Create AccommodationCard component
-    - Implement AccommodationCard.tsx with accommodation details
+- [ ] 8. **Accommodation Display Components (Within Activities Panel)**
+  - [ ] 8.1 Create AccommodationCard component for panel integration
+    - Implement AccommodationCard.tsx with accommodation details for display within the ActivitiesPanel
     - Add check-in/check-out time display and confirmation information
     - Implement thumbnail image display when available
-    - **Requirements Reference**: Requirement 4.2, 4.5 (accommodation information, thumbnail display)
+    - Apply new color palette for interactive elements (Orange-500 for hover states)
+    - Ensure card fits properly within the collapsed panel state
+    - **Requirements Reference**: Requirement 4.2, 4.5 (accommodation information, thumbnail display), Requirement 10.3 (new color palette)
 
-  - [ ] 8.2 Integrate accommodation display with timeline
-    - Position accommodation card prominently at top of detail view
-    - Add accommodation pin display on map for each base
-    - Ensure visual consistency with travel journal aesthetic
+  - [ ] 8.2 Integrate accommodation display with activities panel and map
+    - Position accommodation card prominently at top of the ActivitiesPanel (visible in both collapsed and expanded states)
+    - Add accommodation pin display on map for each base with new color palette
+    - Ensure visual consistency with frosted glass aesthetic and new color scheme
     - **Requirements Reference**: Requirement 4.1, 4.3, 4.4 (prominent display, single pin per base, visual consistency)
 
 - [ ] 9. **Weather Integration**
@@ -257,18 +272,33 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add tests for error handling and fallback mechanisms
     - **Requirements Reference**: End-to-end requirement validation
 
-- [ ] 15. **Final Integration and Deployment Setup**
-  - [ ] 15.1 Wire all components together in main App
-    - Integrate all feature modules (Map, Timeline, Activities, Weather)
-    - Ensure proper data flow between components via global state
-    - Add final error boundary and loading state management
+- [ ] 15. **Color Theme Migration and Visual Updates**
+  - [ ] 15.1 Update existing components with new color palette
+    - Replace all teal/gray color references with new Sky/Orange/Emerald/Amber/Violet palette
+    - Update MapContainer pins with new color scheme
+    - Apply new colors to existing error boundaries and loading components
+    - Update any hardcoded color values in utility functions
+    - **Requirements Reference**: Requirement 10.1, 10.3 (vivid color palette replacement)
+
+  - [ ] 15.2 Apply frosted glass styling to existing components
+    - Update any existing panel components to use consistent frosted glass styling
+    - Ensure all floating elements follow the same visual design system
+    - Add proper backdrop blur support and fallbacks for older browsers
+    - **Requirements Reference**: Requirement 10.2 (frosted glass styling consistency)
+
+- [ ] 16. **Final Integration and Deployment Setup**
+  - [ ] 16.1 Wire all components together in main App with new layout
+    - Integrate floating Timeline and Activities panels with map background
+    - Ensure proper positioning and responsive behavior of floating panels
+    - Implement proper z-index stacking for panel interactions
+    - Add final error boundary and loading state management with new colors
     - **Requirements Reference**: All requirements - final integration ensures complete functionality
 
-  - [ ] 15.2 Configure deployment settings
+  - [ ] 16.2 Configure deployment settings
     - Set up environment variable injection for VITE_GOOGLE_MAPS_API_KEY
     - Configure Vite build settings for GitHub Pages deployment
     - Create production build configuration with optimizations
-    - **Requirements Reference**: Requirement 10.2, 10.3, 10.5 (API key injection, GitHub Actions, environment validation)
+    - **Requirements Reference**: Requirement 11.2, 11.3, 11.5 (API key injection, GitHub Actions, environment validation)
 
 ## Implementation Notes
 
