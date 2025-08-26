@@ -103,7 +103,8 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
                 <div className="text-xs">
                   {new Date(stop.date.from).toLocaleDateString('en-NZ', { 
                     month: 'short', 
-                    day: 'numeric' 
+                    day: 'numeric',
+                    weekday: 'short'
                   })}
                 </div>
                 <div className="text-xs">
