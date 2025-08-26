@@ -34,6 +34,10 @@
       "accommodation": {
         "name": "Sudima Christchurch Airport",
         "address": "550 Memorial Ave, Christchurch 8053, New Zealand",
+        "location": {
+          "lat": -43.4888511,
+          "lng": 172.5558985
+        },
         "check_in": "2025-12-13 15:00",
         "check_out": "2025-12-14 11:00",
         "confirmation": "1924863700",
@@ -87,8 +91,8 @@
         "name": "The Cairns Alpine Resort & Golf Club",
         "address": "48 D'Archiac Drive, Lake Tekapo 7999, New Zealand",
         "location": {
-          "lat": -43.96891,
-          "lng": 170.47105
+          "lat": -43.9454526,
+          "lng": 170.4676672
         },
         "check_in": "2025-12-14 15:00",
         "check_out": "2025-12-16 10:00",
@@ -201,6 +205,10 @@
       "accommodation": {
         "name": "Marina Gem – Lakefront 3-Bedroom Apartment (Airbnb)",
         "address": "875 Frankton Road, Queenstown 9300, New Zealand",
+        "location": {
+          "lat": -45.0173454,
+          "lng": 168.7174542
+        },
         "check_in": "2025-12-16 15:00",
         "check_out": "2025-12-21 10:00",
         "confirmation": "HMJE5ASMEP",
@@ -358,6 +366,10 @@
       "accommodation": {
         "name": "Distinction Te Anau Hotel & Villas",
         "address": "64 Lakefront Drive, Te Anau 9600, New Zealand",
+        "location": {
+          "lat": -45.4181647,
+          "lng": 167.7029112
+        },
         "check_in": "2025-12-21 15:00",
         "check_out": "2025-12-23 11:00",
         "confirmation": "1928590483",
@@ -457,6 +469,10 @@
       "accommodation": {
         "name": "Timberstone House (Airbnb)",
         "address": "2 Allenby Place, Wānaka 9305, New Zealand",
+        "location": {
+          "lat": -44.694333,
+          "lng": 169.1563603
+        },
         "check_in": "2025-12-23 15:00",
         "check_out": "2025-12-25 10:00",
         "confirmation": "HMDEJSDEMY",
@@ -661,6 +677,10 @@
       "accommodation": {
         "name": "Novotel Christchurch Cathedral Square",
         "address": "50 Cathedral Square, Christchurch 8011, New Zealand",
+        "location": {
+          "lat": -43.5304133,
+          "lng": 172.6350173
+        },
         "check_in": "2025-12-27 14:00",
         "check_out": "2025-12-29 11:00",
         "confirmation": "PPTPDRLH",
