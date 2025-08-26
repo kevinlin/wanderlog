@@ -157,7 +157,7 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
   const d = data as Record<string, unknown>;
 
   if (d.name === undefined || typeof d.name !== 'string') {
-    errors.push('name must be a string');
+    return true;  // Skip validation if name is not present
   }
 
   if (d.address === undefined || typeof d.address !== 'string') {

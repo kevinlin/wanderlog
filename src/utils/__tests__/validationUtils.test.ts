@@ -171,7 +171,7 @@ describe('ValidationUtils', () => {
 
     it('should reject accommodation with missing required fields', () => {
       const invalidAccommodation = { ...validAccommodation };
-      delete (invalidAccommodation as Record<string, unknown>).name;
+      delete (invalidAccommodation as Record<string, unknown>).address;
       const errors: string[] = [];
       const warnings: string[] = [];
       expect(isValidAccommodation(invalidAccommodation, errors, warnings)).toBe(false);

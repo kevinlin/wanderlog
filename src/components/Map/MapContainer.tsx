@@ -113,7 +113,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         // Add intermediate stops as waypoints (all except first and last)
         for (let i = 1; i < stops.length - 1; i++) {
           waypoints.push({
-            location: stops[i].accommodation.location || stops[i].location,
+            location: stops[i].accommodation?.location || stops[i].location,
             stopover: true
           });
 
@@ -129,8 +129,8 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         }
 
         const request: google.maps.DirectionsRequest = {
-          origin: stops[0].accommodation.location || stops[0].location,
-          destination: stops[stops.length - 1].accommodation.location || stops[stops.length - 1].location,
+          origin: stops[0].accommodation?.location || stops[0].location,
+          destination: stops[stops.length - 1].accommodation?.location || stops[stops.length - 1].location,
           waypoints: waypoints,
           travelMode: google.maps.TravelMode.DRIVING,
           optimizeWaypoints: false,

@@ -70,7 +70,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-hide">
-        {stops.map((stop) => {
+        {stops.filter(stop => stop.duration_days > 0).map((stop) => {
           const isSelected = stop.stop_id === currentStopId;
           const status = getStopTimeStatus(stop);
           const widthPercentage = (stop.duration_days / totalDays) * 100;

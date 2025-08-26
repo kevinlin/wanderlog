@@ -447,6 +447,30 @@
       ]
     },
     {
+      "stop_id": "milford-sound",
+      "name": "Milford Sound",
+      "location": {
+        "lat": -44.6721281,
+        "lng": 167.9248229
+      },
+      "date": {
+        "from": "2025-12-22",
+        "to": "2025-12-22"
+      },
+      "duration_days": 0,
+      "travel_time_from_previous": "1h 44m (from Te Anau via Queenstown/Crown Range)",
+      "scenic_waypoints": [],
+      "accommodation": {
+      },
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": []
+    },
+    {
       "stop_id": "wanaka",
       "name": "Wānaka",
       "location": {
