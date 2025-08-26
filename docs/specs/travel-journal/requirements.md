@@ -20,10 +20,13 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 7. WHEN base locations are displayed, THEN the system SHALL display accommodation pins (lodge-style) as the primary location markers
 8. WHEN pins are displayed on the map, THEN they SHALL be sized larger than Google Maps built-in icons for enhanced visibility
 9. WHEN pins are displayed on the map, THEN they SHALL use vibrant colors from the application's color palette for maximum visual prominence
-10. WHEN activities or accommodations have invalid or missing location data, THEN the system SHALL display warning indicators in the ActivitiesPanel to alert users that addresses need to be corrected
-11. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
-12. WHEN UI components are displayed over the map, THEN they SHALL be positioned as floating panels with appropriate gaps from screen edges
-13. WHEN floating panels are rendered, THEN they SHALL use frosted glass styling with rounded corners, semi-transparent white background, backdrop blur, subtle borders, and medium shadows
+10. WHEN a location pin needs to be highlighted (trip stop selected or activity selected), THEN the system SHALL display a drop pin animation to draw attention to the specific location
+11. WHEN a trip stop is selected, THEN the accommodation pin SHALL be highlighted with a drop pin animation
+12. WHEN an activity is selected, THEN the corresponding activity pin SHALL be highlighted with a drop pin animation if the activity has valid location coordinates
+13. WHEN activities or accommodations have invalid or missing location data, THEN the system SHALL display warning indicators in the ActivitiesPanel to alert users that addresses need to be corrected
+14. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
+15. WHEN UI components are displayed over the map, THEN they SHALL be positioned as floating panels with appropriate gaps from screen edges
+16. WHEN floating panels are rendered, THEN they SHALL use frosted glass styling with rounded corners, semi-transparent white background, backdrop blur, subtle borders, and medium shadows
 
 ### 2. Timeline Navigation and Date Management
 
@@ -51,7 +54,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 5. WHEN the activities panel is expanded, THEN it SHALL include a collapse control at the end to return to the default state
 6. WHEN activities are displayed, THEN each activity card SHALL include title, thumbnail, address/location, travel time from accommodation, duration, URL link, and remarks
 7. WHEN an activity has location coordinates, THEN the system SHALL display a corresponding pin on the map
-8. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted and the map SHALL center on that location
+8. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted with a drop pin animation and the map SHALL center on that location
 9. WHEN a map pin is tapped, THEN the corresponding activity card SHALL be highlighted and scrolled into view
 10. WHEN activities are displayed, THEN users SHALL be able to reorder them using drag-and-drop functionality
 11. WHEN activity reordering occurs, THEN the new order SHALL be persisted in LocalStorage and reflected in exported data

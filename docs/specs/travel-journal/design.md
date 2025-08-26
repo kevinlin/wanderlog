@@ -287,6 +287,25 @@ interface DraggableActivityProps {
 - Hover state scaling (1.1x) with smooth transitions
 - Selection state highlighting with ring effects
 - Consistent stroke width and color for icon outlines
+- Drop pin animation for highlighted pins when locations are selected
+
+**Drop Pin Animation Specifications**:
+- **Animation Type**: CSS-based keyframe animation that simulates a pin dropping from above
+- **Duration**: 600ms total animation duration for smooth, noticeable effect
+- **Easing**: Cubic-bezier easing that mimics natural drop physics (fast start, bounce at end)
+- **Visual Elements**:
+  - Pin scales from 0.3x to 1.2x then settles to 1x size
+  - Pin translates from -20px Y-offset to final position
+  - Subtle bounce effect at the end using transform scale
+  - Optional shadow animation that grows as pin "lands"
+- **Trigger Conditions**:
+  - When a trip stop is selected (accommodation pin animation)
+  - When an activity is selected (activity pin animation)
+  - Animation only triggers for pins that are currently visible on the map
+- **Performance Considerations**:
+  - Uses CSS transforms for hardware acceleration
+  - Animation is non-blocking and doesn't interfere with map interactions
+  - Only one animation plays at a time to avoid visual confusion
 
 #### 9. LocationWarning Component
 **Purpose**: Warning indicator for activities and accommodations with invalid or missing location data.
@@ -612,6 +631,7 @@ Consistent styling applied to all floating panels:
 - **Panel Expand/Collapse**: 300ms ease-in-out transition
 - **Hover Effects**: 150ms ease-out transition
 - **Pin Highlighting**: 200ms ease-in-out scale and color transitions
+- **Drop Pin Animation**: 600ms cubic-bezier animation with bounce effect for location highlighting
 - **Activity Status Changes**: 250ms fade transition
 - **Touch Feedback**: 200ms transition for active states and scale effects
 - **Drag and Drop**: 200ms transform transition with scale effects during dragging

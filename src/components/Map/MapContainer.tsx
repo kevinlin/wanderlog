@@ -1,8 +1,9 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer, Polyline } from '@react-google-maps/api';
 import { TripData, ActivityType } from '@/types/trip';
 import { enrichActivityWithType, getActivityTypeColor, getActivityTypeSvgPath } from '@/utils/activityUtils';
 import * as dateUtils from '@/utils/dateUtils';
+import '@/assets/styles/map-animations.css';
 
 interface MapContainerProps {
   tripData: TripData;
@@ -72,6 +73,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const [routeFallback, setRouteFallback] = useState<google.maps.LatLng[]>([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [routeError, setRouteError] = useState<string | null>(null);
+  
+  // Refs to store marker instances for animation
+  const accommodationMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
+  const activityMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
+  const previousSelectedActivityRef = useRef<string | null>(null);
+  const previousCurrentBaseRef = useRef<string | null>(null);
 
   const onLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
@@ -166,6 +173,45 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
     fetchRoute();
   }, [isMapLoaded, tripData?.stops]);
+
+  // Animation effects for pin highlighting
+  useEffect(() => {
+    // Animate accommodation pin when base selection changes
+    if (currentBaseId && currentBaseId !== previousCurrentBaseRef.current && isMapLoaded) {
+      const marker = accommodationMarkersRef.current.get(currentBaseId);
+      if (marker && window.google?.maps?.Animation) {
+        // Use Google Maps DROP animation
+        marker.setAnimation(window.google.maps.Animation.DROP);
+        // Stop animation after duration
+        setTimeout(() => {
+          if (marker.getAnimation()) {
+            marker.setAnimation(null);
+          }
+        }, 600);
+      }
+      previousCurrentBaseRef.current = currentBaseId;
+    }
+  }, [currentBaseId, isMapLoaded]);
+
+  useEffect(() => {
+    // Animate activity pin when activity selection changes
+    if (selectedActivityId && selectedActivityId !== previousSelectedActivityRef.current && isMapLoaded) {
+      const marker = activityMarkersRef.current.get(selectedActivityId);
+      if (marker && window.google?.maps?.Animation) {
+        // Use Google Maps DROP animation
+        marker.setAnimation(window.google.maps.Animation.DROP);
+        // Stop animation after duration
+        setTimeout(() => {
+          if (marker.getAnimation()) {
+            marker.setAnimation(null);
+          }
+        }, 600);
+      }
+      previousSelectedActivityRef.current = selectedActivityId;
+    } else if (!selectedActivityId) {
+      previousSelectedActivityRef.current = null;
+    }
+  }, [selectedActivityId, isMapLoaded]);
 
   // Determine base status for styling
   const getBaseStatus = (baseId: string): 'past' | 'current' | 'upcoming' => {
@@ -318,6 +364,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                 title={`${base.name} - ${base.accommodation.name}`}
                 icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId)}
                 onClick={() => onBaseSelect(base.stop_id)}
+                onLoad={(marker) => {
+                  accommodationMarkersRef.current.set(base.stop_id, marker);
+                }}
+                onUnmount={() => {
+                  accommodationMarkersRef.current.delete(base.stop_id);
+                }}
               />
             ))}
 
@@ -337,6 +389,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                     title={activity.activity_name}
                     icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId)}
                     onClick={() => onActivitySelect(activity.activity_id)}
+                    onLoad={(marker) => {
+                      activityMarkersRef.current.set(activity.activity_id, marker);
+                    }}
+                    onUnmount={() => {
+                      activityMarkersRef.current.delete(activity.activity_id);
+                    }}
                   />
                 );
               })}
