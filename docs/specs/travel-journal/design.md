@@ -160,7 +160,7 @@ interface MapContainerProps {
 - Location-specific pin icons:
 
   - Accommodation locations: Lodge-style pins
-  - Activity locations: Activity-type specific pins (default: green flag "Want to go" style)
+  - Activity locations: Activity pins with standardized visited status colors (blue for unvisited, green for visited)
 - Pin status-based styling and interactions
 - Click handlers for pin selection and map interaction
 
@@ -273,14 +273,11 @@ interface DraggableActivityProps {
 - **Colors**: All pins SHALL use vibrant colors from the application's color palette for maximum visual prominence
 
 - **Accommodation Pins**: Lodge/hotel icon with status-based coloring using Orange-500 for active states
-- **Activity Pins**: Type-specific icons with fallback to flag icon, colored with vivid palette:
-  - Restaurant: Fork and knife icon with Emerald-500
-  - Attraction: Camera/sightseeing icon with Violet-500
-  - Shopping: Shopping bag icon with Amber-500
-  - Outdoor: Mountain/hiking icon with Sky-500
-  - Cultural: Museum/building icon with Orange-500
-  - Transport: Vehicle icon with neutral vibrant color
-  - Other/Default: Flag icon with primary accent color (Sky-500)
+- **Activity Pins**: Type-specific icons with standardized visited status colors:
+  - All unvisited activities: Sky-500 (#0ea5e9) blue color regardless of activity type
+  - All visited activities: Emerald-500 (#10b981) green color regardless of activity type
+  - Icon shapes remain type-specific (restaurant: fork/knife, attraction: camera, etc.)
+  - Fallback icon: Flag icon for activities without specific type classification
 
 **Enhanced Visibility Features**:
 - Pin shadows for better contrast against map backgrounds

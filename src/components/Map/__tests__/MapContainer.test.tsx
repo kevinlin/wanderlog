@@ -116,6 +116,7 @@ const defaultProps = {
   tripData: mockTripData,
   currentBaseId: 'stop1',
   selectedActivityId: null,
+  activityStatus: {} as Record<string, boolean>,
   onActivitySelect: vi.fn(),
   onBaseSelect: vi.fn(),
 };

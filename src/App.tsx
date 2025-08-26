@@ -145,6 +145,7 @@ function App() {
             tripData={appTripData}
             currentBaseId={state.currentBase}
             selectedActivityId={state.selectedActivity}
+            activityStatus={state.userModifications.activityStatus}
             onActivitySelect={handleActivitySelect}
             onBaseSelect={handleStopSelect}
           />

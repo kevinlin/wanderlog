@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer, Polyline } from '@react-google-maps/api';
 import { TripData, ActivityType } from '@/types/trip';
-import { enrichActivityWithType, getActivityTypeColor, getActivityTypeSvgPath } from '@/utils/activityUtils';
+import { enrichActivityWithType, getActivityTypeSvgPath } from '@/utils/activityUtils';
 import * as dateUtils from '@/utils/dateUtils';
 import '@/assets/styles/map-animations.css';
 
@@ -9,6 +9,7 @@ interface MapContainerProps {
   tripData: TripData;
   currentBaseId: string | null;
   selectedActivityId: string | null;
+  activityStatus: Record<string, boolean>; // activityId -> visited status
   onActivitySelect: (activityId: string) => void;
   onBaseSelect: (baseId: string) => void;
 }
@@ -65,6 +66,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   tripData,
   currentBaseId,
   selectedActivityId,
+  activityStatus,
   onActivitySelect,
   onBaseSelect,
 }) => {
@@ -276,9 +278,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
-  // Activity pin with type-specific icons - Enhanced visibility with 1.5x size
-  const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean) => {
-    const color = getActivityTypeColor(activityType);
+  // Activity pin with standardized visited/unvisited colors - Enhanced visibility with 1.5x size
+  const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean, isVisited: boolean = false) => {
+    // Standardized colors: blue for unvisited, green for visited
+    const color = isVisited ? '#10b981' : '#0ea5e9'; // Emerald-500 for visited, Sky-500 for unvisited
     const svgPath = getActivityTypeSvgPath(activityType);
     
     // Calculate stroke color (darker version of fill color)
@@ -373,7 +376,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
               />
             ))}
 
-            {/* Activity markers for current base (type-specific pins) */}
+            {/* Activity markers for current base with standardized visited/unvisited colors */}
             {currentBase?.activities
               .filter(activity => activity.location?.lat && activity.location?.lng)
               .map((activity) => {
@@ -381,13 +384,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                 const location = activity.location!;
                 const enrichedActivity = enrichActivityWithType(activity);
                 const activityType = enrichedActivity.activity_type || ActivityType.OTHER;
+                const isVisited = activityStatus[activity.activity_id] || false;
                 
                 return (
                   <Marker
                     key={`activity-${activity.activity_id}`}
                     position={{ lat: location.lat!, lng: location.lng! }}
                     title={activity.activity_name}
-                    icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId)}
+                    icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId, isVisited)}
                     onClick={() => onActivitySelect(activity.activity_id)}
                     onLoad={(marker) => {
                       activityMarkersRef.current.set(activity.activity_id, marker);

@@ -16,10 +16,10 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 3. WHEN route polylines are displayed, THEN they SHALL include scenic waypoints (e.g., Lindis Pass, Crown Range) as intermediate points
 4. WHEN the map is displayed, THEN it SHALL use a custom travel-journal styling with softer pastel colors and reduced POI clutter
 5. WHEN accommodation locations are available, THEN the system SHALL display lodge-style pins at each base location
-6. WHEN activity locations are available, THEN the system SHALL display activity-specific pins based on activity type (default: green flag for "Want to go" style) for each activity with valid coordinates
+6. WHEN activity locations are available, THEN the system SHALL display activity pins with standardized visited status colors (blue for unvisited activities, green for visited activities) for each activity with valid coordinates
 7. WHEN base locations are displayed, THEN the system SHALL display accommodation pins (lodge-style) as the primary location markers
 8. WHEN pins are displayed on the map, THEN they SHALL be sized larger than Google Maps built-in icons for enhanced visibility
-9. WHEN pins are displayed on the map, THEN they SHALL use vibrant colors from the application's color palette for maximum visual prominence
+9. WHEN activity pins are displayed on the map, THEN they SHALL use standardized colors: Sky-500 (#0ea5e9) for unvisited activities and Emerald-500 (#10b981) for visited activities
 10. WHEN a location pin needs to be highlighted (trip stop selected or activity selected), THEN the system SHALL display a drop pin animation to draw attention to the specific location
 11. WHEN a trip stop is selected, THEN the accommodation pin SHALL be highlighted with a drop pin animation
 12. WHEN an activity is selected, THEN the corresponding activity pin SHALL be highlighted with a drop pin animation if the activity has valid location coordinates
@@ -59,7 +59,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 10. WHEN activities are displayed, THEN users SHALL be able to reorder them using drag-and-drop functionality
 11. WHEN activity reordering occurs, THEN the new order SHALL be persisted in LocalStorage and reflected in exported data
 12. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
-13. WHEN activities have completion status, THEN they SHALL be visually indicated using the new color palette (completed activities with reduced opacity or accent coloring)
+13. WHEN activities have completion status, THEN they SHALL be visually indicated on the map using standardized pin colors (green for completed/visited activities, blue for incomplete/unvisited activities)
 14. WHEN an activity includes a URL, THEN users SHALL be able to access a "Navigate in Google Maps" action
 15. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
 16. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
