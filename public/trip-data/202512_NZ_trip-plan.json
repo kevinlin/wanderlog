@@ -60,14 +60,16 @@
           "status": {
             "done": false
           },
-          "activity_name": "Riverside Market (food hall & groceries)",
+          "activity_name": "International Antarctic Centre",
           "location": {
-            "address": "96 Oxford Terrace, Christchurch 8011"
+            "address": "Roy Place, Christchurch 8052, New Zealand",
+            "lat": -43.4892216,
+            "lng": 172.545734
           },
-          "travel_time_from_accommodation": "20–25m drive",
-          "duration": "1–2h",
-          "url": "https://riverside.nz/",
-          "remarks": "7-day indoor market; good for lunch/dinner and grocery top-ups",
+          "travel_time_from_accommodation": "5m walk",
+          "duration": "2–3h",
+          "url": "http://www.iceberg.co.nz/",
+          "remarks": "Simulated Antarctic environments, penguins, huskies & rides in amphibious Hägglund vehicles.",
           "thumbnail_url": null,
           "google_place_id": null
         }
@@ -837,6 +839,23 @@
           "duration": "1–2h",
           "url": "https://riverside.nz/",
           "remarks": "Indoor food hall; easy dinner spot near hotel",
+          "thumbnail_url": null,
+          "google_place_id": null
+        },
+        {
+          "activity_id": "christchurch-end-act-7",
+          "order": 8,
+          "status": {
+            "done": false
+          },
+          "activity_name": "Riverside Market (food hall & groceries)",
+          "location": {
+            "address": "96 Oxford Terrace, Christchurch 8011"
+          },
+          "travel_time_from_accommodation": "10m walk",
+          "duration": "1–2h",
+          "url": "https://riverside.nz/",
+          "remarks": "7-day indoor market; good for lunch/dinner and grocery top-ups",
           "thumbnail_url": null,
           "google_place_id": null
         }
