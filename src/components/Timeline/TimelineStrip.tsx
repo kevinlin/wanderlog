@@ -60,7 +60,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
       className={`
         absolute top-2 left-2 sm:top-4 sm:left-4 
         rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md
-        p-2 sm:p-3 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] md:max-w-2xl lg:max-w-4xl
+        p-2 sm:p-3 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] md:max-w-2xl lg:max-w-6xl
         transition-all duration-300 ease-in-out
         touch-pan-x select-none
         ${className}
@@ -70,7 +70,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-hide">
-        {stops.filter(stop => stop.duration_days > 0).map((stop) => {
+        {stops  .map((stop) => {
           const isSelected = stop.stop_id === currentStopId;
           const status = getStopTimeStatus(stop);
           const widthPercentage = (stop.duration_days / totalDays) * 100;
@@ -99,15 +99,15 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
               style={{ minWidth: `${Math.max(widthPercentage * 4, 60)}px` }}
             >
               <div className="text-center">
-                <div className="font-semibold">{stop.name}</div>
-                <div className="text-xs opacity-90">
-                  {stop.duration_days} day{stop.duration_days !== 1 ? 's' : ''}
-                </div>
-                <div className="text-xs opacity-75">
+                <div className="text-lg font-semibold">{stop.name}</div>
+                <div className="text-xs">
                   {new Date(stop.date.from).toLocaleDateString('en-NZ', { 
                     month: 'short', 
                     day: 'numeric' 
                   })}
+                </div>
+                <div className="text-xs">
+                  {stop.duration_days} day{stop.duration_days !== 1 ? 's' : ''}
                 </div>
               </div>
               

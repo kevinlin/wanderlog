@@ -19,7 +19,7 @@
   "stops": [
     {
       "stop_id": "christchurch-arrival",
-      "name": "Christchurch (Arrival)",
+      "name": "Christchurch",
       "location": {
         "lat": -43.530955,
         "lng": 172.6366455
@@ -583,7 +583,7 @@
     },
     {
       "stop_id": "timaru-caroline-bay",
-      "name": "Timaru (Caroline Bay)",
+      "name": "Timaru",
       "location": {
         "lat": -44.396972,
         "lng": 171.254973
@@ -686,7 +686,7 @@
     },
     {
       "stop_id": "christchurch-end",
-      "name": "Christchurch (End)",
+      "name": "Christchurch",
       "location": {
         "lat": -43.530955,
         "lng": 172.6366455
