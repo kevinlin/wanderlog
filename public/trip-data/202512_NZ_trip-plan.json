@@ -120,7 +120,9 @@
           },
           "activity_name": "Tekapo Springs (hot pools & kids aqua play)",
           "location": {
-            "address": "6 Lakeside Dr, Lake Tekapo 7999"
+            "address": "6 Lakeside Dr, Lake Tekapo 7999",
+            "lat": -43.9950378,
+            "lng": 170.4597833
           },
           "travel_time_from_accommodation": "5–7m drive",
           "duration": "1.5–3h",
@@ -155,7 +157,9 @@
           },
           "activity_name": "Dark Sky Project | Stargazing (Mt John or Lakefront)",
           "location": {
-            "address": "1 Motuariki Ln, Lake Tekapo 7999"
+            "address": "1 Motuariki Ln, Lake Tekapo 7999",
+            "lat": -44.0034137,
+            "lng": 170.4762716
           },
           "travel_time_from_accommodation": "5–10m drive",
           "duration": "1.5–2.5h",
