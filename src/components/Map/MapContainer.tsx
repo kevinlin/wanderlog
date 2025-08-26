@@ -310,8 +310,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         {/* Only render markers after map is loaded */}
         {isMapLoaded && tripData?.stops && (
           <>
-
-
             {/* Accommodation markers (lodge-style pins) */}
             {tripData.stops.map((base) => (
               <Marker
