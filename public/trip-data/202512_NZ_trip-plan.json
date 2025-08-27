@@ -892,6 +892,23 @@
             "remarks": "Sunrise/sunset views; take water and hats",
             "thumbnail_url": null,
             "google_place_id": null
+          },
+          {
+            "activity_id": "poi_ChIJUy4XUiRL1akRSDhwN2JmFhA_1756321143547",
+            "activity_name": "National Transport & Toy Museum",
+            "activity_type": "attraction",
+            "location": {
+              "lat": -44.7228678,
+              "lng": 169.239621,
+              "address": "RD 2, 891 Wanaka-Luggate Highway, Wānaka 9382, New Zealand"
+            },
+            "duration": "1-2 hours",
+            "url": "http://www.nttmuseumwanaka.co.nz/",
+            "remarks": "Rating: 4.6/5 (1497 reviews)",
+            "order": 999,
+            "status": {
+              "done": false
+            }
           }
         ]
       },
@@ -1279,6 +1296,6 @@
       }
     ]
   },
-  "exportDate": "2025-08-27T18:49:16.045Z",
+  "exportDate": "2025-08-27T18:59:19.580Z",
   "version": "1.0.0"
 }
