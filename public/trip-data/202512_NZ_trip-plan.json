@@ -392,7 +392,9 @@
           },
           "activity_name": "Creative Queenstown Market (Saturdays)",
           "location": {
-            "address": "Earnslaw Park, Queenstown"
+            "address": "Earnslaw Park, Queenstown",
+            "lat": -45.0298,
+            "lng": 168.6439
           },
           "travel_time_from_accommodation": "12m drive",
           "duration": "1–2h",
@@ -409,7 +411,9 @@
           },
           "activity_name": "TSS Earnslaw to Walter Peak Farm (RealNZ)",
           "location": {
-            "address": "Steamer Wharf, Queenstown; Walter Peak High Country Farm"
+            "address": "Steamer Wharf, Queenstown; Walter Peak High Country Farm",
+            "lat": -45.0335057,
+            "lng": 168.6558449
           },
           "travel_time_from_accommodation": "12m drive to wharf",
           "duration": "3–4h (incl. cruise + farm tour/dining)",
@@ -426,7 +430,9 @@
           },
           "activity_name": "Kiwi Park (native wildlife)",
           "location": {
-            "address": "51 Brecon Street, Queenstown 9300"
+            "address": "51 Brecon Street, Queenstown 9300",
+            "lat": -45.0283619,
+            "lng": 168.6539962
           },
           "travel_time_from_accommodation": "10–12m drive",
           "duration": "1–2h",
@@ -443,7 +449,9 @@
           },
           "activity_name": "Shotover Jet (jet boating)",
           "location": {
-            "address": "Arthurs Point, Queenstown"
+            "address": "Arthurs Point, Queenstown",
+            "lat": -44.9802397,
+            "lng": 168.6050663
           },
           "travel_time_from_accommodation": "15m drive",
           "duration": "1–1.5h total (25m on water)",
@@ -460,7 +468,9 @@
           },
           "activity_name": "Arrowtown village & gold panning",
           "location": {
-            "address": "Buckingham St & Dudley’s Cottage, Arrowtown"
+            "address": "Buckingham St & Dudley’s Cottage, Arrowtown",
+            "lat": -44.937799,
+            "lng": 168.828076
           },
           "travel_time_from_accommodation": "20–25m drive",
           "duration": "2–3h",
@@ -600,36 +610,14 @@
           },
           "activity_name": "Te Anau Glowworm Caves (RealNZ)",
           "location": {
-            "address": "Departs RealNZ Visitor Centre, 85 Lakefront Dr, Te Anau"
+            "address": "Departs RealNZ Visitor Centre, 85 Lakefront Dr, Te Anau",
+            "lat": -45.4179466,
+            "lng": 167.7077025
           },
           "travel_time_from_accommodation": "2–3m drive / 10m walk",
           "duration": "2–2.5h",
           "url": "https://www.realnz.com/en/experiences/glowworm-caves/te-anau-glowworm-caves/",
           "remarks": "Warm layers and non-slip shoes; photography not permitted inside caves",
-          "thumbnail_url": null,
-          "google_place_id": null
-        },
-        {
-          "activity_id": "te-anau-act-2",
-          "order": 2,
-          "status": {
-            "done": false
-          },
-          "activity_name": "Milford Road scenic stops (Mirror Lakes, Lake Gunn Nature Walk)",
-          "location": {
-            "mirror_lakes": {
-              "lat": -45.033333,
-              "lng": 168.0
-            },
-            "lake_gunn": {
-              "lat": -44.883,
-              "lng": 168.083
-            }
-          },
-          "travel_time_from_accommodation": "Mirror Lakes ~45–50m; Lake Gunn ~1h 5m drive",
-          "duration": "Mirror Lakes 15–30m; Lake Gunn loop 45m",
-          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
-          "remarks": "Check weather & avalanche advisories on Milford Road",
           "thumbnail_url": null,
           "google_place_id": null
         },
@@ -642,6 +630,82 @@
           "activity_name": "Milford Sound cruise (optional day trip)",
           "location": {
             "address": "Milford Sound Visitor Terminal, Milford Sound 9679"
+          },
+          "travel_time_from_accommodation": "2h 0m drive (each way)",
+          "duration": "1h 45m–2h cruise (+stops)",
+          "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/",
+          "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
+          "thumbnail_url": null,
+          "google_place_id": null
+        }
+      ]
+    },
+    {
+      "stop_id": "milford-sound",
+      "name": "Milford Sound",
+      "location": {
+        "lat": -44.6721281,
+        "lng": 167.9248229
+      },
+      "date": {
+        "from": "2025-12-22",
+        "to": "2025-12-22"
+      },
+      "duration_days": 0,
+      "travel_time_from_previous": "1h 44m (from Te Anau via Queenstown/Crown Range)",
+      "scenic_waypoints": [
+        {
+          "activity_id": "milford-sound-wp-1",
+          "order": 1,
+          "status": {
+            "done": false
+          },
+          "activity_name": "Mirror Lakes",
+          "location": {
+            "lat": -45.033333,
+            "lng": 168.0
+          },
+          "duration": "15–30m",
+          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
+          "remarks": "Check weather & avalanche advisories on Milford Road",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "milford-sound-wp-2",
+          "order": 2,
+          "status": {
+            "done": false
+          },
+          "activity_name": "Lake Gunn Nature Walk",
+          "location": {
+            "lat": -44.883,
+            "lng": 168.083
+          },
+          "duration": "45m",
+          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
+          "remarks": "Check weather & avalanche advisories on Milford Road",
+          "thumbnail_url": null
+        }
+      ],
+      "accommodation": {},
+      "weather": {
+        "forecast_high_c": null,
+        "forecast_low_c": null,
+        "precipitation_chance_pct": null,
+        "notes": "Placeholder forecast — update during trip"
+      },
+      "activities": [
+        {
+          "activity_id": "milford-sound-act-1",
+          "order": 1,
+          "status": {
+            "done": false
+          },
+          "activity_name": "Milford Sound cruise (optional day trip)",
+          "location": {
+            "address": "Milford Sound Visitor Terminal, Milford Sound 9679",
+            "lat": -44.6681426,
+            "lng": 167.926988
           },
           "travel_time_from_accommodation": "2h 0m drive (each way)",
           "duration": "1h 45m–2h cruise (+stops)",

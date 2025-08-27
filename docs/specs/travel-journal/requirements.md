@@ -63,16 +63,17 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 14. WHEN an activity includes a URL, THEN users SHALL be able to access a "Navigate in Google Maps" action
 15. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
 16. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
-17. WHEN scenic waypoints are available for a trip base, THEN they SHALL be displayed as a collapsible section in the ActivitiesPanel between accommodation and activities
-18. WHEN scenic waypoints are displayed, THEN each waypoint SHALL be shown as a card similar to activity cards but with distinctive scenic waypoint styling (violet color scheme and landscape emoji)
-19. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
-20. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
-21. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions similar to activities
-22. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
-23. WHEN a stop is selected from the timeline, THEN all scenic waypoints for that stop SHALL display drop pin animations simultaneously with the accommodation pin
-24. WHEN scenic waypoints are displayed on the map, THEN they SHALL use the same enhanced visibility sizing (1.5x larger than Google Maps defaults) as other pins
-25. WHEN scenic waypoint pins are clicked, THEN they SHALL trigger the same selection behavior as activity pins, highlighting the corresponding card in the ActivitiesPanel
-26. WHEN scenic waypoints have completion status, THEN their map pins SHALL use the same color coding as activities (violet for unvisited, green for completed)
+17. WHEN scenic waypoints are available for a trip base, THEN they SHALL be displayed as a dedicated collapsible section at the root level of the ActivitiesPanel, positioned between the accommodation card and activities section
+18. WHEN scenic waypoints are available, THEN they SHALL have a dedicated wide button labeled "Scenic Waypoints (x)" with violet styling that toggles the section's visibility, defaulting to collapsed state
+19. WHEN scenic waypoints are displayed, THEN each waypoint SHALL be shown as a card similar to activity cards but with distinctive scenic waypoint styling (violet color scheme and landscape emoji)
+20. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
+21. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
+22. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions similar to activities
+23. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
+24. WHEN a stop is selected from the timeline, THEN all scenic waypoints for that stop SHALL display drop pin animations simultaneously with the accommodation pin
+25. WHEN scenic waypoints are displayed on the map, THEN they SHALL use the same enhanced visibility sizing (1.5x larger than Google Maps defaults) as other pins
+26. WHEN scenic waypoint pins are clicked, THEN they SHALL trigger the same selection behavior as activity pins, highlighting the corresponding card in the ActivitiesPanel
+27. WHEN scenic waypoints have completion status, THEN their map pins SHALL use the same color coding as activities (violet for unvisited, green for completed)
 
 ### 4. Accommodation Display and Management
 

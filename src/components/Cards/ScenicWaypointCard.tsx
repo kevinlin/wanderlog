@@ -66,7 +66,6 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
           <div className="flex items-start justify-between">
             <div className="flex-1">
               <div className="flex items-center mb-2">
-                <span className="text-violet-500 mr-2">🏞️</span>
                 <h4 className={`text-base sm:text-lg font-semibold ${isDone ? 'line-through text-gray-500' : 'text-gray-900'}`}>
                   {waypoint.activity_name}
                 </h4>

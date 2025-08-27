@@ -207,11 +207,12 @@ interface ActivitiesPanelProps {
 **Key Features**:
 - Floating panel positioned at top-right with appropriate screen edge gaps
 - Frosted glass styling consistent with timeline panel
-- Default state: Shows only accommodation card with expand control
+- Default state: Shows accommodation card, scenic waypoints toggle button (if available), and activities expand control
 - Expanded state: Extends to bottom of screen with collapse control, becomes scrollable
 - Smooth expand/collapse animations
-- Collapsible Scenic Waypoints section between accommodation and activities when available
-- Scenic waypoints section uses violet color scheme for visual distinction
+- Dedicated collapsible Scenic Waypoints section at root level between accommodation and activities
+- Scenic waypoints section uses violet color scheme with dedicated wide toggle button
+- Independent collapse/expand state for scenic waypoints separate from activities
 
 #### 5. AccommodationCard Component
 **Purpose**: Collapsible/expandable accommodation display within the activities panel with location validation.
@@ -283,6 +284,25 @@ interface ScenicWaypointCardProps {
 - Non-draggable design to maintain original sequence from trip data
 - Thumbnail image display when available
 - Duration display (no travel time calculation as it's route-based)
+
+#### 6.2. Scenic Waypoints Section Layout
+**Purpose**: Dedicated root-level collapsible section for scenic waypoints within the ActivitiesPanel.
+
+**Layout Structure**:
+1. **Accommodation Card** (always visible at top)
+2. **Scenic Waypoints Section** (root level, between accommodation and activities)
+   - Wide toggle button with violet styling: "🏞️ Scenic Waypoints (x)"
+   - Collapsed by default
+   - When expanded, shows scenic waypoint cards in vertical list
+   - Independent state from activities section
+3. **Activities Section** (expandable to full panel height)
+
+**Scenic Waypoints Toggle Button**:
+- Full width button with violet color scheme (violet-500/20 background)
+- Landscape emoji (🏞️) and count display
+- Chevron icon indicating expand/collapse state
+- Hover and active states with violet color transitions
+- Touch-friendly 44px minimum height
 
 #### 7. DraggableActivity Component
 **Purpose**: Drag-and-drop wrapper for activity reordering within the expandable panel.

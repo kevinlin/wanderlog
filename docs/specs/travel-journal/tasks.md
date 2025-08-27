@@ -340,6 +340,15 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Enhanced visibility with 1.5x sizing and pin shadows consistent with other pins
     - **Requirements Reference**: Requirement 3.22, 3.23, 3.24, 3.25, 3.26 (map pins, animations, enhanced visibility, selection behavior, color coding)
 
+  - [x] 14.6 Restructure ActivitiesPanel layout for scenic waypoints
+    - Moved scenic waypoints section from inside Activities to root level of ActivitiesPanel
+    - Created dedicated wide toggle button "🏞️ Scenic Waypoints (x)" with violet styling
+    - Positioned scenic waypoints section between accommodation card and activities section
+    - Implemented independent collapse/expand state for scenic waypoints (defaults to collapsed)
+    - Updated activities expand button to show only activities count (removed scenic waypoints reference)
+    - Maintained responsive design and touch-friendly interactions for all toggle buttons
+    - **Requirements Reference**: Requirement 3.17, 3.18 (root level section, dedicated toggle button)
+
 - [ ] 15. **Final Integration and Deployment Setup**
   - [ ] 15.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background

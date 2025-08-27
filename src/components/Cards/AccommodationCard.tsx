@@ -23,7 +23,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 mb-3 sm:mb-4 border-l-4 border-sky-500">
+    <div className="bg-white rounded-lg shadow-md p-3 sm:p-4 border-l-4 border-sky-500">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">

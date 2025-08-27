@@ -48,7 +48,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const [isScenicWaypointsExpanded, setIsScenicWaypointsExpanded] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const activityRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  
+
   // Weather data management
   const { fetchWeather, getWeatherForBase } = useWeather();
   const weatherData = getWeatherForBase(baseId);
@@ -107,13 +107,13 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   }, [selectedActivityId, isExpanded]);
 
   return (
-    <div 
+    <div
       className={`
         absolute top-2 right-2 sm:top-4 sm:right-4 
         rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md
         transition-all duration-300 ease-in-out
-        ${isExpanded 
-          ? 'bottom-2 sm:bottom-4 w-full sm:w-96 max-w-[calc(100vw-1rem)] sm:max-w-96 overflow-hidden' 
+        ${isExpanded
+          ? 'bottom-2 sm:bottom-4 w-full sm:w-96 max-w-[calc(100vw-1rem)] sm:max-w-96 overflow-hidden'
           : 'w-full sm:w-96 max-w-[calc(100vw-1rem)] sm:max-w-96 max-h-[calc(100vh-6rem)] sm:max-h-[calc(100vh-8rem)]'
         }
         ${className}
@@ -131,22 +131,61 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           />
         </div>
 
-        {/* Expand/Collapse Control */}
-        {!isExpanded && (
-          <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+        {/* Scenic Waypoints Section */}
+        {scenicWaypoints.length > 0 && (
+          <div className="px-3 sm:px-4 pb-2">
             <button
-              onClick={toggleExpanded}
+              onClick={toggleScenicWaypoints}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 
+                       bg-violet-500/20 hover:bg-violet-500/30 active:bg-violet-500/40
+                       border border-violet-500/30 rounded-lg
+                       text-violet-700 font-medium transition-all duration-200
+                       hover:shadow-md touch-manipulation min-h-[44px] mb-2"
+            >
+              <span>Scenic Waypoints ({scenicWaypoints.length})</span>
+              {isScenicWaypointsExpanded ? (
+                <ChevronUpIcon className="w-4 h-4" />
+              ) : (
+                <ChevronDownIcon className="w-4 h-4" />
+              )}
+            </button>
+
+            {isScenicWaypointsExpanded && (
+              <div className="space-y-2 mb-2">
+                {scenicWaypoints.map((waypoint) => (
+                  <ScenicWaypointCard
+                    key={waypoint.activity_id}
+                    waypoint={waypoint}
+                    accommodation={accommodation}
+                    isSelected={selectedActivityId === waypoint.activity_id}
+                    isDone={activityStatus[waypoint.activity_id] || waypoint.status?.done || false}
+                    onToggleDone={onToggleDone}
+                    onSelect={onActivitySelect}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Activities Expand/Collapse Control */}
+        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+          <button
+            onClick={toggleExpanded}
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 
                        bg-sky-500/20 hover:bg-sky-500/30 active:bg-sky-500/40
                        border border-sky-500/30 rounded-lg
                        text-sky-700 font-medium transition-all duration-200
                        hover:shadow-md touch-manipulation min-h-[44px]"
-            >
-              <span>View Activities ({activities.length}){scenicWaypoints.length > 0 && ` & Scenic Waypoints (${scenicWaypoints.length})`}</span>
+          >
+            <span>Activities ({activities.length})</span>
+            {isExpanded ? (
+              <ChevronUpIcon className="w-4 h-4" />
+            ) : (
               <ChevronDownIcon className="w-4 h-4" />
-            </button>
-          </div>
-        )}
+            )}
+          </button>
+        </div>
 
         {/* Activities Section - Expanded State */}
         {isExpanded && (
@@ -171,45 +210,6 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               <div className="px-3 sm:px-4 pb-3 sm:pb-4">
                 <WeatherCard weatherData={weatherData} />
               </div>
-
-              {/* Scenic Waypoints Section */}
-              {scenicWaypoints.length > 0 && (
-                <div className="mb-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-                      <span className="text-violet-500">🏞️</span>
-                      Scenic Waypoints ({scenicWaypoints.length})
-                    </h3>
-                    <button
-                      onClick={toggleScenicWaypoints}
-                      className="p-2 hover:bg-violet-500/20 active:bg-violet-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
-                      aria-label={isScenicWaypointsExpanded ? "Collapse scenic waypoints" : "Expand scenic waypoints"}
-                    >
-                      {isScenicWaypointsExpanded ? (
-                        <ChevronUpIcon className="w-5 h-5 text-gray-600" />
-                      ) : (
-                        <ChevronDownIcon className="w-5 h-5 text-gray-600" />
-                      )}
-                    </button>
-                  </div>
-                  
-                  {isScenicWaypointsExpanded && (
-                    <div className="space-y-2">
-                      {scenicWaypoints.map((waypoint) => (
-                        <ScenicWaypointCard
-                          key={waypoint.activity_id}
-                          waypoint={waypoint}
-                          accommodation={accommodation}
-                          isSelected={selectedActivityId === waypoint.activity_id}
-                          isDone={activityStatus[waypoint.activity_id] || waypoint.status?.done || false}
-                          onToggleDone={onToggleDone}
-                          onSelect={onActivitySelect}
-                        />
-                      ))}
-                    </div>
-                  )}
-                </div>
-              )}
 
               <DraggableActivitiesList
                 activities={activities}
