@@ -186,9 +186,12 @@ export const generateDirectionsUrl = (
   
   if (waypoints && waypoints.length > 0) {
     const waypointStr = waypoints
-      .map(wp => formatCoordinatesForUrl(wp))
+      .filter(wp => wp.location?.lat && wp.location?.lng)
+      .map(wp => formatCoordinatesForUrl({ lat: wp.location.lat!, lng: wp.location.lng! }))
       .join('/');
-    return `${baseUrl}${originStr}/${waypointStr}/${destStr}`;
+    if (waypointStr) {
+      return `${baseUrl}${originStr}/${waypointStr}/${destStr}`;
+    }
   }
   
   return `${baseUrl}${originStr}/${destStr}`;

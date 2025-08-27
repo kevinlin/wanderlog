@@ -6,9 +6,20 @@ export interface Coordinates {
 }
 
 export interface ScenicWaypoint {
-  lat: number;
-  lng: number;
-  label: string;
+  activity_id: string;
+  activity_name: string;
+  location: {
+    lat?: number;
+    lng?: number;
+    address?: string;
+  };
+  duration?: string;
+  url?: string;
+  remarks?: string;
+  thumbnail_url?: string | null;
+  status?: {
+    done: boolean;
+  };
 }
 
 export interface MapBounds {

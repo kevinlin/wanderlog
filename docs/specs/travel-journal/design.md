@@ -87,6 +87,7 @@ src/
 │   ├── Cards/                  # Content card components
 │   │   ├── AccommodationCard.tsx
 │   │   ├── ActivityCard.tsx
+│   │   ├── ScenicWaypointCard.tsx
 │   │   └── WeatherCard.tsx
 │   └── Activities/             # Activity management components
 │       ├── ActivityList.tsx
@@ -192,6 +193,7 @@ interface TimelineStripProps {
 interface ActivitiesPanelProps {
   accommodation: Accommodation;
   activities: Activity[];
+  scenicWaypoints?: ScenicWaypoint[];
   isExpanded: boolean;
   onToggleExpanded: () => void;
   onActivitySelect: (activityId: string) => void;
@@ -206,6 +208,8 @@ interface ActivitiesPanelProps {
 - Default state: Shows only accommodation card with expand control
 - Expanded state: Extends to bottom of screen with collapse control, becomes scrollable
 - Smooth expand/collapse animations
+- Collapsible Scenic Waypoints section between accommodation and activities when available
+- Scenic waypoints section uses violet color scheme for visual distinction
 
 #### 5. AccommodationCard Component
 **Purpose**: Collapsible/expandable accommodation display within the activities panel with location validation.
@@ -252,6 +256,31 @@ interface ActivityCardProps {
 - Thumbnail image display
 - Location warning indicator when coordinates are missing or invalid
 - Warning message with suggestions for address correction
+
+#### 6.1. ScenicWaypointCard Component
+**Purpose**: Detailed scenic waypoint display within the activities panel with distinctive styling and location validation.
+
+```typescript
+interface ScenicWaypointCardProps {
+  waypoint: ScenicWaypoint;
+  accommodation?: Accommodation;
+  isSelected: boolean;
+  isDone: boolean;
+  onToggleDone: (waypointId: string, done: boolean) => void;
+  onSelect: (waypointId: string) => void;
+}
+```
+
+**Key Features**:
+- Similar layout to ActivityCard but with scenic waypoint-specific styling
+- Violet color scheme with landscape emoji (🏞️) for visual distinction
+- Gradient background from violet-50 to sky-50 with violet border
+- "Mark Done" functionality with violet-colored checkbox
+- "Navigate in Google Maps" action with violet-colored button
+- Location warning indicator using the same validation system as activities
+- Non-draggable design to maintain original sequence from trip data
+- Thumbnail image display when available
+- Duration display (no travel time calculation as it's route-based)
 
 #### 7. DraggableActivity Component
 **Purpose**: Drag-and-drop wrapper for activity reordering within the expandable panel.
@@ -441,9 +470,20 @@ enum ActivityType {
 }
 
 interface ScenicWaypoint {
-  lat: number;
-  lng: number;
-  label: string;
+  activity_id: string;
+  activity_name: string;
+  location: {
+    lat?: number;
+    lng?: number;
+    address?: string;
+  };
+  duration?: string;
+  url?: string;
+  remarks?: string;
+  thumbnail_url?: string | null;
+  status?: {
+    done: boolean;
+  };
 }
 
 interface Coordinates {

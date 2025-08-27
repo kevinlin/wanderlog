@@ -163,6 +163,7 @@ function App() {
           <ActivitiesPanel
             accommodation={currentStop.accommodation}
             activities={sortedActivities}
+            scenicWaypoints={currentStop.scenic_waypoints || []}
             stopName={currentStop.name}
             baseId={state.currentBase}
             baseLocation={currentStop.location}

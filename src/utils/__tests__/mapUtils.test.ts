@@ -179,7 +179,11 @@ describe('MapUtils', () => {
 
     it('should generate URL with waypoints', () => {
       const waypoints: ScenicWaypoint[] = [
-        { lat: -38.0, lng: 175.0, label: 'Waypoint 1' },
+        { 
+          activity_id: 'waypoint-1',
+          activity_name: 'Waypoint 1',
+          location: { lat: -38.0, lng: 175.0, address: 'Waypoint Address' }
+        },
       ];
       
       const url = generateDirectionsUrl(aucklandCoords, wellingtonCoords, waypoints);

@@ -88,7 +88,56 @@
       },
       "duration_days": 2,
       "travel_time_from_previous": "3h 0m (from Christchurch)",
-      "scenic_waypoints": [],
+      "scenic_waypoints": [
+        {
+          "activity_id": "lake-tekapo-wp-1",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Rakaia River Bridge Walkway (SH1)",
+          "location": {
+            "address": "Rakaia River Bridge, Rakaia 7710",
+            "lat": -43.7496,
+            "lng": 172.0140
+          },
+          "duration": "10–20 min",
+          "url": "https://www.google.com/maps/place/Rakaia+River+Bridge",
+          "remarks": "Quick pull-off for river views on the way south.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "lake-tekapo-wp-2",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Talbot Forest (Geraldine) short loop",
+          "location": {
+            "address": "Hislop St entrance, Geraldine 7930",
+            "lat": -44.0949,
+            "lng": 171.2426
+          },
+          "duration": "20–40 min",
+          "url": "https://www.google.com/maps/place/Talbot+Forest+Scenic+Reserve",
+          "remarks": "Sheltered native bush loop to break the drive.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "lake-tekapo-wp-3",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Burkes Pass Scenic Reserve lookout",
+          "location": {
+            "address": "SH8, Burkes Pass 7987",
+            "lat": -44.0777,
+            "lng": 170.8070
+          },
+          "duration": "10–20 min",
+          "url": "https://www.google.com/maps/place/Burkes+Pass+Scenic+Reserve",
+          "remarks": "First views into the Mackenzie Basin.",
+          "thumbnail_url": null
+        }
+      ],
       "accommodation": {
         "name": "The Cairns Alpine Resort & Golf Club",
         "address": "48 D'Archiac Drive, Lake Tekapo 7999, New Zealand",
@@ -120,9 +169,9 @@
           },
           "activity_name": "Tekapo Springs (hot pools & kids aqua play)",
           "location": {
-            "address": "6 Lakeside Dr, Lake Tekapo 7999",
-            "lat": -43.9950378,
-            "lng": 170.4597833
+            "address": "300 Lakeside Dr, Lake Tekapo 7999",
+            "lat": -43.99508,
+            "lng": 170.460756
           },
           "travel_time_from_accommodation": "5–7m drive",
           "duration": "1.5–3h",
@@ -203,9 +252,84 @@
       "travel_time_from_previous": "3h 15m (from Tekapo via Lindis Pass)",
       "scenic_waypoints": [
         {
-          "lat": -44.8,
-          "lng": 169.4,
-          "label": "Lindis Pass Scenic Viewpoint (placeholder)"
+          "activity_id": "queenstown-wp-1",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Lake Pukaki Lookout (Aoraki view)",
+          "location": {
+            "address": "SH8, Lake Pukaki 7999",
+            "lat": -44.1189,
+            "lng": 170.1684
+          },
+          "duration": "10–20 min",
+          "url": "https://www.google.com/maps/place/Lake+Pukaki+Lookout",
+          "remarks": "Turquoise lake; weather-dependent views to Aoraki.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "queenstown-wp-2",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Omarama Clay Cliffs (short detour)",
+          "location": {
+            "address": "Henburn Rd, Omarama 9412",
+            "lat": -44.4960,
+            "lng": 169.9660
+          },
+          "duration": "45–75 min",
+          "url": "https://www.google.com/maps/place/Clay+Cliffs+Omarama",
+          "remarks": "Gravel road + small access fee; short walk to formations.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "queenstown-wp-3",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Lindis Pass Summit Lookout",
+          "location": {
+            "address": "SH8, Lindis Pass 9382",
+            "lat": -44.7063,
+            "lng": 169.4121
+          },
+          "duration": "10–20 min",
+          "url": "https://www.google.com/maps/place/Lindis+Pass+Lookout",
+          "remarks": "Quick pull-off; alpine tussock scenery.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "queenstown-wp-4",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Roaring Meg Viewpoint (Kawarau Gorge)",
+          "location": {
+            "address": "SH6, Gibbston 9371",
+            "lat": -44.9919,
+            "lng": 168.9102
+          },
+          "duration": "10–20 min",
+          "url": "https://www.google.com/maps/place/Roaring+Meg",
+          "remarks": "Gorge views; small carpark on river side.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "queenstown-wp-5",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Kawarau Suspension Bridge (AJ Hackett Bungy)",
+          "location": {
+            "address": "1720 Gibbston Hwy, Gibbston 9371",
+            "lat": -45.0169,
+            "lng": 168.8287
+          },
+          "duration": "20–40 min",
+          "url": "https://www.bungy.co.nz/queenstown/kawarau-bungy-centre/",
+          "remarks": "Watch jumpers from viewing decks; easy access off SH6.",
+          "thumbnail_url": null
         }
       ],
       "accommodation": {
@@ -368,7 +492,72 @@
       },
       "duration_days": 2,
       "travel_time_from_previous": "2h 0m (from Queenstown)",
-      "scenic_waypoints": [],
+      "scenic_waypoints": [
+        {
+          "activity_id": "te-anau-wp-1",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Devil’s Staircase lookouts (SH6)",
+          "location": {
+            "address": "SH6 south of Queenstown",
+            "lat": -45.153,
+            "lng": 168.522
+          },
+          "duration": "10–20 min",
+          "url": "https://maps.app.goo.gl/8jHn8B6w4r3yq9wq8",
+          "remarks": "Pull-outs above Lake Wakatipu; take care re-entering traffic.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "te-anau-wp-2",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Kingston Foreshore & Wharf",
+          "location": {
+            "address": "Kent St, Kingston 9793",
+            "lat": -45.4046,
+            "lng": 168.7074
+          },
+          "duration": "10–25 min",
+          "url": "https://maps.app.goo.gl/8Uu2kqjQX1mjmDqT8",
+          "remarks": "Lake-edge stretch stop; toilets and picnic tables nearby.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "te-anau-wp-3",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Five Rivers Lookout (Upper Oreti Valley)",
+          "location": {
+            "address": "2485 Mossburn–Five Rivers Rd, Five Rivers 9771",
+            "lat": -45.6559,
+            "lng": 168.5089
+          },
+          "duration": "10–20 min",
+          "url": "https://maps.app.goo.gl/9m6y8YjN2q1QJ3JH6",
+          "remarks": "Wide valley views; easy in–out carpark.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "te-anau-wp-4",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Mossburn Railway Reserve stop",
+          "location": {
+            "address": "SH94, Mossburn 9792",
+            "lat": -45.6687,
+            "lng": 168.2909
+          },
+          "duration": "10–15 min",
+          "url": "https://maps.app.goo.gl/9oXoGL8n3V2i9Q7U8",
+          "remarks": "Short leg-stretch green; last larger stop before Te Anau.",
+          "thumbnail_url": null
+        }
+      ],
       "accommodation": {
         "name": "Distinction Te Anau Hotel & Villas",
         "address": "64 Lakefront Drive, Te Anau 9600, New Zealand",
@@ -453,30 +642,6 @@
       ]
     },
     {
-      "stop_id": "milford-sound",
-      "name": "Milford Sound",
-      "location": {
-        "lat": -44.6721281,
-        "lng": 167.9248229
-      },
-      "date": {
-        "from": "2025-12-22",
-        "to": "2025-12-22"
-      },
-      "duration_days": 0,
-      "travel_time_from_previous": "1h 44m (from Te Anau via Queenstown/Crown Range)",
-      "scenic_waypoints": [],
-      "accommodation": {
-      },
-      "weather": {
-        "forecast_high_c": null,
-        "forecast_low_c": null,
-        "precipitation_chance_pct": null,
-        "notes": "Placeholder forecast — update during trip"
-      },
-      "activities": []
-    },
-    {
       "stop_id": "wanaka",
       "name": "Wānaka",
       "location": {
@@ -491,9 +656,68 @@
       "travel_time_from_previous": "3h 45m (from Te Anau via Queenstown/Crown Range)",
       "scenic_waypoints": [
         {
-          "lat": -44.9,
-          "lng": 168.9,
-          "label": "Crown Range Summit Lookout (placeholder)"
+          "activity_id": "wanaka-wp-1",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Lake Hayes Scenic Reserve (pavilion stop)",
+          "location": {
+            "address": "Bendemeer Bay, Lake Hayes 9371",
+            "lat": -44.989,
+            "lng": 168.784
+          },
+          "duration": "10–25 min",
+          "url": "https://maps.app.goo.gl/1xYfZr6q7mDkL2mS8",
+          "remarks": "Calm reflections; easy pull-in near pavilion.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "wanaka-wp-2",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Crown Range Summit Lookout",
+          "location": {
+            "address": "Crown Range Rd, Arrow Junction 9371",
+            "lat": -44.9836,
+            "lng": 168.8346
+          },
+          "duration": "10–20 min",
+          "url": "https://maps.app.goo.gl/6cN3q4Q3bL1m7oPZ8",
+          "remarks": "Highest sealed road in NZ; alpine tussock views.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "wanaka-wp-3",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Bradrona (Cardrona bra fence)",
+          "location": {
+            "address": "2125 Cardrona Valley Rd, Cardrona 9382",
+            "lat": -44.8976,
+            "lng": 168.9568
+          },
+          "duration": "5–10 min",
+          "url": "https://maps.app.goo.gl/8Qm4m7s5qK6n6J2S7",
+          "remarks": "Quirky roadside charity stop; quick photo.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "wanaka-wp-4",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Cardrona Hotel frontage",
+          "location": {
+            "address": "2312 Cardrona Valley Rd, Cardrona 9382",
+            "lat": -44.8848,
+            "lng": 168.9533
+          },
+          "duration": "15–45 min",
+          "url": "https://cardronahotel.co.nz/",
+          "remarks": "Historic façade; coffee or quick bite in the garden.",
+          "thumbnail_url": null
         }
       ],
       "accommodation": {
@@ -600,7 +824,72 @@
       },
       "duration_days": 2,
       "travel_time_from_previous": "3h 30m (from Wānaka via SH8/SH79)",
-      "scenic_waypoints": [],
+      "scenic_waypoints": [
+        {
+          "activity_id": "timaru-wp-1",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Lindis Pass Summit Lookout",
+          "location": {
+            "address": "SH8, Lindis Pass 9382",
+            "lat": -44.7063,
+            "lng": 169.4121
+          },
+          "duration": "10–20 min",
+          "url": "https://maps.app.goo.gl/6q9JdG7b2o7L7m3H6",
+          "remarks": "Classic tussock scenery; exposed to wind.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "timaru-wp-2",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Benmore Dam Lookout (Waitaki Valley)",
+          "location": {
+            "address": "Benmore Ave, Otematata 9412",
+            "lat": -44.6753,
+            "lng": 170.2504
+          },
+          "duration": "15–30 min",
+          "url": "https://maps.app.goo.gl/ETN6U8H2Wm8w2bqM7",
+          "remarks": "Short detour; views over hydro lake and dam.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "timaru-wp-3",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Elephant Rocks (Limestone outcrops)",
+          "location": {
+            "address": "Island Cliff–Duntroon Rd, Duntroon 9494",
+            "lat": -44.9382,
+            "lng": 170.64
+          },
+          "duration": "20–40 min",
+          "url": "https://maps.app.goo.gl/7kq9x1cLw5h3Xafh7",
+          "remarks": "Short farm track; quirky boulders in paddock.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "timaru-wp-4",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Takiroa Māori Rock Art Shelter",
+          "location": {
+            "address": "SH83, near Duntroon 9494",
+            "lat": -44.9655,
+            "lng": 170.6138
+          },
+          "duration": "10–20 min",
+          "url": "https://maps.app.goo.gl/HL6u3i2mFj4nYb4o9",
+          "remarks": "Sheltered roadside stop; interpretive panels.",
+          "thumbnail_url": null
+        }
+      ],
       "accommodation": {
         "name": "Bay Viaduct Motor Lodge",
         "address": "2 Andrews St, Timaru 7910, New Zealand",
@@ -703,7 +992,56 @@
       },
       "duration_days": 2,
       "travel_time_from_previous": "2h 15m (from Timaru)",
-      "scenic_waypoints": [],
+      "scenic_waypoints": [
+        {
+          "activity_id": "christchurch-wp-1",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Rangitata River Bridge pull-off (SH1)",
+          "location": {
+            "address": "SH1, near Rangitata 7992",
+            "lat": -44.146,
+            "lng": 171.257
+          },
+          "duration": "10–15 min",
+          "url": "https://maps.app.goo.gl/YkZ7E7eX5LwM3w3c7",
+          "remarks": "Braided river views; short photo stop.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "christchurch-wp-2",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Ashburton Domain Gardens",
+          "location": {
+            "address": "West St, Ashburton 7700",
+            "lat": -43.904,
+            "lng": 171.748
+          },
+          "duration": "20–40 min",
+          "url": "https://maps.app.goo.gl/4y5m5oZC4Jc4Qe4L9",
+          "remarks": "Formal gardens, ponds, easy parking; good leg stretch.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "christchurch-wp-3",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Rakaia Salmon Statue & Bridge Walkway",
+          "location": {
+            "address": "Main South Rd, Rakaia 7710",
+            "lat": -43.7511,
+            "lng": 172.0189
+          },
+          "duration": "10–20 min",
+          "url": "https://maps.app.goo.gl/iE5i3b3hZx2m7kqf6",
+          "remarks": "Kitsch landmark; quick river vantage nearby.",
+          "thumbnail_url": null
+        }
+      ],
       "accommodation": {
         "name": "Novotel Christchurch Cathedral Square",
         "address": "50 Cathedral Square, Christchurch 8011, New Zealand",

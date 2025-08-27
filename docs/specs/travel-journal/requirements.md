@@ -63,6 +63,11 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 14. WHEN an activity includes a URL, THEN users SHALL be able to access a "Navigate in Google Maps" action
 15. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
 16. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
+17. WHEN scenic waypoints are available for a trip base, THEN they SHALL be displayed as a collapsible section in the ActivitiesPanel between accommodation and activities
+18. WHEN scenic waypoints are displayed, THEN each waypoint SHALL be shown as a card similar to activity cards but with distinctive scenic waypoint styling (violet color scheme and landscape emoji)
+19. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
+20. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
+21. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions similar to activities
 
 ### 4. Accommodation Display and Management
 

@@ -298,15 +298,47 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - LocationWarning component uses consistent styling with proper backdrop and border effects
     - **Requirements Reference**: Requirement 10.2 (frosted glass styling consistency)
 
-- [ ] 14. **Final Integration and Deployment Setup**
-  - [ ] 14.1 Wire all components together in main App with new layout
+- [x] 14. **Scenic Waypoints Enhancement and Integration**
+  - [x] 14.1 Update TypeScript types for enhanced scenic waypoints
+    - Updated ScenicWaypoint interface in src/types/map.ts to support activity-like structure
+    - Added activity_id, activity_name, location, duration, url, remarks, thumbnail_url, and status fields
+    - Maintained compatibility with existing map-related types and utilities
+    - **Requirements Reference**: Requirement 3.17 (scenic waypoints data structure)
+
+  - [x] 14.2 Create ScenicWaypointCard component
+    - Implemented ScenicWaypointCard.tsx with similar structure to ActivityCard but distinctive violet styling
+    - Added landscape emoji (🏞️) and violet color scheme for visual distinction from activities
+    - Implemented gradient background from violet-50 to sky-50 with violet-200 border
+    - Added "Mark Done" functionality with violet-colored checkbox
+    - Included location validation and warning system using existing validation utilities
+    - Added "Navigate in Google Maps" action with violet-colored button
+    - Ensured non-draggable design to maintain original sequence from trip data
+    - **Requirements Reference**: Requirement 3.18, 3.20, 3.21 (scenic waypoint cards, location validation, navigation actions)
+
+  - [x] 14.3 Integrate scenic waypoints into ActivitiesPanel
+    - Added scenicWaypoints prop to ActivitiesPanel component interface
+    - Implemented collapsible Scenic Waypoints section between accommodation and activities
+    - Added separate state management for scenic waypoints expansion (isScenicWaypointsExpanded)
+    - Updated expand control button text to include scenic waypoints count when available
+    - Created dedicated section header with violet color scheme and toggle functionality
+    - Integrated scenic waypoint cards with proper selection and status management
+    - **Requirements Reference**: Requirement 3.17, 3.19 (collapsible section, non-draggable display)
+
+  - [x] 14.4 Update App component to pass scenic waypoints data
+    - Modified App.tsx to extract scenic_waypoints from current stop and pass to ActivitiesPanel
+    - Ensured proper fallback to empty array when scenic waypoints are not available
+    - Maintained existing activity selection and status management for scenic waypoints
+    - **Requirements Reference**: Requirement 3.17 (scenic waypoints integration)
+
+- [ ] 15. **Final Integration and Deployment Setup**
+  - [ ] 15.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background
     - Ensure proper positioning and responsive behavior of floating panels
     - Implement proper z-index stacking for panel interactions
     - Add final error boundary and loading state management with new colors
     - **Requirements Reference**: All requirements - final integration ensures complete functionality
 
-  - [ ] 14.2 Configure deployment settings
+  - [ ] 15.2 Configure deployment settings
     - Set up environment variable injection for VITE_GOOGLE_MAPS_API_KEY
     - Configure Vite build settings for GitHub Pages deployment
     - Create production build configuration with optimizations
