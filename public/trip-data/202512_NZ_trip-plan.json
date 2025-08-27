@@ -69,7 +69,7 @@
           "travel_time_from_accommodation": "5m walk",
           "duration": "2–3h",
           "url": "http://www.iceberg.co.nz/",
-          "remarks": "Simulated Antarctic environments, penguins, huskies & rides in amphibious Hägglund vehicles.",
+          "remarks": "Penguin Rescue, Hägglund ride; near airport",
           "thumbnail_url": null,
           "google_place_id": null
         }
@@ -824,7 +824,9 @@
           },
           "activity_name": "Dinosaur Park (Lakefront Playground)",
           "location": {
-            "address": "Ardmore St, Wānaka 9305"
+            "address": "Ardmore St, Wānaka 9305",
+            "lat": -44.694822,
+            "lng": 169.135248
           },
           "travel_time_from_accommodation": "5–7m drive / 25m walk",
           "duration": "45–90m",
@@ -841,7 +843,9 @@
           },
           "activity_name": "Puzzling World (Illusion Rooms & Great Maze)",
           "location": {
-            "address": "188 Wānaka–Luggate Hwy (SH84), Wānaka 9382"
+            "address": "188 Wānaka–Luggate Hwy (SH84), Wānaka 9382",
+            "lat": -44.7113406,
+            "lng": 169.1451682
           },
           "travel_time_from_accommodation": "5–7m drive",
           "duration": "1.5–2.5h",
@@ -858,29 +862,14 @@
           },
           "activity_name": "Mount Iron Track (loop walk, views)",
           "location": {
-            "address": "Mt Iron carpark, SH84, Wānaka"
+            "address": "Mt Iron carpark, SH84, Wānaka",
+            "lat": -44.695,
+            "lng": 169.164
           },
           "travel_time_from_accommodation": "6–8m drive",
           "duration": "1–1.5h loop (4.5km)",
           "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/otago/places/wanaka-area/things-to-do/mount-iron-track/",
           "remarks": "Sunrise/sunset views; take water and hats",
-          "thumbnail_url": null,
-          "google_place_id": null
-        },
-        {
-          "activity_id": "wanaka-act-4",
-          "order": 4,
-          "status": {
-            "done": false
-          },
-          "activity_name": "Cardrona Hotel lunch stop (scenic drive)",
-          "location": {
-            "address": "2312 Cardrona Valley Rd, RD2, Wānaka 9382"
-          },
-          "travel_time_from_accommodation": "25–30m drive",
-          "duration": "1–2h",
-          "url": "https://www.cardronahotel.co.nz/",
-          "remarks": "Historic pub garden; good stop if driving Crown Range",
           "thumbnail_url": null,
           "google_place_id": null
         }
@@ -968,6 +957,10 @@
       "accommodation": {
         "name": "Bay Viaduct Motor Lodge",
         "address": "2 Andrews St, Timaru 7910, New Zealand",
+        "location": {
+          "lat": -44.3909015,
+          "lng": 171.2437538
+        },
         "check_in": "2025-12-25 15:00",
         "check_out": "2025-12-27 11:00",
         "confirmation": "1928599123",
@@ -992,7 +985,9 @@
           },
           "activity_name": "Caroline Bay Playground & Beach",
           "location": {
-            "address": "Caroline Bay, Timaru 7910"
+            "address": "Caroline Bay, Timaru 7910",
+            "lat": -44.3887816,
+            "lng": 171.2416528
           },
           "travel_time_from_accommodation": "3–5m drive / 15–20m walk",
           "duration": "1–3h",
@@ -1009,7 +1004,9 @@
           },
           "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
           "location": {
-            "address": "Caroline Bay Soundshell, Timaru"
+            "address": "Caroline Bay Soundshell, Timaru",
+            "lat": -44.3900676,
+            "lng": 171.2466756
           },
           "travel_time_from_accommodation": "3–5m drive / 20m walk",
           "duration": "Flexible",
@@ -1026,7 +1023,9 @@
           },
           "activity_name": "South Canterbury Museum",
           "location": {
-            "address": "4 Perth St, Timaru 7910"
+            "address": "4 Perth St, Timaru 7910",
+            "lat": -44.3970936,
+            "lng": 171.2483619
           },
           "travel_time_from_accommodation": "5–7m drive",
           "duration": "45–90m",
@@ -1043,7 +1042,9 @@
           },
           "activity_name": "Aigantighe Art Gallery",
           "location": {
-            "address": "49 Wai-iti Rd, Timaru 7910"
+            "address": "49 Wai-iti Rd, Timaru 7910",
+            "lat": -44.3905755,
+            "lng": 171.2370981
           },
           "travel_time_from_accommodation": "5–7m drive",
           "duration": "45–90m",
@@ -1141,14 +1142,16 @@
       },
       "activities": [
         {
-          "activity_id": "christchurch-arrival-act-2",
+          "activity_id": "christchurch-end-act-1",
           "order": 1,
           "status": {
             "done": false
           },
           "activity_name": "Margaret Mahy Family Playground",
           "location": {
-            "address": "177 Armagh Street, Christchurch 8011"
+            "address": "177 Armagh Street, Christchurch 8011",
+            "lat": -43.528497,
+            "lng": 172.640788
           },
           "travel_time_from_accommodation": "10m walk",
           "duration": "1–2h",
@@ -1158,36 +1161,21 @@
           "google_place_id": null
         },
         {
-          "activity_id": "christchurch-end-act-1",
+          "activity_id": "christchurch-end-act-2",
           "order": 2,
           "status": {
             "done": false
           },
           "activity_name": "Christchurch Farmers’ Market (Sat mornings)",
           "location": {
-            "address": "16 Kahu Rd, Riccarton, Christchurch 8041"
+            "address": "16 Kahu Rd, Riccarton, Christchurch 8041",
+            "lat": -43.5275828,
+            "lng": 172.5940663
           },
           "travel_time_from_accommodation": "10–15m drive",
           "duration": "1–2h",
           "url": "https://www.christchurchfarmersmarket.co.nz/",
           "remarks": "Saturdays 9am–12pm at Riccarton House & Bush",
-          "thumbnail_url": null,
-          "google_place_id": null
-        },
-        {
-          "activity_id": "christchurch-end-act-2",
-          "order": 3,
-          "status": {
-            "done": false
-          },
-          "activity_name": "International Antarctic Centre",
-          "location": {
-            "address": "38 Orchard Rd, Christchurch 8052"
-          },
-          "travel_time_from_accommodation": "20–25m drive",
-          "duration": "2–3h",
-          "url": "https://www.iceberg.co.nz/",
-          "remarks": "Penguin Rescue, Hägglund ride; near airport",
           "thumbnail_url": null,
           "google_place_id": null
         },
@@ -1199,7 +1187,9 @@
           },
           "activity_name": "Willowbank Wildlife Reserve",
           "location": {
-            "address": "60 Hussey Rd, Northwood, Christchurch 8051"
+            "address": "60 Hussey Rd, Northwood, Christchurch 8051",
+            "lat": -43.4635263,
+            "lng": 172.5914965
           },
           "travel_time_from_accommodation": "20–25m drive",
           "duration": "1.5–3h",
@@ -1216,7 +1206,9 @@
           },
           "activity_name": "Orana Wildlife Park (open-range zoo)",
           "location": {
-            "address": "McLeans Island Rd, Harewood, Christchurch 8051"
+            "address": "McLeans Island Rd, Harewood, Christchurch 8051",
+            "lat": -43.483178,
+            "lng": 172.3054317
           },
           "travel_time_from_accommodation": "25–30m drive",
           "duration": "2–4h",
@@ -1233,7 +1225,9 @@
           },
           "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
           "location": {
-            "address": "Marine Parade, New Brighton, Christchurch"
+            "address": "Marine Parade, New Brighton, Christchurch",
+            "lat": -43.50862,
+            "lng": 172.73179
           },
           "travel_time_from_accommodation": "20–25m drive",
           "duration": "1–3h",
@@ -1248,31 +1242,16 @@
           "status": {
             "done": false
           },
-          "activity_name": "Riverside Market (meals & souvenirs)",
+          "activity_name": "Riverside Market (meals & souvenirs, food hall & groceries)",
           "location": {
-            "address": "96 Oxford Terrace, Christchurch 8011"
-          },
-          "travel_time_from_accommodation": "5–8m walk",
-          "duration": "1–2h",
-          "url": "https://riverside.nz/",
-          "remarks": "Indoor food hall; easy dinner spot near hotel",
-          "thumbnail_url": null,
-          "google_place_id": null
-        },
-        {
-          "activity_id": "christchurch-end-act-7",
-          "order": 8,
-          "status": {
-            "done": false
-          },
-          "activity_name": "Riverside Market (food hall & groceries)",
-          "location": {
-            "address": "96 Oxford Terrace, Christchurch 8011"
+            "address": "96 Oxford Terrace, Christchurch 8011",
+            "lat": -43.5342104,
+            "lng": 172.6335607
           },
           "travel_time_from_accommodation": "10m walk",
           "duration": "1–2h",
           "url": "https://riverside.nz/",
-          "remarks": "7-day indoor market; good for lunch/dinner and grocery top-ups",
+          "remarks": "Indoor food hall; easy dinner spot near hotel; 7-day indoor market; good for lunch/dinner and grocery top-ups",
           "thumbnail_url": null,
           "google_place_id": null
         }
