@@ -42,7 +42,6 @@ export interface Accommodation {
   phone?: string;
   host?: string;
   rooms?: string;
-  google_place_id?: string | null;
 }
 
 export const ActivityType = {
@@ -75,8 +74,6 @@ export interface Activity {
   status?: {
     done: boolean;
   };
-  // Legacy fields for backward compatibility
-  google_place_id?: string | null;
 }
 
 // Legacy interface mappings for backward compatibility
