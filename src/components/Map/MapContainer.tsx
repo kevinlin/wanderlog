@@ -125,16 +125,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             location: stops[i].accommodation?.location || stops[i].location,
             stopover: true
           });
-
-          // Add scenic waypoints for this segment
-          if (stops[i].scenic_waypoints) {
-            stops[i].scenic_waypoints!.forEach(waypoint => {
-              waypoints.push({
-                location: { lat: waypoint.lat, lng: waypoint.lng },
-                stopover: false
-              });
-            });
-          }
         }
 
         const request: google.maps.DirectionsRequest = {
