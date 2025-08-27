@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MapContainer } from '../MapContainer';
+import { AppStateProvider } from '@/contexts/AppStateContext';
 import { TripData, ActivityType } from '@/types/trip';
 
 // Mock the Google Maps API
@@ -72,6 +73,16 @@ Object.defineProperty(window, 'google', {
       DirectionsStatus: {
         OK: 'OK',
       },
+      places: {
+        PlacesService: vi.fn(() => ({
+          getDetails: vi.fn(),
+          nearbySearch: vi.fn(),
+          textSearch: vi.fn(),
+        })),
+        PlacesServiceStatus: {
+          OK: 'OK',
+        },
+      },
     },
   },
   writable: true,
@@ -133,6 +144,15 @@ const defaultProps = {
   onBaseSelect: vi.fn(),
 };
 
+// Helper function to render with AppStateProvider
+const renderWithProvider = (ui: React.ReactElement) => {
+  return render(
+    <AppStateProvider>
+      {ui}
+    </AppStateProvider>
+  );
+};
+
 describe('MapContainer', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -141,14 +161,14 @@ describe('MapContainer', () => {
   });
 
   it('renders the map container', async () => {
-    render(<MapContainer {...defaultProps} />);
+    renderWithProvider(<MapContainer {...defaultProps} />);
     
     expect(screen.getByTestId('load-script')).toBeInTheDocument();
     expect(screen.getByTestId('google-map')).toBeInTheDocument();
   });
 
   it('renders accommodation and activity markers', async () => {
-    render(<MapContainer {...defaultProps} />);
+    renderWithProvider(<MapContainer {...defaultProps} />);
     
     await waitFor(() => {
       expect(screen.getByTestId('marker-Test Stop 1 - Test Hotel')).toBeInTheDocument();
@@ -157,7 +177,7 @@ describe('MapContainer', () => {
   });
 
   it('triggers drop animation when activity is selected', async () => {
-    const { rerender } = render(<MapContainer {...defaultProps} />);
+    const { rerender } = renderWithProvider(<MapContainer {...defaultProps} />);
     
     // Wait for markers to load
     await waitFor(() => {
@@ -165,7 +185,11 @@ describe('MapContainer', () => {
     });
 
     // Select an activity
-    rerender(<MapContainer {...defaultProps} selectedActivityId="activity1" />);
+    rerender(
+      <AppStateProvider>
+        <MapContainer {...defaultProps} selectedActivityId="activity1" />
+      </AppStateProvider>
+    );
     
     await waitFor(() => {
       expect(mockMarker.setAnimation).toHaveBeenCalledWith('DROP');
@@ -173,7 +197,7 @@ describe('MapContainer', () => {
   });
 
   it('triggers drop animation when base is selected', async () => {
-    const { rerender } = render(<MapContainer {...defaultProps} currentBaseId={null} />);
+    const { rerender } = renderWithProvider(<MapContainer {...defaultProps} currentBaseId={null} />);
     
     // Wait for markers to load
     await waitFor(() => {
@@ -181,7 +205,11 @@ describe('MapContainer', () => {
     });
 
     // Select a base
-    rerender(<MapContainer {...defaultProps} currentBaseId="stop1" />);
+    rerender(
+      <AppStateProvider>
+        <MapContainer {...defaultProps} currentBaseId="stop1" />
+      </AppStateProvider>
+    );
     
     await waitFor(() => {
       expect(mockMarker.setAnimation).toHaveBeenCalledWith('DROP');
@@ -191,7 +219,7 @@ describe('MapContainer', () => {
   it('handles missing Google Maps API key gracefully', () => {
     import.meta.env.VITE_GOOGLE_MAPS_API_KEY = '';
     
-    render(<MapContainer {...defaultProps} />);
+    renderWithProvider(<MapContainer {...defaultProps} />);
     
     expect(screen.getByText('Map Unavailable')).toBeInTheDocument();
     expect(screen.getByText('Google Maps API key not configured')).toBeInTheDocument();
@@ -199,7 +227,7 @@ describe('MapContainer', () => {
 
   it('calls onBaseSelect when accommodation marker is clicked', async () => {
     const onBaseSelect = vi.fn();
-    render(<MapContainer {...defaultProps} onBaseSelect={onBaseSelect} />);
+    renderWithProvider(<MapContainer {...defaultProps} onBaseSelect={onBaseSelect} />);
     
     await waitFor(() => {
       const marker = screen.getByTestId('marker-Test Stop 1 - Test Hotel');
@@ -210,7 +238,7 @@ describe('MapContainer', () => {
 
   it('calls onActivitySelect when activity marker is clicked', async () => {
     const onActivitySelect = vi.fn();
-    render(<MapContainer {...defaultProps} onActivitySelect={onActivitySelect} />);
+    renderWithProvider(<MapContainer {...defaultProps} onActivitySelect={onActivitySelect} />);
     
     await waitFor(() => {
       const marker = screen.getByTestId('marker-Test Activity');
@@ -220,7 +248,7 @@ describe('MapContainer', () => {
   });
 
   it('renders scenic waypoint markers', async () => {
-    render(<MapContainer {...defaultProps} />);
+    renderWithProvider(<MapContainer {...defaultProps} />);
     
     await waitFor(() => {
       expect(screen.getByTestId('marker-Test Scenic Waypoint')).toBeInTheDocument();
@@ -229,7 +257,7 @@ describe('MapContainer', () => {
 
   it('calls onActivitySelect when scenic waypoint marker is clicked', async () => {
     const onActivitySelect = vi.fn();
-    render(<MapContainer {...defaultProps} onActivitySelect={onActivitySelect} />);
+    renderWithProvider(<MapContainer {...defaultProps} onActivitySelect={onActivitySelect} />);
     
     await waitFor(() => {
       const marker = screen.getByTestId('marker-Test Scenic Waypoint');
@@ -239,7 +267,7 @@ describe('MapContainer', () => {
   });
 
   it('does not animate the same marker twice in a row', async () => {
-    const { rerender } = render(<MapContainer {...defaultProps} />);
+    const { rerender } = renderWithProvider(<MapContainer {...defaultProps} />);
     
     // Wait for markers to load
     await waitFor(() => {
@@ -247,7 +275,11 @@ describe('MapContainer', () => {
     });
 
     // Select an activity
-    rerender(<MapContainer {...defaultProps} selectedActivityId="activity1" />);
+    rerender(
+      <AppStateProvider>
+        <MapContainer {...defaultProps} selectedActivityId="activity1" />
+      </AppStateProvider>
+    );
     
     await waitFor(() => {
       expect(mockMarker.setAnimation).toHaveBeenCalledWith('DROP');
@@ -257,7 +289,11 @@ describe('MapContainer', () => {
     mockMarker.setAnimation.mockClear();
 
     // Select the same activity again (should not animate)
-    rerender(<MapContainer {...defaultProps} selectedActivityId="activity1" />);
+    rerender(
+      <AppStateProvider>
+        <MapContainer {...defaultProps} selectedActivityId="activity1" />
+      </AppStateProvider>
+    );
     
     // Should not animate again
     expect(mockMarker.setAnimation).not.toHaveBeenCalled();

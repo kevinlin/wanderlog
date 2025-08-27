@@ -1,7 +1,11 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { GoogleMap, LoadScript, Marker, DirectionsRenderer, Polyline } from '@react-google-maps/api';
-import { TripData, ActivityType } from '@/types/trip';
-import { enrichActivityWithType, getActivityTypeSvgPath } from '@/utils/activityUtils';
+import { TripData, ActivityType, Activity } from '@/types/trip';
+import { enrichActivityWithType, getActivityTypeSvgPath, inferActivityType } from '@/utils/activityUtils';
+import { POIDetails } from '@/types/poi';
+import { PlacesService } from '@/services/placesService';
+import { POIModal } from '@/components/Map/POIModal';
+import { useAppStateContext } from '@/contexts/AppStateContext';
 import * as dateUtils from '@/utils/dateUtils';
 import '@/assets/styles/map-animations.css';
 
@@ -70,11 +74,13 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   onActivitySelect,
   onBaseSelect,
 }) => {
-  const [, setMap] = useState<google.maps.Map | null>(null);
+  const { state, dispatch } = useAppStateContext();
+  const [map, setMap] = useState<google.maps.Map | null>(null);
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
   const [routeFallback, setRouteFallback] = useState<google.maps.LatLng[]>([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [routeError, setRouteError] = useState<string | null>(null);
+  const placesServiceRef = useRef<PlacesService | null>(null);
   
   // Refs to store marker instances for animation
   const accommodationMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
@@ -86,6 +92,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const onLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
     setIsMapLoaded(true);
+    
+    // Initialize Places Service
+    placesServiceRef.current = PlacesService.getInstance();
+    placesServiceRef.current.initialize(map);
     
     // Fit map to show all stops
     if (tripData?.stops && tripData.stops.length > 0) {
@@ -372,6 +382,61 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
+  // POI click handler
+  const handlePOIClick = useCallback(async (placeId: string) => {
+    if (!placesServiceRef.current || !currentBaseId) return;
+
+    dispatch({ type: 'SET_POI_MODAL', payload: { isOpen: true, loading: true, error: null, poi: null } });
+
+    try {
+      const poiDetails = await placesServiceRef.current.getPlaceDetails(placeId);
+      dispatch({ type: 'SET_POI_MODAL', payload: { poi: poiDetails, loading: false } });
+    } catch (error) {
+      dispatch({ 
+        type: 'SET_POI_MODAL', 
+        payload: { 
+          loading: false, 
+          error: error instanceof Error ? error.message : 'Failed to load place details' 
+        } 
+      });
+    }
+  }, [currentBaseId, dispatch]);
+
+  // Add activity from POI
+  const handleAddActivityFromPOI = useCallback((poi: POIDetails) => {
+    if (!currentBaseId) return;
+
+    const activityType = inferActivityType(poi.name, undefined, poi.types);
+    
+    // Generate a unique activity ID
+    const activityId = `poi_${poi.place_id}_${Date.now()}`;
+    
+    const newActivity: Activity = {
+      activity_id: activityId,
+      activity_name: poi.name,
+      activity_type: activityType,
+      location: {
+        lat: poi.location.lat,
+        lng: poi.location.lng,
+        address: poi.formatted_address,
+      },
+      duration: '1-2 hours', // Default duration
+      url: poi.website,
+      remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
+      order: 999, // Add at the end
+    };
+
+    dispatch({ 
+      type: 'ADD_ACTIVITY_FROM_POI', 
+      payload: { baseId: currentBaseId, activity: newActivity } 
+    });
+  }, [currentBaseId, dispatch]);
+
+  // Close POI modal
+  const handleClosePOIModal = useCallback(() => {
+    dispatch({ type: 'CLOSE_POI_MODAL' });
+  }, [dispatch]);
+
   const currentBase = tripData?.stops?.find(stop => stop.stop_id === currentBaseId);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -408,8 +473,15 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             position: window.google?.maps?.ControlPosition?.RIGHT_BOTTOM,
           },
           // Enhanced touch interactions
-          clickableIcons: false, // Disable default POI clicks to avoid conflicts
+          clickableIcons: true, // Enable POI clicks
           keyboardShortcuts: false, // Disable keyboard shortcuts on mobile
+        }}
+        onClick={(e) => {
+          // Handle POI clicks
+          if (e.placeId) {
+            e.stop(); // Prevent default info window
+            handlePOIClick(e.placeId);
+          }
         }}
       >
         {/* Only render markers after map is loaded */}
@@ -520,6 +592,16 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             ⚠️ {routeError}
           </div>
         )}
+
+        {/* POI Modal */}
+        <POIModal
+          poi={state.poiModal.poi}
+          isOpen={state.poiModal.isOpen}
+          loading={state.poiModal.loading}
+          error={state.poiModal.error}
+          onClose={handleClosePOIModal}
+          onAddToActivities={handleAddActivityFromPOI}
+        />
       </GoogleMap>
     </LoadScript>
   );

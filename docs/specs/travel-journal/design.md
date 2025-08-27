@@ -137,6 +137,17 @@ interface AppProps {}
 interface AppState {
   tripData: TripData | null;
   currentBase: string | null;
+  selectedActivity: string | null;
+  userModifications: UserModifications;
+  weatherData: WeatherCache;
+  poiModal: POIModalState;
+  loading: boolean;
+  error: string | null;
+}
+
+interface POIModalState {
+  isOpen: boolean;
+  poi: POIDetails | null;
   loading: boolean;
   error: string | null;
 }
@@ -317,7 +328,73 @@ interface DraggableActivityProps {
 }
 ```
 
-#### 8. Pin Components
+#### 8. POIModal Component
+**Purpose**: Interactive modal dialog for displaying Point of Interest details and enabling activity creation.
+
+```typescript
+interface POIModalProps {
+  poi: POIDetails | null;
+  isOpen: boolean;
+  loading: boolean;
+  error: string | null;
+  onClose: () => void;
+  onAddToActivities: (poi: POIDetails) => void;
+}
+
+interface POIDetails {
+  place_id: string;
+  name: string;
+  formatted_address?: string;
+  location: { lat: number; lng: number };
+  types?: string[];
+  rating?: number;
+  user_ratings_total?: number;
+  price_level?: number;
+  opening_hours?: {
+    open_now?: boolean;
+    weekday_text?: string[];
+  };
+  photos?: Array<{
+    photo_reference: string;
+    height: number;
+    width: number;
+  }>;
+  website?: string;
+  formatted_phone_number?: string;
+  business_status?: string;
+}
+```
+
+**Key Features**:
+- **Modal Overlay**: Fixed position overlay with semi-transparent black background (bg-black bg-opacity-50)
+- **Modal Content**: Centered dialog with rounded corners (rounded-xl), white background, and shadow (shadow-2xl)
+- **Responsive Design**: Maximum width constraints (max-w-md) with appropriate padding and mobile-friendly sizing
+- **Header Section**: Place name, close button, and loading/error states
+- **Content Sections**:
+  - High-quality place photo using Google Places Photo API (when available)
+  - Place name with type tags (restaurant, attraction, etc.)
+  - Address and location information
+  - Star rating display with visual stars and review count
+  - Price level indicators ($, $$, $$$, $$$$)
+  - Opening hours with current open/closed status
+  - Contact information (phone, website)
+  - "Open in Google Maps" link with map icon
+- **Footer Actions**: 
+  - Close button (gray styling)
+  - "Add to Activities" button (emerald styling for prominence)
+- **Loading States**: Spinner animation with descriptive text
+- **Error Handling**: User-friendly error messages with retry options
+- **Accessibility**: Proper focus management, keyboard navigation, and ARIA labels
+
+**Modal Behavior**:
+- Opens when POI is clicked on map
+- Prevents default Google Maps info window
+- Closes via X button, backdrop click, or Escape key
+- Fetches place details using Google Places API
+- Integrates with global app state for activity creation
+- Responsive design for mobile and desktop
+
+#### 9. Pin Components
 **Purpose**: Map marker components with enhanced visibility and location-specific styling using vivid color palette.
 
 **Pin Icon Specifications**:
@@ -610,6 +687,34 @@ class ExportService {
   static downloadAsJSON(data: TripData, filename: string): void;
 }
 ```
+
+### 5. PlacesService
+**Purpose**: Google Places API integration for POI discovery and details.
+
+```typescript
+class PlacesService {
+  private placesService: google.maps.places.PlacesService | null;
+  
+  static getInstance(): PlacesService;
+  initialize(map: google.maps.Map): void;
+  
+  async getPlaceDetails(placeId: string): Promise<POIDetails>;
+  async searchNearby(
+    location: google.maps.LatLng | google.maps.LatLngLiteral,
+    radius?: number,
+    type?: string
+  ): Promise<google.maps.places.PlaceResult[]>;
+  async textSearch(query: string): Promise<google.maps.places.PlaceResult[]>;
+}
+```
+
+**Key Features**:
+- **Singleton Pattern**: Ensures single instance across the application
+- **Map Integration**: Requires Google Maps instance for Places service initialization
+- **Place Details**: Fetches comprehensive place information using place_id
+- **Search Functionality**: Supports nearby search and text-based search
+- **Error Handling**: Proper error handling for API failures and quota limits
+- **Type Safety**: Full TypeScript integration with Google Maps Places types
 
 ## Error Handling Strategy
 

@@ -17,8 +17,11 @@ export const loadTripData = async (filename?: string): Promise<TripData> => {
       throw new Error(`Failed to load trip data: ${response.status} ${response.statusText}`);
     }
     
-    const data: unknown = await response.json();
-    
+    let data: any = await response.json();
+    if (data?.tripData) {
+      data = data.tripData;
+    }
+
     const details = validateTripData(data);
     if (!details.isValid) {
       console.error('Validation failed. Details:', details);

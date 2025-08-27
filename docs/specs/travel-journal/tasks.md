@@ -349,19 +349,78 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Maintained responsive design and touch-friendly interactions for all toggle buttons
     - **Requirements Reference**: Requirement 3.17, 3.18 (root level section, dedicated toggle button)
 
-- [ ] 15. **Final Integration and Deployment Setup**
-  - [ ] 15.1 Wire all components together in main App with new layout
+- [x] 15. **Point of Interest (POI) Discovery and Integration**
+  - [x] 15.1 Create POI types and interfaces
+    - Implement POIDetails interface with comprehensive place information structure
+    - Add POIModalState interface for modal state management
+    - Create type definitions for Google Places API integration
+    - **Requirements Reference**: Requirement 11.4, 11.13 (place details structure, photo API integration)
+
+  - [x] 15.2 Implement PlacesService for Google Places API integration
+    - Create PlacesService singleton class with Google Maps integration
+    - Implement getPlaceDetails method with comprehensive field requests
+    - Add error handling for Places API failures and quota limits
+    - Include proper TypeScript integration with Google Maps Places types
+    - **Requirements Reference**: Requirement 11.10, 11.11 (API error handling, loading states)
+
+  - [x] 15.3 Create POIModal component with Activity Card structure
+    - Implement responsive modal dialog with frosted glass overlay
+    - Add comprehensive place information display (photos, ratings, hours, contact)
+    - Include star rating visualization and price level indicators
+    - Implement "Open in Google Maps" link with proper URL generation
+    - Add loading states with spinner animation and error handling
+    - Ensure mobile-friendly design with touch-optimized interactions
+    - **Requirements Reference**: Requirement 11.3, 11.4, 11.5, 11.9 (modal display, place details, Google Maps link, responsive design)
+
+  - [x] 15.4 Implement POI interactivity and map integration
+    - Enable Google Maps POI clicks by setting clickableIcons: true
+    - Add POI click handler to prevent default info window and trigger custom modal
+    - Integrate POI modal with global app state management
+    - Implement proper modal opening/closing behavior with backdrop and keyboard support
+    - **Requirements Reference**: Requirement 11.1, 11.2, 11.12 (POI clicks, custom modal, modal behavior)
+
+  - [x] 15.5 Implement "Add to Activities" functionality
+    - Create activity generation from POI data with proper structure mapping
+    - Implement automatic activity type inference using Google Places types
+    - Add activity to current selected trip base/stop with proper state management
+    - Include POI rating and review information in activity remarks
+    - Set default duration and proper activity ordering
+    - **Requirements Reference**: Requirement 11.6, 11.7, 11.8 (Add to Activities button, activity creation, immediate display)
+
+  - [x] 15.6 Update activity type inference for POI integration
+    - Extend inferActivityType function to handle Google Places types
+    - Add comprehensive Google Places type mapping to activity types
+    - Implement proper fallback logic for unknown place types
+    - Ensure backward compatibility with existing activity type inference
+    - **Requirements Reference**: Requirement 11.7 (activity type inference)
+
+  - [x] 15.7 Update state management for POI functionality
+    - Add POI modal state to global AppStateContext
+    - Implement POI modal actions (SET_POI_MODAL, CLOSE_POI_MODAL)
+    - Add ADD_ACTIVITY_FROM_POI action for activity creation
+    - Update reducer logic to handle POI-related state changes
+    - **Requirements Reference**: Requirement 11.6, 11.7, 11.8 (state management, activity addition)
+
+  - [x] 15.8 Update tests and ensure compatibility
+    - Fix MapContainer tests to work with new POI functionality
+    - Add proper Google Places API mocking for test environment
+    - Update test wrappers to include AppStateProvider context
+    - Ensure all existing tests continue to pass with POI changes
+    - **Requirements Reference**: All requirements - testing ensures requirement compliance
+
+- [ ] 16. **Final Integration and Deployment Setup**
+  - [ ] 16.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background
     - Ensure proper positioning and responsive behavior of floating panels
     - Implement proper z-index stacking for panel interactions
     - Add final error boundary and loading state management with new colors
     - **Requirements Reference**: All requirements - final integration ensures complete functionality
 
-  - [ ] 15.2 Configure deployment settings
+  - [ ] 16.2 Configure deployment settings
     - Set up environment variable injection for VITE_GOOGLE_MAPS_API_KEY
     - Configure Vite build settings for GitHub Pages deployment
     - Create production build configuration with optimizations
-    - **Requirements Reference**: Requirement 11.2, 11.3, 11.5 (API key injection, GitHub Actions, environment validation)
+    - **Requirements Reference**: Requirement 12.2, 12.3, 12.5 (API key injection, GitHub Actions, environment validation)
 
 ## Implementation Notes
 

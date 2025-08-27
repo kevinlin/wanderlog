@@ -46,15 +46,25 @@ const ACTIVITY_TYPE_KEYWORDS = {
  * Infers activity type from activity name using keyword matching
  * @param activityName - The name of the activity
  * @param existingType - Any existing activity type (takes precedence)
+ * @param googlePlaceTypes - Optional Google Places API types for POI inference
  * @returns The inferred ActivityType
  */
 export function inferActivityType(
   activityName: string, 
-  existingType?: ActivityType
+  existingType?: ActivityType,
+  googlePlaceTypes?: string[]
 ): ActivityType {
   // If activity already has a type, use it
   if (existingType && Object.values(ActivityType).includes(existingType)) {
     return existingType;
+  }
+
+  // If Google Places types are provided, use them for inference
+  if (googlePlaceTypes && googlePlaceTypes.length > 0) {
+    const inferredFromPlaces = inferActivityTypeFromGooglePlaces(googlePlaceTypes);
+    if (inferredFromPlaces !== ActivityType.OTHER) {
+      return inferredFromPlaces;
+    }
   }
 
   // Convert activity name to lowercase for case-insensitive matching
@@ -81,6 +91,86 @@ export function inferActivityType(
   }
 
   // Default to 'other' if no matches found
+  return ActivityType.OTHER;
+}
+
+/**
+ * Infers activity type from Google Places API types
+ * @param placeTypes - Array of Google Places types
+ * @returns The inferred ActivityType
+ */
+export function inferActivityTypeFromGooglePlaces(placeTypes: string[]): ActivityType {
+  // Google Places type mappings to our activity types
+  const googlePlaceTypeMap: Record<string, ActivityType> = {
+    // Restaurant types
+    'restaurant': ActivityType.RESTAURANT,
+    'food': ActivityType.RESTAURANT,
+    'meal_takeaway': ActivityType.RESTAURANT,
+    'meal_delivery': ActivityType.RESTAURANT,
+    'cafe': ActivityType.RESTAURANT,
+    'bar': ActivityType.RESTAURANT,
+    'bakery': ActivityType.RESTAURANT,
+    'night_club': ActivityType.RESTAURANT,
+    
+    // Attraction types
+    'tourist_attraction': ActivityType.ATTRACTION,
+    'museum': ActivityType.ATTRACTION,
+    'amusement_park': ActivityType.ATTRACTION,
+    'aquarium': ActivityType.ATTRACTION,
+    'art_gallery': ActivityType.ATTRACTION,
+    'zoo': ActivityType.ATTRACTION,
+    'park': ActivityType.ATTRACTION,
+    'natural_feature': ActivityType.ATTRACTION,
+    'point_of_interest': ActivityType.ATTRACTION,
+    
+    // Shopping types
+    'shopping_mall': ActivityType.SHOPPING,
+    'store': ActivityType.SHOPPING,
+    'clothing_store': ActivityType.SHOPPING,
+    'shoe_store': ActivityType.SHOPPING,
+    'jewelry_store': ActivityType.SHOPPING,
+    'book_store': ActivityType.SHOPPING,
+    'electronics_store': ActivityType.SHOPPING,
+    'furniture_store': ActivityType.SHOPPING,
+    'supermarket': ActivityType.SHOPPING,
+    'department_store': ActivityType.SHOPPING,
+    
+    // Outdoor types
+    'campground': ActivityType.OUTDOOR,
+    'rv_park': ActivityType.OUTDOOR,
+    'stadium': ActivityType.OUTDOOR,
+    'gym': ActivityType.OUTDOOR,
+    'spa': ActivityType.OUTDOOR,
+    
+    // Cultural types
+    'library': ActivityType.CULTURAL,
+    'university': ActivityType.CULTURAL,
+    'school': ActivityType.CULTURAL,
+    'church': ActivityType.CULTURAL,
+    'hindu_temple': ActivityType.CULTURAL,
+    'mosque': ActivityType.CULTURAL,
+    'synagogue': ActivityType.CULTURAL,
+    'place_of_worship': ActivityType.CULTURAL,
+    
+    // Transport types
+    'gas_station': ActivityType.TRANSPORT,
+    'car_rental': ActivityType.TRANSPORT,
+    'subway_station': ActivityType.TRANSPORT,
+    'train_station': ActivityType.TRANSPORT,
+    'bus_station': ActivityType.TRANSPORT,
+    'airport': ActivityType.TRANSPORT,
+    'taxi_stand': ActivityType.TRANSPORT,
+    'parking': ActivityType.TRANSPORT,
+  };
+
+  // Check each place type and return the first match
+  for (const placeType of placeTypes) {
+    const activityType = googlePlaceTypeMap[placeType];
+    if (activityType) {
+      return activityType;
+    }
+  }
+
   return ActivityType.OTHER;
 }
 

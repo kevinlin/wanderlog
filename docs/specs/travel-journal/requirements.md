@@ -170,7 +170,39 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN visual hierarchy is established, THEN colors SHALL be used consistently across all components to maintain design coherence
 5. WHEN accessibility is considered, THEN color combinations SHALL maintain adequate contrast ratios for readability
 
-### 11. Deployment and Configuration
+### 11. Point of Interest (POI) Discovery and Integration
+
+**User Story:** As a traveler, I want to discover and interact with Points of Interest on the map, so that I can explore new places and easily add them to my itinerary.
+
+**Acceptance Criteria:**
+1. WHEN the map is displayed, THEN Google Maps built-in POIs SHALL be clickable and interactive
+2. WHEN a POI is clicked, THEN the system SHALL prevent the default Google Maps info window from appearing
+3. WHEN a POI is clicked, THEN a custom modal dialog SHALL open displaying detailed place information
+4. WHEN the POI modal is displayed, THEN it SHALL show comprehensive place details including:
+   - Place name and address
+   - High-quality place photo (when available)
+   - Star rating and review count (when available)
+   - Price level indicators (when available)
+   - Business hours and current open/closed status (when available)
+   - Phone number and website links (when available)
+   - Business status and place type tags
+5. WHEN the POI modal is displayed, THEN it SHALL include a prominent "Open in Google Maps" link that opens the place in a new tab
+6. WHEN the POI modal is displayed, THEN it SHALL include an "Add to Activities" button that allows users to convert the POI into a new activity
+7. WHEN "Add to Activities" is clicked, THEN the system SHALL:
+   - Create a new activity with the POI's name, location, and details
+   - Automatically infer the appropriate activity type based on Google Places types
+   - Add the activity to the current selected trip base/stop
+   - Include rating and review information in the activity remarks
+   - Set a default duration of "1-2 hours"
+   - Close the POI modal
+8. WHEN a POI is added as an activity, THEN it SHALL immediately appear in the activities list and on the map with the appropriate activity pin
+9. WHEN the POI modal is displayed, THEN it SHALL be responsive and work well on both desktop and mobile devices
+10. WHEN Google Places API requests fail, THEN the POI modal SHALL display appropriate error messages
+11. WHEN the POI modal is loading place details, THEN it SHALL show a loading spinner with descriptive text
+12. WHEN the POI modal is open, THEN users SHALL be able to close it by clicking the X button, clicking outside the modal, or pressing the Escape key
+13. WHEN Google Places photo references are available, THEN they SHALL be properly formatted and displayed using the Google Places Photo API
+
+### 12. Deployment and Configuration
 
 **User Story:** As a developer/maintainer, I want the application to be properly configured for GitHub Pages deployment with secure API key management, so that the application can be reliably hosted and maintained.
 

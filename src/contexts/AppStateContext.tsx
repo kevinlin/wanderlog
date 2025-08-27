@@ -1,7 +1,8 @@
 import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { TripData } from '@/types';
+import { TripData, Activity } from '@/types';
 import { UserModifications } from '@/types/storage';
 import { WeatherCache } from '@/types/weather';
+import { POIModalState } from '@/types/poi';
 
 // State interface based on design document
 export interface AppState {
@@ -10,6 +11,7 @@ export interface AppState {
   selectedActivity: string | null;
   userModifications: UserModifications;
   weatherData: WeatherCache;
+  poiModal: POIModalState;
   loading: boolean;
   error: string | null;
 }
@@ -23,6 +25,9 @@ export type AppAction =
   | { type: 'REORDER_ACTIVITIES'; payload: { baseId: string; fromIndex: number; toIndex: number } }
   | { type: 'SET_WEATHER_DATA'; payload: { baseId: string; weather: any } }
   | { type: 'SET_USER_MODIFICATIONS'; payload: UserModifications }
+  | { type: 'SET_POI_MODAL'; payload: Partial<POIModalState> }
+  | { type: 'CLOSE_POI_MODAL' }
+  | { type: 'ADD_ACTIVITY_FROM_POI'; payload: { baseId: string; activity: Activity } }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'SET_LOADING'; payload: boolean };
 
@@ -36,6 +41,12 @@ const initialState: AppState = {
     activityOrders: {},
   },
   weatherData: {},
+  poiModal: {
+    isOpen: false,
+    poi: null,
+    loading: false,
+    error: null,
+  },
   loading: false,
   error: null,
 };
@@ -115,6 +126,49 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
         ...state,
         userModifications: action.payload,
       };
+
+    case 'SET_POI_MODAL':
+      return {
+        ...state,
+        poiModal: {
+          ...state.poiModal,
+          ...action.payload,
+        },
+      };
+
+    case 'CLOSE_POI_MODAL':
+      return {
+        ...state,
+        poiModal: {
+          isOpen: false,
+          poi: null,
+          loading: false,
+          error: null,
+        },
+      };
+
+    case 'ADD_ACTIVITY_FROM_POI': {
+      const { baseId, activity } = action.payload;
+      if (!state.tripData) return state;
+
+      const updatedStops = state.tripData.stops.map(stop => {
+        if (stop.stop_id === baseId) {
+          return {
+            ...stop,
+            activities: [...stop.activities, activity],
+          };
+        }
+        return stop;
+      });
+
+      return {
+        ...state,
+        tripData: {
+          ...state.tripData,
+          stops: updatedStops,
+        },
+      };
+    }
 
     case 'SET_ERROR':
       return {
