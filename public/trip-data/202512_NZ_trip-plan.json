@@ -199,41 +199,52 @@
           "google_place_id": null
         },
         {
-          "activity_id": "lake-tekapo-act-3",
-          "order": 3,
+          "activity_id": "lake-tekapo-wp-3",
           "status": {
             "done": false
           },
-          "activity_name": "Dark Sky Project | Stargazing (Mt John or Lakefront)",
+          "activity_name": "Ōtehīwai / Mt John Summit & Astro Café",
           "location": {
-            "address": "1 Motuariki Ln, Lake Tekapo 7999",
-            "lat": -44.0034137,
-            "lng": 170.4762716
+            "address": "Godley Peaks Rd (access road), Lake Tekapo 7999",
+            "lat": -43.98667,
+            "lng": 170.465
           },
-          "travel_time_from_accommodation": "5–10m drive",
-          "duration": "1.5–2.5h",
-          "url": "https://www.darkskyproject.co.nz/",
-          "remarks": "Family-friendly astronomy tour; weather dependent",
-          "thumbnail_url": null,
-          "google_place_id": null
+          "duration": "1–2h",
+          "url": "https://www.darkskyproject.co.nz/dine/astro-cafe/",
+          "remarks": "Private access road fee; huge basin views; check café/open road hours; very windy.",
+          "thumbnail_url": null
         },
         {
-          "activity_id": "lake-tekapo-act-4",
-          "order": 4,
+          "activity_id": "lake-tekapo-wp-4",
           "status": {
             "done": false
           },
-          "activity_name": "Mt John Summit Walk (short hike, views)",
+          "activity_name": "Cowans Hill Track (lookout loop)",
           "location": {
-            "lat": -43.9919,
-            "lng": 170.4631
+            "address": "Carpark off SH8 near Hamilton Dr, Lake Tekapo 7999",
+            "lat": -44.006824,
+            "lng": 170.481405
           },
-          "travel_time_from_accommodation": "15–20m drive to carpark",
-          "duration": "45–90m (short route)",
-          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/lake-tekapo-area/tracks/mt-john-summit-walk/",
-          "remarks": "Windy up top; take jackets and water",
-          "thumbnail_url": null,
-          "google_place_id": null
+          "duration": "1–2h",
+          "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/lake-tekapo-area/things-to-do/cowans-hill-track/",
+          "remarks": "Easy family walk; tussock & tarns; best light late afternoon.",
+          "thumbnail_url": null
+        },
+        {
+          "activity_id": "lake-tekapo-wp-5",
+          "status": {
+            "done": false
+          },
+          "activity_name": "Peter’s Lookout (Lake Pukaki → Aoraki views)",
+          "location": {
+            "address": "SH80 (Mount Cook Rd), Ben Ohau 7999",
+            "lat": -44.014,
+            "lng": 170.179
+          },
+          "duration": "15–30 min",
+          "url": "https://www.tripadvisor.com/Attraction_Review-g7042765-d19056143-Reviews-Peter_s_Lookout-Pukaki_Mackenzie_District_Canterbury_Region_South_Island.html",
+          "remarks": "Large car park; classic road-to-Aoraki photo spot; combine with Mt Cook day trip.",
+          "thumbnail_url": null
         }
       ]
     },
@@ -362,9 +373,9 @@
           },
           "activity_name": "Skyline Gondola & Luge",
           "location": {
-            "lat": -45.0327,
-            "lng": 168.6581,
-            "address": "Brecon St, Queenstown"
+            "address": "Brecon St, Queenstown 9300",
+            "lat": -45.0298,
+            "lng": 168.6439
           },
           "travel_time_from_accommodation": "10–12m drive",
           "duration": "2–4h",

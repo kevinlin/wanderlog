@@ -108,6 +108,18 @@ const mockTripData: TripData = {
           },
         },
       ],
+      scenic_waypoints: [
+        {
+          activity_id: 'waypoint1',
+          activity_name: 'Test Scenic Waypoint',
+          location: {
+            lat: -44.7,
+            lng: 170.2,
+            address: 'Scenic Lookout',
+          },
+          duration: '15 min',
+        },
+      ],
     },
   ],
 };
@@ -204,6 +216,25 @@ describe('MapContainer', () => {
       const marker = screen.getByTestId('marker-Test Activity');
       marker.click();
       expect(onActivitySelect).toHaveBeenCalledWith('activity1');
+    });
+  });
+
+  it('renders scenic waypoint markers', async () => {
+    render(<MapContainer {...defaultProps} />);
+    
+    await waitFor(() => {
+      expect(screen.getByTestId('marker-Test Scenic Waypoint')).toBeInTheDocument();
+    });
+  });
+
+  it('calls onActivitySelect when scenic waypoint marker is clicked', async () => {
+    const onActivitySelect = vi.fn();
+    render(<MapContainer {...defaultProps} onActivitySelect={onActivitySelect} />);
+    
+    await waitFor(() => {
+      const marker = screen.getByTestId('marker-Test Scenic Waypoint');
+      marker.click();
+      expect(onActivitySelect).toHaveBeenCalledWith('waypoint1');
     });
   });
 

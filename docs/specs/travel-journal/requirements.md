@@ -68,6 +68,11 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 19. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
 20. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
 21. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions similar to activities
+22. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
+23. WHEN a stop is selected from the timeline, THEN all scenic waypoints for that stop SHALL display drop pin animations simultaneously with the accommodation pin
+24. WHEN scenic waypoints are displayed on the map, THEN they SHALL use the same enhanced visibility sizing (1.5x larger than Google Maps defaults) as other pins
+25. WHEN scenic waypoint pins are clicked, THEN they SHALL trigger the same selection behavior as activity pins, highlighting the corresponding card in the ActivitiesPanel
+26. WHEN scenic waypoints have completion status, THEN their map pins SHALL use the same color coding as activities (violet for unvisited, green for completed)
 
 ### 4. Accommodation Display and Management
 

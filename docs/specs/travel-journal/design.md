@@ -162,8 +162,10 @@ interface MapContainerProps {
 
   - Accommodation locations: Lodge-style pins
   - Activity locations: Activity pins with standardized visited status colors (blue for unvisited, green for visited)
+  - Scenic waypoint locations: Violet-styled pins with landscape/mountain icons (violet for unvisited, green for visited)
 - Pin status-based styling and interactions
 - Click handlers for pin selection and map interaction
+- Coordinated drop pin animations for accommodation and scenic waypoints when stops are selected
 
 #### 3. TimelineStrip Component
 **Purpose**: Floating timeline panel positioned at top-left corner with frosted glass styling.
@@ -314,6 +316,21 @@ interface DraggableActivityProps {
 - Selection state highlighting with ring effects
 - Consistent stroke width and color for icon outlines
 - Drop pin animation for highlighted pins when locations are selected
+
+#### 8.1. Scenic Waypoint Pin Components
+**Purpose**: Map marker components for scenic waypoints with distinctive violet styling and enhanced visibility.
+
+**Scenic Waypoint Pin Specifications**:
+- **Size**: All scenic waypoint pins SHALL be sized 1.5x larger than Google Maps default built-in icons for enhanced visibility (30px base, 33px selected)
+- **Colors**: Violet-500 (#8b5cf6) for unvisited waypoints, Emerald-500 (#10b981) for visited waypoints
+- **Icon**: Landscape/mountain SVG path for scenic waypoint identification
+- **Visual Effects**: Same enhanced visibility features as activity pins (shadows, hover scaling, stroke outlines)
+
+**Drop Pin Animation for Scenic Waypoints**:
+- **Trigger Condition**: When a trip stop is selected from the timeline, all scenic waypoints for that stop animate simultaneously
+- **Animation Timing**: Staggered animation with 100ms delay between each waypoint for visual effect
+- **Animation Type**: Google Maps DROP animation (600ms duration)
+- **Coordination**: Scenic waypoint animations occur simultaneously with accommodation pin animation
 
 **Drop Pin Animation Specifications**:
 - **Animation Type**: CSS-based keyframe animation that simulates a pin dropping from above

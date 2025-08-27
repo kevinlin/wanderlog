@@ -79,6 +79,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   // Refs to store marker instances for animation
   const accommodationMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
   const activityMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
+  const scenicWaypointMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
   const previousSelectedActivityRef = useRef<string | null>(null);
   const previousCurrentBaseRef = useRef<string | null>(null);
 
@@ -94,6 +95,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         stop.activities.forEach(activity => {
           if (activity.location?.lat && activity.location?.lng) {
             bounds.extend({ lat: activity.location.lat, lng: activity.location.lng });
+          }
+        });
+        // Include scenic waypoints in bounds calculation
+        stop.scenic_waypoints?.forEach(waypoint => {
+          if (waypoint.location?.lat && waypoint.location?.lng) {
+            bounds.extend({ lat: waypoint.location.lat, lng: waypoint.location.lng });
           }
         });
       });
@@ -168,22 +175,42 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
   // Animation effects for pin highlighting
   useEffect(() => {
-    // Animate accommodation pin when base selection changes
+    // Animate accommodation pin and scenic waypoints when base selection changes
     if (currentBaseId && currentBaseId !== previousCurrentBaseRef.current && isMapLoaded) {
-      const marker = accommodationMarkersRef.current.get(currentBaseId);
-      if (marker && window.google?.maps?.Animation) {
+      const accommodationMarker = accommodationMarkersRef.current.get(currentBaseId);
+      if (accommodationMarker && window.google?.maps?.Animation) {
         // Use Google Maps DROP animation
-        marker.setAnimation(window.google.maps.Animation.DROP);
+        accommodationMarker.setAnimation(window.google.maps.Animation.DROP);
         // Stop animation after duration
         setTimeout(() => {
-          if (marker.getAnimation()) {
-            marker.setAnimation(null);
+          if (accommodationMarker.getAnimation()) {
+            accommodationMarker.setAnimation(null);
           }
         }, 600);
       }
+
+      // Animate all scenic waypoints for the current base
+      const currentStop = tripData?.stops?.find(stop => stop.stop_id === currentBaseId);
+      if (currentStop?.scenic_waypoints) {
+        currentStop.scenic_waypoints.forEach((waypoint, index) => {
+          const marker = scenicWaypointMarkersRef.current.get(waypoint.activity_id);
+          if (marker && window.google?.maps?.Animation) {
+            // Stagger the animations slightly for visual effect
+            setTimeout(() => {
+              marker.setAnimation(window.google.maps.Animation.DROP);
+              setTimeout(() => {
+                if (marker.getAnimation()) {
+                  marker.setAnimation(null);
+                }
+              }, 600);
+            }, index * 100); // 100ms delay between each waypoint animation
+          }
+        });
+      }
+
       previousCurrentBaseRef.current = currentBaseId;
     }
-  }, [currentBaseId, isMapLoaded]);
+  }, [currentBaseId, isMapLoaded, tripData?.stops]);
 
   useEffect(() => {
     // Animate activity pin when activity selection changes
@@ -306,6 +333,45 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
+  // Scenic waypoint pin with distinctive violet styling
+  const getScenicWaypointPinIcon = (isSelected: boolean, isVisited: boolean = false) => {
+    // Violet color scheme for scenic waypoints
+    const color = isVisited ? '#10b981' : '#8b5cf6'; // Emerald-500 for visited, Violet-500 for unvisited
+    // Landscape/mountain SVG path for scenic waypoints
+    const svgPath = 'M3 18h18v-2l-4-4-2.5 2.5L12 12l-3.5 3.5L6 14l-3 4z M14 8.5c0 1.38-1.12 2.5-2.5 2.5S9 9.88 9 8.5 10.12 6 11.5 6s2.5 1.12 2.5 2.5z';
+    
+    // Calculate stroke color (darker version of fill color)
+    const strokeHex = color.length === 7 ? 
+      '#' + color.slice(1).match(/.{2}/g)?.map(hex => 
+        Math.max(0, parseInt(hex, 16) - 40).toString(16).padStart(2, '0')
+      ).join('') || color : color;
+
+    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
+    const selectedSize = 33; // 1.1x hover scaling
+    const size = isSelected ? selectedSize : baseSize;
+    
+    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+          </filter>
+        </defs>
+        <path d="${svgPath}" 
+              fill="${color}" 
+              stroke="${strokeHex}" 
+              stroke-width="1" 
+              filter="url(#shadow)"/>
+      </svg>
+    `)}`;
+
+    return {
+      url: iconUrl,
+      scaledSize: new window.google.maps.Size(size, size),
+      anchor: new window.google.maps.Point(size / 2, size),
+    };
+  };
+
   const currentBase = tripData?.stops?.find(stop => stop.stop_id === currentBaseId);
 
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -388,6 +454,31 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                     }}
                     onUnmount={() => {
                       activityMarkersRef.current.delete(activity.activity_id);
+                    }}
+                  />
+                );
+              })}
+
+            {/* Scenic waypoint markers for current base with violet styling */}
+            {currentBase?.scenic_waypoints
+              ?.filter(waypoint => waypoint.location?.lat && waypoint.location?.lng)
+              .map((waypoint) => {
+                // TypeScript safety: we know location exists due to filter above
+                const location = waypoint.location!;
+                const isVisited = activityStatus[waypoint.activity_id] || waypoint.status?.done || false;
+                
+                return (
+                  <Marker
+                    key={`scenic-waypoint-${waypoint.activity_id}`}
+                    position={{ lat: location.lat!, lng: location.lng! }}
+                    title={waypoint.activity_name}
+                    icon={getScenicWaypointPinIcon(waypoint.activity_id === selectedActivityId, isVisited)}
+                    onClick={() => onActivitySelect(waypoint.activity_id)}
+                    onLoad={(marker) => {
+                      scenicWaypointMarkersRef.current.set(waypoint.activity_id, marker);
+                    }}
+                    onUnmount={() => {
+                      scenicWaypointMarkersRef.current.delete(waypoint.activity_id);
                     }}
                   />
                 );

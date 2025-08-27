@@ -330,6 +330,16 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Maintained existing activity selection and status management for scenic waypoints
     - **Requirements Reference**: Requirement 3.17 (scenic waypoints integration)
 
+  - [x] 14.5 Integrate scenic waypoints as map pins with animations
+    - Created getScenicWaypointPinIcon function with violet color scheme and landscape/mountain SVG icon
+    - Added scenicWaypointMarkersRef for managing scenic waypoint marker instances
+    - Updated map bounds calculation to include scenic waypoints for proper map fitting
+    - Implemented scenic waypoint markers rendering with proper selection and status handling
+    - Added coordinated drop pin animations for scenic waypoints when stop is selected
+    - Implemented staggered animations (100ms delay between waypoints) for visual effect
+    - Enhanced visibility with 1.5x sizing and pin shadows consistent with other pins
+    - **Requirements Reference**: Requirement 3.22, 3.23, 3.24, 3.25, 3.26 (map pins, animations, enhanced visibility, selection behavior, color coding)
+
 - [ ] 15. **Final Integration and Deployment Setup**
   - [ ] 15.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background
