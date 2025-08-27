@@ -186,7 +186,8 @@ interface TimelineStripProps {
 - Proportional base representation based on stay duration
 - Auto-focus on current day using NZ timezone
 - Touch/swipe gesture support for mobile
-- Status-based visual indicators using vivid color palette
+- Unique color assignment for each base using cycling color palette
+- Selection state with enlargement and brighter colors
 
 #### 4. ActivitiesPanel Component
 **Purpose**: Expandable/collapsible floating panel for accommodation and activities display.
@@ -644,24 +645,34 @@ class ExportService {
 ### Color Palette
 The application uses a vivid, modern, and dynamic color scheme based on Tailwind Colors v4, replacing the previous teal/gray theme:
 
-**Primary Colors:**
-- **Primary Accent**: Sky-500 (`bg-sky-500`, `text-sky-500`) - Vibrant blue for current timeline base, active states, and primary actions
-- **Secondary Accent**: Orange-500 (`bg-orange-500`, `text-orange-500`) - Energetic orange for secondary actions, hover states, and interactive elements
+**Timeline Color Palette:**
+The timeline uses a cycling 12-color palette from Tailwind Colors v4 for maximum visual distinction:
+- **Blue-500**: (`bg-blue-500`, `bg-blue-600` selected) - First timeline base color
+- **Emerald-500**: (`bg-emerald-500`, `bg-emerald-600` selected) - Second timeline base color  
+- **Violet-500**: (`bg-violet-500`, `bg-violet-600` selected) - Third timeline base color
+- **Orange-500**: (`bg-orange-500`, `bg-orange-600` selected) - Fourth timeline base color
+- **Rose-500**: (`bg-rose-500`, `bg-rose-600` selected) - Fifth timeline base color
+- **Cyan-500**: (`bg-cyan-500`, `bg-cyan-600` selected) - Sixth timeline base color
+- **Amber-500**: (`bg-amber-500`, `bg-amber-600` selected) - Seventh timeline base color
+- **Pink-500**: (`bg-pink-500`, `bg-pink-600` selected) - Eighth timeline base color
+- **Indigo-500**: (`bg-indigo-500`, `bg-indigo-600` selected) - Ninth timeline base color
+- **Teal-500**: (`bg-teal-500`, `bg-teal-600` selected) - Tenth timeline base color
+- **Lime-500**: (`bg-lime-500`, `bg-lime-600` selected) - Eleventh timeline base color
+- **Fuchsia-500**: (`bg-fuchsia-500`, `bg-fuchsia-600` selected) - Twelfth timeline base color
+
+**Additional Application Colors:**
 - **Success**: Emerald-500 (`bg-emerald-500`, `text-emerald-500`) - Rich green for completed activities and positive feedback
 - **Warning**: Amber-500 (`bg-amber-500`, `text-amber-500`) - Bright amber for pending or attention-required states
-- **Info**: Violet-500 (`bg-violet-500`, `text-violet-500`) - Modern violet for informational elements and neutral actions
 
-**Status Colors:**
-- **Past/Completed**: 
-  - Timeline bases: Sky-500 with 30% opacity (`bg-sky-500/30`)
-  - Completed activities: Emerald-500 with 40% opacity (`bg-emerald-500/40`)
-- **Current/Active**: Full intensity Sky-500 (`bg-sky-500`)
-- **Upcoming/Pending**: Sky-500 with 70% opacity (`bg-sky-500/70`)
+**Timeline Selection States:**
+- **Unselected**: Base color at 500 level (e.g., `bg-blue-500`, `bg-emerald-500`)
+- **Selected**: Darker shade at 600 level with ring outline and 110% scale (e.g., `bg-blue-600 ring-blue-500`, `bg-emerald-600 ring-emerald-500`)
+- **Hover**: Enhanced shadow and 105% scale with transition effects
 
-**Interactive States:**
-- **Hover**: Orange-500 with 90% opacity (`hover:bg-orange-500/90`)
-- **Active**: Enhanced saturation and shadow effects (`active:bg-orange-500/40`)
-- **Focus**: Sky-500 with ring utilities (`focus:ring-sky-500`)
+**General Interactive States:**
+- **Hover**: Enhanced shadow and subtle scale effects (`hover:shadow-lg hover:scale-105`)
+- **Active**: Slight scale reduction for tactile feedback (`active:scale-95`)
+- **Focus**: Color-specific ring utilities matching the element's base color
 
 **Mobile Touch States:**
 - **Touch Targets**: Minimum 44px height and width for all interactive elements (`min-h-[44px] min-w-[44px]`)

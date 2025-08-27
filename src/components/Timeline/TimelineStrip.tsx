@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { TripBase } from '@/types';
-import { getStopTimeStatus } from '@/utils/dateUtils';
 
 interface TimelineStripProps {
   stops: TripBase[];
@@ -19,6 +18,27 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
   const timelineRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
+
+  // Colorful palette from Tailwind Colors - cycling through vibrant colors
+  const colorPalette = [
+    { base: 'bg-blue-500', text: 'text-white', selected: 'bg-blue-600', ring: 'ring-blue-500' },
+    { base: 'bg-emerald-500', text: 'text-white', selected: 'bg-emerald-600', ring: 'ring-emerald-500' },
+    { base: 'bg-violet-500', text: 'text-white', selected: 'bg-violet-600', ring: 'ring-violet-500' },
+    { base: 'bg-orange-500', text: 'text-white', selected: 'bg-orange-600', ring: 'ring-orange-500' },
+    { base: 'bg-rose-500', text: 'text-white', selected: 'bg-rose-600', ring: 'ring-rose-500' },
+    { base: 'bg-cyan-500', text: 'text-white', selected: 'bg-cyan-600', ring: 'ring-cyan-500' },
+    { base: 'bg-amber-500', text: 'text-white', selected: 'bg-amber-600', ring: 'ring-amber-500' },
+    { base: 'bg-pink-500', text: 'text-white', selected: 'bg-pink-600', ring: 'ring-pink-500' },
+    { base: 'bg-indigo-500', text: 'text-white', selected: 'bg-indigo-600', ring: 'ring-indigo-500' },
+    { base: 'bg-teal-500', text: 'text-white', selected: 'bg-teal-600', ring: 'ring-teal-500' },
+    { base: 'bg-lime-500', text: 'text-white', selected: 'bg-lime-600', ring: 'ring-lime-500' },
+    { base: 'bg-fuchsia-500', text: 'text-white', selected: 'bg-fuchsia-600', ring: 'ring-fuchsia-500' }
+  ];
+
+  // Function to get color for a stop based on its index
+  const getStopColor = (index: number) => {
+    return colorPalette[index % colorPalette.length];
+  };
 
   // Handle swipe gestures for mobile
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -70,18 +90,10 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
       onTouchEnd={handleTouchEnd}
     >
       <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-hide">
-        {stops  .map((stop) => {
+        {stops.map((stop, index) => {
           const isSelected = stop.stop_id === currentStopId;
-          const status = getStopTimeStatus(stop);
           const widthPercentage = (stop.duration_days / totalDays) * 100;
-          
-          // Apply new color palette: Sky-500 for current, with opacity variations for status
-          let statusColor = 'bg-sky-500 text-white';
-          if (status === 'past') {
-            statusColor = 'bg-sky-500/30 text-sky-900';
-          } else if (status === 'upcoming') {
-            statusColor = 'bg-sky-500/70 text-white';
-          }
+          const colors = getStopColor(index);
 
           return (
             <button
@@ -91,10 +103,12 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
                 relative px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg text-xs font-medium whitespace-nowrap
                 transition-all duration-300 ease-in-out flex-shrink-0
                 min-h-[44px] sm:min-h-auto touch-manipulation
-                ${isSelected ? 'ring-2 ring-sky-500 ring-offset-2 ring-offset-white/20' : ''}
-                ${statusColor}
-                hover:shadow-lg hover:scale-105 hover:bg-orange-500/90
-                active:scale-95 active:bg-orange-500
+                ${isSelected 
+                  ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} ring-offset-2 ring-offset-white/20 scale-110 shadow-lg` 
+                  : `${colors.base} ${colors.text}`
+                }
+                hover:shadow-lg hover:scale-105
+                active:scale-95
               `}
               style={{ minWidth: `${Math.max(widthPercentage * 4, 60)}px` }}
             >
@@ -114,7 +128,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
               
               {isSelected && (
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2">
-                  <div className="w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent border-t-sky-500"></div>
+                  <div className={`w-0 h-0 border-l-4 border-r-4 border-t-4 border-l-transparent border-r-transparent ${colors.ring.replace('ring-', 'border-t-')}`}></div>
                 </div>
               )}
             </button>

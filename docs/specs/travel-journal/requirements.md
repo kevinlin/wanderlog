@@ -37,10 +37,11 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 2. WHEN the timeline panel is displayed, THEN it SHALL be positioned with appropriate gap from screen edges and use frosted glass styling
 3. WHEN timeline elements are displayed, THEN each base SHALL have length proportional to the duration of stay
 4. WHEN the current date is determined, THEN the system SHALL automatically focus on today's base using New Zealand local time
-5. WHEN bases are displayed in the timeline, THEN they SHALL be color-coded based on status using the new vivid color palette (past: reduced opacity, current: primary accent color, upcoming: medium opacity)
-6. WHEN a user interacts with the timeline, THEN it SHALL support both swipe gestures and tap navigation
-7. WHEN a timeline base is selected, THEN the map SHALL center on the corresponding location and display relevant pins
-8. WHEN timeline navigation occurs, THEN the system SHALL persist the last viewed day/base in LocalStorage
+5. WHEN bases are displayed in the timeline, THEN each base SHALL have a unique vibrant color from the Tailwind color palette to create a colorful and visually distinct timeline
+6. WHEN a timeline base is selected, THEN it SHALL enlarge slightly (scale 110%), change to a brighter/deeper shade of its base color, display a ring outline in the same color family, and remain visually selected until a different base is chosen
+7. WHEN a user interacts with the timeline, THEN it SHALL support both swipe gestures and tap navigation
+8. WHEN a timeline base is selected, THEN the map SHALL center on the corresponding location and display relevant pins
+9. WHEN timeline navigation occurs, THEN the system SHALL persist the last viewed day/base in LocalStorage
 
 ### 3. Activity Management and Organization
 
@@ -153,7 +154,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 **User Story:** As a user, I want the application to have a modern, vivid, and dynamic visual design that enhances the travel experience and provides excellent visual hierarchy.
 
 **Acceptance Criteria:**
-1. WHEN the application is styled, THEN it SHALL use a vivid, modern, and dynamic color palette from Tailwind Colors v4 to replace the current teal/gray theme
+1. WHEN the application is styled, THEN it SHALL use a vivid, modern, and dynamic color palette from Tailwind Colors v4 with each timeline base having a unique color from the palette (blue, emerald, violet, orange, rose, cyan, amber, pink, indigo, teal, lime, fuchsia) cycling through the sequence
 2. WHEN floating panels are rendered, THEN they SHALL use consistent frosted glass styling with the following specifications:
    - Rounded corners using `rounded-xl` class
    - Semi-transparent white background using `bg-white/30`
@@ -161,7 +162,8 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
    - Subtle border using `border border-white/20`
    - Medium shadow using `shadow-md`
 3. WHEN color coding is applied, THEN the system SHALL use the selected vivid color palette for:
-   - Timeline base status indicators
+   - Timeline base unique color assignment (cycling through the 12-color palette)
+   - Timeline base selection states (brighter shades with ring outlines)
    - Activity completion states
    - Pin highlighting and selection states
    - Interactive element feedback
