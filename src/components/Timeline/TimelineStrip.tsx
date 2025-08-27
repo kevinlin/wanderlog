@@ -14,7 +14,6 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
   onStopSelect,
   className = '',
 }) => {
-  const totalDays = stops.reduce((total, stop) => total + stop.duration_days, 0);
   const timelineRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
@@ -38,6 +37,20 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
   // Function to get color for a stop based on its index
   const getStopColor = (index: number) => {
     return colorPalette[index % colorPalette.length];
+  };
+
+  // Calculate proportional width based on stay period with minimum 0.5 days
+  const getStopWidth = (stop: TripBase) => {
+    const effectiveDays = Math.max(stop.duration_days, 0.5); // Minimum 0.5 days
+    const totalEffectiveDays = stops.reduce((total, s) => total + Math.max(s.duration_days, 0.5), 0);
+    const widthRatio = effectiveDays / totalEffectiveDays;
+    
+    // Use a base width that scales much better - aim for 120-300px range
+    // Minimum width of 100px, with proportional scaling up to reasonable maximums
+    const baseWidth = Math.max(widthRatio * 1200, 100); // Much better scaling
+    const maxWidth = 300; // Cap maximum width for very long stays
+    
+    return Math.min(baseWidth, maxWidth);
   };
 
   // Handle swipe gestures for mobile
@@ -80,7 +93,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
       className={`
         absolute top-2 left-2 sm:top-4 sm:left-4 
         rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md
-        p-2 sm:p-3 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] md:max-w-2xl lg:max-w-6xl
+        p-1.5 sm:p-2 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] md:max-w-2xl lg:max-w-6xl
         transition-all duration-300 ease-in-out
         touch-pan-x select-none
         ${className}
@@ -92,37 +105,39 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
       <div className="flex items-center space-x-2 overflow-x-auto pb-1 scrollbar-hide">
         {stops.map((stop, index) => {
           const isSelected = stop.stop_id === currentStopId;
-          const widthPercentage = (stop.duration_days / totalDays) * 100;
           const colors = getStopColor(index);
+          const stopWidth = getStopWidth(stop);
 
           return (
             <button
               key={stop.stop_id}
               onClick={() => onStopSelect(stop.stop_id)}
               className={`
-                relative px-2 py-1.5 sm:px-3 sm:py-2 rounded-lg text-xs font-medium whitespace-nowrap
+                relative rounded-lg text-xs font-medium whitespace-nowrap
                 transition-all duration-300 ease-in-out flex-shrink-0
-                min-h-[44px] sm:min-h-auto touch-manipulation
+                min-h-[36px] sm:min-h-auto touch-manipulation
                 ${isSelected 
-                  ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} ring-offset-2 ring-offset-white/20 scale-110 shadow-lg` 
-                  : `${colors.base} ${colors.text}`
+                  ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} ring-offset-2 ring-offset-white/20 scale-110 shadow-lg px-1.5 py-0.5 sm:px-2 sm:py-1` 
+                  : `${colors.base} ${colors.text} px-2 py-1 sm:px-3 sm:py-1.5`
                 }
                 hover:shadow-lg hover:scale-105
                 active:scale-95
               `}
-              style={{ minWidth: `${Math.max(widthPercentage * 4, 60)}px` }}
+              style={{ width: `${stopWidth}px` }}
             >
+              {/* Duration badge at top-right */}
+              <div className="absolute -top-1 -right-1 bg-white text-gray-800 text-xs font-bold rounded-full min-w-[20px] h-5 flex items-center justify-center px-1.5 shadow-sm border border-gray-200">
+                {stop.duration_days}
+              </div>
+              
               <div className="text-center">
-                <div className="text-lg font-semibold">{stop.name}</div>
+                <div className={`font-semibold ${isSelected ? 'text-sm' : 'text-base'}`}>{stop.name}</div>
                 <div className="text-xs">
                   {new Date(stop.date.from).toLocaleDateString('en-NZ', { 
                     month: 'short', 
                     day: 'numeric',
                     weekday: 'short'
                   })}
-                </div>
-                <div className="text-xs">
-                  {stop.duration_days} day{stop.duration_days !== 1 ? 's' : ''}
                 </div>
               </div>
               
