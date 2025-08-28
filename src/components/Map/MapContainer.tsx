@@ -75,7 +75,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   onBaseSelect,
 }) => {
   const { state, dispatch } = useAppStateContext();
-  const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [, setMap] = useState<google.maps.Map | null>(null);
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
   const [routeFallback, setRouteFallback] = useState<google.maps.LatLng[]>([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
@@ -478,9 +478,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         }}
         onClick={(e) => {
           // Handle POI clicks
-          if (e.placeId) {
-            e.stop(); // Prevent default info window
-            handlePOIClick(e.placeId);
+          const event = e as google.maps.MapMouseEvent & { placeId?: string };
+          if (event.placeId) {
+            event.stop?.(); // Prevent default info window
+            handlePOIClick(event.placeId);
           }
         }}
       >
