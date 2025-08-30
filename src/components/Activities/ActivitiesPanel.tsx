@@ -53,7 +53,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const [isScenicWaypointsExpanded, setIsScenicWaypointsExpanded] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const activityRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  
+
   // Screen size detection
   const { isMobile } = useScreenSize();
 
@@ -115,8 +115,8 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   }, [selectedActivityId, isExpanded]);
 
   // Mobile slide-out animation classes
-  const mobileClasses = isVisible 
-    ? 'translate-y-0' 
+  const mobileClasses = isVisible
+    ? 'translate-y-0'
     : 'translate-y-full';
 
   // Hide panel completely on mobile when not visible
@@ -144,10 +144,10 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
       `}>
         {/* Mobile Collapse Button */}
         {isMobile && onHide && (
-          <div className="flex justify-center p-2 border-b border-white/20">
+          <div className="flex justify-center px-3 border-b border-white/20">
             <button
               onClick={onHide}
-              className="p-2 hover:bg-gray-500/20 active:bg-gray-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
+              className="px-2 hover:bg-gray-500/20 active:bg-gray-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
               aria-label="Hide activities panel"
             >
               <ChevronDownIcon className="w-6 h-6 text-gray-600" />
@@ -156,7 +156,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         )}
 
         {/* Accommodation Card - Always Visible */}
-        <div className="p-3 sm:p-4 pb-2">
+        <div className="px-3 pb-3">
           <AccommodationCard
             accommodation={accommodation}
             stopName={stopName}
@@ -165,14 +165,14 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
         {/* Scenic Waypoints Section */}
         {scenicWaypoints.length > 0 && (
-          <div className="px-3 sm:px-4 pb-2">
+          <div className="px-3 pb-3">
             <button
               onClick={toggleScenicWaypoints}
               className="w-full flex items-center justify-center gap-2 py-3 px-4 
                        bg-violet-500/20 hover:bg-violet-500/30 active:bg-violet-500/40
                        border border-violet-500/30 rounded-lg
                        text-violet-700 font-medium transition-all duration-200
-                       hover:shadow-md touch-manipulation min-h-[44px] mb-2"
+                       hover:shadow-md touch-manipulation min-h-[44px]"
             >
               <span>Scenic Waypoints ({scenicWaypoints.length})</span>
               {isScenicWaypointsExpanded ? (
@@ -183,7 +183,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             </button>
 
             {isScenicWaypointsExpanded && (
-              <div className="space-y-2 mb-2">
+              <div className="space-y-3">
                 {scenicWaypoints.map((waypoint) => (
                   <ScenicWaypointCard
                     key={waypoint.activity_id}
@@ -201,7 +201,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         )}
 
         {/* Activities Expand/Collapse Control */}
-        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+        <div className="px-3 pb-3">
           <button
             onClick={toggleExpanded}
             className="w-full flex items-center justify-center gap-2 py-3 px-4 
@@ -222,7 +222,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         {/* Activities Section - Expanded State */}
         {isExpanded && (
           <>
-            <div className="px-3 sm:px-4 pb-2">
+            <div className="px-3 pb-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">
                   Activities ({activities.length})
@@ -238,22 +238,27 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             </div>
 
             {/* Scrollable Activities List with Drag & Drop */}
-            <div ref={scrollContainerRef} className="flex-1 overflow-y-auto px-3 sm:px-4 pb-2 overscroll-contain">
-              <div className="px-3 sm:px-4 pb-3 sm:pb-4">
+            <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overscroll-contain">
+              {/* Weather Card */}
+              <div className="px-3 pb-3">
                 <WeatherCard weatherData={weatherData} />
               </div>
 
-              <DraggableActivitiesList
-                activities={activities}
-                accommodation={accommodation}
-                selectedActivityId={selectedActivityId}
-                activityStatus={activityStatus}
-                onActivitySelect={onActivitySelect}
-                onToggleDone={onToggleDone}
-                onReorder={onReorder}
-              />
+              {/* Activities List */}
+              <div className="px-3 pb-3">
+                <DraggableActivitiesList
+                  activities={activities}
+                  accommodation={accommodation}
+                  selectedActivityId={selectedActivityId}
+                  activityStatus={activityStatus}
+                  onActivitySelect={onActivitySelect}
+                  onToggleDone={onToggleDone}
+                  onReorder={onReorder}
+                />
+              </div>
+
               {/* Export Button */}
-              <div className="px-3 sm:px-4 pb-3 sm:pb-4 border-t border-white/20 pt-3 sm:pt-4">
+              <div className="px-3 pb-3 border-t border-white/20 pt-3">
                 <button
                   onClick={handleExport}
                   disabled={!tripData || !userModifications}
@@ -267,7 +272,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   title="Download your updated trip data with activity status and custom order"
                 >
                   <ArrowDownTrayIcon className="w-4 h-4" />
-                  <span className="text-sm sm:text-base">Download Updated Trip JSON</span>
+                  <span className="text-sm">Download Updated Trip JSON</span>
                 </button>
               </div>
             </div>
