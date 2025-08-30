@@ -6,6 +6,7 @@ import { WeatherCard } from '@/components/Cards/WeatherCard';
 import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
 import { DraggableActivitiesList } from './DraggableActivity';
 import { useWeather } from '@/hooks/useWeather';
+import { useScreenSize } from '@/hooks/useScreenSize';
 import { ExportService } from '@/services/exportService';
 import { ChevronDownIcon, ChevronUpIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
 
@@ -20,10 +21,12 @@ interface ActivitiesPanelProps {
   activityStatus: Record<string, boolean>;
   tripData?: TripData;
   userModifications?: UserModifications;
+  isVisible?: boolean; // New prop for mobile visibility control
   onActivitySelect: (activityId: string) => void;
   onToggleDone: (activityId: string, done: boolean) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onExportSuccess?: () => void;
+  onHide?: () => void; // New prop for mobile panel hiding
   className?: string;
 }
 
@@ -38,16 +41,21 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   activityStatus,
   tripData,
   userModifications,
+  isVisible = true,
   onActivitySelect,
   onToggleDone,
   onReorder,
   onExportSuccess,
+  onHide,
   className = '',
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isScenicWaypointsExpanded, setIsScenicWaypointsExpanded] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const activityRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  
+  // Screen size detection
+  const { isMobile } = useScreenSize();
 
   // Weather data management
   const { fetchWeather, getWeatherForBase } = useWeather();
@@ -106,15 +114,26 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
     }
   }, [selectedActivityId, isExpanded]);
 
+  // Mobile slide-out animation classes
+  const mobileClasses = isVisible 
+    ? 'translate-y-0' 
+    : 'translate-y-full';
+
+  // Hide panel completely on mobile when not visible
+  if (!isVisible && isMobile) {
+    return null;
+  }
+
   return (
     <div
       className={`
-        absolute top-2 right-2 sm:top-4 sm:right-4 
-        rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md
-        transition-all duration-300 ease-in-out
+        fixed bottom-0 left-0 right-0 sm:absolute sm:top-2 sm:right-2 sm:left-auto sm:bottom-auto sm:top-4 sm:right-4
+        rounded-t-xl sm:rounded-xl bg-white/30 backdrop-blur border-t sm:border border-white/20 shadow-md
+        transition-all duration-400 ease-in-out z-20
+        ${mobileClasses}
         ${isExpanded
-          ? 'bottom-2 sm:bottom-4 w-full sm:w-96 max-w-[calc(100vw-1rem)] sm:max-w-96 overflow-hidden'
-          : 'w-full sm:w-96 max-w-[calc(100vw-1rem)] sm:max-w-96 max-h-[calc(100vh-6rem)] sm:max-h-[calc(100vh-8rem)]'
+          ? 'h-[80vh] sm:bottom-2 sm:bottom-4 w-full sm:w-96 max-w-full sm:max-w-96 overflow-hidden'
+          : 'h-auto w-full sm:w-96 max-w-full sm:max-w-96 max-h-[60vh] sm:max-h-[calc(100vh-8rem)]'
         }
         ${className}
       `}
@@ -123,6 +142,19 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
       <div className={`
         ${isExpanded ? 'h-full flex flex-col' : ''}
       `}>
+        {/* Mobile Collapse Button */}
+        {isMobile && onHide && (
+          <div className="flex justify-center p-2 border-b border-white/20">
+            <button
+              onClick={onHide}
+              className="p-2 hover:bg-gray-500/20 active:bg-gray-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
+              aria-label="Hide activities panel"
+            >
+              <ChevronDownIcon className="w-6 h-6 text-gray-600" />
+            </button>
+          </div>
+        )}
+
         {/* Accommodation Card - Always Visible */}
         <div className="p-3 sm:p-4 pb-2">
           <AccommodationCard

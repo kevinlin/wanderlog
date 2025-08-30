@@ -33,26 +33,33 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 **User Story:** As a traveler, I want to navigate through my trip timeline and see my current progress, so that I can easily jump to any day and understand where I am in my journey.
 
 **Acceptance Criteria:**
-1. WHEN the application loads, THEN it SHALL display a horizontal timeline strip as a floating panel positioned at the top-left corner of the map
-2. WHEN the timeline panel is displayed, THEN it SHALL be positioned with appropriate gap from screen edges and use frosted glass styling
-3. WHEN timeline elements are displayed, THEN each base SHALL have length proportional to the duration of stay
-4. WHEN the current date is determined, THEN the system SHALL automatically focus on today's base using New Zealand local time
-5. WHEN bases are displayed in the timeline, THEN each base SHALL have a unique vibrant color from the Tailwind color palette to create a colorful and visually distinct timeline
-6. WHEN a timeline base is selected, THEN it SHALL enlarge slightly (scale 110%), change to a brighter/deeper shade of its base color, display a ring outline in the same color family, and remain visually selected until a different base is chosen
-7. WHEN a user interacts with the timeline, THEN it SHALL support both swipe gestures and tap navigation
-8. WHEN a timeline base is selected, THEN the map SHALL center on the corresponding location and display relevant pins
-9. WHEN timeline navigation occurs, THEN the system SHALL persist the last viewed day/base in LocalStorage
+1. WHEN the application loads on mobile, THEN it SHALL display a horizontal timeline strip positioned at the top of the screen spanning the full width
+2. WHEN the application loads on desktop, THEN it SHALL display a horizontal timeline strip as a floating panel positioned at the top-left corner of the map
+3. WHEN the timeline panel is displayed on mobile, THEN it SHALL be positioned at the top edge with no gaps and use frosted glass styling
+4. WHEN the timeline panel is displayed on desktop, THEN it SHALL be positioned with appropriate gap from screen edges and use frosted glass styling
+5. WHEN timeline elements are displayed, THEN each base SHALL have length proportional to the duration of stay
+6. WHEN the current date is determined, THEN the system SHALL automatically focus on today's base using New Zealand local time
+7. WHEN bases are displayed in the timeline, THEN each base SHALL have a unique vibrant color from the Tailwind color palette to create a colorful and visually distinct timeline
+8. WHEN a timeline base is selected, THEN it SHALL enlarge slightly (scale 110%), change to a brighter/deeper shade of its base color, display a ring outline in the same color family, and remain visually selected until a different base is chosen
+9. WHEN a user interacts with the timeline, THEN it SHALL support both swipe gestures and tap navigation
+10. WHEN a timeline base is selected, THEN the map SHALL center on the corresponding location and display relevant pins
+11. WHEN timeline navigation occurs, THEN the system SHALL persist the last viewed day/base in LocalStorage
+12. WHEN a timeline base is selected on mobile, THEN the ActivitiesPanel SHALL automatically slide out from the bottom of the screen
 
 ### 3. Activity Management and Organization
 
 **User Story:** As a traveler, I want to view, organize, and track my activities with detailed information and completion status, so that I can efficiently manage my itinerary and remember what I've accomplished.
 
 **Acceptance Criteria:**
-1. WHEN the application loads, THEN the accommodation/activities panel SHALL be positioned as a floating component at the top-right corner of the map with appropriate gap from screen edges
-2. WHEN the activities panel is displayed, THEN it SHALL use frosted glass styling consistent with other floating panels
-3. WHEN the activities panel is in default state, THEN it SHALL display only the accommodation card with an expand control at the bottom
-4. WHEN the expand control is activated, THEN the panel SHALL extend to the bottom of the screen (map) maintaining the same gap, and become scrollable for viewing all activity cards
-5. WHEN the activities panel is expanded, THEN it SHALL include a collapse control at the end to return to the default state
+1. WHEN the application loads on desktop, THEN the accommodation/activities panel SHALL be positioned as a floating component at the top-right corner of the map with appropriate gap from screen edges
+2. WHEN the application loads on mobile, THEN the accommodation/activities panel SHALL be hidden by default and slide out from the bottom when a stop is selected from the timeline
+3. WHEN the activities panel is displayed, THEN it SHALL use frosted glass styling consistent with other floating panels
+4. WHEN the activities panel is in default state on desktop, THEN it SHALL display only the accommodation card with an expand control at the bottom
+5. WHEN the activities panel is displayed on mobile, THEN it SHALL slide up from the bottom of the screen and include a collapse button with chevron icon to hide the entire panel
+6. WHEN the expand control is activated on desktop, THEN the panel SHALL extend to the bottom of the screen (map) maintaining the same gap, and become scrollable for viewing all activity cards
+7. WHEN the activities panel is expanded on mobile, THEN it SHALL occupy the bottom portion of the screen and become scrollable for viewing all activity cards
+8. WHEN the activities panel is expanded, THEN it SHALL include a collapse control at the end to return to the default state
+9. WHEN the collapse button is pressed on mobile, THEN the entire ActivitiesPanel SHALL slide down and hide completely
 6. WHEN activities are displayed, THEN each activity card SHALL include title, thumbnail, address/location, travel time from accommodation, duration, URL link, and remarks
 7. WHEN an activity has location coordinates, THEN the system SHALL display a corresponding pin on the map
 8. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted with a drop pin animation and the map SHALL center on that location
@@ -125,6 +132,10 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 3. WHEN touch gestures are used, THEN the timeline SHALL support swipe navigation for base selection
 4. WHEN on mobile devices, THEN map interactions SHALL be optimized for touch input (pinch, zoom, pan)
 5. WHEN activity cards are displayed on mobile, THEN they SHALL be appropriately sized and easily tappable
+6. WHEN the application is viewed on mobile, THEN the timeline SHALL be positioned at the top of the screen with full width
+7. WHEN the application is viewed on mobile, THEN the ActivitiesPanel SHALL be hidden by default and slide out from the bottom when a stop is selected
+8. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL include a prominent collapse button with chevron icon to hide the panel completely
+9. WHEN the collapse button is pressed on mobile, THEN the ActivitiesPanel SHALL slide down smoothly and disappear, returning to the map-only view
 
 ### 8. Error Handling and Fallback Mechanisms
 

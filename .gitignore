@@ -23,5 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+# Testing
+coverage/
+
 # Cursor IDE
 .history/

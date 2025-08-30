@@ -179,7 +179,7 @@ interface MapContainerProps {
 - Coordinated drop pin animations for accommodation and scenic waypoints when stops are selected
 
 #### 3. TimelineStrip Component
-**Purpose**: Floating timeline panel positioned at top-left corner with frosted glass styling.
+**Purpose**: Timeline panel with responsive positioning - full-width at top on mobile, floating panel at top-left on desktop.
 
 ```typescript
 interface TimelineStripProps {
@@ -187,21 +187,23 @@ interface TimelineStripProps {
   currentBase: string;
   onBaseSelect: (baseId: string) => void;
   timezone: string;
-  className?: string; // For floating panel positioning
+  className?: string; // For responsive positioning
 }
 ```
 
 **Key Features**:
-- Floating panel positioned at top-left with appropriate screen edge gaps
+- **Mobile Layout**: Full-width panel positioned at top of screen with no gaps
+- **Desktop Layout**: Floating panel positioned at top-left with appropriate screen edge gaps
 - Frosted glass styling, i.e. `rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
 - Proportional base representation based on stay duration
 - Auto-focus on current day using NZ timezone
 - Touch/swipe gesture support for mobile
 - Unique color assignment for each base using cycling color palette
 - Selection state with enlargement and brighter colors
+- **Mobile Behavior**: Selecting a stop triggers ActivitiesPanel slide-out animation
 
 #### 4. ActivitiesPanel Component
-**Purpose**: Expandable/collapsible floating panel for accommodation and activities display.
+**Purpose**: Responsive panel for accommodation and activities display with mobile slide-out behavior.
 
 ```typescript
 interface ActivitiesPanelProps {
@@ -209,22 +211,29 @@ interface ActivitiesPanelProps {
   activities: Activity[];
   scenicWaypoints?: ScenicWaypoint[];
   isExpanded: boolean;
+  isVisible: boolean; // New prop for mobile visibility control
   onToggleExpanded: () => void;
+  onToggleVisible: () => void; // New prop for mobile panel visibility
   onActivitySelect: (activityId: string) => void;
   onToggleDone: (activityId: string) => void;
-  className?: string; // For floating panel positioning
+  className?: string; // For responsive positioning
 }
 ```
 
 **Key Features**:
-- Floating panel positioned at top-right with appropriate screen edge gaps
+- **Desktop Layout**: Floating panel positioned at top-right with appropriate screen edge gaps
+- **Mobile Layout**: Hidden by default, slides out from bottom when stop is selected
 - Frosted glass styling consistent with timeline panel
-- Default state: Shows accommodation card, scenic waypoints toggle button (if available), and activities expand control
-- Expanded state: Extends to bottom of screen with collapse control, becomes scrollable
-- Smooth expand/collapse animations
+- **Desktop Default State**: Shows accommodation card, scenic waypoints toggle button (if available), and activities expand control
+- **Mobile Default State**: Shows accommodation card and prominent collapse button with chevron icon
+- **Desktop Expanded State**: Extends to bottom of screen with collapse control, becomes scrollable
+- **Mobile Expanded State**: Occupies bottom portion of screen, becomes scrollable
+- Smooth slide-in/slide-out animations for mobile
+- Smooth expand/collapse animations for desktop
 - Dedicated collapsible Scenic Waypoints section at root level between accommodation and activities
 - Scenic waypoints section uses violet color scheme with dedicated wide toggle button
 - Independent collapse/expand state for scenic waypoints separate from activities
+- **Mobile Collapse Button**: Prominent button with chevron down icon to hide entire panel
 
 #### 5. AccommodationCard Component
 **Purpose**: Collapsible/expandable accommodation display within the activities panel with location validation.
@@ -800,25 +809,34 @@ Consistent styling applied to all floating panels:
 
 ### Layout Specifications
 
-**Floating Panel Positioning:**
-- **Timeline Panel**: `absolute top-2 left-2 sm:top-4 sm:left-4` with responsive adjustments
-- **Activities Panel**: `absolute top-2 right-2 sm:top-4 sm:right-4` with responsive adjustments
+**Responsive Panel Positioning:**
+- **Timeline Panel**: 
+  - Mobile: `absolute top-0 left-0 right-0` for full-width positioning at top edge
+  - Desktop: `absolute top-2 left-2 sm:top-4 sm:left-4` with responsive adjustments
+- **Activities Panel**: 
+  - Mobile: `fixed bottom-0 left-0 right-0` with slide-up animation, hidden by default
+  - Desktop: `absolute top-2 right-2 sm:top-4 sm:right-4` with responsive adjustments
 - **Gap Specifications**: 
-  - Mobile: 0.5rem (8px) gap from screen edges
+  - Mobile Timeline: No gaps, full-width at top edge
+  - Mobile Activities: No gaps, slides from bottom edge
   - Desktop: 1rem (16px) gap from screen edges on sm+ breakpoints
 
 **Panel Dimensions:**
 - **Timeline Panel**: 
-  - Mobile: `max-w-[calc(100vw-1rem)]` with horizontal scrolling
-  - Desktop: `max-w-2xl lg:max-w-4xl` based on content
+  - Mobile: `w-full` spanning entire screen width
+  - Desktop: `max-w-2xl lg:max-w-4xl` based on content with horizontal scrolling
 - **Activities Panel**: 
-  - Mobile: `w-full max-w-[calc(100vw-1rem)]` for full-width experience
+  - Mobile: `w-full` spanning entire screen width, slides up from bottom
   - Desktop: `w-96` fixed width
-  - Collapsed: Auto-height for accommodation card only
-  - Expanded: `top-2 sm:top-4` to `bottom-2 sm:bottom-4` with scroll overflow
+  - Mobile Collapsed: Hidden completely below screen
+  - Mobile Expanded: Occupies bottom 60-80% of screen height with scroll overflow
+  - Desktop Collapsed: Auto-height for accommodation card only
+  - Desktop Expanded: `top-2 sm:top-4` to `bottom-2 sm:bottom-4` with scroll overflow
 
 ### Animation Specifications
 - **Panel Expand/Collapse**: 300ms ease-in-out transition
+- **Mobile Panel Slide**: 400ms ease-in-out transition for slide-up/slide-down animations
+- **Timeline Selection**: Triggers ActivitiesPanel slide-out on mobile with 100ms delay
 - **Hover Effects**: 150ms ease-out transition
 - **Pin Highlighting**: 200ms ease-in-out scale and color transitions
 - **Drop Pin Animation**: 600ms cubic-bezier animation with bounce effect for location highlighting

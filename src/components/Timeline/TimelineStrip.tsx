@@ -8,6 +8,13 @@ interface TimelineStripProps {
   className?: string;
 }
 
+interface TimelineStripProps {
+  stops: TripBase[];
+  currentStopId: string | null;
+  onStopSelect: (stopId: string) => void;
+  className?: string;
+}
+
 export const TimelineStrip: React.FC<TimelineStripProps> = ({
   stops,
   currentStopId,
@@ -91,11 +98,11 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({
     <div 
       ref={timelineRef}
       className={`
-        absolute top-2 left-2 sm:top-4 sm:left-4 
-        rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md
-        p-1.5 sm:p-2 max-w-[calc(100vw-1rem)] sm:max-w-[calc(100vw-2rem)] md:max-w-2xl lg:max-w-6xl
+        absolute top-0 left-0 right-0 sm:top-4 sm:left-4 sm:right-auto
+        rounded-none sm:rounded-xl bg-white/30 backdrop-blur border-b sm:border border-white/20 shadow-md
+        p-1.5 sm:p-2 w-full sm:w-auto sm:max-w-[calc(100vw-2rem)] md:max-w-2xl lg:max-w-6xl
         transition-all duration-300 ease-in-out
-        touch-pan-x select-none
+        touch-pan-x select-none z-10
         ${className}
       `}
       onTouchStart={handleTouchStart}

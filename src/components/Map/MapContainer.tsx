@@ -264,7 +264,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const getAccommodationPinIcon = (baseId: string, isSelected: boolean) => {
     const status = getBaseStatus(baseId);
     let color = '#f97316'; // Orange-500 for active states
-    let strokeColor = '#ea580c'; // Orange-600 for outline
+    const strokeColor = '#ea580c'; // Orange-600 for outline
     let opacity = 1.0;
     
     if (status === 'past') {

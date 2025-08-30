@@ -8,6 +8,7 @@ import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
 import { useTripData } from '@/hooks/useTripData';
+import { useScreenSize } from '@/hooks/useScreenSize';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 import { getCurrentStop } from '@/utils/dateUtils';
@@ -17,7 +18,14 @@ import { Activity } from '@/types';
 function App() {
   const { tripData, isLoading, error, refetch } = useTripData();
   const { state, dispatch } = useAppStateContext();
+  const { isMobile } = useScreenSize();
   const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
+  const [isActivitiesPanelVisible, setIsActivitiesPanelVisible] = useState(false);
+
+  // Set initial panel visibility based on screen size
+  useEffect(() => {
+    setIsActivitiesPanelVisible(!isMobile);
+  }, [isMobile]);
 
   // Initialize trip data in global state when loaded
   useEffect(() => {
@@ -110,6 +118,12 @@ function App() {
 
   const handleStopSelect = (stopId: string) => {
     dispatch({ type: 'SELECT_BASE', payload: stopId });
+    // Auto-show activities panel on mobile when stop is selected
+    setIsActivitiesPanelVisible(true);
+  };
+
+  const handleHideActivitiesPanel = () => {
+    setIsActivitiesPanelVisible(false);
   };
 
   const handleActivityReorder = (fromIndex: number, toIndex: number) => {
@@ -158,7 +172,7 @@ function App() {
           onStopSelect={handleStopSelect}
         />
 
-        {/* Expandable Activities Panel */}
+        {/* Responsive Activities Panel */}
         {currentStop && state.currentBase && (
           <ActivitiesPanel
             accommodation={currentStop.accommodation}
@@ -171,10 +185,12 @@ function App() {
             activityStatus={state.userModifications.activityStatus}
             tripData={appTripData}
             userModifications={state.userModifications}
+            isVisible={isActivitiesPanelVisible}
             onActivitySelect={handleActivitySelect}
             onToggleDone={handleActivityToggle}
             onReorder={handleActivityReorder}
             onExportSuccess={handleExportSuccess}
+            onHide={handleHideActivitiesPanel}
           />
         )}
 
