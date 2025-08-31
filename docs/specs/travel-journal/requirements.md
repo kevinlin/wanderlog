@@ -67,27 +67,29 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 14. WHEN the mobile activities panel is in expanded state, THEN the collapse button SHALL be positioned as a fixed header outside the scrollable area to preserve maximum scrollable space for content
 15. WHEN content sections are displayed on mobile, THEN section headers SHALL use compact styling with reduced font sizes and minimal padding to preserve scrollable space for actual content
 6. WHEN activities are displayed, THEN each activity card SHALL include title, thumbnail, address/location, travel time from accommodation, duration, URL link, and remarks
-7. WHEN an activity has location coordinates, THEN the system SHALL display a corresponding pin on the map
-8. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted with a drop pin animation and the map SHALL center on that location
-9. WHEN a map pin is tapped, THEN the corresponding activity card SHALL be highlighted and scrolled into view
-10. WHEN activities are displayed, THEN users SHALL be able to reorder them using drag-and-drop functionality
-11. WHEN activity reordering occurs, THEN the new order SHALL be persisted in LocalStorage and reflected in exported data
-12. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
-13. WHEN activities have completion status, THEN they SHALL be visually indicated on the map using standardized pin colors (green for completed/visited activities, blue for incomplete/unvisited activities)
-14. WHEN an activity includes a URL, THEN users SHALL be able to access both "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row
-15. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
-16. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
-17. WHEN scenic waypoints are available for a trip base, THEN they SHALL be displayed as a dedicated collapsible section at the root level of the ActivitiesPanel, positioned between the accommodation card and activities section
-18. WHEN scenic waypoints are available, THEN they SHALL have a dedicated wide button labeled "Scenic Waypoints (x)" with violet styling that toggles the section's visibility, defaulting to collapsed state
-19. WHEN scenic waypoints are displayed, THEN each waypoint SHALL be shown as a card similar to activity cards but with distinctive scenic waypoint styling (violet color scheme and landscape emoji)
-20. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
-21. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
-22. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions displayed side by side in a single row similar to activities
-23. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
-24. WHEN a stop is selected from the timeline, THEN all scenic waypoints for that stop SHALL display drop pin animations simultaneously with the accommodation pin
-25. WHEN scenic waypoints are displayed on the map, THEN they SHALL use the same enhanced visibility sizing (1.5x larger than Google Maps defaults) as other pins
-26. WHEN scenic waypoint pins are clicked, THEN they SHALL trigger the same selection behavior as activity pins, highlighting the corresponding card in the ActivitiesPanel
-27. WHEN scenic waypoints have completion status, THEN their map pins SHALL use the same color coding as activities (violet for unvisited, green for completed)
+7. WHEN activity cards are displayed, THEN they SHALL expand to full width in the container for optimal space utilization
+8. WHEN activity cards are displayed with drag-and-drop functionality, THEN the draggable handle icon SHALL be positioned at the left edge of the card in the middle vertically for intuitive drag interaction
+9. WHEN an activity has location coordinates, THEN the system SHALL display a corresponding pin on the map
+10. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted with a drop pin animation and the map SHALL center on that location
+11. WHEN a map pin is tapped, THEN the corresponding activity card SHALL be highlighted and scrolled into view
+12. WHEN activities are displayed, THEN users SHALL be able to reorder them using drag-and-drop functionality
+13. WHEN activity reordering occurs, THEN the new order SHALL be persisted in LocalStorage and reflected in exported data
+14. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
+15. WHEN activities have completion status, THEN they SHALL be visually indicated on the map using standardized pin colors (green for completed/visited activities, blue for incomplete/unvisited activities)
+16. WHEN an activity includes a URL, THEN users SHALL be able to access both "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row
+17. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
+18. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
+19. WHEN scenic waypoints are available for a trip base, THEN they SHALL be displayed as a dedicated collapsible section at the root level of the ActivitiesPanel, positioned between the accommodation card and activities section
+20. WHEN scenic waypoints are available, THEN they SHALL have a dedicated wide button labeled "Scenic Waypoints (x)" with violet styling that toggles the section's visibility, defaulting to collapsed state
+21. WHEN scenic waypoints are displayed, THEN each waypoint SHALL be shown as a card similar to activity cards but with distinctive scenic waypoint styling (violet color scheme and landscape emoji)
+22. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
+23. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
+24. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions displayed side by side in a single row similar to activities
+25. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
+26. WHEN a stop is selected from the timeline, THEN all scenic waypoints for that stop SHALL display drop pin animations simultaneously with the accommodation pin
+27. WHEN scenic waypoints are displayed on the map, THEN they SHALL use the same enhanced visibility sizing (1.5x larger than Google Maps defaults) as other pins
+28. WHEN scenic waypoint pins are clicked, THEN they SHALL trigger the same selection behavior as activity pins, highlighting the corresponding card in the ActivitiesPanel
+29. WHEN scenic waypoints have completion status, THEN their map pins SHALL use the same color coding as activities (violet for unvisited, green for completed)
 
 ### 4. Accommodation Display and Management
 

@@ -440,6 +440,27 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensured all tests continue to pass and build is successful
     - **Requirements Reference**: Requirement 3.14, 3.22 (action button layout optimization)
 
+- [x] 16.10 Update Activity Card layout and drag handle positioning
+    - Expanded Activity Card to full width in the container (w-full class)
+    - Positioned draggable handle icon on the left edge of the card in the middle vertically
+    - Removed excessive bottom spacing by replacing space-y-3 with individual mb-2 margins
+    - Repositioned drag handle to absolute position at left edge middle (left-0 top-1/2 transform -translate-y-1/2)
+    - Added left padding (pl-12) to Activity Card container to accommodate drag handle
+    - Optimized content spacing for better visual density and reduced card height
+    - Maintained all existing functionality including selection, completion status, and interactions
+    - Ensured all tests continue to pass and build is successful
+    - **Requirements Reference**: Requirement 3.7, 3.8 (full-width cards, left-edge drag handle positioning)
+
+- [x] 16.11 Merge DraggableActivity and ActivityCard components
+    - Merged drag-and-drop functionality directly into ActivityCard component to fix layout issues
+    - Added isDraggable prop to ActivityCard to conditionally enable drag functionality
+    - Positioned drag handle inside the card at left edge middle (left-2 top-1/2) with proper z-index
+    - Simplified DraggableActivitiesList to directly use ActivityCard with isDraggable=true
+    - Eliminated wrapper components that were causing layout positioning issues
+    - Maintained all existing drag-and-drop functionality with improved layout control
+    - Ensured all tests continue to pass and build is successful
+    - **Requirements Reference**: Requirement 3.8, 3.10 (drag handle positioning, drag-drop functionality)
+
 - [ ] 17. **Final Integration and Deployment Setup**
   - [ ] 17.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background

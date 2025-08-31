@@ -277,13 +277,20 @@ interface ActivityCardProps {
 ```
 
 **Key Features**:
-- Comprehensive activity information display
-- Travel time calculation from accommodation
+- **Full-Width Layout**: Card expands to full container width (w-full) for optimal space utilization
+- **Integrated Drag Functionality**: Optional drag-and-drop capability controlled by isDraggable prop
+- **Optimized Spacing**: Uses individual margins (mb-2) instead of space-y-3 for better visual density
+- **Conditional Layout**: Content padding adjusts based on drag handle presence (pl-8 when draggable)
+- **Header Section**: Checkbox and title positioned at top with thumbnail image on the right
+- **Content Sections**: Address, duration/travel time, remarks, and warnings with compact spacing
+- **Action Buttons**: "View Details" and "Navigate in Google Maps" actions displayed side by side at bottom
+- **Integrated Drag Handle**: When draggable, handle positioned inside card at left edge middle
+- Comprehensive activity information display with travel time calculation from accommodation
 - "Mark Done" functionality with visual feedback using vivid color palette
-- "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row
-- Thumbnail image display
+- Thumbnail image display positioned in header section
 - Location warning indicator when coordinates are missing or invalid
 - Warning message with suggestions for address correction
+- **Reduced Bottom Spacing**: Eliminated excessive spacing for more compact card presentation
 
 #### 6.1. ScenicWaypointCard Component
 **Purpose**: Detailed scenic waypoint display within the activities panel with distinctive styling and location validation.
@@ -340,6 +347,16 @@ interface DraggableActivityProps {
   children: React.ReactNode;
 }
 ```
+
+**Key Features**:
+- **Merged Component Architecture**: Drag-and-drop functionality integrated directly into ActivityCard component
+- **Conditional Drag Functionality**: isDraggable prop enables/disables drag functionality as needed
+- **Full-Width Layout**: Activity cards expand to full container width for better space utilization
+- **Integrated Drag Handle**: Drag handle positioned inside card at left edge middle for intuitive dragging
+- **Enhanced Touch Targets**: Drag handle sized for mobile accessibility (32px minimum)
+- **Visual Feedback**: Hover and active states with sky-500 color scheme for drag handle
+- **Proper Z-Index**: Drag handle positioned above card content with z-10 for accessibility
+- **Optimized Spacing**: Conditional left padding (pl-8) on card content when draggable to accommodate drag handle
 
 #### 8. POIModal Component
 **Purpose**: Interactive modal dialog for displaying Point of Interest details and enabling activity creation.
