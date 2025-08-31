@@ -461,6 +461,13 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensured all tests continue to pass and build is successful
     - **Requirements Reference**: Requirement 3.8, 3.10 (drag handle positioning, drag-drop functionality)
 
+- [x] 16.12 Remove activity card hover transparency effect
+    - Removed hover:bg-orange-500/5 class that was making activity cards partially transparent on hover
+    - Maintained hover:shadow-lg effect for visual feedback without transparency
+    - Kept active:bg-orange-500/10 effect for click feedback
+    - Improved user experience by eliminating confusing transparency effect
+    - Ensured all tests continue to pass and build is successful
+
 - [ ] 17. **Final Integration and Deployment Setup**
   - [ ] 17.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background

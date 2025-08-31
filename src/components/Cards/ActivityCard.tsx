@@ -75,7 +75,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           relative w-full bg-white rounded-lg shadow-md p-3 cursor-pointer transition-all duration-200
           ${isSelected ? 'ring-2 ring-sky-500 ring-offset-2 bg-sky-500/10' : ''}
           ${isDone ? 'opacity-75 bg-emerald-500/10' : ''}
-          hover:shadow-lg hover:bg-orange-500/5 active:bg-orange-500/10
+          hover:shadow-lg active:bg-orange-500/10
           touch-manipulation min-h-[60px]
         `}
       >
