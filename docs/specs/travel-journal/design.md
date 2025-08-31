@@ -280,7 +280,7 @@ interface ActivityCardProps {
 - Comprehensive activity information display
 - Travel time calculation from accommodation
 - "Mark Done" functionality with visual feedback using vivid color palette
-- "Navigate in Google Maps" action
+- "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row
 - Thumbnail image display
 - Location warning indicator when coordinates are missing or invalid
 - Warning message with suggestions for address correction
@@ -304,7 +304,7 @@ interface ScenicWaypointCardProps {
 - Violet color scheme with landscape emoji (🏞️) for visual distinction
 - Gradient background from violet-50 to sky-50 with violet border
 - "Mark Done" functionality with violet-colored checkbox
-- "Navigate in Google Maps" action with violet-colored button
+- "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row with violet-colored buttons
 - Location warning indicator using the same validation system as activities
 - Non-draggable design to maintain original sequence from trip data
 - Thumbnail image display when available

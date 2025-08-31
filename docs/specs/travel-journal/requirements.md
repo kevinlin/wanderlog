@@ -74,7 +74,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 11. WHEN activity reordering occurs, THEN the new order SHALL be persisted in LocalStorage and reflected in exported data
 12. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
 13. WHEN activities have completion status, THEN they SHALL be visually indicated on the map using standardized pin colors (green for completed/visited activities, blue for incomplete/unvisited activities)
-14. WHEN an activity includes a URL, THEN users SHALL be able to access a "Navigate in Google Maps" action
+14. WHEN an activity includes a URL, THEN users SHALL be able to access both "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row
 15. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
 16. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
 17. WHEN scenic waypoints are available for a trip base, THEN they SHALL be displayed as a dedicated collapsible section at the root level of the ActivitiesPanel, positioned between the accommodation card and activities section
@@ -82,7 +82,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 19. WHEN scenic waypoints are displayed, THEN each waypoint SHALL be shown as a card similar to activity cards but with distinctive scenic waypoint styling (violet color scheme and landscape emoji)
 20. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
 21. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
-22. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions similar to activities
+22. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions displayed side by side in a single row similar to activities
 23. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
 24. WHEN a stop is selected from the timeline, THEN all scenic waypoints for that stop SHALL display drop pin animations simultaneously with the accommodation pin
 25. WHEN scenic waypoints are displayed on the map, THEN they SHALL use the same enhanced visibility sizing (1.5x larger than Google Maps defaults) as other pins

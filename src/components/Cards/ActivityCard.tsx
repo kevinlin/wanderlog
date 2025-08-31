@@ -107,20 +107,20 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             )}
           </div>
 
-          <div className="flex flex-col gap-2 pt-3 border-t border-gray-100">
+          <div className="flex gap-2 pt-3 border-t border-gray-100">
             <a
               href={activity.url}
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="text-sky-500 hover:text-sky-600 active:text-sky-700 text-sm font-medium touch-manipulation min-h-[44px] flex items-center justify-center"
+              className="flex-1 text-sky-500 hover:text-sky-600 active:text-sky-700 text-sm font-medium touch-manipulation min-h-[44px] flex items-center justify-center border border-sky-200 hover:border-sky-300 rounded transition-colors"
             >
               View Details →
             </a>
             
             <button
               onClick={handleNavigate}
-              className="bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation min-h-[44px]"
+              className="flex-1 bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation min-h-[44px]"
             >
               🧭 Navigate
             </button>

@@ -112,14 +112,14 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
             )}
           </div>
 
-          <div className="flex flex-col gap-2 pt-3 border-t border-violet-100">
+          <div className="flex gap-2 pt-3 border-t border-violet-100">
             {waypoint.url && (
               <a
                 href={waypoint.url}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="text-violet-500 hover:text-violet-600 active:text-violet-700 text-sm font-medium touch-manipulation min-h-[44px] flex items-center justify-center"
+                className="flex-1 text-violet-500 hover:text-violet-600 active:text-violet-700 text-sm font-medium touch-manipulation min-h-[44px] flex items-center justify-center border border-violet-200 hover:border-violet-300 rounded transition-colors"
               >
                 View Details →
               </a>
@@ -127,7 +127,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
             
             <button
               onClick={handleNavigate}
-              className="bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation min-h-[44px]"
+              className={`${waypoint.url ? 'flex-1' : 'w-full'} bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation min-h-[44px]`}
             >
               🧭 Navigate
             </button>

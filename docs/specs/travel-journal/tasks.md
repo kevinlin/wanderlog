@@ -171,7 +171,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
 
   - [x] 7.3 Implement activity interactions within expandable panel
     - Add activity card highlighting when map pins are selected using Sky-500 (`bg-sky-500`)
-    - Implement "Navigate in Google Maps" action with external URL opening
+    - Implement "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row with external URL opening
     - Create scrollable activity list within expanded panel
     - Add smooth scroll-to-activity functionality when pins are selected
     - **Requirements Reference**: Requirement 3.8, 3.9 (activity-pin synchronization), Requirement 3.14 (Google Maps navigation)
@@ -311,7 +311,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implemented gradient background from violet-50 to sky-50 with violet-200 border
     - Added "Mark Done" functionality with violet-colored checkbox
     - Included location validation and warning system using existing validation utilities
-    - Added "Navigate in Google Maps" action with violet-colored button
+    - Added "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row with violet-colored buttons
     - Ensured non-draggable design to maintain original sequence from trip data
     - **Requirements Reference**: Requirement 3.18, 3.20, 3.21 (scenic waypoint cards, location validation, navigation actions)
 
@@ -407,6 +407,15 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Update test wrappers to include AppStateProvider context
     - Ensure all existing tests continue to pass with POI changes
     - **Requirements Reference**: All requirements - testing ensures requirement compliance
+
+  - [x] 15.9 Update Activity and Scenic Waypoint Card button layout
+    - Combined "View Details" and "Navigate" buttons into a single row with two buttons side by side
+    - Updated ActivityCard component to use flex layout with flex-1 for equal button sizing
+    - Updated ScenicWaypointCard component with conditional sizing (flex-1 when URL exists, w-full when no URL)
+    - Added border styling to "View Details" link buttons for visual consistency
+    - Maintained existing color schemes (sky for activities, violet for scenic waypoints)
+    - Ensured all tests continue to pass and build is successful
+    - **Requirements Reference**: Requirement 3.14, 3.22 (action button layout optimization)
 
 - [ ] 16. **Final Integration and Deployment Setup**
   - [ ] 16.1 Wire all components together in main App with new layout
