@@ -203,7 +203,7 @@ interface TimelineStripProps {
 - **Mobile Behavior**: Selecting a stop triggers ActivitiesPanel slide-out animation
 
 #### 4. ActivitiesPanel Component
-**Purpose**: Responsive panel for accommodation and activities display with mobile slide-out behavior.
+**Purpose**: Responsive panel for accommodation and activities display with mobile slide-out behavior and optimized scrolling.
 
 ```typescript
 interface ActivitiesPanelProps {
@@ -227,13 +227,17 @@ interface ActivitiesPanelProps {
 - **Desktop Default State**: Shows accommodation card, scenic waypoints toggle button (if available), and activities expand control
 - **Mobile Default State**: Shows accommodation card and prominent collapse button with chevron icon
 - **Desktop Expanded State**: Extends to bottom of screen with collapse control, becomes scrollable
-- **Mobile Expanded State**: Occupies bottom portion of screen, becomes scrollable
+- **Mobile Expanded State**: Uses calc(100vh - 5rem) height to maximize scrollable space while accounting for timeline (4rem) and collapse button header (1rem)
+- **Mobile Scrolling Architecture**: Single unified scrollable container containing all content (accommodation, scenic waypoints, activities, weather, export) with optimized spacing
+- **Mobile Space Optimization**: Collapse button positioned as fixed header outside scrollable area to preserve maximum content space
+- **Mobile Compact Layout**: Reduced padding (px-2), compact spacing (space-y-2), smaller section headers, and consolidated action buttons to maximize content visibility
 - Smooth slide-in/slide-out animations for mobile
 - Smooth expand/collapse animations for desktop
-- Dedicated collapsible Scenic Waypoints section at root level between accommodation and activities
+- Dedicated collapsible Scenic Waypoints section with emoji indicators for better visual hierarchy
 - Scenic waypoints section uses violet color scheme with dedicated wide toggle button
 - Independent collapse/expand state for scenic waypoints separate from activities
-- **Mobile Collapse Button**: Prominent button with chevron down icon to hide entire panel
+- **Mobile Collapse Button**: Prominent button with chevron down icon to hide entire panel, positioned as flex-shrink-0 header
+- **Enhanced Mobile UX**: Overscroll containment and momentum scrolling for smooth mobile interaction
 
 #### 5. AccommodationCard Component
 **Purpose**: Collapsible/expandable accommodation display within the activities panel with location validation.
@@ -829,7 +833,9 @@ Consistent styling applied to all floating panels:
   - Mobile: `w-full` spanning entire screen width, slides up from bottom
   - Desktop: `w-96` fixed width
   - Mobile Collapsed: Hidden completely below screen
-  - Mobile Expanded: Occupies bottom 60-80% of screen height with scroll overflow
+  - Mobile Expanded: `h-[calc(100vh-5rem)]` to maximize scrollable space while accounting for timeline (4rem) and collapse button header (1rem)
+  - Mobile Scrollable Area: Single container with `flex-1 overflow-y-auto` containing all content with optimized spacing
+  - Mobile Compact Layout: `px-2` horizontal padding, `space-y-2` vertical spacing, reduced section header sizes
   - Desktop Collapsed: Auto-height for accommodation card only
   - Desktop Expanded: `top-2 sm:top-4` to `bottom-2 sm:bottom-4` with scroll overflow
 
@@ -845,6 +851,51 @@ Consistent styling applied to all floating panels:
 - **Drag and Drop**: 200ms transform transition with scale effects during dragging
 
 ### Mobile-Specific Design Patterns
+
+#### Mobile Layout Optimization for Limited Screen Space
+
+**Space Allocation Strategy:**
+The mobile layout prioritizes content visibility over visual spacing through a hierarchical space allocation system:
+
+1. **Fixed Elements (Non-scrollable)**:
+   - Timeline strip: 4rem height at top
+   - Collapse button header: 1rem height when panel is visible
+   - Total reserved space: 5rem
+
+2. **Scrollable Content Area**:
+   - Available height: `calc(100vh - 5rem)`
+   - Single unified container prevents scroll conflicts
+   - Optimized for maximum content density
+
+**Compact Layout Implementation:**
+```css
+/* Mobile-specific spacing overrides */
+.mobile-activities-panel {
+  /* Reduced horizontal padding */
+  @apply px-2; /* Instead of px-3 */
+  
+  /* Compact vertical spacing */
+  .content-sections {
+    @apply space-y-2; /* Instead of space-y-3 */
+  }
+  
+  /* Compact card spacing */
+  .activity-cards {
+    @apply space-y-2; /* 8px instead of 12px */
+  }
+  
+  /* Reduced section headers */
+  .section-header {
+    @apply text-base py-2; /* Instead of text-lg py-3 */
+  }
+}
+```
+
+**Content Prioritization:**
+- **Primary Content**: Activity and waypoint cards get maximum space allocation
+- **Secondary Content**: Section headers use minimal vertical space
+- **Tertiary Content**: Action buttons are consolidated and compact
+- **Hidden Content**: Non-essential decorative elements are hidden on mobile
 
 #### Touch Interaction Guidelines
 - **Minimum Touch Targets**: All interactive elements implement 44px minimum height/width following iOS and Android guidelines
@@ -867,12 +918,38 @@ Consistent styling applied to all floating panels:
 - **Smooth Scrolling**: `-webkit-overflow-scrolling: touch` for native momentum scrolling
 - **Tap Highlight Removal**: `-webkit-tap-highlight-color: transparent` for custom feedback
 - **Overscroll Behavior**: `overscroll-behavior: contain` prevents parent container scrolling
+- **Unified Scroll Container**: Single scrollable area containing all content to prevent scroll conflicts and maximize usable space
+- **Optimized Height Calculation**: Uses `calc(100vh - 5rem)` to account for timeline height (4rem) and collapse button header (1rem) to maximize scrollable content area
+- **Flex Layout Optimization**: Uses `flex-shrink-0` for fixed elements (collapse button header) and `flex-1` for scrollable content to ensure proper space distribution
+- **Compact Layout System**: Implements `px-2` horizontal padding, `space-y-2` vertical spacing, and reduced section header sizes to maximize content visibility
+- **Optimized Card Spacing**: Uses 8px spacing between cards and sections instead of default 12px to fit more content in limited mobile viewport
+- **Consolidated Action Buttons**: Groups related actions and uses compact button styling to reduce vertical space consumption
+
+#### Mobile Scrolling Optimization Strategy
+
+**Space Allocation Hierarchy:**
+1. **Fixed Header**: Collapse button (1rem height) positioned outside scrollable area
+2. **Scrollable Content**: Remaining space using `calc(100vh - 5rem)` for maximum content area
+3. **Compact Spacing**: Reduced padding and margins throughout to maximize content density
+
+**Content Layout Optimization:**
+- **Accommodation Card**: Compact presentation with essential information only
+- **Scenic Waypoints**: Collapsible section with 8px card spacing when expanded
+- **Activities List**: Compact card layout with reduced vertical spacing
+- **Section Headers**: Smaller font sizes and minimal padding to preserve content space
+- **Action Buttons**: Consolidated and compact styling to reduce vertical footprint
+
+**Scrolling Performance:**
+- **Single Container**: All content in unified scrollable area to prevent nested scroll conflicts
+- **Momentum Scrolling**: Native iOS/Android momentum with proper overscroll containment
+- **Touch Optimization**: Optimized touch targets while maintaining compact layout
+- **Memory Efficiency**: Virtualized scrolling for large activity lists (future enhancement)
 
 #### Accessibility Considerations
 - **Focus Management**: Visible focus indicators for keyboard navigation
 - **Screen Reader Support**: Proper ARIA labels and semantic HTML structure
 - **Color Contrast**: All color combinations maintain WCAG AA compliance
-- **Touch Target Spacing**: Adequate spacing between interactive elements to prevent accidental taps
+- **Touch Target Spacing**: Adequate spacing between interactive elements to prevent accidental taps while maintaining compact mobile layout
 
 ## Testing Strategy
 

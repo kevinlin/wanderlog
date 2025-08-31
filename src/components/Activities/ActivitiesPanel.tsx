@@ -132,7 +132,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         transition-all duration-400 ease-in-out z-20
         ${mobileClasses}
         ${isExpanded
-          ? 'h-[80vh] sm:bottom-2 sm:bottom-4 w-full sm:w-96 max-w-full sm:max-w-96 overflow-hidden'
+          ? 'h-[calc(100vh-4rem)] sm:bottom-2 sm:bottom-4 w-full sm:w-96 max-w-full sm:max-w-96 overflow-hidden'
           : 'h-auto w-full sm:w-96 max-w-full sm:max-w-96 max-h-[60vh] sm:max-h-[calc(100vh-8rem)]'
         }
         ${className}
@@ -144,7 +144,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
       `}>
         {/* Mobile Collapse Button */}
         {isMobile && onHide && (
-          <div className="flex justify-center px-3 border-b border-white/20">
+          <div className="flex justify-center px-3 border-b border-white/20 flex-shrink-0">
             <button
               onClick={onHide}
               className="px-2 hover:bg-gray-500/20 active:bg-gray-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
@@ -155,90 +155,95 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           </div>
         )}
 
-        {/* Accommodation Card - Always Visible */}
-        <div className="px-3 pb-3">
-          <AccommodationCard
-            accommodation={accommodation}
-            stopName={stopName}
-          />
-        </div>
-
-        {/* Scenic Waypoints Section */}
-        {scenicWaypoints.length > 0 && (
+        {/* Scrollable Content Area */}
+        <div
+          ref={scrollContainerRef}
+          className={`
+            ${isExpanded ? 'flex-1 overflow-y-auto' : 'max-h-[50vh] overflow-y-auto'} 
+            overscroll-contain
+          `}
+        >
+          {/* Accommodation Card - Always Visible */}
           <div className="px-3 pb-3">
-            <button
-              onClick={toggleScenicWaypoints}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 
-                       bg-violet-500/20 hover:bg-violet-500/30 active:bg-violet-500/40
-                       border border-violet-500/30 rounded-lg
-                       text-violet-700 font-medium transition-all duration-200
-                       hover:shadow-md touch-manipulation min-h-[44px]"
-            >
-              <span>Scenic Waypoints ({scenicWaypoints.length})</span>
-              {isScenicWaypointsExpanded ? (
-                <ChevronUpIcon className="w-4 h-4" />
-              ) : (
-                <ChevronDownIcon className="w-4 h-4" />
-              )}
-            </button>
-
-            {isScenicWaypointsExpanded && (
-              <div className="space-y-3">
-                {scenicWaypoints.map((waypoint) => (
-                  <ScenicWaypointCard
-                    key={waypoint.activity_id}
-                    waypoint={waypoint}
-                    accommodation={accommodation}
-                    isSelected={selectedActivityId === waypoint.activity_id}
-                    isDone={activityStatus[waypoint.activity_id] || waypoint.status?.done || false}
-                    onToggleDone={onToggleDone}
-                    onSelect={onActivitySelect}
-                  />
-                ))}
-              </div>
-            )}
+            <AccommodationCard
+              accommodation={accommodation}
+              stopName={stopName}
+            />
           </div>
-        )}
 
-        {/* Activities Expand/Collapse Control */}
-        <div className="px-3 pb-3">
-          <button
-            onClick={toggleExpanded}
-            className="w-full flex items-center justify-center gap-2 py-3 px-4 
-                       bg-sky-500/20 hover:bg-sky-500/30 active:bg-sky-500/40
-                       border border-sky-500/30 rounded-lg
-                       text-sky-700 font-medium transition-all duration-200
-                       hover:shadow-md touch-manipulation min-h-[44px]"
-          >
-            <span>Activities ({activities.length})</span>
-            {isExpanded ? (
-              <ChevronUpIcon className="w-4 h-4" />
-            ) : (
-              <ChevronDownIcon className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-
-        {/* Activities Section - Expanded State */}
-        {isExpanded && (
-          <>
+          {/* Scenic Waypoints Section */}
+          {scenicWaypoints.length > 0 && (
             <div className="px-3 pb-3">
-              <div className="flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900">
-                  Activities ({activities.length})
-                </h3>
-                <button
-                  onClick={toggleExpanded}
-                  className="p-2 hover:bg-orange-500/20 active:bg-orange-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
-                  aria-label="Collapse activities panel"
-                >
-                  <ChevronUpIcon className="w-5 h-5 text-gray-600" />
-                </button>
-              </div>
-            </div>
+              <button
+                onClick={toggleScenicWaypoints}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 
+                         bg-violet-500/20 hover:bg-violet-500/30 active:bg-violet-500/40
+                         border border-violet-500/30 rounded-lg
+                         text-violet-700 font-medium transition-all duration-200
+                         hover:shadow-md touch-manipulation min-h-[44px] mb-3"
+              >
+                <span>🏞️ Scenic Waypoints ({scenicWaypoints.length})</span>
+                {isScenicWaypointsExpanded ? (
+                  <ChevronUpIcon className="w-4 h-4" />
+                ) : (
+                  <ChevronDownIcon className="w-4 h-4" />
+                )}
+              </button>
 
-            {/* Scrollable Activities List with Drag & Drop */}
-            <div ref={scrollContainerRef} className="flex-1 overflow-y-auto overscroll-contain">
+              {isScenicWaypointsExpanded && (
+                <div className="space-y-3">
+                  {scenicWaypoints.map((waypoint) => (
+                    <ScenicWaypointCard
+                      key={waypoint.activity_id}
+                      waypoint={waypoint}
+                      accommodation={accommodation}
+                      isSelected={selectedActivityId === waypoint.activity_id}
+                      isDone={activityStatus[waypoint.activity_id] || waypoint.status?.done || false}
+                      onToggleDone={onToggleDone}
+                      onSelect={onActivitySelect}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Activities Toggle Button */}
+          {!isExpanded && (
+            <div className="px-3 pb-3">
+              <button
+                onClick={toggleExpanded}
+                className="w-full flex items-center justify-center gap-2 py-3 px-4 
+                         bg-sky-500/20 hover:bg-sky-500/30 active:bg-sky-500/40
+                         border border-sky-500/30 rounded-lg
+                         text-sky-700 font-medium transition-all duration-200
+                         hover:shadow-md touch-manipulation min-h-[44px]"
+              >
+                <span>📋 Activities ({activities.length})</span>
+                <ChevronDownIcon className="w-4 h-4" />
+              </button>
+            </div>
+          )}
+
+          {/* Activities Section - Expanded State */}
+          {isExpanded && (
+            <>
+              {/* Activities Header */}
+              <div className="px-3 pb-3 flex-shrink-0">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">
+                    📋 Activities ({activities.length})
+                  </h3>
+                  <button
+                    onClick={toggleExpanded}
+                    className="p-2 hover:bg-orange-500/20 active:bg-orange-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
+                    aria-label="Collapse activities panel"
+                  >
+                    <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+                  </button>
+                </div>
+              </div>
+
               {/* Weather Card */}
               <div className="px-3 pb-3">
                 <WeatherCard weatherData={weatherData} />
@@ -258,26 +263,26 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               </div>
 
               {/* Export Button */}
-              <div className="px-3 pb-3 border-t border-white/20 pt-3">
+              <div className="px-3 pb-6 border-t border-white/20 pt-3">
                 <button
                   onClick={handleExport}
                   disabled={!tripData || !userModifications}
                   className="w-full flex items-center justify-center gap-2 py-3 px-4 
-                         bg-emerald-500/20 hover:bg-emerald-500/30 active:bg-emerald-500/40
-                         disabled:bg-gray-500/20 disabled:hover:bg-gray-500/20
-                         border border-emerald-500/30 disabled:border-gray-500/30 
-                         rounded-lg text-emerald-700 disabled:text-gray-500 
-                         font-medium transition-all duration-200
-                         hover:shadow-md disabled:cursor-not-allowed touch-manipulation min-h-[44px]"
+                           bg-emerald-500/20 hover:bg-emerald-500/30 active:bg-emerald-500/40
+                           disabled:bg-gray-500/20 disabled:hover:bg-gray-500/20
+                           border border-emerald-500/30 disabled:border-gray-500/30 
+                           rounded-lg text-emerald-700 disabled:text-gray-500 
+                           font-medium transition-all duration-200
+                           hover:shadow-md disabled:cursor-not-allowed touch-manipulation min-h-[44px]"
                   title="Download your updated trip data with activity status and custom order"
                 >
                   <ArrowDownTrayIcon className="w-4 h-4" />
-                  <span className="text-sm">Download Updated Trip JSON</span>
+                  <span className="text-sm">💾 Download Trip Data</span>
                 </button>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

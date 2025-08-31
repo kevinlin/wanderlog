@@ -57,9 +57,15 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN the activities panel is in default state on desktop, THEN it SHALL display only the accommodation card with an expand control at the bottom
 5. WHEN the activities panel is displayed on mobile, THEN it SHALL slide up from the bottom of the screen and include a collapse button with chevron icon to hide the entire panel
 6. WHEN the expand control is activated on desktop, THEN the panel SHALL extend to the bottom of the screen (map) maintaining the same gap, and become scrollable for viewing all activity cards
-7. WHEN the activities panel is expanded on mobile, THEN it SHALL occupy the bottom portion of the screen and become scrollable for viewing all activity cards
+7. WHEN the activities panel is expanded on mobile, THEN it SHALL occupy most of the screen height (calc(100vh - 4rem)) to maximize scrollable space while accounting for the timeline at the top
 8. WHEN the activities panel is expanded, THEN it SHALL include a collapse control at the end to return to the default state
 9. WHEN the collapse button is pressed on mobile, THEN the entire ActivitiesPanel SHALL slide down and hide completely
+10. WHEN the activities panel is displayed on mobile, THEN ALL content including accommodation, scenic waypoints, and activities SHALL be contained within a single unified scrollable container to maximize usable space and prevent scroll conflicts
+11. WHEN the activities panel is expanded on mobile, THEN it SHALL use optimized space allocation with minimal padding (8px horizontal) and compact vertical spacing (12px between sections) to maximize scrollable content area
+12. WHEN scenic waypoints are expanded on mobile, THEN they SHALL be displayed within the unified scrollable container with compact card spacing (8px between cards) and reduced padding to maximize visible content
+13. WHEN activities are expanded on mobile, THEN the scrollable area SHALL use compact layout with reduced card spacing (8px between cards), minimal section headers, and consolidated action buttons to maximize activity visibility
+14. WHEN the mobile activities panel is in expanded state, THEN the collapse button SHALL be positioned as a fixed header outside the scrollable area to preserve maximum scrollable space for content
+15. WHEN content sections are displayed on mobile, THEN section headers SHALL use compact styling with reduced font sizes and minimal padding to preserve scrollable space for actual content
 6. WHEN activities are displayed, THEN each activity card SHALL include title, thumbnail, address/location, travel time from accommodation, duration, URL link, and remarks
 7. WHEN an activity has location coordinates, THEN the system SHALL display a corresponding pin on the map
 8. WHEN an activity card is tapped, THEN the corresponding map pin SHALL be highlighted with a drop pin animation and the map SHALL center on that location
@@ -134,8 +140,12 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 5. WHEN activity cards are displayed on mobile, THEN they SHALL be appropriately sized and easily tappable
 6. WHEN the application is viewed on mobile, THEN the timeline SHALL be positioned at the top of the screen with full width
 7. WHEN the application is viewed on mobile, THEN the ActivitiesPanel SHALL be hidden by default and slide out from the bottom when a stop is selected
-8. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL include a prominent collapse button with chevron icon to hide the panel completely
+8. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL include a prominent collapse button with chevron icon positioned as a fixed header outside the scrollable area to hide the panel completely
 9. WHEN the collapse button is pressed on mobile, THEN the ActivitiesPanel SHALL slide down smoothly and disappear, returning to the map-only view
+10. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL maximize scrollable space by using calc(100vh - 5rem) height to account for both timeline (4rem) and collapse button header (1rem)
+11. WHEN content exceeds the visible area on mobile, THEN ALL content SHALL be contained within a single unified scrollable container with optimized spacing to prevent layout conflicts and maximize content visibility
+12. WHEN users scroll within the ActivitiesPanel on mobile, THEN the scrolling SHALL be smooth with momentum, overscroll containment, and optimized touch performance to prevent page-level scrolling interference
+13. WHEN the mobile ActivitiesPanel uses compact layout, THEN it SHALL implement reduced padding (px-2 instead of px-3), compact spacing (space-y-2 instead of space-y-3), and smaller section headers to maximize scrollable content area
 
 ### 8. Error Handling and Fallback Mechanisms
 
