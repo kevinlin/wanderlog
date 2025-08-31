@@ -11,13 +11,13 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Create project with Vite template
     - Configure TypeScript strict mode settings
     - Set up project folder structure according to design document
-    - **Requirements Reference**: Requirement 10.1, 10.2 (Vite configuration, TypeScript setup)
+    - **Requirements Reference**: Requirement 11.1, 11.2 (Vite configuration, TypeScript setup)
 
   - [x] 1.2 Install and configure core dependencies
     - Install React, TypeScript, Tailwind CSS, @react-google-maps/api, @dnd-kit/core, date-fns
     - Configure Tailwind CSS with travel journal color palette
     - Set up Vite configuration with base path '/wanderlog/' for GitHub Pages
-    - **Requirements Reference**: Requirement 10.1, 10.4 (GitHub Pages configuration)
+    - **Requirements Reference**: Requirement 11.1, 11.4 (GitHub Pages configuration)
 
   - [x] 1.3 Create core TypeScript interfaces and types
     - Implement TripData, TripBase, Accommodation, Activity interfaces in src/types/trip.ts
@@ -32,7 +32,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implement JSON schema validation for trip data structure using comprehensive validationUtils
     - Add error handling for invalid JSON format with detailed error reporting
     - Add optional filename parameter and enhanced error messages
-    - **Requirements Reference**: Requirement 8.4 (JSON schema validation), Requirement 5.6 (JSON export structure)
+    - **Requirements Reference**: Requirement 9.4 (JSON schema validation), Requirement 5.6 (JSON export structure)
 
   - [x] 2.2 Implement StorageService for LocalStorage operations
     - Create storageService.ts with getUserModifications, saveUserModifications methods (new UserModifications format)
@@ -40,7 +40,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Add LocalStorage availability detection and fallback handling
     - Include migration from legacy StopStatus format to new UserModifications format
     - Add comprehensive weather caching with validation and expiration
-    - **Requirements Reference**: Requirement 5.1, 5.2, 5.3 (LocalStorage persistence), Requirement 8.3 (LocalStorage unavailable handling)
+    - **Requirements Reference**: Requirement 5.1, 5.2, 5.3 (LocalStorage persistence), Requirement 9.3 (LocalStorage unavailable handling)
 
   - [x] 2.3 Create utility functions for date and map operations
     - Implement dateUtils.ts with New Zealand timezone-aware date functions (already exists)
@@ -78,7 +78,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implement useAppState hook for accessing global state with backward compatibility
     - Create useTripData hook for data loading with loading and error states using global context
     - Implement useLocalStorage hook for persistent state operations with migration support
-    - **Requirements Reference**: Requirement 5.4 (state restoration), Requirement 9.3 (loading indicators)
+    - **Requirements Reference**: Requirement 5.4 (state restoration), Requirement 10.3 (loading indicators)
 
 - [x] 4. **Layout Components and Error Handling**
   - [x] 4.1 Create error boundary and loading components
@@ -86,21 +86,21 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Create LoadingSpinner.tsx component with travel journal styling including adventure-themed variant with compass animations, multiple sizes, and enhanced travel-themed loading states
     - Implement ErrorMessage.tsx for displaying user-friendly error messages with contextual error types (network, data, permission), helpful suggestions, and travel journal aesthetics
     - Create LocationWarning.tsx component for displaying location data warnings in activities and accommodation cards
-    - **Requirements Reference**: Requirement 8.6 (JavaScript error handling), Requirement 9.3 (loading indicators), Requirement 1.10, 3.15, 3.16 (location warnings)
+    - **Requirements Reference**: Requirement 9.6 (JavaScript error handling), Requirement 10.3 (loading indicators), Requirement 1.10, 3.15, 3.16 (location warnings)
 
   - [x] 4.2 Create main App component structure
     - Updated App.tsx to properly use AppStateProvider and global context management
     - Implement proper trip data loading with global state initialization
     - Enhanced error boundary wrapping and comprehensive global error handling with graceful degradation
     - Migrated from legacy useAppState hook to proper global state management using AppStateContext
-    - **Requirements Reference**: Requirement 5.4 (state restoration on load), Requirement 8.6 (error handling)
+    - **Requirements Reference**: Requirement 5.4 (state restoration on load), Requirement 9.6 (error handling)
 
 - [x] 5. **Google Maps Integration**
   - [x] 5.1 Implement basic MapContainer component
     - Create MapContainer.tsx with @react-google-maps/api integration
     - Implement custom map styling with pastel colors and reduced POI clutter
     - Add map loading error handling with grid background fallback
-    - **Requirements Reference**: Requirement 1.1, 1.4 (Google Maps display, custom styling), Requirement 8.1 (map loading failure)
+    - **Requirements Reference**: Requirement 1.1, 1.4 (Google Maps display, custom styling), Requirement 9.1 (map loading failure)
 
   - [x] 5.2 Create map pin components with type-specific icons and enhanced visibility
     - Implemented enhanced pin visibility with 1.5x larger sizing than Google Maps defaults for all pin types
@@ -125,7 +125,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Create TripRoute.tsx component for polyline rendering
     - Implement route fetching with scenic waypoints inclusion
     - Add fallback to straight-line polylines when Directions API fails
-    - **Requirements Reference**: Requirement 1.2, 1.3 (route polylines, scenic waypoints), Requirement 8.2 (Directions API fallback)
+    - **Requirements Reference**: Requirement 1.2, 1.3 (route polylines, scenic waypoints), Requirement 9.2 (Directions API fallback)
 
 - [x] 6. **Timeline Navigation Component (Floating Panel)**
   - [x] 6.1 Create floating TimelineStrip component structure
@@ -133,14 +133,14 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - [x] Apply consistent styling: `absolute top-4 left-4 rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
     - [x] Update App.tsx to position timeline as floating panel over full-screen map
     - [x] Add proportional sizing based on stay duration
-    - **Requirements Reference**: Requirement 2.1, 2.2 (floating timeline panel, proportional length), Requirement 10.2 (frosted glass styling)
+    - **Requirements Reference**: Requirement 2.1, 2.2 (floating timeline panel, proportional length), Requirement 11.2 (frosted glass styling)
 
   - [x] 6.2 Implement timeline navigation and auto-focus with new color palette
     - [x] New Zealand timezone detection for current day calculation (already implemented in dateUtils.ts)
     - [x] Auto-focus on today's base with Sky-500 highlighting (`bg-sky-500`) (already implemented in App.tsx)
     - [x] Timeline base selection handlers with map integration (already implemented)
     - [x] Apply new color scheme: past bases (`bg-sky-500/30`), current (`bg-sky-500`), upcoming (`bg-sky-500/70`)
-    - **Requirements Reference**: Requirement 2.3 (NZ local time auto-focus), Requirement 2.6 (timeline base selection), Requirement 10.3 (vivid color palette)
+    - **Requirements Reference**: Requirement 2.3 (NZ local time auto-focus), Requirement 2.6 (timeline base selection), Requirement 11.3 (vivid color palette)
 
   - [x] 6.3 Add mobile touch support and responsive design
     - [x] Implement swipe gesture handling for timeline navigation (swipe left/right to navigate between stops)
@@ -157,7 +157,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implement expandable/collapsible functionality with smooth transitions (300ms ease-in-out)
     - Default state: Display only accommodation card with expand control at bottom
     - Expanded state: Extend to bottom of screen (`top-4` to `bottom-4`) with collapse control and scroll overflow
-    - **Requirements Reference**: Requirement 3.1, 3.2, 3.3, 3.4, 3.5 (floating activities panel, expandable design), Requirement 10.2 (frosted glass styling)
+    - **Requirements Reference**: Requirement 3.1, 3.2, 3.3, 3.4, 3.5 (floating activities panel, expandable design), Requirement 11.2 (frosted glass styling)
 
   - [x] 7.2 Create ActivityCard component with new color palette and location validation
     - Enhanced ActivityCard.tsx with comprehensive activity information display including location validation
@@ -193,7 +193,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Added support for host and rooms fields display when available
     - Add location warning indicator when coordinates are missing or invalid
     - Integrate LocationWarning component for accommodations with location issues
-    - **Requirements Reference**: Requirement 4.2, 4.5 (accommodation information, thumbnail display), Requirement 10.3 (new color palette), Requirement 1.10, 3.15, 3.16 (location warnings)
+    - **Requirements Reference**: Requirement 4.2, 4.5 (accommodation information, thumbnail display), Requirement 11.3 (new color palette), Requirement 1.10, 3.15, 3.16 (location warnings)
 
   - [x] 8.2 Integrate accommodation display with activities panel and map
     - Position accommodation card prominently at top of the ActivitiesPanel (visible in both collapsed and expanded states)
@@ -230,7 +230,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Created Toast component with different types (success, error, warning, info) and auto-dismiss functionality
     - **Requirements Reference**: Requirement 5.5 (download function availability)
 
-- [x] 11. **Mobile Optimization and Responsive Design**
+- [x] 11. **Responsive Design and Mobile Optimization**
   - [x] 11.1 Implement responsive layouts for all components
     - Updated all components with Tailwind responsive classes (sm: breakpoints)
     - Optimized map interactions for touch input with gestureHandling: 'greedy' and enhanced touch controls
@@ -253,21 +253,44 @@ This document outlines the step-by-step implementation tasks for building the Wa
       - Global CSS: Added touch-action: manipulation and webkit touch optimizations
       - All buttons: Added active states and touch-manipulation class for better feedback
 
-- [ ] 12. **Error Handling and Fallback Mechanisms**
-  - [ ] 12.1 Implement comprehensive error handling
+- [x] 12. **Mobile Layout and Panel Management**
+  - [x] 12.1 Implement mobile panel visibility and slide animations
+    - Timeline positioned at top of screen with full width on mobile
+    - ActivitiesPanel hidden by default, slides out from bottom when stop is selected
+    - Prominent collapse button with chevron icon to hide panel completely
+    - Smooth slide-up/slide-down animations with 400ms ease-in-out timing
+    - **Requirements Reference**: Requirement 8.1, 8.2, 8.3, 8.4 (mobile timeline positioning, panel slide behavior, collapse functionality)
+    - **Implementation Details**:
+      - TimelineStrip: Full-width positioning at top edge on mobile
+      - ActivitiesPanel: Fixed bottom positioning with slide animations
+      - Collapse button: Fixed header outside scrollable area
+
+  - [x] 12.2 Optimize mobile scrolling and space utilization
+    - Maximized scrollable space using calc(100vh - 5rem) height calculation
+    - Single unified scrollable container for all content to prevent scroll conflicts
+    - Compact layout with reduced padding (px-2) and spacing (space-y-2)
+    - Optimized touch performance with momentum scrolling and overscroll containment
+    - **Requirements Reference**: Requirement 8.5, 8.6, 8.7, 8.8 (space maximization, unified scrolling, compact layout)
+    - **Implementation Details**:
+      - Mobile height calculation: Accounts for timeline (4rem) and collapse button header (1rem)
+      - Unified scroll container: All content in single scrollable area
+      - Compact spacing: Reduced section headers and card spacing for maximum content visibility
+
+- [ ] 13. **Error Handling and Fallback Mechanisms**
+  - [ ] 13.1 Implement comprehensive error handling
     - Add network connectivity detection and offline status display
     - Implement timeout and retry logic for API calls
     - Create fallback UI components for service failures
-    - **Requirements Reference**: Requirement 8.5 (offline status), Requirement 9.4 (API timeouts and retry)
+    - **Requirements Reference**: Requirement 9.5 (offline status), Requirement 10.4 (API timeouts and retry)
 
-  - [ ] 12.2 Add graceful degradation for external services
+  - [ ] 13.2 Add graceful degradation for external services
     - Implement map unavailable state with grid background
     - Add straight-line polyline fallback for Directions API failures
     - Ensure core functionality works without external services
-    - **Requirements Reference**: Requirement 8.1, 8.2 (map and directions fallbacks), Requirement 8.5 (offline functionality)
+    - **Requirements Reference**: Requirement 9.1, 9.2 (map and directions fallbacks), Requirement 9.5 (offline functionality)
 
-- [x] 13. **Enhanced Pin Visibility and Location Validation**
-  - [x] 13.1 Implement enhanced pin visibility features
+- [x] 14. **Enhanced Pin Visibility and Location Validation**
+  - [x] 14.1 Implement enhanced pin visibility features
     - Updated all pin components to use 1.5x larger sizing (30px base, 33px selected) than Google Maps defaults (20px)
     - Applied vibrant colors from the color palette to all pin types with proper color mapping
     - Added pin shadows using SVG filters for better contrast against map backgrounds
@@ -276,7 +299,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Enhanced pin visual prominence with proper opacity states for timeline status
     - **Requirements Reference**: Requirement 1.8, 1.9 (enhanced pin visibility, vibrant colors)
 
-  - [x] 13.2 Implement location validation and warning system
+  - [x] 14.2 Implement location validation and warning system
     - Created LocationWarning component with Amber-500 warning styling, ExclamationTriangleIcon, and clear messaging
     - Added location validation logic in validationUtils.ts with `hasLocationIssues`, `activityHasLocationIssues`, and `accommodationHasLocationIssues` functions
     - Integrated location warnings into ActivityCard and AccommodationCard components with prominent display
@@ -285,27 +308,27 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Created comprehensive test coverage (13 new tests) for all location validation functions
     - **Requirements Reference**: Requirement 1.10, 3.15, 3.16 (location warnings and validation)
 
-  - [x] 13.3 Update existing components with new color palette
+  - [x] 14.3 Update existing components with new color palette
     - Updated MapContainer pins with enhanced visibility and vibrant color scheme using Sky-500, Orange-500, and activity-specific colors
     - Applied new color palette throughout pin components with proper status-based opacity
     - Enhanced ActivityCard and AccommodationCard with new color scheme for selection, hover, and completion states
     - Updated activity type color mapping in activityUtils.ts with vivid Tailwind Colors v4 palette
-    - **Requirements Reference**: Requirement 10.1, 10.3 (vivid color palette replacement)
+    - **Requirements Reference**: Requirement 11.1, 11.3 (vivid color palette replacement)
 
-  - [x] 13.4 Apply frosted glass styling to existing components
+  - [x] 14.4 Apply frosted glass styling to existing components
     - Verified all floating panel components (TimelineStrip, ActivitiesPanel) use consistent frosted glass styling
     - Ensured all floating elements follow the same visual design system with `rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
     - LocationWarning component uses consistent styling with proper backdrop and border effects
-    - **Requirements Reference**: Requirement 10.2 (frosted glass styling consistency)
+    - **Requirements Reference**: Requirement 11.2 (frosted glass styling consistency)
 
-- [x] 14. **Scenic Waypoints Enhancement and Integration**
-  - [x] 14.1 Update TypeScript types for enhanced scenic waypoints
+- [x] 15. **Scenic Waypoints Enhancement and Integration**
+  - [x] 15.1 Update TypeScript types for enhanced scenic waypoints
     - Updated ScenicWaypoint interface in src/types/map.ts to support activity-like structure
     - Added activity_id, activity_name, location, duration, url, remarks, thumbnail_url, and status fields
     - Maintained compatibility with existing map-related types and utilities
     - **Requirements Reference**: Requirement 3.17 (scenic waypoints data structure)
 
-  - [x] 14.2 Create ScenicWaypointCard component
+  - [x] 15.2 Create ScenicWaypointCard component
     - Implemented ScenicWaypointCard.tsx with similar structure to ActivityCard but distinctive violet styling
     - Added landscape emoji (🏞️) and violet color scheme for visual distinction from activities
     - Implemented gradient background from violet-50 to sky-50 with violet-200 border
@@ -315,7 +338,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensured non-draggable design to maintain original sequence from trip data
     - **Requirements Reference**: Requirement 3.18, 3.20, 3.21 (scenic waypoint cards, location validation, navigation actions)
 
-  - [x] 14.3 Integrate scenic waypoints into ActivitiesPanel
+  - [x] 15.3 Integrate scenic waypoints into ActivitiesPanel
     - Added scenicWaypoints prop to ActivitiesPanel component interface
     - Implemented collapsible Scenic Waypoints section between accommodation and activities
     - Added separate state management for scenic waypoints expansion (isScenicWaypointsExpanded)
@@ -324,13 +347,13 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Integrated scenic waypoint cards with proper selection and status management
     - **Requirements Reference**: Requirement 3.17, 3.19 (collapsible section, non-draggable display)
 
-  - [x] 14.4 Update App component to pass scenic waypoints data
+  - [x] 15.4 Update App component to pass scenic waypoints data
     - Modified App.tsx to extract scenic_waypoints from current stop and pass to ActivitiesPanel
     - Ensured proper fallback to empty array when scenic waypoints are not available
     - Maintained existing activity selection and status management for scenic waypoints
     - **Requirements Reference**: Requirement 3.17 (scenic waypoints integration)
 
-  - [x] 14.5 Integrate scenic waypoints as map pins with animations
+  - [x] 15.5 Integrate scenic waypoints as map pins with animations
     - Created getScenicWaypointPinIcon function with violet color scheme and landscape/mountain SVG icon
     - Added scenicWaypointMarkersRef for managing scenic waypoint marker instances
     - Updated map bounds calculation to include scenic waypoints for proper map fitting
@@ -340,7 +363,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Enhanced visibility with 1.5x sizing and pin shadows consistent with other pins
     - **Requirements Reference**: Requirement 3.22, 3.23, 3.24, 3.25, 3.26 (map pins, animations, enhanced visibility, selection behavior, color coding)
 
-  - [x] 14.6 Restructure ActivitiesPanel layout for scenic waypoints
+  - [x] 15.6 Restructure ActivitiesPanel layout for scenic waypoints
     - Moved scenic waypoints section from inside Activities to root level of ActivitiesPanel
     - Created dedicated wide toggle button "🏞️ Scenic Waypoints (x)" with violet styling
     - Positioned scenic waypoints section between accommodation card and activities section
@@ -349,66 +372,66 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Maintained responsive design and touch-friendly interactions for all toggle buttons
     - **Requirements Reference**: Requirement 3.17, 3.18 (root level section, dedicated toggle button)
 
-- [x] 15. **Point of Interest (POI) Discovery and Integration**
-  - [x] 15.1 Create POI types and interfaces
+- [x] 16. **Point of Interest (POI) Discovery and Integration**
+  - [x] 16.1 Create POI types and interfaces
     - Implement POIDetails interface with comprehensive place information structure
     - Add POIModalState interface for modal state management
     - Create type definitions for Google Places API integration
-    - **Requirements Reference**: Requirement 11.4, 11.13 (place details structure, photo API integration)
+    - **Requirements Reference**: Requirement 12.4, 12.13 (place details structure, photo API integration)
 
-  - [x] 15.2 Implement PlacesService for Google Places API integration
+  - [x] 16.2 Implement PlacesService for Google Places API integration
     - Create PlacesService singleton class with Google Maps integration
     - Implement getPlaceDetails method with comprehensive field requests
     - Add error handling for Places API failures and quota limits
     - Include proper TypeScript integration with Google Maps Places types
-    - **Requirements Reference**: Requirement 11.10, 11.11 (API error handling, loading states)
+    - **Requirements Reference**: Requirement 12.10, 12.11 (API error handling, loading states)
 
-  - [x] 15.3 Create POIModal component with Activity Card structure
+  - [x] 16.3 Create POIModal component with Activity Card structure
     - Implement responsive modal dialog with frosted glass overlay
     - Add comprehensive place information display (photos, ratings, hours, contact)
     - Include star rating visualization and price level indicators
     - Implement "Open in Google Maps" link with proper URL generation
     - Add loading states with spinner animation and error handling
     - Ensure mobile-friendly design with touch-optimized interactions
-    - **Requirements Reference**: Requirement 11.3, 11.4, 11.5, 11.9 (modal display, place details, Google Maps link, responsive design)
+    - **Requirements Reference**: Requirement 12.3, 12.4, 12.5, 12.9 (modal display, place details, Google Maps link, responsive design)
 
-  - [x] 15.4 Implement POI interactivity and map integration
+  - [x] 16.4 Implement POI interactivity and map integration
     - Enable Google Maps POI clicks by setting clickableIcons: true
     - Add POI click handler to prevent default info window and trigger custom modal
     - Integrate POI modal with global app state management
     - Implement proper modal opening/closing behavior with backdrop and keyboard support
-    - **Requirements Reference**: Requirement 11.1, 11.2, 11.12 (POI clicks, custom modal, modal behavior)
+    - **Requirements Reference**: Requirement 12.1, 12.2, 12.12 (POI clicks, custom modal, modal behavior)
 
-  - [x] 15.5 Implement "Add to Activities" functionality
+  - [x] 16.5 Implement "Add to Activities" functionality
     - Create activity generation from POI data with proper structure mapping
     - Implement automatic activity type inference using Google Places types
     - Add activity to current selected trip base/stop with proper state management
     - Include POI rating and review information in activity remarks
     - Set default duration and proper activity ordering
-    - **Requirements Reference**: Requirement 11.6, 11.7, 11.8 (Add to Activities button, activity creation, immediate display)
+    - **Requirements Reference**: Requirement 12.6, 12.7, 12.8 (Add to Activities button, activity creation, immediate display)
 
-  - [x] 15.6 Update activity type inference for POI integration
+  - [x] 16.6 Update activity type inference for POI integration
     - Extend inferActivityType function to handle Google Places types
     - Add comprehensive Google Places type mapping to activity types
     - Implement proper fallback logic for unknown place types
     - Ensure backward compatibility with existing activity type inference
-    - **Requirements Reference**: Requirement 11.7 (activity type inference)
+    - **Requirements Reference**: Requirement 12.7 (activity type inference)
 
-  - [x] 15.7 Update state management for POI functionality
+  - [x] 16.7 Update state management for POI functionality
     - Add POI modal state to global AppStateContext
     - Implement POI modal actions (SET_POI_MODAL, CLOSE_POI_MODAL)
     - Add ADD_ACTIVITY_FROM_POI action for activity creation
     - Update reducer logic to handle POI-related state changes
-    - **Requirements Reference**: Requirement 11.6, 11.7, 11.8 (state management, activity addition)
+    - **Requirements Reference**: Requirement 12.6, 12.7, 12.8 (state management, activity addition)
 
-  - [x] 15.8 Update tests and ensure compatibility
+  - [x] 16.8 Update tests and ensure compatibility
     - Fix MapContainer tests to work with new POI functionality
     - Add proper Google Places API mocking for test environment
     - Update test wrappers to include AppStateProvider context
     - Ensure all existing tests continue to pass with POI changes
     - **Requirements Reference**: All requirements - testing ensures requirement compliance
 
-  - [x] 15.9 Update Activity and Scenic Waypoint Card button layout
+  - [x] 16.9 Update Activity and Scenic Waypoint Card button layout
     - Combined "View Details" and "Navigate" buttons into a single row with two buttons side by side
     - Updated ActivityCard component to use flex layout with flex-1 for equal button sizing
     - Updated ScenicWaypointCard component with conditional sizing (flex-1 when URL exists, w-full when no URL)
@@ -417,19 +440,19 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Ensured all tests continue to pass and build is successful
     - **Requirements Reference**: Requirement 3.14, 3.22 (action button layout optimization)
 
-- [ ] 16. **Final Integration and Deployment Setup**
-  - [ ] 16.1 Wire all components together in main App with new layout
+- [ ] 17. **Final Integration and Deployment Setup**
+  - [ ] 17.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background
     - Ensure proper positioning and responsive behavior of floating panels
     - Implement proper z-index stacking for panel interactions
     - Add final error boundary and loading state management with new colors
     - **Requirements Reference**: All requirements - final integration ensures complete functionality
 
-  - [ ] 16.2 Configure deployment settings
+  - [ ] 17.2 Configure deployment settings
     - Set up environment variable injection for VITE_GOOGLE_MAPS_API_KEY
     - Configure Vite build settings for GitHub Pages deployment
     - Create production build configuration with optimizations
-    - **Requirements Reference**: Requirement 12.2, 12.3, 12.5 (API key injection, GitHub Actions, environment validation)
+    - **Requirements Reference**: Requirement 13.2, 13.3, 13.5 (API key injection, GitHub Actions, environment validation)
 
 ## Implementation Notes
 

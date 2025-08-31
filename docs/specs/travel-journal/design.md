@@ -850,7 +850,21 @@ Consistent styling applied to all floating panels:
 - **Touch Feedback**: 200ms transition for active states and scale effects
 - **Drag and Drop**: 200ms transform transition with scale effects during dragging
 
-### Mobile-Specific Design Patterns
+### Mobile Layout and Panel Management Design Patterns
+
+The mobile layout system is designed to maximize content visibility and usability on small screens through efficient panel management and space optimization.
+
+#### Mobile Panel Management Strategy
+
+**Panel Visibility Control:**
+- **Timeline Panel**: Always visible at top, full-width positioning
+- **Activities Panel**: Hidden by default, slides out from bottom when stop is selected
+- **Collapse Mechanism**: Prominent collapse button to hide panel and return to map-only view
+
+**Panel State Management:**
+- **Default State**: Map-only view with timeline at top
+- **Expanded State**: Activities panel slides up, occupying most of screen height
+- **Transition Animations**: Smooth slide-up/slide-down with 400ms ease-in-out timing
 
 #### Mobile Layout Optimization for Limited Screen Space
 

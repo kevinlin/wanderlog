@@ -138,16 +138,22 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 3. WHEN touch gestures are used, THEN the timeline SHALL support swipe navigation for base selection
 4. WHEN on mobile devices, THEN map interactions SHALL be optimized for touch input (pinch, zoom, pan)
 5. WHEN activity cards are displayed on mobile, THEN they SHALL be appropriately sized and easily tappable
-6. WHEN the application is viewed on mobile, THEN the timeline SHALL be positioned at the top of the screen with full width
-7. WHEN the application is viewed on mobile, THEN the ActivitiesPanel SHALL be hidden by default and slide out from the bottom when a stop is selected
-8. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL include a prominent collapse button with chevron icon positioned as a fixed header outside the scrollable area to hide the panel completely
-9. WHEN the collapse button is pressed on mobile, THEN the ActivitiesPanel SHALL slide down smoothly and disappear, returning to the map-only view
-10. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL maximize scrollable space by using calc(100vh - 5rem) height to account for both timeline (4rem) and collapse button header (1rem)
-11. WHEN content exceeds the visible area on mobile, THEN ALL content SHALL be contained within a single unified scrollable container with optimized spacing to prevent layout conflicts and maximize content visibility
-12. WHEN users scroll within the ActivitiesPanel on mobile, THEN the scrolling SHALL be smooth with momentum, overscroll containment, and optimized touch performance to prevent page-level scrolling interference
-13. WHEN the mobile ActivitiesPanel uses compact layout, THEN it SHALL implement reduced padding (px-2 instead of px-3), compact spacing (space-y-2 instead of space-y-3), and smaller section headers to maximize scrollable content area
 
-### 8. Error Handling and Fallback Mechanisms
+### 8. Mobile Layout and Panel Management
+
+**User Story:** As a mobile user, I want the application layout to be optimized for small screens with efficient panel management and space utilization, so that I can access all functionality without compromising usability.
+
+**Acceptance Criteria:**
+1. WHEN the application is viewed on mobile, THEN the timeline SHALL be positioned at the top of the screen with full width
+2. WHEN the application is viewed on mobile, THEN the ActivitiesPanel SHALL be hidden by default and slide out from the bottom when a stop is selected
+3. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL include a prominent collapse button with chevron icon positioned as a fixed header outside the scrollable area to hide the panel completely
+4. WHEN the collapse button is pressed on mobile, THEN the ActivitiesPanel SHALL slide down smoothly and disappear, returning to the map-only view
+5. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL maximize scrollable space by using calc(100vh - 5rem) height to account for both timeline (4rem) and collapse button header (1rem)
+6. WHEN content exceeds the visible area on mobile, THEN ALL content SHALL be contained within a single unified scrollable container with optimized spacing to prevent layout conflicts and maximize content visibility
+7. WHEN users scroll within the ActivitiesPanel on mobile, THEN the scrolling SHALL be smooth with momentum, overscroll containment, and optimized touch performance to prevent page-level scrolling interference
+8. WHEN the mobile ActivitiesPanel uses compact layout, THEN it SHALL implement reduced padding (px-2 instead of px-3), compact spacing (space-y-2 instead of space-y-3), and smaller section headers to maximize scrollable content area
+
+### 9. Error Handling and Fallback Mechanisms
 
 **User Story:** As a user, I want the application to handle errors gracefully and provide alternative functionality when services are unavailable, so that I can continue using the app even when connectivity or external services fail.
 
@@ -159,7 +165,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 5. WHEN network connectivity is lost, THEN cached data SHALL continue to function and users SHALL be notified of offline status
 6. WHEN JavaScript errors occur, THEN they SHALL be caught and logged without crashing the entire application
 
-### 9. Performance and Loading Optimization
+### 10. Performance and Loading Optimization
 
 **User Story:** As a user, I want the application to load quickly and respond smoothly to interactions, so that I can efficiently navigate my travel information without delays.
 
@@ -170,7 +176,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN API calls are made, THEN they SHALL implement appropriate timeouts and retry logic
 5. WHEN LocalStorage operations occur, THEN they SHALL be optimized to minimize performance impact
 
-### 10. Visual Design and Color Theme
+### 11. Visual Design and Color Theme
 
 **User Story:** As a user, I want the application to have a modern, vivid, and dynamic visual design that enhances the travel experience and provides excellent visual hierarchy.
 
@@ -191,7 +197,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN visual hierarchy is established, THEN colors SHALL be used consistently across all components to maintain design coherence
 5. WHEN accessibility is considered, THEN color combinations SHALL maintain adequate contrast ratios for readability
 
-### 11. Point of Interest (POI) Discovery and Integration
+### 12. Point of Interest (POI) Discovery and Integration
 
 **User Story:** As a traveler, I want to discover and interact with Points of Interest on the map, so that I can explore new places and easily add them to my itinerary.
 
@@ -223,7 +229,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 12. WHEN the POI modal is open, THEN users SHALL be able to close it by clicking the X button, clicking outside the modal, or pressing the Escape key
 13. WHEN Google Places photo references are available, THEN they SHALL be properly formatted and displayed using the Google Places Photo API
 
-### 12. Deployment and Configuration
+### 13. Deployment and Configuration
 
 **User Story:** As a developer/maintainer, I want the application to be properly configured for GitHub Pages deployment with secure API key management, so that the application can be reliably hosted and maintained.
 
