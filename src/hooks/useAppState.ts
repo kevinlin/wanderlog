@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from 'react';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useLastViewedBase, useUserModifications } from '@/hooks/useLocalStorage';
-import { saveUserModifications } from '@/services/storageService';
 import type { TripStop } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
 
@@ -95,7 +94,8 @@ export const useAppState = (stops: TripStop[] = []): UseAppStateReturn => {
         },
       };
       setUserModifications(updatedModifications);
-      saveUserModifications(updatedModifications);
+      // Note: saveUserModifications requires tripId, but we're using localStorage hook directly
+      // The localStorage hook (setUserModifications) already handles persistence
     },
     [dispatch, state.userModifications, setUserModifications]
   );
@@ -122,7 +122,8 @@ export const useAppState = (stops: TripStop[] = []): UseAppStateReturn => {
         },
       };
       setUserModifications(updatedModifications);
-      saveUserModifications(updatedModifications);
+      // Note: saveUserModifications requires tripId, but we're using localStorage hook directly
+      // The localStorage hook (setUserModifications) already handles persistence
     },
     [dispatch, state.userModifications, setUserModifications]
   );

@@ -28,14 +28,16 @@ export const useTrips = (): UseTripsReturn => {
       // Load all trips from Firestore
       const trips = await loadAllTrips();
 
-      // Convert TripData[] to TripSummary[]
-      const tripSummaries: TripSummary[] = trips.map((trip) => ({
-        trip_id: trip.trip_id,
-        trip_name: trip.trip_name,
-        timezone: trip.timezone,
-        created_at: trip.created_at,
-        updated_at: trip.updated_at,
-      }));
+      // Convert TripData[] to TripSummary[] (filter out trips without trip_id)
+      const tripSummaries: TripSummary[] = trips
+        .filter((trip): trip is typeof trip & { trip_id: string } => typeof trip.trip_id === 'string')
+        .map((trip) => ({
+          trip_id: trip.trip_id,
+          trip_name: trip.trip_name,
+          timezone: trip.timezone,
+          created_at: trip.created_at,
+          updated_at: trip.updated_at,
+        }));
 
       dispatch({ type: 'SET_AVAILABLE_TRIPS', payload: tripSummaries });
     } catch (err) {

@@ -4,8 +4,13 @@ import type { ExportData, StopStatus, TripData, UserModifications } from '@/type
 /**
  * Export trip data with current localStorage state
  */
-export const exportTripData = (tripData: TripData): void => {
-  const userModifications = getUserModifications();
+export const exportTripData = async (tripData: TripData): Promise<void> => {
+  const tripId = tripData.trip_id;
+  if (!tripId) {
+    console.warn('Cannot export trip data without trip_id');
+    return;
+  }
+  const userModifications = await getUserModifications(tripId);
   const exportData = mergeUserModificationsWithTripData(tripData, userModifications);
 
   const exportObj: ExportData = {

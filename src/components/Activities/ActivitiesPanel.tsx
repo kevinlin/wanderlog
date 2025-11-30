@@ -180,7 +180,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   {scenicWaypoints.map((waypoint) => (
                     <ScenicWaypointCard
                       accommodation={accommodation}
-                      isDone={activityStatus[waypoint.activity_id] || waypoint.status?.done}
+                      isDone={activityStatus[waypoint.activity_id] ?? waypoint.status?.done ?? false}
                       isSelected={selectedActivityId === waypoint.activity_id}
                       key={waypoint.activity_id}
                       onSelect={onActivitySelect}
