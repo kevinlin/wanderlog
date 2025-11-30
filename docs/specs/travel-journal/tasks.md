@@ -537,6 +537,32 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Updated design.md component specifications for ActivityCard, AccommodationCard, and ScenicWaypointCard
     - **Requirements Reference**: Documentation updates for new functionality
 
+- [x] 19. **Mobile Panel Resize Handle**
+  - [x] 19.1 Implement draggable resize handle for mobile ActivitiesPanel
+    - Replaced mobile collapse button (chevron) with iOS-style horizontal pill resize handle
+    - Handle always visible when panel is shown on mobile (removed onHide dependency)
+    - Added state management for panel height (mobilePanelHeight)
+    - Implemented touch event handlers (handleTouchStart, handleTouchMove, handleTouchEnd)
+    - Implemented mouse event handlers for desktop testing (handleMouseDown with document-level move/up)
+    - Height clamped between MOBILE_MIN_PANEL_HEIGHT (40px) and max (viewport - timeline)
+    - Default initial height: 50% of available viewport space
+    - **Requirements Reference**: Requirement 9.3, 9.4, 9.9 (resize handle, drag-to-resize, visual feedback)
+
+  - [x] 19.2 Update panel layout for resize functionality
+    - Applied dynamic height via inline style on mobile (mobilePanelStyle)
+    - Updated panel container classes to use overflow-hidden on mobile
+    - Made scrollable content area flex-1 on mobile for proper flex layout
+    - Added touch-none CSS to resize handle for smooth drag without scroll interference
+    - Added cursor-grab/cursor-grabbing visual feedback
+    - **Requirements Reference**: Requirement 9.4, 9.5 (height constraints, scrollable content)
+
+  - [x] 19.3 Update documentation
+    - Updated requirements.md Requirement 9 with resizable panel acceptance criteria
+    - Updated design.md ActivitiesPanel component with resize handle specifications
+    - Updated design.md Mobile Panel Management Strategy section
+    - Updated design.md Animation Specifications with resize handle behavior
+    - **Requirements Reference**: Documentation updates for new functionality
+
 ## Implementation Notes
 
 - Each task builds incrementally on previous tasks

@@ -203,7 +203,7 @@ interface TimelineStripProps {
 - **Mobile Behavior**: Selecting a stop triggers ActivitiesPanel slide-out animation
 
 #### 4. ActivitiesPanel Component
-**Purpose**: Responsive panel for accommodation and activities display with mobile slide-out behavior and optimized scrolling.
+**Purpose**: Responsive panel for accommodation and activities display with mobile slide-out behavior, resizable height, and optimized scrolling.
 
 ```typescript
 interface ActivitiesPanelProps {
@@ -213,7 +213,7 @@ interface ActivitiesPanelProps {
   isExpanded: boolean;
   isVisible: boolean; // New prop for mobile visibility control
   onToggleExpanded: () => void;
-  onToggleVisible: () => void; // New prop for mobile panel visibility
+  onToggleVisible: () => void; // Legacy prop for mobile panel visibility (deprecated)
   onActivitySelect: (activityId: string) => void;
   onToggleDone: (activityId: string) => void;
   className?: string; // For responsive positioning
@@ -225,19 +225,26 @@ interface ActivitiesPanelProps {
 - **Mobile Layout**: Hidden by default, slides out from bottom when stop is selected
 - Frosted glass styling consistent with timeline panel
 - **Desktop Default State**: Shows accommodation card, scenic waypoints toggle button (if available), and activities expand control
-- **Mobile Default State**: Shows accommodation card and prominent collapse button with chevron icon
+- **Mobile Default State**: Shows accommodation card and draggable resize handle (iOS-style pill)
 - **Desktop Expanded State**: Extends to bottom of screen with collapse control, becomes scrollable
-- **Mobile Expanded State**: Uses calc(100vh - 5rem) height to maximize scrollable space while accounting for timeline (4rem) and collapse button header (1rem)
+- **Mobile Resizable State**: User can drag the resize handle to freely adjust panel height between min (~40px, handle only) and max (calc(100vh - 4rem))
 - **Mobile Scrolling Architecture**: Single unified scrollable container containing all content (accommodation, scenic waypoints, activities, weather, export) with optimized spacing
-- **Mobile Space Optimization**: Collapse button positioned as fixed header outside scrollable area to preserve maximum content space
+- **Mobile Resize Handle**: iOS-style horizontal pill (w-10 h-1.5 rounded-full bg-gray-400) centered in touch-friendly container, always visible when panel is shown
 - **Mobile Compact Layout**: Reduced padding (px-2), compact spacing (space-y-2), smaller section headers, and consolidated action buttons to maximize content visibility
 - Smooth slide-in/slide-out animations for mobile
 - Smooth expand/collapse animations for desktop
 - Dedicated collapsible Scenic Waypoints section with emoji indicators for better visual hierarchy
 - Scenic waypoints section uses violet color scheme with dedicated wide toggle button
 - Independent collapse/expand state for scenic waypoints separate from activities
-- **Mobile Collapse Button**: Prominent button with chevron down icon to hide entire panel, positioned as flex-shrink-0 header
-- **Enhanced Mobile UX**: Overscroll containment and momentum scrolling for smooth mobile interaction
+- **Enhanced Mobile UX**: Overscroll containment, momentum scrolling, and touch-none on resize handle for smooth interaction
+
+**Mobile Resize Handle Behavior**:
+- Touch and mouse drag support for resizing
+- Drag up to increase panel height, drag down to decrease
+- Height clamped between MOBILE_MIN_PANEL_HEIGHT (40px) and max viewport height minus timeline (64px)
+- Initial default height: 50% of available viewport space
+- Visual feedback: cursor-grab on hover, cursor-grabbing while dragging
+- touch-none CSS prevents scroll interference during drag operations
 
 #### 5. AccommodationCard Component
 **Purpose**: Collapsible/expandable accommodation display within the activities panel with location validation.
@@ -903,6 +910,7 @@ Consistent styling applied to all floating panels:
 ### Animation Specifications
 - **Panel Expand/Collapse**: 300ms ease-in-out transition
 - **Mobile Panel Slide**: 400ms ease-in-out transition for slide-up/slide-down animations
+- **Mobile Panel Resize**: Real-time height adjustment during drag (no transition for responsiveness)
 - **Timeline Selection**: Triggers ActivitiesPanel slide-out on mobile with 100ms delay
 - **Hover Effects**: 150ms ease-out transition
 - **Pin Highlighting**: 200ms ease-in-out scale and color transitions
@@ -910,6 +918,7 @@ Consistent styling applied to all floating panels:
 - **Activity Status Changes**: 250ms fade transition
 - **Touch Feedback**: 200ms transition for active states and scale effects
 - **Drag and Drop**: 200ms transform transition with scale effects during dragging
+- **Resize Handle**: Immediate cursor feedback (grab/grabbing), no transition delay for responsive feel
 
 ### Mobile Layout and Panel Management Design Patterns
 
@@ -920,12 +929,19 @@ The mobile layout system is designed to maximize content visibility and usabilit
 **Panel Visibility Control:**
 - **Timeline Panel**: Always visible at top, full-width positioning
 - **Activities Panel**: Hidden by default, slides out from bottom when stop is selected
-- **Collapse Mechanism**: Prominent collapse button to hide panel and return to map-only view
+- **Resize Mechanism**: Draggable iOS-style resize handle to adjust panel height
 
 **Panel State Management:**
 - **Default State**: Map-only view with timeline at top
-- **Expanded State**: Activities panel slides up, occupying most of screen height
+- **Active State**: Activities panel slides up with user-adjustable height (default 50% of available space)
 - **Transition Animations**: Smooth slide-up/slide-down with 400ms ease-in-out timing
+
+**Mobile Resize Handle:**
+- **Appearance**: iOS-style horizontal pill (w-10 h-1.5 rounded-full bg-gray-400)
+- **Position**: Fixed header outside scrollable area, always visible when panel is shown
+- **Interaction**: Touch/mouse drag to resize panel height
+- **Constraints**: Min height ~40px (handle only), max height calc(100vh - 4rem)
+- **Visual Feedback**: cursor-grab on hover, cursor-grabbing while dragging, touch-none for smooth drag
 
 #### Mobile Layout Optimization for Limited Screen Space
 
@@ -933,12 +949,12 @@ The mobile layout system is designed to maximize content visibility and usabilit
 The mobile layout prioritizes content visibility over visual spacing through a hierarchical space allocation system:
 
 1. **Fixed Elements (Non-scrollable)**:
-   - Timeline strip: 4rem height at top
-   - Collapse button header: 1rem height when panel is visible
-   - Total reserved space: 5rem
+   - Timeline strip: 4rem (64px) height at top
+   - Resize handle: ~24px height (py-3 container with 6px pill)
+   - Total reserved space: ~88px at minimum
 
 2. **Scrollable Content Area**:
-   - Available height: `calc(100vh - 5rem)`
+   - Available height: User-controlled via drag (default 50% of viewport minus timeline)
    - Single unified container prevents scroll conflicts
    - Optimized for maximum content density
 

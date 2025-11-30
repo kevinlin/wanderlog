@@ -169,12 +169,13 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 **Acceptance Criteria:**
 1. WHEN the application is viewed on mobile, THEN the timeline SHALL be positioned at the top of the screen with full width
 2. WHEN the application is viewed on mobile, THEN the ActivitiesPanel SHALL be hidden by default and slide out from the bottom when a stop is selected
-3. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL include a prominent collapse button with chevron icon positioned as a fixed header outside the scrollable area to hide the panel completely
-4. WHEN the collapse button is pressed on mobile, THEN the ActivitiesPanel SHALL slide down smoothly and disappear, returning to the map-only view
-5. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL maximize scrollable space by using calc(100vh - 5rem) height to account for both timeline (4rem) and collapse button header (1rem)
+3. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL include a draggable resize handle (iOS-style horizontal pill) positioned as a fixed header outside the scrollable area, always visible when the panel is shown
+4. WHEN the resize handle is dragged on mobile, THEN the user SHALL be able to freely adjust the panel height between a minimum (handle only visible, ~40px) and maximum (viewport height minus timeline, calc(100vh - 4rem))
+5. WHEN the ActivitiesPanel is displayed on mobile, THEN it SHALL maximize scrollable space using the user-defined height with all content contained within a single unified scrollable container
 6. WHEN content exceeds the visible area on mobile, THEN ALL content SHALL be contained within a single unified scrollable container with optimized spacing to prevent layout conflicts and maximize content visibility
 7. WHEN users scroll within the ActivitiesPanel on mobile, THEN the scrolling SHALL be smooth with momentum, overscroll containment, and optimized touch performance to prevent page-level scrolling interference
 8. WHEN the mobile ActivitiesPanel uses compact layout, THEN it SHALL implement reduced padding (px-2 instead of px-3), compact spacing (space-y-2 instead of space-y-3), and smaller section headers to maximize scrollable content area
+9. WHEN the resize handle is displayed on mobile, THEN it SHALL use touch-none CSS to prevent scroll interference during drag operations and provide visual feedback with cursor changes (grab/grabbing)
 
 ### 10. Error Handling and Fallback Mechanisms
 

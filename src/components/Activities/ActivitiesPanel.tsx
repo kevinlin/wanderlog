@@ -1,6 +1,6 @@
 import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
 import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
 import { WeatherCard } from '@/components/Cards/WeatherCard';
@@ -10,6 +10,11 @@ import { ExportService } from '@/services/exportService';
 import type { Accommodation, Activity, TripData, UserModifications } from '@/types';
 import type { Coordinates, ScenicWaypoint } from '@/types/map';
 import { DraggableActivitiesList } from './DraggableActivity';
+
+// Constants for mobile panel resize
+const MOBILE_MIN_PANEL_HEIGHT = 40; // Just the handle visible
+const MOBILE_TIMELINE_HEIGHT = 64; // 4rem = 64px
+const MOBILE_DEFAULT_PANEL_RATIO = 0.5; // Default to 50% of available height
 
 interface ActivitiesPanelProps {
   accommodation: Accommodation;
@@ -27,7 +32,7 @@ interface ActivitiesPanelProps {
   onToggleDone: (activityId: string, done: boolean) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onExportSuccess?: () => void;
-  onHide?: () => void; // New prop for mobile panel hiding
+  onHide?: () => void; // Legacy prop for mobile panel hiding (deprecated, kept for compatibility)
   className?: string;
 }
 
@@ -47,7 +52,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   onToggleDone,
   onReorder,
   onExportSuccess,
-  onHide,
+  onHide: _onHide, // Kept for backward compatibility but no longer used
   className = '',
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -57,6 +62,88 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   // Screen size detection
   const { isMobile } = useScreenSize();
+
+  // Mobile panel height state and drag tracking
+  const [mobilePanelHeight, setMobilePanelHeight] = useState<number | null>(null);
+  const isDraggingRef = useRef(false);
+  const dragStartYRef = useRef(0);
+  const dragStartHeightRef = useRef(0);
+
+  // Calculate max panel height (viewport - timeline)
+  const getMaxPanelHeight = useCallback(() => {
+    if (typeof window === 'undefined') return 500;
+    return window.innerHeight - MOBILE_TIMELINE_HEIGHT;
+  }, []);
+
+  // Initialize mobile panel height on first render
+  useEffect(() => {
+    if (isMobile && mobilePanelHeight === null) {
+      const maxHeight = getMaxPanelHeight();
+      setMobilePanelHeight(Math.round(maxHeight * MOBILE_DEFAULT_PANEL_RATIO));
+    }
+  }, [isMobile, mobilePanelHeight, getMaxPanelHeight]);
+
+  // Clamp height between min and max bounds
+  const clampHeight = useCallback(
+    (height: number) => {
+      const maxHeight = getMaxPanelHeight();
+      return Math.max(MOBILE_MIN_PANEL_HEIGHT, Math.min(height, maxHeight));
+    },
+    [getMaxPanelHeight]
+  );
+
+  // Touch event handlers for mobile resize
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent) => {
+      if (!isMobile) return;
+      isDraggingRef.current = true;
+      dragStartYRef.current = e.touches[0].clientY;
+      dragStartHeightRef.current = mobilePanelHeight ?? getMaxPanelHeight() * MOBILE_DEFAULT_PANEL_RATIO;
+    },
+    [isMobile, mobilePanelHeight, getMaxPanelHeight]
+  );
+
+  const handleTouchMove = useCallback(
+    (e: React.TouchEvent) => {
+      if (!(isDraggingRef.current && isMobile)) return;
+      const deltaY = dragStartYRef.current - e.touches[0].clientY;
+      const newHeight = clampHeight(dragStartHeightRef.current + deltaY);
+      setMobilePanelHeight(newHeight);
+    },
+    [isMobile, clampHeight]
+  );
+
+  const handleTouchEnd = useCallback(() => {
+    isDraggingRef.current = false;
+  }, []);
+
+  // Mouse event handlers for desktop testing
+  const handleMouseDown = useCallback(
+    (e: React.MouseEvent) => {
+      if (!isMobile) return;
+      e.preventDefault();
+      isDraggingRef.current = true;
+      dragStartYRef.current = e.clientY;
+      dragStartHeightRef.current = mobilePanelHeight ?? getMaxPanelHeight() * MOBILE_DEFAULT_PANEL_RATIO;
+
+      const handleMouseMove = (moveEvent: MouseEvent) => {
+        if (!isDraggingRef.current) return;
+        const deltaY = dragStartYRef.current - moveEvent.clientY;
+        const newHeight = clampHeight(dragStartHeightRef.current + deltaY);
+        setMobilePanelHeight(newHeight);
+      };
+
+      const handleMouseUp = () => {
+        isDraggingRef.current = false;
+        document.removeEventListener('mousemove', handleMouseMove);
+        document.removeEventListener('mouseup', handleMouseUp);
+      };
+
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+    },
+    [isMobile, mobilePanelHeight, getMaxPanelHeight, clampHeight]
+  );
 
   // Weather data management
   const { fetchWeather, getWeatherForBase } = useWeather();
@@ -123,40 +210,49 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
     return null;
   }
 
+  // Calculate mobile panel style
+  const mobilePanelStyle: React.CSSProperties | undefined =
+    isMobile && mobilePanelHeight !== null ? { height: `${mobilePanelHeight}px` } : undefined;
+
   return (
     <div
       className={`fixed right-0 bottom-0 left-0 z-20 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur transition-all duration-400 ease-in-out sm:absolute sm:top-2 sm:top-4 sm:right-2 sm:right-4 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
         ${
-          isExpanded || isScenicWaypointsExpanded
-            ? 'h-[calc(100vh-4rem)] w-full max-w-full overflow-hidden sm:bottom-2 sm:bottom-4 sm:w-96 sm:max-w-96'
-            : 'h-auto max-h-[60vh] w-full max-w-full sm:max-h-[calc(100vh-8rem)] sm:w-96 sm:max-w-96'
+          isMobile
+            ? 'w-full max-w-full overflow-hidden'
+            : isExpanded || isScenicWaypointsExpanded
+              ? 'h-[calc(100vh-4rem)] w-full max-w-full overflow-hidden sm:bottom-2 sm:bottom-4 sm:w-96 sm:max-w-96'
+              : 'h-auto max-h-[60vh] w-full max-w-full sm:max-h-[calc(100vh-8rem)] sm:w-96 sm:max-w-96'
         }
         ${className}
       `}
+      style={mobilePanelStyle}
     >
       {/* Panel Content */}
       <div
         className={`
-        ${isExpanded || isScenicWaypointsExpanded ? 'flex h-full flex-col' : ''}
+        ${isExpanded || isScenicWaypointsExpanded || isMobile ? 'flex h-full flex-col' : ''}
       `}
       >
-        {/* Mobile Collapse Button */}
-        {isMobile && onHide && (
-          <div className="flex flex-shrink-0 justify-center border-white/20 border-b px-3">
-            <button
-              aria-label="Hide activities panel"
-              className="min-h-[30px] min-w-[44px] touch-manipulation rounded-lg px-2 transition-colors hover:bg-gray-500/20 active:bg-gray-500/30"
-              onClick={onHide}
-            >
-              <ChevronDownIcon className="h-6 w-6 text-gray-600" />
-            </button>
+        {/* Mobile Resize Handle */}
+        {isMobile && (
+          <div
+            aria-label="Drag to resize panel"
+            className="flex flex-shrink-0 cursor-grab touch-none justify-center py-3 active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
+            onTouchStart={handleTouchStart}
+            role="slider"
+          >
+            <div className="h-1.5 w-10 rounded-full bg-gray-400" />
           </div>
         )}
 
         {/* Scrollable Content Area */}
         <div
           className={`
-            ${isExpanded || isScenicWaypointsExpanded ? 'flex-1 overflow-y-auto' : 'max-h-[60vh] overflow-y-auto'} overscroll-contain`}
+            ${isExpanded || isScenicWaypointsExpanded || isMobile ? 'flex-1 overflow-y-auto' : 'max-h-[60vh] overflow-y-auto'} overscroll-contain`}
           ref={scrollContainerRef}
         >
           {/* Accommodation Card - Always Visible */}
