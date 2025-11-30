@@ -8,6 +8,7 @@ const STORAGE_KEYS = {
   LAST_VIEWED_STOP: 'wanderlog_last_viewed_stop', // Legacy - for backward compatibility
   APP_VERSION: 'wanderlog_app_version',
   CURRENT_TRIP_ID: 'wanderlog_current_trip_id', // NEW: Store current trip ID
+  MAP_LAYER_PREFERENCES: 'wanderlog_map_layer_preferences', // Map layer preferences
 } as const;
 
 /**
@@ -391,4 +392,113 @@ const migrateStopStatusToUserModifications = (stopStatus: StopStatus): UserModif
   }
 
   return userModifications;
+};
+
+// ============================================================================
+// Map Layer Preferences
+// ============================================================================
+
+/**
+ * Map type IDs supported by Google Maps
+ */
+export type MapTypeId = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
+
+/**
+ * Overlay layers that can be toggled
+ */
+export interface OverlayLayers {
+  traffic: boolean;
+  transit: boolean;
+  bicycling: boolean;
+}
+
+/**
+ * Map layer preferences stored in localStorage
+ */
+export interface MapLayerPreferences {
+  mapType: MapTypeId;
+  overlayLayers: OverlayLayers;
+}
+
+/**
+ * Default map layer preferences
+ */
+const DEFAULT_MAP_LAYER_PREFERENCES: MapLayerPreferences = {
+  mapType: 'roadmap',
+  overlayLayers: {
+    traffic: false,
+    transit: false,
+    bicycling: false,
+  },
+};
+
+/**
+ * Validate map type ID
+ */
+const isValidMapType = (mapType: unknown): mapType is MapTypeId =>
+  typeof mapType === 'string' && ['roadmap', 'satellite', 'terrain', 'hybrid'].includes(mapType);
+
+/**
+ * Validate overlay layers object
+ */
+const isValidOverlayLayers = (overlayLayers: unknown): overlayLayers is OverlayLayers => {
+  if (typeof overlayLayers !== 'object' || overlayLayers === null) {
+    return false;
+  }
+  const obj = overlayLayers as Record<string, unknown>;
+  return typeof obj.traffic === 'boolean' && typeof obj.transit === 'boolean' && typeof obj.bicycling === 'boolean';
+};
+
+/**
+ * Get map layer preferences from localStorage
+ */
+export const getMapLayerPreferences = (): MapLayerPreferences => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.MAP_LAYER_PREFERENCES);
+    if (!stored) {
+      return DEFAULT_MAP_LAYER_PREFERENCES;
+    }
+
+    const parsed = JSON.parse(stored);
+
+    // Validate the stored data
+    if (!(isValidMapType(parsed.mapType) && isValidOverlayLayers(parsed.overlayLayers))) {
+      console.warn('Invalid map layer preferences in localStorage, using defaults');
+      return DEFAULT_MAP_LAYER_PREFERENCES;
+    }
+
+    return parsed;
+  } catch (error) {
+    console.warn('Failed to load map layer preferences from localStorage:', error);
+    return DEFAULT_MAP_LAYER_PREFERENCES;
+  }
+};
+
+/**
+ * Save map layer preferences to localStorage
+ */
+export const saveMapLayerPreferences = (preferences: MapLayerPreferences): void => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.MAP_LAYER_PREFERENCES, JSON.stringify(preferences));
+  } catch (error) {
+    console.warn('Failed to save map layer preferences to localStorage:', error);
+  }
+};
+
+/**
+ * Update map type preference
+ */
+export const saveMapType = (mapType: MapTypeId): void => {
+  const preferences = getMapLayerPreferences();
+  preferences.mapType = mapType;
+  saveMapLayerPreferences(preferences);
+};
+
+/**
+ * Update overlay layer preference
+ */
+export const saveOverlayLayers = (overlayLayers: OverlayLayers): void => {
+  const preferences = getMapLayerPreferences();
+  preferences.overlayLayers = overlayLayers;
+  saveMapLayerPreferences(preferences);
 };

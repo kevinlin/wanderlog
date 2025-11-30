@@ -42,7 +42,11 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 29. WHEN the Map Layer Picker panel is open, THEN clicking outside the panel SHALL close it
 30. WHEN the map type is changed to Satellite, Terrain, or Hybrid, THEN the custom map styling SHALL be disabled to show the native map appearance
 31. WHEN the map type is changed back to Default (roadmap), THEN the custom travel-journal styling SHALL be restored
-32. WHEN an accommodation pin is clicked/tapped or a trip stop is selected from the timeline, THEN the map SHALL pan to center on the accommodation location and zoom to a neighborhood-level view (zoom level 14)
+32. WHEN a user selects a map type, THEN the selection SHALL be persisted to LocalStorage
+33. WHEN a user toggles an overlay layer, THEN the selection SHALL be persisted to LocalStorage
+34. WHEN the application loads, THEN the map layer preferences (map type and overlay layers) SHALL be restored from LocalStorage
+35. WHEN LocalStorage contains invalid map layer preferences, THEN the system SHALL use default values (roadmap type, all overlays off)
+36. WHEN an accommodation pin is clicked/tapped or a trip stop is selected from the timeline, THEN the map SHALL pan to center on the accommodation location and zoom to a neighborhood-level view (zoom level 14)
 33. WHEN an activity pin is clicked/tapped or an activity is selected from the ActivitiesPanel, THEN the map SHALL pan to center on the activity location and zoom to a neighborhood-level view (zoom level 14)
 34. WHEN a scenic waypoint pin is clicked/tapped or a scenic waypoint is selected from the ActivitiesPanel, THEN the map SHALL pan to center on the waypoint location and zoom to a neighborhood-level view (zoom level 14)
 1.  WHEN a POI search result pin is clicked/tapped, THEN the map SHALL pan to center on the POI location and zoom to a neighborhood-level view (zoom level 14)

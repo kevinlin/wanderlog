@@ -722,6 +722,47 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Documented zoom level, trigger sources, and implementation approach
     - **Requirements Reference**: Documentation updates for new functionality
 
+- [x] 24. **Map Layer Preference Persistence**
+  - [x] 24.1 Add map layer storage functions to StorageService
+    - Added MAP_LAYER_PREFERENCES key to STORAGE_KEYS constant
+    - Created MapTypeId type and OverlayLayers interface for type safety
+    - Created MapLayerPreferences interface combining mapType and overlayLayers
+    - Implemented getMapLayerPreferences() with validation and defaults fallback
+    - Implemented saveMapLayerPreferences() for full preference object storage
+    - Implemented saveMapType() for map type only updates
+    - Implemented saveOverlayLayers() for overlay layers only updates
+    - Added isValidMapType() and isValidOverlayLayers() validation functions
+    - Invalid stored data triggers fallback to default values
+    - **Requirements Reference**: Requirement 1.32, 1.33, 1.34, 1.35 (map layer persistence)
+
+  - [x] 24.2 Update MapContainer to load and save preferences
+    - Updated MapLayerPicker to import types from storageService (re-exports for convenience)
+    - Updated MapContainer to import storage functions from storageService
+    - Modified mapType and overlayLayers state initialization to load from localStorage
+    - Updated handleMapTypeChange to call saveMapType() on change
+    - Updated handleOverlayToggle to call saveOverlayLayers() on toggle
+    - Preferences persist immediately on user interaction
+    - **Requirements Reference**: Requirement 1.32, 1.33, 1.34 (preference load/save)
+
+  - [x] 24.3 Add comprehensive tests for map layer storage
+    - Added 11 new tests to storageService.test.ts for Map Layer Preferences API
+    - Tests for default preferences when none exist
+    - Tests for save and retrieve complete preferences
+    - Tests for save and retrieve individual components (mapType, overlayLayers)
+    - Tests for preserving other preferences when updating one component
+    - Tests for validation: invalid map type, invalid overlay layers, malformed JSON
+    - Tests for handling missing overlay layer properties
+    - Tests for graceful error handling on localStorage errors
+    - All 230 tests passing
+    - **Requirements Reference**: Testing ensures requirement compliance
+
+  - [x] 24.4 Update documentation
+    - Updated requirements.md with acceptance criteria 1.32-1.35 for map layer persistence
+    - Added Map Layer Preferences Schema to design.md Data Models section
+    - Updated StorageService documentation in design.md with new functions
+    - Added Task 24 to tasks.md documenting all implementation steps
+    - **Requirements Reference**: Documentation updates for new functionality
+
 ## Implementation Notes
 
 - Each task builds incrementally on previous tasks

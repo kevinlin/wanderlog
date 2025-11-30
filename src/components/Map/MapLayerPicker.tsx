@@ -1,15 +1,9 @@
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import type { MapTypeId, OverlayLayers } from '@/services/storageService';
 
-// Map types supported by Google Maps
-export type MapTypeId = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
-
-// Overlay layers that can be toggled
-export interface OverlayLayers {
-  traffic: boolean;
-  transit: boolean;
-  bicycling: boolean;
-}
+// Re-export types for convenience
+export type { MapTypeId, OverlayLayers } from '@/services/storageService';
 
 interface MapLayerPickerProps {
   map: google.maps.Map | null;

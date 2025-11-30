@@ -6,6 +6,7 @@ import { PlaceHoverCard } from '@/components/Map/PlaceHoverCard';
 import { POIModal } from '@/components/Map/POIModal';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { PlacesService } from '@/services/placesService';
+import { getMapLayerPreferences, saveMapType, saveOverlayLayers } from '@/services/storageService';
 import type { ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
 import { type Accommodation, type Activity, ActivityType, type TripBase, type TripData } from '@/types/trip';
@@ -105,12 +106,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const [hoverState, setHoverState] = useState<HoverState | null>(null);
   const placesServiceRef = useRef<PlacesService | null>(null);
 
-  // Map layer state
-  const [mapType, setMapType] = useState<MapTypeId>('roadmap');
-  const [overlayLayers, setOverlayLayers] = useState<OverlayLayers>({
-    traffic: false,
-    transit: false,
-    bicycling: false,
+  // Map layer state - initialize from localStorage
+  const [mapType, setMapType] = useState<MapTypeId>(() => {
+    const saved = getMapLayerPreferences();
+    return saved.mapType;
+  });
+  const [overlayLayers, setOverlayLayers] = useState<OverlayLayers>(() => {
+    const saved = getMapLayerPreferences();
+    return saved.overlayLayers;
   });
 
   // Refs for overlay layer instances
@@ -411,6 +414,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const handleMapTypeChange = useCallback(
     (newMapType: MapTypeId) => {
       setMapType(newMapType);
+      saveMapType(newMapType); // Persist to localStorage
       if (mapInstance) {
         mapInstance.setMapTypeId(newMapType);
       }
@@ -420,10 +424,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
   // Overlay layer toggle handler
   const handleOverlayToggle = useCallback((layer: keyof OverlayLayers) => {
-    setOverlayLayers((prev) => ({
-      ...prev,
-      [layer]: !prev[layer],
-    }));
+    setOverlayLayers((prev) => {
+      const newLayers = {
+        ...prev,
+        [layer]: !prev[layer],
+      };
+      saveOverlayLayers(newLayers); // Persist to localStorage
+      return newLayers;
+    });
   }, []);
 
   // Effect to manage overlay layers

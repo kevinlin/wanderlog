@@ -2,10 +2,15 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { UserModifications, WeatherCache } from '@/types';
 import {
   getCachedWeather,
+  getMapLayerPreferences,
   getUserModifications,
   getWeatherCache,
   isStorageAvailable,
   isWeatherCacheValid,
+  type MapLayerPreferences,
+  saveMapLayerPreferences,
+  saveMapType,
+  saveOverlayLayers,
   saveUserModifications,
   saveWeatherCache,
   setCurrentTripId,
@@ -241,6 +246,7 @@ describe('StorageService', () => {
 
     it('should handle malformed JSON in localStorage', async () => {
       // Manually set invalid JSON
+      const originalGetItem = localStorage.getItem.bind(localStorage);
       Object.defineProperty(localStorage, 'getItem', {
         value: vi.fn().mockReturnValue('invalid json'),
         configurable: true,
@@ -252,6 +258,240 @@ describe('StorageService', () => {
         activityStatus: {},
         activityOrders: {},
       });
+
+      // Restore original localStorage.getItem
+      Object.defineProperty(localStorage, 'getItem', {
+        value: originalGetItem,
+        configurable: true,
+      });
+    });
+  });
+
+  describe('Map Layer Preferences API', () => {
+    const MAP_LAYER_KEY = 'wanderlog_map_layer_preferences';
+
+    // Clear map layer preferences before each test in this group
+    beforeEach(() => {
+      localStorage.removeItem(MAP_LAYER_KEY);
+    });
+
+    it('should return default preferences when none exist', () => {
+      const preferences = getMapLayerPreferences();
+
+      expect(preferences).toEqual({
+        mapType: 'roadmap',
+        overlayLayers: {
+          traffic: false,
+          transit: false,
+          bicycling: false,
+        },
+      });
+    });
+
+    it('should save and retrieve map layer preferences', () => {
+      const preferences: MapLayerPreferences = {
+        mapType: 'satellite',
+        overlayLayers: {
+          traffic: true,
+          transit: false,
+          bicycling: true,
+        },
+      };
+
+      saveMapLayerPreferences(preferences);
+      const retrieved = getMapLayerPreferences();
+
+      expect(retrieved).toEqual(preferences);
+    });
+
+    it('should save and retrieve map type preference', () => {
+      saveMapType('terrain');
+      const preferences = getMapLayerPreferences();
+
+      expect(preferences.mapType).toBe('terrain');
+    });
+
+    it('should save and retrieve overlay layers preference', () => {
+      const overlayLayers = {
+        traffic: true,
+        transit: true,
+        bicycling: false,
+      };
+
+      saveOverlayLayers(overlayLayers);
+      const preferences = getMapLayerPreferences();
+
+      expect(preferences.overlayLayers).toEqual(overlayLayers);
+    });
+
+    it('should preserve other preferences when saving map type', () => {
+      const initialPreferences: MapLayerPreferences = {
+        mapType: 'roadmap',
+        overlayLayers: {
+          traffic: true,
+          transit: true,
+          bicycling: true,
+        },
+      };
+
+      saveMapLayerPreferences(initialPreferences);
+      saveMapType('hybrid');
+
+      const preferences = getMapLayerPreferences();
+      expect(preferences.mapType).toBe('hybrid');
+      expect(preferences.overlayLayers).toEqual(initialPreferences.overlayLayers);
+    });
+
+    it('should preserve other preferences when saving overlay layers', () => {
+      const initialPreferences: MapLayerPreferences = {
+        mapType: 'satellite',
+        overlayLayers: {
+          traffic: false,
+          transit: false,
+          bicycling: false,
+        },
+      };
+
+      saveMapLayerPreferences(initialPreferences);
+      saveOverlayLayers({
+        traffic: true,
+        transit: true,
+        bicycling: true,
+      });
+
+      const preferences = getMapLayerPreferences();
+      expect(preferences.mapType).toBe('satellite');
+      expect(preferences.overlayLayers).toEqual({
+        traffic: true,
+        transit: true,
+        bicycling: true,
+      });
+    });
+
+    describe('validation and error handling', () => {
+      beforeEach(async () => {
+        // Reset modules to get fresh localStorage access
+        vi.resetModules();
+        localStorage.clear();
+      });
+
+      it('should return defaults for invalid stored map type', async () => {
+        // Set invalid data directly
+        localStorage.setItem(
+          MAP_LAYER_KEY,
+          JSON.stringify({
+            mapType: 'invalid_type',
+            overlayLayers: {
+              traffic: true,
+              transit: false,
+              bicycling: false,
+            },
+          })
+        );
+
+        // Dynamically import to get fresh module
+        const { getMapLayerPreferences: freshGet } = await import('../storageService');
+        const preferences = freshGet();
+
+        expect(preferences).toEqual({
+          mapType: 'roadmap',
+          overlayLayers: {
+            traffic: false,
+            transit: false,
+            bicycling: false,
+          },
+        });
+      });
+
+      it('should return defaults for invalid stored overlay layers', async () => {
+        localStorage.setItem(
+          MAP_LAYER_KEY,
+          JSON.stringify({
+            mapType: 'satellite',
+            overlayLayers: {
+              traffic: 'yes', // Invalid - should be boolean
+              transit: false,
+              bicycling: false,
+            },
+          })
+        );
+
+        const { getMapLayerPreferences: freshGet } = await import('../storageService');
+        const preferences = freshGet();
+
+        expect(preferences).toEqual({
+          mapType: 'roadmap',
+          overlayLayers: {
+            traffic: false,
+            transit: false,
+            bicycling: false,
+          },
+        });
+      });
+
+      it('should return defaults for malformed JSON', async () => {
+        localStorage.setItem(MAP_LAYER_KEY, 'not valid json');
+
+        const { getMapLayerPreferences: freshGet } = await import('../storageService');
+        const preferences = freshGet();
+
+        expect(preferences).toEqual({
+          mapType: 'roadmap',
+          overlayLayers: {
+            traffic: false,
+            transit: false,
+            bicycling: false,
+          },
+        });
+      });
+
+      it('should handle missing overlay layer properties', async () => {
+        localStorage.setItem(
+          MAP_LAYER_KEY,
+          JSON.stringify({
+            mapType: 'terrain',
+            overlayLayers: {
+              traffic: true,
+              // missing transit and bicycling
+            },
+          })
+        );
+
+        const { getMapLayerPreferences: freshGet } = await import('../storageService');
+        const preferences = freshGet();
+
+        // Should return defaults due to invalid structure
+        expect(preferences).toEqual({
+          mapType: 'roadmap',
+          overlayLayers: {
+            traffic: false,
+            transit: false,
+            bicycling: false,
+          },
+        });
+      });
+    });
+
+    it('should handle localStorage errors gracefully when saving', () => {
+      const originalSetItem = localStorage.setItem;
+      localStorage.setItem = vi.fn().mockImplementation(() => {
+        throw new Error('Storage quota exceeded');
+      });
+
+      // Should not throw
+      expect(() =>
+        saveMapLayerPreferences({
+          mapType: 'satellite',
+          overlayLayers: {
+            traffic: true,
+            transit: false,
+            bicycling: false,
+          },
+        })
+      ).not.toThrow();
+
+      // Restore original localStorage
+      localStorage.setItem = originalSetItem;
     });
   });
 });

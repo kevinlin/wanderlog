@@ -862,6 +862,30 @@ interface UserModifications {
 }
 ```
 
+### Map Layer Preferences Schema
+
+```typescript
+type MapTypeId = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
+
+interface OverlayLayers {
+  traffic: boolean;
+  transit: boolean;
+  bicycling: boolean;
+}
+
+interface MapLayerPreferences {
+  mapType: MapTypeId;
+  overlayLayers: OverlayLayers;
+}
+```
+
+**Storage Details:**
+- **Key**: `wanderlog_map_layer_preferences`
+- **Default Values**: `{ mapType: 'roadmap', overlayLayers: { traffic: false, transit: false, bicycling: false } }`
+- **Persistence**: Saved immediately on map type change or overlay layer toggle
+- **Load Behavior**: Preferences restored from LocalStorage on application load
+- **Validation**: Invalid data in storage results in default values being used
+
 ### Weather Data Schema
 
 ```typescript
@@ -905,8 +929,20 @@ class StorageService {
   static getWeatherCache(): WeatherCache;
   static saveWeatherCache(cache: WeatherCache): void;
   static isAvailable(): boolean;
+  
+  // Map Layer Preferences
+  static getMapLayerPreferences(): MapLayerPreferences;
+  static saveMapLayerPreferences(preferences: MapLayerPreferences): void;
+  static saveMapType(mapType: MapTypeId): void;
+  static saveOverlayLayers(overlayLayers: OverlayLayers): void;
 }
 ```
+
+**Map Layer Storage Functions:**
+- **getMapLayerPreferences()**: Returns the stored map layer preferences, or defaults if not found or invalid
+- **saveMapLayerPreferences(preferences)**: Saves the complete map layer preferences object
+- **saveMapType(mapType)**: Updates only the map type while preserving overlay layers
+- **saveOverlayLayers(overlayLayers)**: Updates only the overlay layers while preserving map type
 
 ### 3. WeatherService
 **Purpose**: Open-Meteo API integration with caching.
