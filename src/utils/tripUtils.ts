@@ -51,6 +51,17 @@ export const generateGoogleMapsUrl = (activity: Activity, accommodation?: { loca
 };
 
 /**
+ * Generate Google Maps place URL from google_place_id
+ * Opens Google Maps website on desktop and Google Maps app on mobile
+ */
+export const generateGoogleMapsPlaceUrl = (placeId: string, placeName?: string): string => {
+  const params = new URLSearchParams({ api: '1' });
+  if (placeName) params.set('query', placeName);
+  params.set('query_place_id', placeId);
+  return `https://www.google.com/maps/search/?${params.toString()}`;
+};
+
+/**
  * Calculate total trip duration in days
  */
 export const getTripDuration = (stops: TripStop[]): number => {

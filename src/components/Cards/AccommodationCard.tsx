@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation } from '@/types';
+import { generateGoogleMapsPlaceUrl } from '@/utils/tripUtils';
 import { accommodationHasLocationIssues } from '@/utils/validationUtils';
 
 interface AccommodationCardProps {
@@ -145,8 +146,19 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
             rel="noopener noreferrer"
             target="_blank"
           >
-            View Website →
+            📋 Details
           </a>
+
+          {accommodation.google_place_id && (
+            <a
+              className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
+              href={generateGoogleMapsPlaceUrl(accommodation.google_place_id, accommodation.name)}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              📍 Maps
+            </a>
+          )}
 
           <a
             className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
@@ -154,7 +166,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
             rel="noopener noreferrer"
             target="_blank"
           >
-            📍 Directions
+            🧭 Direction
           </a>
         </div>
       )}

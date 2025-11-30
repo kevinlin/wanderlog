@@ -77,7 +77,8 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 14. WHEN an activity includes a "Mark Done" checkbox, THEN the completion status SHALL be persisted in LocalStorage
 15. WHEN activities have completion status, THEN they SHALL be visually indicated on the map using standardized pin colors (green for completed/visited activities, blue for incomplete/unvisited activities)
 16. WHEN an activity includes a URL, THEN users SHALL be able to access both "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row
-17. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
+17. WHEN an activity includes a google_place_id, THEN an "Open in Maps" button SHALL be displayed that opens the Google Maps place page on desktop browsers and the Google Maps app on mobile devices
+18. WHEN activities or accommodations have missing, invalid, or non-geocodable location data, THEN warning indicators SHALL be displayed prominently on their respective cards in the ActivitiesPanel
 18. WHEN location warnings are displayed, THEN they SHALL include clear messaging about the need to correct address information and SHALL not prevent other functionality from working
 19. WHEN scenic waypoints are available for a trip base, THEN they SHALL be displayed as a dedicated collapsible section at the root level of the ActivitiesPanel, positioned between the accommodation card and activities section
 20. WHEN scenic waypoints are available, THEN they SHALL have a dedicated wide button labeled "Scenic Waypoints (x)" with violet styling that toggles the section's visibility, defaulting to collapsed state
@@ -85,7 +86,8 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 22. WHEN scenic waypoints are displayed, THEN they SHALL not be draggable or reorderable, maintaining their original sequence from the trip data
 23. WHEN scenic waypoints include location data, THEN they SHALL support the same location validation and warning system as activities
 24. WHEN scenic waypoints include URLs, THEN they SHALL provide "View Details" and "Navigate" actions displayed side by side in a single row similar to activities
-25. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
+25. WHEN scenic waypoints include a google_place_id, THEN an "Open in Maps" button SHALL be displayed that opens the Google Maps place page on desktop browsers and the Google Maps app on mobile devices
+26. WHEN scenic waypoints have valid location coordinates, THEN they SHALL be displayed as pins on the map with distinctive violet styling and landscape/mountain icons
 26. WHEN a stop is selected from the timeline, THEN all scenic waypoints for that stop SHALL display drop pin animations simultaneously with the accommodation pin
 27. WHEN scenic waypoints are displayed on the map, THEN they SHALL use the same enhanced visibility sizing (1.5x larger than Google Maps defaults) as other pins
 28. WHEN scenic waypoint pins are clicked, THEN they SHALL trigger the same selection behavior as activity pins, highlighting the corresponding card in the ActivitiesPanel
@@ -105,6 +107,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 7. WHEN accommodation cards are displayed, THEN they SHALL maintain visual consistency with the travel-journal aesthetic
 8. WHEN accommodation includes a thumbnail URL, THEN the thumbnail image SHALL be displayed on the card only when expanded
 9. WHEN the accommodation card is expanded, THEN the website link and directions button SHALL be shown at the bottom
+10. WHEN accommodation includes a google_place_id, THEN an "Open in Maps" button SHALL be displayed that opens the Google Maps place page on desktop browsers and the Google Maps app on mobile devices
 
 ### 5. Image Viewer and Thumbnail Display
 

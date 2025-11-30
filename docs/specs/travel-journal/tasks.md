@@ -517,19 +517,25 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Update AccommodationCard, ActivityCard, ScenicWaypointCard documentation with thumbnail features in design.md
     - **Requirements Reference**: All Requirement 5 acceptance criteria
 
-- [ ] 18. **Final Integration and Deployment Setup**
-  - [ ] 18.1 Wire all components together in main App with new layout
-    - Integrate floating Timeline and Activities panels with map background
-    - Ensure proper positioning and responsive behavior of floating panels
-    - Implement proper z-index stacking for panel interactions
-    - Add final error boundary and loading state management with new colors
-    - **Requirements Reference**: All requirements - final integration ensures complete functionality
+- [x] 18. **Add "Open Maps" Button to Place Cards**
+  - [x] 18.1 Create utility function for Google Maps place URL
+    - Added generateGoogleMapsPlaceUrl function in src/utils/tripUtils.ts
+    - Generates URL using google_place_id that opens Google Maps on desktop and Google Maps app on mobile
+    - URL format: https://www.google.com/maps/search/?api=1&query=place_name&query_place_id=PLACE_ID
+    - **Requirements Reference**: Requirement 3.17, 4.10, 3.25 (Open Maps button functionality)
 
-  - [ ] 18.2 Configure deployment settings
-    - Set up environment variable injection for VITE_GOOGLE_MAPS_API_KEY
-    - Configure Vite build settings for GitHub Pages deployment
-    - Create production build configuration with optimizations
-    - **Requirements Reference**: Requirement 13.2, 13.3, 13.5 (API key injection, GitHub Actions, environment validation)
+  - [x] 18.2 Update card action buttons with new labels and icons
+    - Updated ActivityCard with three action buttons: "📋 Details", "📍 Open Maps" (conditional), "🧭 Direction"
+    - Updated AccommodationCard with three action buttons: "📋 Details", "📍 Open Maps" (conditional), "🧭 Direction"
+    - Updated ScenicWaypointCard with three action buttons: "📋 Details", "📍 Open Maps" (conditional), "🧭 Direction"
+    - "Open Maps" button only appears when google_place_id exists on the entity
+    - Consistent icon usage across all card types for visual coherence
+    - **Requirements Reference**: Requirement 3.16, 3.17, 4.10, 3.24, 3.25 (action button layout and Open Maps functionality)
+
+  - [x] 18.3 Update requirements and design documentation
+    - Added acceptance criteria for "Open Maps" button in requirements.md (Activities section 3.17, Accommodation section 4.10, Scenic Waypoints section 3.25)
+    - Updated design.md component specifications for ActivityCard, AccommodationCard, and ScenicWaypointCard
+    - **Requirements Reference**: Documentation updates for new functionality
 
 ## Implementation Notes
 

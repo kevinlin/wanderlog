@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation, Activity } from '@/types';
-import { generateGoogleMapsUrl } from '@/utils/tripUtils';
+import { generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripUtils';
 import { activityHasLocationIssues } from '@/utils/validationUtils';
 
 interface ActivityCardProps {
@@ -165,14 +165,26 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                View Details →
+                📋 Details
               </a>
+
+              {activity.google_place_id && (
+                <a
+                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
+                  href={generateGoogleMapsPlaceUrl(activity.google_place_id, activity.activity_name)}
+                  onClick={(e) => e.stopPropagation()}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  📍 Maps
+                </a>
+              )}
 
               <button
                 className="min-h-[30px] flex-1 touch-manipulation rounded bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
                 onClick={handleNavigate}
               >
-                🧭 Navigate
+                🧭 Direction
               </button>
             </div>
           </div>

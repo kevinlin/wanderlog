@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation, ScenicWaypoint } from '@/types';
-import { generateGoogleMapsUrl } from '@/utils/tripUtils';
+import { generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripUtils';
 import { activityHasLocationIssues } from '@/utils/validationUtils';
 
 interface ScenicWaypointCardProps {
@@ -117,15 +117,27 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
                   rel="noopener noreferrer"
                   target="_blank"
                 >
-                  View Details →
+                  📋 Details
+                </a>
+              )}
+
+              {waypoint.google_place_id && (
+                <a
+                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-violet-200 font-medium text-sm text-violet-500 transition-colors hover:border-violet-300 hover:text-violet-600 active:text-violet-700"
+                  href={generateGoogleMapsPlaceUrl(waypoint.google_place_id, waypoint.activity_name)}
+                  onClick={(e) => e.stopPropagation()}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  📍 Maps
                 </a>
               )}
 
               <button
-                className={`${waypoint.url ? 'flex-1' : 'w-full'} min-h-[30px] touch-manipulation rounded bg-violet-500 px-3 py-2 text-sm text-white transition-colors hover:bg-violet-600 active:bg-violet-700`}
+                className={`${waypoint.url || waypoint.google_place_id ? 'flex-1' : 'w-full'} min-h-[30px] touch-manipulation rounded bg-violet-500 px-3 py-2 text-sm text-white transition-colors hover:bg-violet-600 active:bg-violet-700`}
                 onClick={handleNavigate}
               >
-                🧭 Navigate
+                🧭 Direction
               </button>
             </div>
           </div>

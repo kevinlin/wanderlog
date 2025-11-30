@@ -260,7 +260,8 @@ interface AccommodationCardProps {
 - **Interactive thumbnail**: Standardized h-16 w-16 size with click-to-view functionality
 - **Thumbnail hover effect**: Scale animation (1.05x) to indicate clickability
 - **Image viewer integration**: Opens full-screen modal when thumbnail is clicked
-- Website link and directions button only shown when expanded
+- Website link, "Open in Maps" (when google_place_id exists), and directions button only shown when expanded
+- **Open in Maps button**: Opens Google Maps place page on desktop browsers and Google Maps app on mobile devices
 - Location warning indicator when coordinates are missing or invalid
 - Warning message with suggestions for address correction
 - Consistent styling with other panel components
@@ -286,7 +287,7 @@ interface ActivityCardProps {
 - **Conditional Layout**: Content padding adjusts based on drag handle presence (pl-8 when draggable)
 - **Header Section**: Checkbox and title positioned at top with thumbnail image on the right
 - **Content Sections**: Address, duration/travel time, remarks, and warnings with compact spacing
-- **Action Buttons**: "View Details" and "Navigate in Google Maps" actions displayed side by side at bottom
+- **Action Buttons**: "View Details", "Open in Maps" (when google_place_id exists), and "Navigate in Google Maps" actions displayed side by side at bottom
 - **Integrated Drag Handle**: When draggable, handle positioned inside card at left edge middle
 - Comprehensive activity information display with travel time calculation from accommodation
 - "Mark Done" functionality with visual feedback using vivid color palette
@@ -294,6 +295,7 @@ interface ActivityCardProps {
 - **Interactive thumbnail**: Standardized h-16 w-16 size with click-to-view functionality
 - **Thumbnail hover effect**: Scale animation (1.05x) to indicate clickability
 - **Image viewer integration**: Opens full-screen modal with stopPropagation to prevent card selection
+- **Open in Maps button**: Conditionally rendered when google_place_id exists, opens Google Maps place page on desktop browsers and Google Maps app on mobile devices
 - Location warning indicator when coordinates are missing or invalid
 - Warning message with suggestions for address correction
 - **Reduced Bottom Spacing**: Eliminated excessive spacing for more compact card presentation
@@ -317,7 +319,8 @@ interface ScenicWaypointCardProps {
 - Violet color scheme with landscape emoji (🏞️) for visual distinction
 - Gradient background from violet-50 to sky-50 with violet border
 - "Mark Done" functionality with violet-colored checkbox
-- "View Details" and "Navigate in Google Maps" actions displayed side by side in a single row with violet-colored buttons
+- "View Details", "Open in Maps" (when google_place_id exists), and "Navigate in Google Maps" actions displayed side by side in a single row with violet-colored buttons
+- **Open in Maps button**: Opens Google Maps place page on desktop browsers and Google Maps app on mobile devices
 - Location warning indicator using the same validation system as activities
 - Non-draggable design to maintain original sequence from trip data
 - Thumbnail image display when available
