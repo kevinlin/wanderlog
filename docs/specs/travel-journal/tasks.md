@@ -636,6 +636,57 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Documented map type options and overlay layer options with descriptions
     - **Requirements Reference**: Documentation updates for new functionality
 
+- [x] 22. **POI Search Functionality**
+  - [x] 22.1 Add POI search state management
+    - Added POISearchState interface to src/types/poi.ts with results, query, loading, and error fields
+    - Added poiSearch state to AppState in AppStateContext
+    - Implemented POI search actions: SET_POI_SEARCH_RESULTS, SET_POI_SEARCH_QUERY, SET_POI_SEARCH_LOADING, SET_POI_SEARCH_ERROR, CLEAR_POI_SEARCH
+    - Added reducer cases for all POI search actions
+    - **Requirements Reference**: Requirement 15.1, 15.9, 15.10, 15.11 (search state management)
+
+  - [x] 22.2 Add location-biased search to PlacesService
+    - Created textSearchWithLocationBias method in PlacesService
+    - Accepts query, location (LatLngLiteral), and optional radius (default 5000m)
+    - Uses Google Places TextSearch API with location bias
+    - Converts PlaceResult to POIDetails array for consistent typing
+    - Handles ZERO_RESULTS status by returning empty array
+    - **Requirements Reference**: Requirement 15.2, 15.3 (location-biased search)
+
+  - [x] 22.3 Create POISearchResultCard component
+    - Created POISearchResultCard.tsx in src/components/Cards/
+    - Displays place photo with business status badge overlay
+    - Shows name, type tags, rating/reviews, price level
+    - Includes address, opening hours status (open/closed)
+    - Contact links for phone, website, Google Maps
+    - "Add to Activities" button with emerald styling
+    - Rose/coral gradient color scheme for visual distinction
+    - **Requirements Reference**: Requirement 15.4, 15.5, 15.6 (search result cards)
+
+  - [x] 22.4 Restructure ActivitiesPanel layout
+    - Moved Download button from Activities section to panel footer
+    - Renamed Download button label to "💾 Download"
+    - Added search bar row with text input, search button (icon), and clear (X) button
+    - Positioned panel footer with frosted glass styling (bg-white/20)
+    - Added POI search results section in scrollable content area
+    - Implemented search handlers: handleSearch, handleSearchKeyDown, handleClearSearch
+    - Added handleAddActivityFromPOI to create activities from search results
+    - **Requirements Reference**: Requirement 15.1, 15.4, 15.9, 15.10, 15.12 (panel layout)
+
+  - [x] 22.5 Add search result pins to MapContainer
+    - Created getSearchResultPinIcon function with rose/coral styling
+    - Rose-500 color (#f43f5e) with animated glow effect
+    - Renders search result markers with distinctive rose pins
+    - Click handler opens POI modal for detailed view
+    - Pins cleared automatically when search is cleared
+    - **Requirements Reference**: Requirement 15.7, 15.8 (map pins)
+
+  - [x] 22.6 Update documentation
+    - Added Requirement 15 "POI Search Functionality" to requirements.md
+    - Added POISearchResultCard component documentation to design.md
+    - Updated ActivitiesPanel documentation with Panel Footer Layout
+    - Added Task 22 to tasks.md documenting all implementation steps
+    - **Requirements Reference**: Documentation updates for new functionality
+
 ## Implementation Notes
 
 - Each task builds incrementally on previous tasks

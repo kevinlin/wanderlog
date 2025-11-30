@@ -290,6 +290,23 @@ interface ActivitiesPanelProps {
 - Scenic waypoints section uses violet color scheme with dedicated wide toggle button
 - Independent collapse/expand state for scenic waypoints separate from activities
 - **Enhanced Mobile UX**: Overscroll containment, momentum scrolling, and touch-none on resize handle for smooth interaction
+- **Panel Footer**: Fixed footer section containing search bar and download button, positioned outside scrollable content
+
+**Panel Footer Layout**:
+- Fixed position at bottom of panel (flex-shrink-0)
+- Contains search row and download button
+- **Search Row**: Text input with placeholder "Search nearby places...", search button (magnifying glass icon), and clear button (X icon)
+- **Search Input**: Rose-focused styling with rose-400 border on focus
+- **Search Button**: Rose color scheme (border-rose-500/30 bg-rose-500/20)
+- **Clear Button**: Appears when input has text or results exist
+- **Download Button**: Emerald color scheme, labeled "💾 Download"
+- Frosted glass background (bg-white/20) with top border
+
+**POI Search Results Section**:
+- Displayed in scrollable content area, below activities list
+- Shows result count header "🔍 Search Results (x)"
+- Renders POISearchResultCard for each result
+- Error display for search failures
 
 **Mobile Resize Handle Behavior**:
 - Touch and mouse drag support for resizing
@@ -495,6 +512,36 @@ interface POIDetails {
 - Fetches place details using Google Places API
 - Integrates with global app state for activity creation
 - Responsive design for mobile and desktop
+
+#### 8.1. POISearchResultCard Component
+**Purpose**: Detailed POI card component for displaying search results in the ActivitiesPanel with "Add to Activities" capability.
+
+```typescript
+interface POISearchResultCardProps {
+  poi: POIDetails;
+  onAddToActivities: (poi: POIDetails) => void;
+}
+```
+
+**Key Features**:
+- **Card Layout**: Rounded card with rose/orange gradient background and rose border
+- **Photo Section**: Place photo displayed at top (h-32) with business status badge overlay
+- **Content Section**: 
+  - Name and type tags (rose color scheme)
+  - Star rating with visual stars and review count
+  - Price level indicators
+  - Address (truncated)
+  - Opening hours status (open now/closed)
+  - Contact links (phone, website, Google Maps)
+- **Action Button**: "Add to Activities" button (emerald styling) at bottom of card
+- **Responsive Design**: Mobile-friendly with touch-optimized interactions
+- **Visual Distinction**: Rose/coral color scheme to distinguish from regular activity cards
+
+**Card Styling**:
+- Background: `bg-gradient-to-br from-rose-50/80 to-orange-50/80`
+- Border: `border border-rose-200/50`
+- Rounded corners: `rounded-xl`
+- Shadow: `shadow-sm` with hover `shadow-md`
 
 #### 9. ImageViewerModal Component
 **Purpose**: Full-screen modal for viewing enlarged thumbnail images from cards.

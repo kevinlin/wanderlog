@@ -644,6 +644,56 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
+  // POI search result pin with distinctive rose/coral styling
+  const getSearchResultPinIcon = (isHovered = false) => {
+    const color = '#f43f5e'; // Rose-500 for search results
+    const glowColor = 'rgba(244, 63, 94, 0.7)';
+    const strokeColor = '#e11d48'; // Rose-600 for outline
+
+    // Search result icon: magnifying glass / location marker combo
+    const svgPath =
+      'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z';
+
+    const baseSize = 28;
+    const selectedSize = 31;
+    const size = isHovered ? selectedSize : baseSize;
+
+    const glowStdDev = isHovered ? 4 : 2;
+    const glowOpacity = isHovered ? 0.9 : 0.6;
+
+    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
+      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
+            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
+            <feMerge>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+        <style>
+          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+          .pin-icon { animation: pulse 2s ease-in-out infinite; }
+        </style>
+        <path class="pin-icon" d="${svgPath}" 
+              fill="${color}" 
+              stroke="${strokeColor}" 
+              stroke-width="1" 
+              filter="url(#glow)"/>
+      </svg>
+    `)}`;
+
+    return {
+      url: iconUrl,
+      scaledSize: new window.google.maps.Size(size, size),
+      anchor: new window.google.maps.Point(size / 2, size),
+    };
+  };
+
   // POI click handler
   const handlePOIClick = useCallback(
     async (placeId: string) => {
@@ -836,6 +886,17 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                   />
                 );
               })}
+
+            {/* POI Search Result markers with rose styling */}
+            {state.poiSearch.results.map((poi) => (
+              <Marker
+                icon={getSearchResultPinIcon()}
+                key={`search-result-${poi.place_id}`}
+                onClick={() => handlePOIClick(poi.place_id)}
+                position={{ lat: poi.location.lat, lng: poi.location.lng }}
+                title={poi.name}
+              />
+            ))}
           </>
         )}
 

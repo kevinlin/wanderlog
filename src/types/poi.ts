@@ -51,3 +51,10 @@ export interface POIModalState {
   loading: boolean;
   error: string | null;
 }
+
+export interface POISearchState {
+  results: POIDetails[];
+  query: string;
+  loading: boolean;
+  error: string | null;
+}

@@ -1,7 +1,7 @@
 import type React from 'react';
 import { createContext, type ReactNode, useContext, useReducer } from 'react';
 import type { Activity, TripData } from '@/types';
-import type { POIModalState } from '@/types/poi';
+import type { POIDetails, POIModalState, POISearchState } from '@/types/poi';
 import type { UserModifications } from '@/types/storage';
 import type { WeatherCache } from '@/types/weather';
 
@@ -27,6 +27,7 @@ export interface AppState {
   userModifications: UserModifications;
   weatherData: WeatherCache;
   poiModal: POIModalState;
+  poiSearch: POISearchState;
 
   // UI state
   loading: boolean;
@@ -51,6 +52,13 @@ export type AppAction =
   | { type: 'SET_POI_MODAL'; payload: Partial<POIModalState> }
   | { type: 'CLOSE_POI_MODAL' }
   | { type: 'ADD_ACTIVITY_FROM_POI'; payload: { baseId: string; activity: Activity } }
+
+  // POI Search actions
+  | { type: 'SET_POI_SEARCH_RESULTS'; payload: POIDetails[] }
+  | { type: 'SET_POI_SEARCH_QUERY'; payload: string }
+  | { type: 'SET_POI_SEARCH_LOADING'; payload: boolean }
+  | { type: 'SET_POI_SEARCH_ERROR'; payload: string | null }
+  | { type: 'CLEAR_POI_SEARCH' }
   | { type: 'SET_ERROR'; payload: string | null }
   | { type: 'SET_LOADING'; payload: boolean };
 
@@ -72,6 +80,12 @@ const initialState: AppState = {
   poiModal: {
     isOpen: false,
     poi: null,
+    loading: false,
+    error: null,
+  },
+  poiSearch: {
+    results: [],
+    query: '',
     loading: false,
     error: null,
   },
@@ -221,6 +235,57 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
         },
       };
     }
+
+    // POI Search actions
+    case 'SET_POI_SEARCH_RESULTS':
+      return {
+        ...state,
+        poiSearch: {
+          ...state.poiSearch,
+          results: action.payload,
+          loading: false,
+          error: null,
+        },
+      };
+
+    case 'SET_POI_SEARCH_QUERY':
+      return {
+        ...state,
+        poiSearch: {
+          ...state.poiSearch,
+          query: action.payload,
+        },
+      };
+
+    case 'SET_POI_SEARCH_LOADING':
+      return {
+        ...state,
+        poiSearch: {
+          ...state.poiSearch,
+          loading: action.payload,
+        },
+      };
+
+    case 'SET_POI_SEARCH_ERROR':
+      return {
+        ...state,
+        poiSearch: {
+          ...state.poiSearch,
+          error: action.payload,
+          loading: false,
+        },
+      };
+
+    case 'CLEAR_POI_SEARCH':
+      return {
+        ...state,
+        poiSearch: {
+          results: [],
+          query: '',
+          loading: false,
+          error: null,
+        },
+      };
 
     case 'SET_ERROR':
       return {

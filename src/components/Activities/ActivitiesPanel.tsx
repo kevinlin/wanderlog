@@ -1,14 +1,19 @@
-import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
+import { POISearchResultCard } from '@/components/Cards/POISearchResultCard';
 import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
 import { WeatherCard } from '@/components/Cards/WeatherCard';
+import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useWeather } from '@/hooks/useWeather';
 import { ExportService } from '@/services/exportService';
+import { PlacesService } from '@/services/placesService';
 import type { Accommodation, Activity, TripData, UserModifications } from '@/types';
 import type { Coordinates, ScenicWaypoint } from '@/types/map';
+import type { POIDetails } from '@/types/poi';
+import { inferActivityType } from '@/utils/activityUtils';
 import { DraggableActivitiesList } from './DraggableActivity';
 
 // Constants for mobile panel resize
@@ -59,6 +64,11 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const [isScenicWaypointsExpanded, setIsScenicWaypointsExpanded] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const activityRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+
+  // POI Search state from global context
+  const { state, dispatch } = useAppStateContext();
+  const { poiSearch } = state;
+  const [searchInputValue, setSearchInputValue] = useState('');
 
   // Screen size detection
   const { isMobile } = useScreenSize();
@@ -170,6 +180,66 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
       console.error('Export failed:', error);
     }
   };
+
+  // POI Search handlers
+  const handleSearch = useCallback(async () => {
+    const query = searchInputValue.trim();
+    if (!query) return;
+
+    dispatch({ type: 'SET_POI_SEARCH_QUERY', payload: query });
+    dispatch({ type: 'SET_POI_SEARCH_LOADING', payload: true });
+
+    try {
+      const placesService = PlacesService.getInstance();
+      const results = await placesService.textSearchWithLocationBias(query, baseLocation, 5000);
+      dispatch({ type: 'SET_POI_SEARCH_RESULTS', payload: results });
+    } catch (error) {
+      dispatch({
+        type: 'SET_POI_SEARCH_ERROR',
+        payload: error instanceof Error ? error.message : 'Search failed',
+      });
+    }
+  }, [searchInputValue, baseLocation, dispatch]);
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchInputValue('');
+    dispatch({ type: 'CLEAR_POI_SEARCH' });
+  };
+
+  const handleAddActivityFromPOI = useCallback(
+    (poi: POIDetails) => {
+      const activityType = inferActivityType(poi.name, undefined, poi.types);
+      const activityId = `poi_${poi.place_id}_${Date.now()}`;
+
+      const newActivity: Activity = {
+        activity_id: activityId,
+        activity_name: poi.name,
+        activity_type: activityType,
+        location: {
+          lat: poi.location.lat,
+          lng: poi.location.lng,
+          address: poi.formatted_address,
+        },
+        duration: '1-2 hours',
+        url: poi.website,
+        remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
+        google_place_id: poi.place_id,
+        order: 999,
+      };
+
+      dispatch({
+        type: 'ADD_ACTIVITY_FROM_POI',
+        payload: { baseId, activity: newActivity },
+      });
+    },
+    [baseId, dispatch]
+  );
 
   // Fetch weather data when component mounts or baseId changes
   useEffect(() => {
@@ -336,21 +406,75 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   selectedActivityId={selectedActivityId}
                 />
               </div>
-
-              {/* Export Button */}
-              <div className="border-white/20 border-t px-3 pt-3 pb-6">
-                <button
-                  className="flex min-h-[30px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/20 px-4 py-3 font-medium text-emerald-700 transition-all duration-200 hover:bg-emerald-500/30 hover:shadow-md active:bg-emerald-500/40 disabled:cursor-not-allowed disabled:border-gray-500/30 disabled:bg-gray-500/20 disabled:text-gray-500 disabled:hover:bg-gray-500/20"
-                  disabled={!(tripData && userModifications)}
-                  onClick={handleExport}
-                  title="Download your updated trip data with activity status and custom order"
-                >
-                  <ArrowDownTrayIcon className="h-4 w-4" />
-                  <span className="text-sm">💾 Download Trip Data</span>
-                </button>
-              </div>
             </>
           )}
+
+          {/* POI Search Results */}
+          {poiSearch.results.length > 0 && (
+            <div className="px-3 pb-3">
+              <div className="mb-2 flex items-center justify-between">
+                <h3 className="font-semibold text-gray-900 text-sm">🔍 Search Results ({poiSearch.results.length})</h3>
+              </div>
+              <div className="space-y-3">
+                {poiSearch.results.map((poi) => (
+                  <POISearchResultCard key={poi.place_id} onAddToActivities={handleAddActivityFromPOI} poi={poi} />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Search Error */}
+          {poiSearch.error && (
+            <div className="px-3 pb-3">
+              <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-red-700 text-sm">{poiSearch.error}</div>
+            </div>
+          )}
+        </div>
+
+        {/* Panel Footer: Search & Download */}
+        <div className="flex-shrink-0 border-white/20 border-t bg-white/20 px-3 py-3">
+          {/* Search Row */}
+          <div className="mb-2 flex gap-2">
+            <div className="relative flex-1">
+              <input
+                className="h-9 w-full rounded-lg border border-gray-300/50 bg-white/70 pr-8 pl-3 text-sm placeholder-gray-500 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400"
+                onChange={(e) => setSearchInputValue(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                placeholder="Search nearby places..."
+                type="text"
+                value={searchInputValue}
+              />
+              {(searchInputValue || poiSearch.results.length > 0) && (
+                <button
+                  aria-label="Clear search"
+                  className="-translate-y-1/2 absolute top-1/2 right-2 rounded p-0.5 text-gray-400 hover:text-gray-600"
+                  onClick={handleClearSearch}
+                >
+                  <XMarkIcon className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+            <button
+              aria-label="Search"
+              className="flex h-9 w-9 touch-manipulation items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-700 transition-all hover:bg-emerald-500/30 active:bg-emerald-500/40 disabled:cursor-not-allowed disabled:opacity-50"
+              disabled={!searchInputValue.trim() || poiSearch.loading}
+              onClick={handleSearch}
+            >
+              {poiSearch.loading ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-400 border-t-transparent" />
+              ) : (
+                <MagnifyingGlassIcon className="h-4 w-4" />
+              )}
+            </button>
+            <button
+              className="flex min-h-[36px] touch-manipulation items-center justify-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/20 px-4 py-2 font-medium text-rose-700 text-sm transition-all duration-200 hover:bg-rose-500/30 hover:shadow-md active:bg-rose-500/40 disabled:cursor-not-allowed disabled:border-gray-500/30 disabled:bg-gray-500/20 disabled:text-gray-500 disabled:hover:bg-gray-500/20"
+              disabled={!(tripData && userModifications)}
+              onClick={handleExport}
+              title="Download your updated trip data with activity status and custom order"
+            >
+              <ArrowDownTrayIcon className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

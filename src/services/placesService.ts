@@ -174,4 +174,60 @@ export class PlacesService {
       });
     });
   }
+
+  /**
+   * Text search for places with location bias
+   * Searches for places near the specified location
+   */
+  async textSearchWithLocationBias(query: string, location: google.maps.LatLngLiteral, radius = 5000): Promise<POIDetails[]> {
+    return new Promise((resolve, reject) => {
+      if (!this.placesService) {
+        reject(new Error('Places service not initialized'));
+        return;
+      }
+
+      const request: google.maps.places.TextSearchRequest = {
+        query,
+        location: new google.maps.LatLng(location.lat, location.lng),
+        radius,
+      };
+
+      this.placesService.textSearch(request, (results, status) => {
+        if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+          // Convert PlaceResult to POIDetails
+          const poiResults: POIDetails[] = results.map((place) => ({
+            place_id: place.place_id || '',
+            name: place.name || 'Unknown Place',
+            formatted_address: place.formatted_address,
+            location: {
+              lat: place.geometry?.location?.lat() || 0,
+              lng: place.geometry?.location?.lng() || 0,
+            },
+            types: place.types,
+            rating: place.rating,
+            user_ratings_total: place.user_ratings_total,
+            price_level: place.price_level,
+            opening_hours: place.opening_hours
+              ? {
+                  open_now: place.opening_hours.isOpen?.(),
+                  weekday_text: place.opening_hours.weekday_text,
+                }
+              : undefined,
+            photos: place.photos?.map((photo) => ({
+              photo_reference: photo.getUrl({ maxWidth: 400 }),
+              height: photo.height,
+              width: photo.width,
+            })),
+            business_status: place.business_status,
+            icon: place.icon,
+          }));
+          resolve(poiResults);
+        } else if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+          resolve([]);
+        } else {
+          reject(new Error(`Failed to search places: ${status}`));
+        }
+      });
+    });
+  }
 }

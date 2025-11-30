@@ -278,3 +278,22 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 3. WHEN the application is deployed, THEN GitHub Actions SHALL automatically build and deploy on pushes to main branch
 4. WHEN API keys are configured, THEN they SHALL include appropriate referrer restrictions in Google Cloud Console
 5. WHEN the build process runs, THEN it SHALL validate all required environment variables are present
+
+### 15. POI Search Functionality
+
+**User Story:** As a traveler, I want to search for nearby points of interest and add them to my itinerary, so that I can discover new places and easily add them to my trip.
+
+**Acceptance Criteria:**
+1. WHEN the ActivitiesPanel is displayed, THEN a search bar SHALL be visible at the bottom of the panel alongside the Download button
+2. WHEN a user types a search query and presses Enter or clicks the search button, THEN the system SHALL search for POIs using Google Places API with location bias to the current stop
+3. WHEN POI search is performed, THEN the search SHALL be biased to the current trip stop's accommodation location within a 5km radius
+4. WHEN search results are returned, THEN they SHALL be displayed as detailed cards in the ActivitiesPanel below the search bar
+5. WHEN search result cards are displayed, THEN they SHALL include place photo, name, type tags, rating/reviews, address, opening hours status, and contact links
+6. WHEN search result cards are displayed, THEN each card SHALL include an "Add to Activities" button that creates a new activity from the POI
+7. WHEN search results are available, THEN they SHALL be displayed as distinctive rose-colored pins on the map
+8. WHEN a user clicks on a search result map pin, THEN the POI modal SHALL open with detailed place information
+9. WHEN a user clicks the clear (X) button next to the search input, THEN all search results SHALL be cleared from both the panel and the map
+10. WHEN POI search is loading, THEN a loading spinner SHALL be displayed in the search button
+11. WHEN POI search fails, THEN an error message SHALL be displayed in the panel
+12. WHEN the Download button is displayed, THEN it SHALL be labeled "💾 Download" and positioned in the panel footer alongside the search bar
+13. WHEN no search results are found, THEN the system SHALL display an empty results state without error
