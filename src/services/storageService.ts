@@ -1,4 +1,5 @@
 import { StopStatus, ActivityStatus, ActivityOrder, UserModifications, WeatherCache } from '@/types';
+import * as firebaseService from './firebaseService';
 
 const STORAGE_KEYS = {
   USER_MODIFICATIONS: 'wanderlog_user_modifications',
@@ -6,6 +7,7 @@ const STORAGE_KEYS = {
   STOP_STATUS: 'wanderlog_stop_status', // Legacy - for backward compatibility
   LAST_VIEWED_STOP: 'wanderlog_last_viewed_stop', // Legacy - for backward compatibility
   APP_VERSION: 'wanderlog_app_version',
+  CURRENT_TRIP_ID: 'wanderlog_current_trip_id', // NEW: Store current trip ID
 } as const;
 
 /**
@@ -123,26 +125,62 @@ export const isStorageAvailable = (): boolean => {
   }
 };
 
-// New UserModifications-based API (aligns with design specification)
+// ============================================================================
+// Current Trip ID Management
+// ============================================================================
 
 /**
- * Get user modifications from localStorage
+ * Get the current trip ID from localStorage
  */
-export const getUserModifications = (): UserModifications => {
+export const getCurrentTripId = (): string | null => {
   try {
-    const stored = localStorage.getItem(STORAGE_KEYS.USER_MODIFICATIONS);
+    return localStorage.getItem(STORAGE_KEYS.CURRENT_TRIP_ID);
+  } catch (error) {
+    console.warn('Failed to load current trip ID from localStorage:', error);
+    return null;
+  }
+};
+
+/**
+ * Set the current trip ID in localStorage
+ */
+export const setCurrentTripId = (tripId: string): void => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.CURRENT_TRIP_ID, tripId);
+  } catch (error) {
+    console.warn('Failed to save current trip ID to localStorage:', error);
+  }
+};
+
+// ============================================================================
+// New UserModifications-based API with Firestore Dual-Write
+// ============================================================================
+
+/**
+ * Get user modifications from localStorage (local-only, synchronous)
+ * This is used as a fallback when Firestore is unavailable
+ */
+const getUserModificationsLocal = (): UserModifications => {
+  try {
+    const tripId = getCurrentTripId();
+    if (!tripId) {
+      return { activityStatus: {}, activityOrders: {} };
+    }
+
+    const key = `${STORAGE_KEYS.USER_MODIFICATIONS}_${tripId}`;
+    const stored = localStorage.getItem(key);
     if (stored) {
       return JSON.parse(stored);
     }
-    
+
     // Migration: convert legacy StopStatus to UserModifications format
     const legacyStopStatus = getStopStatus();
     if (Object.keys(legacyStopStatus).length > 0) {
       const userMods = migrateStopStatusToUserModifications(legacyStopStatus);
-      saveUserModifications(userMods);
+      saveUserModificationsLocal(userMods);
       return userMods;
     }
-    
+
     return {
       activityStatus: {},
       activityOrders: {},
@@ -157,42 +195,123 @@ export const getUserModifications = (): UserModifications => {
 };
 
 /**
- * Save user modifications to localStorage
+ * Save user modifications to localStorage only (synchronous)
  */
-export const saveUserModifications = (modifications: UserModifications): void => {
+const saveUserModificationsLocal = (modifications: UserModifications): void => {
   try {
-    localStorage.setItem(STORAGE_KEYS.USER_MODIFICATIONS, JSON.stringify(modifications));
+    const tripId = getCurrentTripId();
+    if (!tripId) {
+      console.warn('No current trip ID, cannot save user modifications locally');
+      return;
+    }
+
+    const key = `${STORAGE_KEYS.USER_MODIFICATIONS}_${tripId}`;
+    localStorage.setItem(key, JSON.stringify(modifications));
   } catch (error) {
     console.warn('Failed to save user modifications to localStorage:', error);
   }
 };
 
 /**
- * Update activity status in user modifications
+ * Get user modifications from Firestore (with localStorage fallback)
+ * DUAL-READ: Tries Firestore first, falls back to localStorage
+ *
+ * @param tripId - The trip ID to get modifications for
+ * @returns Promise resolving to user modifications
  */
-export const updateActivityDoneStatus = (activityId: string, done: boolean): void => {
-  const modifications = getUserModifications();
+export const getUserModifications = async (tripId: string): Promise<UserModifications> => {
+  try {
+    // Try Firestore first
+    const firestoreMods = await firebaseService.getUserModifications(tripId);
+
+    // Cache in localStorage for offline access
+    const key = `${STORAGE_KEYS.USER_MODIFICATIONS}_${tripId}`;
+    localStorage.setItem(key, JSON.stringify(firestoreMods));
+
+    return firestoreMods;
+  } catch (error) {
+    console.warn('Firestore unavailable, using localStorage fallback:', error);
+
+    // Fallback to localStorage
+    setCurrentTripId(tripId); // Temporarily set for local read
+    const localMods = getUserModificationsLocal();
+    return localMods;
+  }
+};
+
+/**
+ * Save user modifications with Firestore dual-write
+ * DUAL-WRITE: Writes to both Firestore and localStorage
+ *
+ * @param tripId - The trip ID to save modifications for
+ * @param modifications - The modifications to save
+ */
+export const saveUserModifications = async (
+  tripId: string,
+  modifications: UserModifications
+): Promise<void> => {
+  // Always save to localStorage first (immediate, synchronous)
+  try {
+    const key = `${STORAGE_KEYS.USER_MODIFICATIONS}_${tripId}`;
+    localStorage.setItem(key, JSON.stringify(modifications));
+  } catch (error) {
+    console.warn('Failed to save user modifications to localStorage:', error);
+  }
+
+  // Then try to sync to Firestore (may fail offline)
+  try {
+    await firebaseService.saveUserModifications(tripId, modifications);
+  } catch (error) {
+    console.warn('Failed to sync user modifications to Firestore (will retry later):', error);
+    // TODO: Queue for retry when back online
+  }
+};
+
+/**
+ * Update activity status in user modifications
+ *
+ * @param tripId - The trip ID
+ * @param activityId - The activity ID
+ * @param done - Whether the activity is done
+ */
+export const updateActivityDoneStatus = async (
+  tripId: string,
+  activityId: string,
+  done: boolean
+): Promise<void> => {
+  const modifications = await getUserModifications(tripId);
   modifications.activityStatus[activityId] = done;
-  saveUserModifications(modifications);
+  await saveUserModifications(tripId, modifications);
 };
 
 /**
  * Update activity order for a base
+ *
+ * @param tripId - The trip ID
+ * @param baseId - The base/stop ID
+ * @param activityIds - Ordered array of activity IDs
  */
-export const updateActivityOrderForBase = (baseId: string, activityIds: string[]): void => {
-  const modifications = getUserModifications();
+export const updateActivityOrderForBase = async (
+  tripId: string,
+  baseId: string,
+  activityIds: string[]
+): Promise<void> => {
+  const modifications = await getUserModifications(tripId);
   modifications.activityOrders[baseId] = activityIds.map((_, index) => index);
-  saveUserModifications(modifications);
+  await saveUserModifications(tripId, modifications);
 };
 
 /**
  * Set last viewed base
+ *
+ * @param tripId - The trip ID
+ * @param baseId - The base/stop ID
  */
-export const setLastViewedBase = (baseId: string): void => {
-  const modifications = getUserModifications();
+export const setLastViewedBase = async (tripId: string, baseId: string): Promise<void> => {
+  const modifications = await getUserModifications(tripId);
   modifications.lastViewedBase = baseId;
   modifications.lastViewedDate = new Date().toISOString();
-  saveUserModifications(modifications);
+  await saveUserModifications(tripId, modifications);
 };
 
 /**

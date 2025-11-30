@@ -2,9 +2,12 @@
 import { Coordinates, ScenicWaypoint } from './map';
 
 export interface TripData {
+  trip_id?: string;
   trip_name: string;
   timezone: string;
   stops: TripBase[];
+  created_at?: string;
+  updated_at?: string;
   // Legacy fields for backward compatibility
   travellers?: string[];
   vehicle?: string;

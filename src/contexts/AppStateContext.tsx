@@ -4,20 +4,42 @@ import { UserModifications } from '@/types/storage';
 import { WeatherCache } from '@/types/weather';
 import { POIModalState } from '@/types/poi';
 
+// Trip summary interface for trip list
+export interface TripSummary {
+  trip_id: string;
+  trip_name: string;
+  timezone: string;
+  created_at?: string;
+  updated_at?: string;
+}
+
 // State interface based on design document
 export interface AppState {
+  // Trip management
+  currentTripId: string | null;
+  availableTrips: TripSummary[];
+
+  // Current trip data
   tripData: TripData | null;
   currentBase: string | null;
   selectedActivity: string | null;
   userModifications: UserModifications;
   weatherData: WeatherCache;
   poiModal: POIModalState;
+
+  // UI state
   loading: boolean;
   error: string | null;
 }
 
 // Action types from design document
-export type AppAction = 
+export type AppAction =
+  // Trip management actions
+  | { type: 'SET_CURRENT_TRIP_ID'; payload: string | null }
+  | { type: 'SET_AVAILABLE_TRIPS'; payload: TripSummary[] }
+  | { type: 'LOAD_TRIP'; payload: { tripId: string; tripData: TripData; userModifications: UserModifications } }
+
+  // Existing actions
   | { type: 'SET_TRIP_DATA'; payload: TripData }
   | { type: 'SELECT_BASE'; payload: string }
   | { type: 'SELECT_ACTIVITY'; payload: string | null }
@@ -33,6 +55,11 @@ export type AppAction =
 
 // Initial state
 const initialState: AppState = {
+  // Trip management
+  currentTripId: null,
+  availableTrips: [],
+
+  // Current trip data
   tripData: null,
   currentBase: null,
   selectedActivity: null,
@@ -47,6 +74,8 @@ const initialState: AppState = {
     loading: false,
     error: null,
   },
+
+  // UI state
   loading: false,
   error: null,
 };
@@ -54,6 +83,30 @@ const initialState: AppState = {
 // Reducer function
 function appStateReducer(state: AppState, action: AppAction): AppState {
   switch (action.type) {
+    // Trip management actions
+    case 'SET_CURRENT_TRIP_ID':
+      return {
+        ...state,
+        currentTripId: action.payload,
+      };
+
+    case 'SET_AVAILABLE_TRIPS':
+      return {
+        ...state,
+        availableTrips: action.payload,
+      };
+
+    case 'LOAD_TRIP':
+      return {
+        ...state,
+        currentTripId: action.payload.tripId,
+        tripData: action.payload.tripData,
+        userModifications: action.payload.userModifications,
+        currentBase: action.payload.userModifications.lastViewedBase ||
+          action.payload.tripData.stops[0]?.stop_id || null,
+        error: null,
+      };
+
     case 'SET_TRIP_DATA':
       return {
         ...state,

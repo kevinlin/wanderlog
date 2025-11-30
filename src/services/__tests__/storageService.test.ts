@@ -11,13 +11,24 @@ import {
   isWeatherCacheValid,
   getCachedWeather,
   isStorageAvailable,
+  setCurrentTripId,
 } from '../storageService';
 import { UserModifications, WeatherCache } from '@/types';
 
+// Mock Firebase service to make tests use localStorage fallback
+vi.mock('../firebaseService', () => ({
+  getUserModifications: vi.fn().mockRejectedValue(new Error('Firebase not available in tests')),
+  saveUserModifications: vi.fn().mockRejectedValue(new Error('Firebase not available in tests')),
+}));
+
 describe('StorageService', () => {
+  const TEST_TRIP_ID = 'test-trip-123';
+
   beforeEach(() => {
     localStorage.clear();
     vi.clearAllMocks();
+    // Set current trip ID for tests
+    setCurrentTripId(TEST_TRIP_ID);
   });
 
   describe('isStorageAvailable', () => {
@@ -27,16 +38,16 @@ describe('StorageService', () => {
   });
 
   describe('UserModifications API', () => {
-    it('should return empty modifications when none exist', () => {
-      const modifications = getUserModifications();
-      
+    it('should return empty modifications when none exist', async () => {
+      const modifications = await getUserModifications(TEST_TRIP_ID);
+
       expect(modifications).toEqual({
         activityStatus: {},
         activityOrders: {},
       });
     });
 
-    it('should save and retrieve user modifications', () => {
+    it('should save and retrieve user modifications', async () => {
       const modifications: UserModifications = {
         activityStatus: {
           'activity1': true,
@@ -49,36 +60,36 @@ describe('StorageService', () => {
         lastViewedDate: '2025-01-01T00:00:00.000Z',
       };
 
-      saveUserModifications(modifications);
-      const retrieved = getUserModifications();
-      
+      await saveUserModifications(TEST_TRIP_ID, modifications);
+      const retrieved = await getUserModifications(TEST_TRIP_ID);
+
       expect(retrieved).toEqual(modifications);
     });
 
-    it('should update activity done status', () => {
-      updateActivityDoneStatus('activity1', true);
-      
-      const modifications = getUserModifications();
+    it('should update activity done status', async () => {
+      await updateActivityDoneStatus(TEST_TRIP_ID, 'activity1', true);
+
+      const modifications = await getUserModifications(TEST_TRIP_ID);
       expect(modifications.activityStatus['activity1']).toBe(true);
     });
 
-    it('should update activity order for base', () => {
+    it('should update activity order for base', async () => {
       const activityIds = ['activity1', 'activity2', 'activity3'];
-      updateActivityOrderForBase('base1', activityIds);
-      
-      const modifications = getUserModifications();
+      await updateActivityOrderForBase(TEST_TRIP_ID, 'base1', activityIds);
+
+      const modifications = await getUserModifications(TEST_TRIP_ID);
       expect(modifications.activityOrders['base1']).toEqual([0, 1, 2]);
     });
 
-    it('should set last viewed base with timestamp', () => {
+    it('should set last viewed base with timestamp', async () => {
       const baseBefore = Date.now();
-      setLastViewedBase('base1');
+      await setLastViewedBase(TEST_TRIP_ID, 'base1');
       const baseAfter = Date.now();
-      
-      const modifications = getUserModifications();
+
+      const modifications = await getUserModifications(TEST_TRIP_ID);
       expect(modifications.lastViewedBase).toBe('base1');
       expect(modifications.lastViewedDate).toBeDefined();
-      
+
       const timestamp = new Date(modifications.lastViewedDate!).getTime();
       expect(timestamp).toBeGreaterThanOrEqual(baseBefore);
       expect(timestamp).toBeLessThanOrEqual(baseAfter);
@@ -209,34 +220,34 @@ describe('StorageService', () => {
   });
 
   describe('Error handling', () => {
-    it('should handle localStorage errors gracefully', () => {
+    it('should handle localStorage errors gracefully', async () => {
       // Mock localStorage to throw errors
       const originalSetItem = localStorage.setItem;
       localStorage.setItem = vi.fn().mockImplementation(() => {
         throw new Error('Storage quota exceeded');
       });
 
-      // Should not throw, but log warning
-      expect(() => {
-        saveUserModifications({
+      // Should not throw, but handle error gracefully
+      await expect(
+        saveUserModifications(TEST_TRIP_ID, {
           activityStatus: {},
           activityOrders: {},
-        });
-      }).not.toThrow();
+        })
+      ).resolves.not.toThrow();
 
       // Restore original localStorage
       localStorage.setItem = originalSetItem;
     });
 
-    it('should handle malformed JSON in localStorage', () => {
+    it('should handle malformed JSON in localStorage', async () => {
       // Manually set invalid JSON
       Object.defineProperty(localStorage, 'getItem', {
         value: vi.fn().mockReturnValue('invalid json'),
         configurable: true,
       });
 
-      const modifications = getUserModifications();
-      
+      const modifications = await getUserModifications(TEST_TRIP_ID);
+
       expect(modifications).toEqual({
         activityStatus: {},
         activityOrders: {},
