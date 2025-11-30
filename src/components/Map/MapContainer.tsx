@@ -1,14 +1,34 @@
 import { DirectionsRenderer, GoogleMap, LoadScript, Marker, Polyline } from '@react-google-maps/api';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { PlaceHoverCard } from '@/components/Map/PlaceHoverCard';
 import { POIModal } from '@/components/Map/POIModal';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { PlacesService } from '@/services/placesService';
+import type { ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
-import { type Activity, ActivityType, type TripData } from '@/types/trip';
-import { enrichActivityWithType, getActivityTypeSvgPath, inferActivityType } from '@/utils/activityUtils';
+import { type Accommodation, type Activity, ActivityType, type TripBase, type TripData } from '@/types/trip';
+import {
+  enrichActivityWithType,
+  getAccommodationSvgPath,
+  getActivityTypeSvgPath,
+  getScenicWaypointSvgPath,
+  inferActivityType,
+} from '@/utils/activityUtils';
 import * as dateUtils from '@/utils/dateUtils';
 import '@/assets/styles/map-animations.css';
+
+// Hover state interface for place hover card
+interface HoverState {
+  type: 'accommodation' | 'activity' | 'scenic_waypoint';
+  id: string;
+  position: { x: number; y: number };
+  accommodation?: Accommodation;
+  activity?: Activity;
+  scenicWaypoint?: ScenicWaypoint;
+  stopName?: string;
+  isDone?: boolean;
+}
 
 interface MapContainerProps {
   tripData: TripData;
@@ -76,11 +96,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   onBaseSelect,
 }) => {
   const { state, dispatch } = useAppStateContext();
-  const [, setMap] = useState<google.maps.Map | null>(null);
+  const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
   const [routeFallback, setRouteFallback] = useState<google.maps.LatLng[]>([]);
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [routeError, setRouteError] = useState<string | null>(null);
+  const [hoverState, setHoverState] = useState<HoverState | null>(null);
   const placesServiceRef = useRef<PlacesService | null>(null);
 
   // Refs to store marker instances for animation
@@ -92,7 +113,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
   const onLoad = useCallback(
     (map: google.maps.Map) => {
-      setMap(map);
+      setMapInstance(map);
       setIsMapLoaded(true);
 
       // Initialize Places Service
@@ -123,8 +144,103 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   );
 
   const onUnmount = useCallback(() => {
-    setMap(null);
+    setMapInstance(null);
   }, []);
+
+  // Convert lat/lng to screen position for hover card placement
+  const getScreenPosition = useCallback(
+    (lat: number, lng: number): { x: number; y: number } => {
+      if (!mapInstance) return { x: 0, y: 0 };
+
+      const projection = mapInstance.getProjection();
+      if (!projection) return { x: 0, y: 0 };
+
+      const bounds = mapInstance.getBounds();
+      const ne = bounds?.getNorthEast();
+      const sw = bounds?.getSouthWest();
+
+      if (!(ne && sw)) return { x: 0, y: 0 };
+
+      const mapDiv = mapInstance.getDiv();
+      const mapWidth = mapDiv.offsetWidth;
+      const mapHeight = mapDiv.offsetHeight;
+
+      const latRange = ne.lat() - sw.lat();
+      const lngRange = ne.lng() - sw.lng();
+
+      const x = ((lng - sw.lng()) / lngRange) * mapWidth;
+      const y = ((ne.lat() - lat) / latRange) * mapHeight;
+
+      return { x, y };
+    },
+    [mapInstance]
+  );
+
+  // Hover handlers for markers
+  const handleAccommodationHover = useCallback(
+    (base: TripBase, isEntering: boolean) => {
+      if (!isEntering) {
+        setHoverState(null);
+        return;
+      }
+
+      const position = base.accommodation?.location || base.location;
+      const screenPos = getScreenPosition(position.lat, position.lng);
+
+      setHoverState({
+        type: 'accommodation',
+        id: base.stop_id,
+        position: screenPos,
+        accommodation: base.accommodation,
+        stopName: base.name,
+      });
+    },
+    [getScreenPosition]
+  );
+
+  const handleActivityHover = useCallback(
+    (activity: Activity, isEntering: boolean) => {
+      if (!isEntering) {
+        setHoverState(null);
+        return;
+      }
+
+      if (!(activity.location?.lat && activity.location?.lng)) return;
+
+      const screenPos = getScreenPosition(activity.location.lat, activity.location.lng);
+
+      setHoverState({
+        type: 'activity',
+        id: activity.activity_id,
+        position: screenPos,
+        activity,
+        isDone: activityStatus[activity.activity_id],
+      });
+    },
+    [getScreenPosition, activityStatus]
+  );
+
+  const handleScenicWaypointHover = useCallback(
+    (waypoint: ScenicWaypoint, isEntering: boolean) => {
+      if (!isEntering) {
+        setHoverState(null);
+        return;
+      }
+
+      if (!(waypoint.location?.lat && waypoint.location?.lng)) return;
+
+      const screenPos = getScreenPosition(waypoint.location.lat, waypoint.location.lng);
+
+      setHoverState({
+        type: 'scenic_waypoint',
+        id: waypoint.activity_id,
+        position: screenPos,
+        scenicWaypoint: waypoint,
+        isDone: activityStatus[waypoint.activity_id] || waypoint.status?.done,
+      });
+    },
+    [getScreenPosition, activityStatus]
+  );
 
   // Route fetching effect
   useEffect(() => {
@@ -258,41 +374,56 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     return 'current';
   };
 
-  // Accommodation pin (lodge-style) - Enhanced visibility with 1.5x size and Orange-500
-  const getAccommodationPinIcon = (baseId: string, isSelected: boolean) => {
+  // Accommodation pin (lodge-style) - Enhanced with glow effect and polished Material Design icon
+  const getAccommodationPinIcon = (baseId: string, isSelected: boolean, isHovered = false) => {
     const status = getBaseStatus(baseId);
-    let color = '#f97316'; // Orange-500 for active states
+    const color = '#f97316'; // Orange-500 for active states
     const strokeColor = '#ea580c'; // Orange-600 for outline
+    const glowColor = 'rgba(249, 115, 22, 0.7)'; // Orange glow
     let opacity = 1.0;
 
     if (status === 'past') {
-      color = '#f97316';
       opacity = 0.3;
-    } else if (status === 'current') {
-      color = '#f97316';
-      opacity = 1.0;
     } else if (status === 'upcoming') {
-      color = '#f97316';
       opacity = 0.7;
     }
 
     const baseSize = 30; // 1.5x larger than Google Maps default (20px)
     const selectedSize = 33; // 1.1x hover scaling
-    const size = isSelected ? selectedSize : baseSize;
+    const size = isSelected || isHovered ? selectedSize : baseSize;
+    const svgPath = getAccommodationSvgPath();
+
+    // Glow intensity based on state
+    const glowStdDev = isHovered ? 4 : 2;
+    const glowOpacity = isHovered ? 0.9 : 0.6;
 
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <defs>
+          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
+            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
+            <feMerge>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
           <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
           </filter>
         </defs>
-        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" 
+        <style>
+          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+          .pin-icon { animation: pulse 2s ease-in-out infinite; }
+        </style>
+        <path class="pin-icon" d="${svgPath}" 
               fill="${color}" 
               fill-opacity="${opacity}"
               stroke="${strokeColor}" 
               stroke-width="1" 
-              filter="url(#shadow)"/>
+              filter="url(#glow)"/>
       </svg>
     `)}`;
 
@@ -303,10 +434,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
-  // Activity pin with standardized visited/unvisited colors - Enhanced visibility with 1.5x size
-  const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean, isVisited = false) => {
+  // Activity pin with standardized visited/unvisited colors - Enhanced with glow effect and polished icons
+  const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean, isVisited = false, isHovered = false) => {
     // Standardized colors: blue for unvisited, green for visited
     const color = isVisited ? '#10b981' : '#0ea5e9'; // Emerald-500 for visited, Sky-500 for unvisited
+    const glowColor = isVisited ? 'rgba(16, 185, 129, 0.7)' : 'rgba(14, 165, 233, 0.7)';
     const svgPath = getActivityTypeSvgPath(activityType);
 
     // Calculate stroke color (darker version of fill color)
@@ -326,20 +458,35 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
     const baseSize = 30; // 1.5x larger than Google Maps default (20px)
     const selectedSize = 33; // 1.1x hover scaling
-    const size = isSelected ? selectedSize : baseSize;
+    const size = isSelected || isHovered ? selectedSize : baseSize;
+
+    // Glow intensity based on state
+    const glowStdDev = isHovered ? 4 : 2;
+    const glowOpacity = isHovered ? 0.9 : 0.6;
 
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
+            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
+            <feMerge>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
           </filter>
         </defs>
-        <path d="${svgPath}" 
+        <style>
+          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+          .pin-icon { animation: pulse 2s ease-in-out infinite; }
+        </style>
+        <path class="pin-icon" d="${svgPath}" 
               fill="${color}" 
               stroke="${strokeHex}" 
               stroke-width="1" 
-              filter="url(#shadow)"/>
+              filter="url(#glow)"/>
       </svg>
     `)}`;
 
@@ -350,13 +497,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
-  // Scenic waypoint pin with distinctive violet styling
-  const getScenicWaypointPinIcon = (isSelected: boolean, isVisited = false) => {
+  // Scenic waypoint pin with distinctive violet styling - Enhanced with glow effect
+  const getScenicWaypointPinIconFn = (isSelected: boolean, isVisited = false, isHovered = false) => {
     // Violet color scheme for scenic waypoints
     const color = isVisited ? '#10b981' : '#8b5cf6'; // Emerald-500 for visited, Violet-500 for unvisited
-    // Landscape/mountain SVG path for scenic waypoints
-    const svgPath =
-      'M3 18h18v-2l-4-4-2.5 2.5L12 12l-3.5 3.5L6 14l-3 4z M14 8.5c0 1.38-1.12 2.5-2.5 2.5S9 9.88 9 8.5 10.12 6 11.5 6s2.5 1.12 2.5 2.5z';
+    const glowColor = isVisited ? 'rgba(16, 185, 129, 0.7)' : 'rgba(139, 92, 246, 0.7)';
+    const svgPath = getScenicWaypointSvgPath();
 
     // Calculate stroke color (darker version of fill color)
     const strokeHex =
@@ -375,20 +521,35 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
     const baseSize = 30; // 1.5x larger than Google Maps default (20px)
     const selectedSize = 33; // 1.1x hover scaling
-    const size = isSelected ? selectedSize : baseSize;
+    const size = isSelected || isHovered ? selectedSize : baseSize;
+
+    // Glow intensity based on state
+    const glowStdDev = isHovered ? 4 : 2;
+    const glowOpacity = isHovered ? 0.9 : 0.6;
 
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
+            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
+            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
+            <feMerge>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="glow"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
           </filter>
         </defs>
-        <path d="${svgPath}" 
+        <style>
+          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
+          .pin-icon { animation: pulse 2s ease-in-out infinite; }
+        </style>
+        <path class="pin-icon" d="${svgPath}" 
               fill="${color}" 
               stroke="${strokeHex}" 
               stroke-width="1" 
-              filter="url(#shadow)"/>
+              filter="url(#glow)"/>
       </svg>
     `)}`;
 
@@ -512,21 +673,26 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         {isMapLoaded && tripData?.stops && (
           <>
             {/* Accommodation markers (lodge-style pins) */}
-            {tripData.stops.map((base) => (
-              <Marker
-                icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId)}
-                key={`accommodation-${base.stop_id}`}
-                onClick={() => onBaseSelect(base.stop_id)}
-                onLoad={(marker) => {
-                  accommodationMarkersRef.current.set(base.stop_id, marker);
-                }}
-                onUnmount={() => {
-                  accommodationMarkersRef.current.delete(base.stop_id);
-                }}
-                position={base.accommodation?.location || base.location}
-                title={`${base.name} - ${base.accommodation.name}`}
-              />
-            ))}
+            {tripData.stops.map((base) => {
+              const isHovered = hoverState?.type === 'accommodation' && hoverState?.id === base.stop_id;
+              return (
+                <Marker
+                  icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId, isHovered)}
+                  key={`accommodation-${base.stop_id}`}
+                  onClick={() => onBaseSelect(base.stop_id)}
+                  onLoad={(marker) => {
+                    accommodationMarkersRef.current.set(base.stop_id, marker);
+                  }}
+                  onMouseOut={() => handleAccommodationHover(base, false)}
+                  onMouseOver={() => handleAccommodationHover(base, true)}
+                  onUnmount={() => {
+                    accommodationMarkersRef.current.delete(base.stop_id);
+                  }}
+                  position={base.accommodation?.location || base.location}
+                  title={`${base.name} - ${base.accommodation.name}`}
+                />
+              );
+            })}
 
             {/* Activity markers for current base with standardized visited/unvisited colors */}
             {currentBase?.activities
@@ -537,15 +703,18 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                 const enrichedActivity = enrichActivityWithType(activity);
                 const activityType = enrichedActivity.activity_type || ActivityType.OTHER;
                 const isVisited = activityStatus[activity.activity_id];
+                const isHovered = hoverState?.type === 'activity' && hoverState?.id === activity.activity_id;
 
                 return (
                   <Marker
-                    icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId, isVisited)}
+                    icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId, isVisited, isHovered)}
                     key={`activity-${activity.activity_id}`}
                     onClick={() => onActivitySelect(activity.activity_id)}
                     onLoad={(marker) => {
                       activityMarkersRef.current.set(activity.activity_id, marker);
                     }}
+                    onMouseOut={() => handleActivityHover(activity, false)}
+                    onMouseOver={() => handleActivityHover(activity, true)}
                     onUnmount={() => {
                       activityMarkersRef.current.delete(activity.activity_id);
                     }}
@@ -562,15 +731,18 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                 // TypeScript safety: we know location exists due to filter above
                 const location = waypoint.location!;
                 const isVisited = activityStatus[waypoint.activity_id] || waypoint.status?.done;
+                const isHovered = hoverState?.type === 'scenic_waypoint' && hoverState?.id === waypoint.activity_id;
 
                 return (
                   <Marker
-                    icon={getScenicWaypointPinIcon(waypoint.activity_id === selectedActivityId, isVisited)}
+                    icon={getScenicWaypointPinIconFn(waypoint.activity_id === selectedActivityId, isVisited, isHovered)}
                     key={`scenic-waypoint-${waypoint.activity_id}`}
                     onClick={() => onActivitySelect(waypoint.activity_id)}
                     onLoad={(marker) => {
                       scenicWaypointMarkersRef.current.set(waypoint.activity_id, marker);
                     }}
+                    onMouseOut={() => handleScenicWaypointHover(waypoint, false)}
+                    onMouseOver={() => handleScenicWaypointHover(waypoint, true)}
                     onUnmount={() => {
                       scenicWaypointMarkersRef.current.delete(waypoint.activity_id);
                     }}
@@ -626,6 +798,20 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           onClose={handleClosePOIModal}
           poi={state.poiModal.poi}
         />
+
+        {/* Place Hover Card */}
+        {hoverState && (
+          <PlaceHoverCard
+            accommodation={hoverState.accommodation}
+            activity={hoverState.activity}
+            isDone={hoverState.isDone}
+            isVisible={true}
+            placeType={hoverState.type}
+            position={hoverState.position}
+            scenicWaypoint={hoverState.scenicWaypoint}
+            stopName={hoverState.stopName}
+          />
+        )}
       </GoogleMap>
     </LoadScript>
   );

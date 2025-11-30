@@ -476,23 +476,34 @@ interface ImageViewerModalProps {
 - Renders via React Portal to escape parent container hierarchy and display over entire app
 
 #### 10. Pin Components
-**Purpose**: Map marker components with enhanced visibility and location-specific styling using vivid color palette.
+**Purpose**: Map marker components with enhanced visibility, glow animations, and location-specific styling using polished Material Design icons.
 
 **Pin Icon Specifications**:
-- **Size**: All pins SHALL be sized 1.5x larger than Google Maps default built-in icons for enhanced visibility
+- **Size**: All pins SHALL be sized 1.5x larger than Google Maps default built-in icons for enhanced visibility (30px base, 33px hovered/selected)
 - **Colors**: All pins SHALL use vibrant colors from the application's color palette for maximum visual prominence
+- **Icons**: Polished Material Design filled SVG icons for modern, sleek appearance
 
-- **Accommodation Pins**: Lodge/hotel icon with status-based coloring using Orange-500 for active states
-- **Activity Pins**: Type-specific icons with standardized visited status colors:
+- **Accommodation Pins**: Material Design home icon with status-based coloring using Orange-500 for active states
+- **Activity Pins**: Type-specific Material Design icons with standardized visited status colors:
   - All unvisited activities: Sky-500 (#0ea5e9) blue color regardless of activity type
   - All visited activities: Emerald-500 (#10b981) green color regardless of activity type
-  - Icon shapes remain type-specific (restaurant: fork/knife, attraction: camera, etc.)
-  - Fallback icon: Flag icon for activities without specific type classification
+  - Icon shapes: Restaurant (utensils), Attraction (star), Shopping (bag), Outdoor (mountain), Cultural (museum), Transport (car), Other (location pin)
+- **Scenic Waypoint Pins**: Material Design landscape icon with Violet-500 (#8b5cf6) for unvisited, Emerald-500 for visited
+
+**Glow Animation Effects**:
+- **Continuous Glow**: Subtle pulsing glow animation that runs continuously on all pins
+  - Uses SVG feGaussianBlur filter with stdDeviation of 2
+  - Glow color matches pin color with 60% opacity
+  - Pulse animation cycles every 2 seconds with ease-in-out timing
+- **Hover Enhanced Glow**: Brighter, more prominent glow when hovering over pins
+  - Filter stdDeviation increases to 4 for wider glow radius
+  - Glow opacity increases to 90% for more vibrant effect
+  - Pin size increases from 30px to 33px for visual feedback
 
 **Enhanced Visibility Features**:
-- Pin shadows for better contrast against map backgrounds
+- Pin shadows using SVG drop-shadow filter for better contrast against map backgrounds
 - Hover state scaling (1.1x) with smooth transitions
-- Selection state highlighting with ring effects
+- Selection state highlighting with enhanced glow
 - Consistent stroke width and color for icon outlines
 - Drop pin animation for highlighted pins when locations are selected
 
@@ -547,6 +558,48 @@ interface LocationWarningProps {
 - Non-blocking design that doesn't prevent other functionality
 - Consistent styling with travel journal aesthetic
 - Responsive design for mobile and desktop
+
+#### 11. PlaceHoverCard Component
+**Purpose**: Popover card that displays place details when hovering over map pins for accommodations, activities, and scenic waypoints.
+
+```typescript
+type PlaceType = 'accommodation' | 'activity' | 'scenic_waypoint';
+
+interface PlaceHoverCardProps {
+  placeType: PlaceType;
+  accommodation?: Accommodation;
+  activity?: Activity;
+  scenicWaypoint?: ScenicWaypoint;
+  stopName?: string;
+  isDone?: boolean;
+  position: { x: number; y: number };
+  isVisible: boolean;
+}
+```
+
+**Key Features**:
+- **Frosted Glass Styling**: Consistent with other UI components using semi-transparent white background and backdrop blur
+- **Thumbnail Display**: Shows place thumbnail image (16x16 rem) when available from trip data
+- **Place Information**:
+  - Type icon and label (accommodation/activity type/scenic waypoint)
+  - Place name (truncated if too long)
+  - Stop name for accommodations
+  - Address with location pin icon
+  - Duration for activities and scenic waypoints
+  - Completion status indicator (checkmark for done, outline for pending)
+- **Color Coding**: Border and glow colors match pin type:
+  - Accommodation: Orange-200 border with orange shadow
+  - Activity: Sky-200 (unvisited) or Emerald-200 (done) border
+  - Scenic Waypoint: Violet-200 (unvisited) or Emerald-200 (done) border
+- **Positioning**: Fixed position near the hovered marker, offset 20px right and centered vertically
+- **Animation**: Fade-in and slide-in animation for smooth appearance
+- **Auto-dismiss**: Card disappears when mouse leaves the pin
+
+**Hover Card Behavior**:
+- Appears immediately on mouse enter (no delay)
+- Positioned using screen coordinates converted from lat/lng
+- Non-interactive (pointer-events: none) to allow clicking through to marker
+- Z-index of 1000 to appear above other map elements
 
 ### Custom Hooks
 

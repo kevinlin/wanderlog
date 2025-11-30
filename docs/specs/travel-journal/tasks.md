@@ -563,6 +563,51 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Updated design.md Animation Specifications with resize handle behavior
     - **Requirements Reference**: Documentation updates for new functionality
 
+- [x] 20. **Enhanced Pin Icons and Hover Interactions**
+  - [x] 20.1 Update SVG icon paths with polished Material Design icons
+    - Replaced activity type SVG paths with polished Material Design filled icons
+    - Updated icons for: Restaurant (utensils), Attraction (star), Shopping (bag), Outdoor (mountain), Cultural (museum), Transport (car), Other (location pin)
+    - Added getAccommodationSvgPath() and getScenicWaypointSvgPath() utility functions
+    - **Requirements Reference**: Requirement 1.17 (polished Material Design icons)
+
+  - [x] 20.2 Add glow animation effects to map pins
+    - Added CSS keyframes for pinGlowPulse (continuous subtle glow) and pinGlowHover (enhanced hover glow)
+    - Implemented SVG glow filter using feGaussianBlur for smooth glow effect
+    - Continuous pulse animation cycles every 2 seconds with ease-in-out timing
+    - Hover glow increases filter stdDeviation from 2 to 4 for wider, brighter effect
+    - Added glow color variants matching pin types (sky, emerald, orange, violet)
+    - **Requirements Reference**: Requirement 1.18, 1.19 (glow animations, hover effects)
+
+  - [x] 20.3 Update pin icon generation functions
+    - Updated getAccommodationPinIcon(), getActivityPinIcon(), and getScenicWaypointPinIconFn()
+    - Added isHovered parameter to all pin icon functions
+    - Integrated SVG glow filter into all pin icon definitions
+    - Glow intensity increases on hover (glowStdDev from 2 to 4, opacity from 0.6 to 0.9)
+    - Pin size increases from 30px to 33px on hover for visual feedback
+    - **Requirements Reference**: Requirement 1.18, 1.19 (glow effects, hover state)
+
+  - [x] 20.4 Create PlaceHoverCard component
+    - New component at src/components/Map/PlaceHoverCard.tsx
+    - Displays place details from trip data: name, type, thumbnail, address, duration, status
+    - Frosted glass styling with type-specific border and glow colors
+    - Fixed positioning near marker with fade-in animation
+    - Non-interactive (pointer-events: none) for seamless hover experience
+    - **Requirements Reference**: Requirement 1.20, 1.21 (hover popover display)
+
+  - [x] 20.5 Implement hover event handlers in MapContainer
+    - Added HoverState interface for tracking hovered marker info
+    - Implemented getScreenPosition() to convert lat/lng to screen coordinates
+    - Added handleAccommodationHover(), handleActivityHover(), handleScenicWaypointHover()
+    - Connected onMouseOver/onMouseOut events to all Marker components
+    - Integrated PlaceHoverCard rendering with hover state
+    - **Requirements Reference**: Requirement 1.20, 1.21 (hover behavior, auto-dismiss)
+
+  - [x] 20.6 Update documentation
+    - Added requirements 1.17-1.21 to requirements.md for enhanced pin icons
+    - Updated design.md Pin Components section with glow animation specifications
+    - Added PlaceHoverCard component documentation to design.md
+    - **Requirements Reference**: Documentation updates for new functionality
+
 ## Implementation Notes
 
 - Each task builds incrementally on previous tasks

@@ -358,35 +358,57 @@ export function getActivityTypeColor(activityType: ActivityType): string {
 
 /**
  * Gets the SVG path for an activity type icon (for pin styling)
+ * Polished Material Design filled icons for modern, sleek appearance
  * @param activityType - The activity type
  * @returns SVG path string for the activity type icon
  */
 export function getActivityTypeSvgPath(activityType: ActivityType): string {
   const iconMap = {
-    // Restaurant: Fork and knife icon
-    [ActivityType.RESTAURANT]: 'M8 2v20h2V2H8zm4 0v20h2v-4h4V2h-6zm2 2h2v12h-2V4z',
+    // Restaurant: Elegant utensils icon (Material Design restaurant)
+    [ActivityType.RESTAURANT]:
+      'M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z',
 
-    // Attraction: Camera/sightseeing icon
-    [ActivityType.ATTRACTION]:
-      'M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V7a2 2 0 00-2-2H4zm8 2a4 4 0 100 8 4 4 0 000-8z',
+    // Attraction: Star/landmark icon (Material Design star)
+    [ActivityType.ATTRACTION]: 'M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z',
 
-    // Shopping: Shopping bag icon
-    [ActivityType.SHOPPING]: 'M6 2a2 2 0 00-2 2v2a2 2 0 002 2h.5L8 22h8l1.5-14H18a2 2 0 002-2V4a2 2 0 00-2-2H6zm2 4V4h8v2H8z',
+    // Shopping: Modern shopping bag icon (Material Design shopping bag)
+    [ActivityType.SHOPPING]:
+      'M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z',
 
-    // Outdoor: Mountain/hiking icon
-    [ActivityType.OUTDOOR]: 'M2.5 16L4 14l1.5 2 3-4 3 4 1.5-2 3 4 3-4L21.5 16H2.5zM12 6a2 2 0 100-4 2 2 0 000 4z',
+    // Outdoor: Mountain peaks icon (Material Design terrain)
+    [ActivityType.OUTDOOR]: 'M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z',
 
-    // Cultural: Museum/building icon
-    [ActivityType.CULTURAL]:
-      'M6.5 2a.5.5 0 01.5.5V3h10v-.5a.5.5 0 011 0V3h1a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1h1v-.5a.5.5 0 01.5-.5zM6 5v2h12V5H6zm0 4v2h2V9H6zm4 0v2h2V9h-2zm4 0v2h2V9h-2zM6 13v2h2v-2H6zm4 0v2h2v-2h-2zm4 0v2h2v-2h-2z',
+    // Cultural: Temple/museum pillars icon (Material Design account balance)
+    [ActivityType.CULTURAL]: 'M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z',
 
-    // Transport: Vehicle icon
+    // Transport: Sleek car icon (Material Design directions car)
     [ActivityType.TRANSPORT]:
-      'M5 17a2 2 0 104 0 2 2 0 00-4 0zm10 0a2 2 0 104 0 2 2 0 00-4 0zM4 5a1 1 0 011-1h14a1 1 0 011 1v8a1 1 0 01-1 1H5a1 1 0 01-1-1V5z',
+      'M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z',
 
-    // Other/Default: Flag icon (primary accent)
-    [ActivityType.OTHER]: 'M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1v12z',
+    // Other/Default: Location pin icon (Material Design place)
+    [ActivityType.OTHER]:
+      'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z',
   };
 
   return iconMap[activityType] || iconMap[ActivityType.OTHER];
+}
+
+/**
+ * Gets the SVG path for accommodation pin icon
+ * Polished Material Design home/lodge icon
+ * @returns SVG path string for accommodation icon
+ */
+export function getAccommodationSvgPath(): string {
+  // Material Design home icon - modern house shape
+  return 'M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z';
+}
+
+/**
+ * Gets the SVG path for scenic waypoint pin icon
+ * Polished Material Design landscape icon
+ * @returns SVG path string for scenic waypoint icon
+ */
+export function getScenicWaypointSvgPath(): string {
+  // Material Design landscape/image icon - mountains with sun
+  return 'M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6zM5 17l2-2.5 1.5 2 2.5-3.5L14 17H5z';
 }

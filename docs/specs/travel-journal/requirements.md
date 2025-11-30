@@ -27,6 +27,11 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 14. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
 15. WHEN UI components are displayed over the map, THEN they SHALL be positioned as floating panels with appropriate gaps from screen edges
 16. WHEN floating panels are rendered, THEN they SHALL use frosted glass styling with rounded corners, semi-transparent white background, backdrop blur, subtle borders, and medium shadows
+17. WHEN map pins are rendered, THEN they SHALL use polished Material Design filled SVG icons for a modern and sleek appearance
+18. WHEN map pins are displayed, THEN they SHALL have a continuous subtle glow animation effect that pulses gently to enhance visual appeal
+19. WHEN a user hovers over a map pin, THEN the pin SHALL display an enhanced brighter glow effect and increase slightly in size for visual feedback
+20. WHEN a user hovers over a map pin (accommodation, activity, or scenic waypoint), THEN a Place Details popover SHALL appear showing place information from trip data including name, type, thumbnail image (if available), address, and completion status
+21. WHEN the Place Details popover is displayed on hover, THEN it SHALL use frosted glass styling consistent with other UI components and automatically dismiss when the mouse leaves the pin
 
 ### 2. Timeline Navigation and Date Management
 
