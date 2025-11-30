@@ -1,5 +1,5 @@
 // Validation utilities for Wanderlog Travel Journal
-import { Coordinates, ActivityType } from '@/types';
+import { ActivityType, type Coordinates } from '@/types';
 
 /**
  * Validates if an object has the basic structure of trip data
@@ -30,7 +30,7 @@ export const isValidTripData = (data: unknown, errors: string[], warnings: strin
     typeof d.trip_name === 'string' &&
     typeof d.timezone === 'string' &&
     Array.isArray(d.stops) &&
-    d.stops.every(stop => isValidStop(stop, errors, warnings))
+    d.stops.every((stop) => isValidStop(stop, errors, warnings))
   );
 };
 
@@ -86,7 +86,7 @@ export const isValidStop = (data: unknown, errors: string[], warnings: string[])
     typeof d.duration_days === 'number' &&
     isValidAccommodation(d.accommodation, errors, warnings) &&
     Array.isArray(d.activities) &&
-    d.activities.every(activity => isValidActivity(activity, errors, warnings))
+    d.activities.every((activity) => isValidActivity(activity, errors, warnings))
   );
 };
 
@@ -100,12 +100,7 @@ export const isValidDateRange = (data: unknown): boolean => {
 
   const d = data as Record<string, unknown>;
 
-  return (
-    typeof d.from === 'string' &&
-    typeof d.to === 'string' &&
-    isValidDateString(d.from) &&
-    isValidDateString(d.to)
-  );
+  return typeof d.from === 'string' && typeof d.to === 'string' && isValidDateString(d.from) && isValidDateString(d.to);
 };
 
 /**
@@ -135,14 +130,7 @@ export const isValidCoordinates = (data: unknown): data is Coordinates => {
 
   const d = data as Record<string, unknown>;
 
-  return (
-    typeof d.lat === 'number' &&
-    typeof d.lng === 'number' &&
-    d.lat >= -90 &&
-    d.lat <= 90 &&
-    d.lng >= -180 &&
-    d.lng <= 180
-  );
+  return typeof d.lat === 'number' && typeof d.lng === 'number' && d.lat >= -90 && d.lat <= 90 && d.lng >= -180 && d.lng <= 180;
 };
 
 /**
@@ -157,7 +145,7 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
   const d = data as Record<string, unknown>;
 
   if (d.name === undefined || typeof d.name !== 'string') {
-    return true;  // Skip validation if name is not present
+    return true; // Skip validation if name is not present
   }
 
   if (d.address === undefined || typeof d.address !== 'string') {
@@ -190,7 +178,8 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
     errors.push('thumbnail_url must be a string');
   }
 
-  const isValid = typeof d.name === 'string' &&
+  const isValid =
+    typeof d.name === 'string' &&
     typeof d.address === 'string' &&
     typeof d.check_in === 'string' &&
     typeof d.check_out === 'string' &&
@@ -200,7 +189,7 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
     (!d.thumbnail_url || typeof d.thumbnail_url === 'string');
 
   if (!isValid) {
-    console.log("Invalid accommodation:", d);
+    console.log('Invalid accommodation:', d);
   }
 
   return isValid;
@@ -275,24 +264,20 @@ export const isValidActivity = (data: unknown, errors: string[], warnings: strin
     errors.push('status must be a valid activity status');
   }
 
-  const hasValidLocation = d.location === undefined || (
-    typeof d.location === 'object' &&
-    d.location !== null &&
-    (
-      (d.location as Record<string, unknown>).lat === undefined || typeof (d.location as Record<string, unknown>).lat === 'number'
-    ) &&
-    (
-      (d.location as Record<string, unknown>).lng === undefined || typeof (d.location as Record<string, unknown>).lng === 'number'
-    ) &&
-    (
-      (d.location as Record<string, unknown>).address === undefined || typeof (d.location as Record<string, unknown>).address === 'string'
-    )
-  );
+  const hasValidLocation =
+    d.location === undefined ||
+    (typeof d.location === 'object' &&
+      d.location !== null &&
+      ((d.location as Record<string, unknown>).lat === undefined || typeof (d.location as Record<string, unknown>).lat === 'number') &&
+      ((d.location as Record<string, unknown>).lng === undefined || typeof (d.location as Record<string, unknown>).lng === 'number') &&
+      ((d.location as Record<string, unknown>).address === undefined ||
+        typeof (d.location as Record<string, unknown>).address === 'string'));
   if (!hasValidLocation) {
     errors.push('location must be a valid coordinates' + JSON.stringify(d.location));
   }
 
-  const isValid = typeof d.activity_id === 'string' &&
+  const isValid =
+    typeof d.activity_id === 'string' &&
     typeof d.activity_name === 'string' &&
     hasValidLocation &&
     (!d.duration || typeof d.duration === 'string') &&
@@ -304,7 +289,7 @@ export const isValidActivity = (data: unknown, errors: string[], warnings: strin
     (!d.status || isValidActivityStatus(d.status));
 
   if (!isValid) {
-    console.log("Invalid activity:", d);
+    console.log('Invalid activity:', d);
   }
 
   return isValid;
@@ -328,36 +313,36 @@ export const isValidActivityStatus = (data: unknown): boolean => {
  */
 export const hasLocationIssues = (location?: { lat?: number; lng?: number; address?: string }): boolean => {
   if (!location) return true;
-  
+
   // Check if coordinates are missing or invalid
-  const hasValidCoordinates = typeof location.lat === 'number' && 
-                              typeof location.lng === 'number' &&
-                              !isNaN(location.lat) && 
-                              !isNaN(location.lng) &&
-                              location.lat >= -90 && location.lat <= 90 &&
-                              location.lng >= -180 && location.lng <= 180;
-  
+  const hasValidCoordinates =
+    typeof location.lat === 'number' &&
+    typeof location.lng === 'number' &&
+    !isNaN(location.lat) &&
+    !isNaN(location.lng) &&
+    location.lat >= -90 &&
+    location.lat <= 90 &&
+    location.lng >= -180 &&
+    location.lng <= 180;
+
   // Check if address is meaningful (not just empty or whitespace)
-  const hasValidAddress = typeof location.address === 'string' && 
-                         location.address.trim().length > 0;
-  
+  const hasValidAddress = typeof location.address === 'string' && location.address.trim().length > 0;
+
   // Location has issues if it lacks both valid coordinates AND a meaningful address
-  return !hasValidCoordinates && !hasValidAddress;
+  return !(hasValidCoordinates || hasValidAddress);
 };
 
 /**
  * Checks if activity has location issues
  */
-export const activityHasLocationIssues = (activity: { location?: { lat?: number; lng?: number; address?: string } }): boolean => {
-  return hasLocationIssues(activity.location);
-};
+export const activityHasLocationIssues = (activity: { location?: { lat?: number; lng?: number; address?: string } }): boolean =>
+  hasLocationIssues(activity.location);
 
 /**
  * Checks if accommodation has location issues
  */
-export const accommodationHasLocationIssues = (accommodation: { location?: { lat?: number; lng?: number } }): boolean => {
-  return hasLocationIssues(accommodation.location);
-};
+export const accommodationHasLocationIssues = (accommodation: { location?: { lat?: number; lng?: number } }): boolean =>
+  hasLocationIssues(accommodation.location);
 
 /**
  * Validates URL format
@@ -382,19 +367,13 @@ export const isValidEmail = (email: string): boolean => {
 /**
  * Sanitizes string input to prevent XSS
  */
-export const sanitizeString = (input: string): string => {
-  return input
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#x27;')
-    .replace(/\//g, '&#x2F;');
-};
+export const sanitizeString = (input: string): string =>
+  input.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#x27;').replace(/\//g, '&#x2F;');
 
 /**
  * Validates and sanitizes user input
  */
-export const validateAndSanitizeInput = (input: unknown, maxLength: number = 1000): string => {
+export const validateAndSanitizeInput = (input: unknown, maxLength = 1000): string => {
   if (typeof input !== 'string') {
     return '';
   }

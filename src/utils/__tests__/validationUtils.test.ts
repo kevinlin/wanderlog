@@ -1,22 +1,22 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import type { Accommodation, Activity, Coordinates, TripBase, TripData } from '@/types';
 import {
-  isValidTripData,
-  isValidStop,
-  isValidDateRange,
-  isValidDateString,
-  isValidCoordinates,
+  accommodationHasLocationIssues,
+  activityHasLocationIssues,
+  hasLocationIssues,
   isValidAccommodation,
   isValidActivity,
   isValidActivityStatus,
-  isValidUrl,
+  isValidCoordinates,
+  isValidDateRange,
+  isValidDateString,
   isValidEmail,
+  isValidStop,
+  isValidTripData,
+  isValidUrl,
   sanitizeString,
   validateAndSanitizeInput,
-  hasLocationIssues,
-  activityHasLocationIssues,
-  accommodationHasLocationIssues
 } from '../validationUtils';
-import { TripData, TripBase, Coordinates, Accommodation, Activity } from '@/types';
 
 describe('ValidationUtils', () => {
   describe('isValidTripData', () => {
@@ -311,7 +311,7 @@ describe('ValidationUtils', () => {
       });
 
       it('should return true for invalid coordinates and no address', () => {
-        const location = { lat: NaN, lng: 200 };
+        const location = { lat: Number.NaN, lng: 200 };
         expect(hasLocationIssues(location)).toBe(true);
       });
 
@@ -343,19 +343,19 @@ describe('ValidationUtils', () => {
       });
 
       it('should return false for activity with valid location', () => {
-        const activity = { 
-          activity_id: 'test', 
+        const activity = {
+          activity_id: 'test',
           activity_name: 'Test',
-          location: { lat: -45.0, lng: 170.0 }
+          location: { lat: -45.0, lng: 170.0 },
         };
         expect(activityHasLocationIssues(activity)).toBe(false);
       });
 
       it('should return false for activity with valid address', () => {
-        const activity = { 
-          activity_id: 'test', 
+        const activity = {
+          activity_id: 'test',
           activity_name: 'Test',
-          location: { address: '123 Main St, Queenstown' }
+          location: { address: '123 Main St, Queenstown' },
         };
         expect(activityHasLocationIssues(activity)).toBe(false);
       });
@@ -368,10 +368,10 @@ describe('ValidationUtils', () => {
       });
 
       it('should return false for accommodation with valid coordinates', () => {
-        const accommodation = { 
-          name: 'Test Hotel', 
+        const accommodation = {
+          name: 'Test Hotel',
           address: '123 Test St',
-          location: { lat: -45.0, lng: 170.0 }
+          location: { lat: -45.0, lng: 170.0 },
         };
         expect(accommodationHasLocationIssues(accommodation)).toBe(false);
       });

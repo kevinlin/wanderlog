@@ -12,7 +12,7 @@ export interface WeatherCache {
   [baseId: string]: {
     data: WeatherData;
     lastFetched: number; // timestamp
-    expires: number;     // timestamp
+    expires: number; // timestamp
   };
 }
 

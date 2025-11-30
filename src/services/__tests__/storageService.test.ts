@@ -1,19 +1,19 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { UserModifications, WeatherCache } from '@/types';
 import {
+  getCachedWeather,
   getUserModifications,
+  getWeatherCache,
+  isStorageAvailable,
+  isWeatherCacheValid,
   saveUserModifications,
+  saveWeatherCache,
+  setCurrentTripId,
+  setLastViewedBase,
   updateActivityDoneStatus,
   updateActivityOrderForBase,
-  setLastViewedBase,
-  getWeatherCache,
-  saveWeatherCache,
   updateWeatherForBase,
-  isWeatherCacheValid,
-  getCachedWeather,
-  isStorageAvailable,
-  setCurrentTripId,
 } from '../storageService';
-import { UserModifications, WeatherCache } from '@/types';
 
 // Mock Firebase service to make tests use localStorage fallback
 vi.mock('../firebaseService', () => ({
@@ -50,11 +50,11 @@ describe('StorageService', () => {
     it('should save and retrieve user modifications', async () => {
       const modifications: UserModifications = {
         activityStatus: {
-          'activity1': true,
-          'activity2': false,
+          activity1: true,
+          activity2: false,
         },
         activityOrders: {
-          'base1': [0, 1, 2],
+          base1: [0, 1, 2],
         },
         lastViewedBase: 'base1',
         lastViewedDate: '2025-01-01T00:00:00.000Z',
@@ -104,7 +104,7 @@ describe('StorageService', () => {
 
     it('should save and retrieve weather cache', () => {
       const cache: WeatherCache = {
-        'base1': {
+        base1: {
           data: {
             temperature_2m_max: 25,
             temperature_2m_min: 15,
@@ -113,13 +113,13 @@ describe('StorageService', () => {
             time: '2025-01-01T00:00:00Z',
           },
           lastFetched: Date.now(),
-          expires: Date.now() + (6 * 60 * 60 * 1000),
+          expires: Date.now() + 6 * 60 * 60 * 1000,
         },
       };
 
       saveWeatherCache(cache);
       const retrieved = getWeatherCache();
-      
+
       expect(retrieved).toEqual(cache);
     });
 
@@ -138,7 +138,7 @@ describe('StorageService', () => {
 
       const cache = getWeatherCache();
       const entry = cache['base1'];
-      
+
       expect(entry).toBeDefined();
       expect(entry.data).toEqual(weatherData);
       expect(entry.lastFetched).toBeGreaterThanOrEqual(before);
@@ -147,11 +147,11 @@ describe('StorageService', () => {
     });
 
     it('should validate weather cache correctly', () => {
-      const futureExpiration = Date.now() + (60 * 60 * 1000); // 1 hour from now
-      const pastExpiration = Date.now() - (60 * 60 * 1000); // 1 hour ago
+      const futureExpiration = Date.now() + 60 * 60 * 1000; // 1 hour from now
+      const pastExpiration = Date.now() - 60 * 60 * 1000; // 1 hour ago
 
       const cache: WeatherCache = {
-        'base1': {
+        base1: {
           data: {
             temperature_2m_max: 25,
             temperature_2m_min: 15,
@@ -162,7 +162,7 @@ describe('StorageService', () => {
           lastFetched: Date.now(),
           expires: futureExpiration,
         },
-        'base2': {
+        base2: {
           data: {
             temperature_2m_max: 20,
             temperature_2m_min: 10,
@@ -192,14 +192,14 @@ describe('StorageService', () => {
       };
 
       updateWeatherForBase('base1', weatherData);
-      
+
       const cached = getCachedWeather('base1');
       expect(cached).toEqual(weatherData);
     });
 
     it('should return null for expired cache', () => {
       const cache: WeatherCache = {
-        'base1': {
+        base1: {
           data: {
             temperature_2m_max: 25,
             temperature_2m_min: 15,
@@ -213,7 +213,7 @@ describe('StorageService', () => {
       };
 
       saveWeatherCache(cache);
-      
+
       const cached = getCachedWeather('base1');
       expect(cached).toBeNull();
     });

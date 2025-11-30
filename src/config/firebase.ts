@@ -1,5 +1,5 @@
-import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getFirestore, Firestore, enableIndexedDbPersistence } from 'firebase/firestore';
+import { type FirebaseApp, initializeApp } from 'firebase/app';
+import { enableIndexedDbPersistence, type Firestore, getFirestore } from 'firebase/firestore';
 
 // Support both Vite (import.meta.env) and Node.js (process.env) environments
 const getEnvVar = (viteKey: string): string | undefined => {
@@ -11,7 +11,7 @@ const getEnvVar = (viteKey: string): string | undefined => {
   if (typeof process !== 'undefined' && process.env) {
     return process.env[viteKey];
   }
-  return undefined;
+  return;
 };
 
 const firebaseConfig = {
@@ -85,7 +85,7 @@ export const enableOffline = async (): Promise<boolean> => {
       console.warn('Firebase offline persistence failed: Multiple tabs open. Only one tab can have persistence enabled.');
     } else if (error.code === 'unimplemented') {
       // Browser doesn't support IndexedDB
-      console.warn('Firebase offline persistence failed: Browser doesn\'t support all necessary features.');
+      console.warn("Firebase offline persistence failed: Browser doesn't support all necessary features.");
     } else {
       console.warn('Firebase offline persistence failed:', error.message || error);
     }

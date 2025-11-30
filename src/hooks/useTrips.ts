@@ -1,7 +1,7 @@
-import { useEffect, useCallback } from 'react';
-import { LoadingState } from '@/types';
+import { useCallback, useEffect } from 'react';
+import { type TripSummary, useAppStateContext } from '@/contexts/AppStateContext';
 import { loadAllTrips } from '@/services/tripService';
-import { useAppStateContext, TripSummary } from '@/contexts/AppStateContext';
+import type { LoadingState } from '@/types';
 
 interface UseTripsReturn extends LoadingState {
   trips: TripSummary[];
@@ -29,7 +29,7 @@ export const useTrips = (): UseTripsReturn => {
       const trips = await loadAllTrips();
 
       // Convert TripData[] to TripSummary[]
-      const tripSummaries: TripSummary[] = trips.map(trip => ({
+      const tripSummaries: TripSummary[] = trips.map((trip) => ({
         trip_id: trip.trip_id,
         trip_name: trip.trip_name,
         timezone: trip.timezone,

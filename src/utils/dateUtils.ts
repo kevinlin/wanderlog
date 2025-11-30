@@ -1,32 +1,24 @@
-import { TripStop } from '@/types';
+import type { TripStop } from '@/types';
 
 /**
  * Get current date in NZ timezone (Pacific/Auckland)
  */
-export const getCurrentNZDate = (): Date => {
-  return new Date(new Date().toLocaleString("en-US", { timeZone: "Pacific/Auckland" }));
-};
+export const getCurrentNZDate = (): Date => new Date(new Date().toLocaleString('en-US', { timeZone: 'Pacific/Auckland' }));
 
 /**
  * Parse date string (YYYY-MM-DD) to Date object
  */
-export const parseDate = (dateString: string): Date => {
-  return new Date(dateString + 'T00:00:00');
-};
+export const parseDate = (dateString: string): Date => new Date(dateString + 'T00:00:00');
 
 /**
  * Format date to YYYY-MM-DD string
  */
-export const formatDate = (date: Date): string => {
-  return date.toISOString().split('T')[0];
-};
+export const formatDate = (date: Date): string => date.toISOString().split('T')[0];
 
 /**
  * Check if a date is between two dates (inclusive)
  */
-export const isDateBetween = (date: Date, startDate: Date, endDate: Date): boolean => {
-  return date >= startDate && date <= endDate;
-};
+export const isDateBetween = (date: Date, startDate: Date, endDate: Date): boolean => date >= startDate && date <= endDate;
 
 /**
  * Get the current stop based on today's date (NZ time)
@@ -34,14 +26,16 @@ export const isDateBetween = (date: Date, startDate: Date, endDate: Date): boole
 export const getCurrentStop = (stops: TripStop[]): TripStop | null => {
   const today = getCurrentNZDate();
   const todayString = formatDate(today);
-  
-  return stops.find(stop => {
-    const fromDate = parseDate(stop.date.from);
-    const toDate = parseDate(stop.date.to);
-    const currentDate = parseDate(todayString);
-    
-    return isDateBetween(currentDate, fromDate, toDate);
-  }) || null;
+
+  return (
+    stops.find((stop) => {
+      const fromDate = parseDate(stop.date.from);
+      const toDate = parseDate(stop.date.to);
+      const currentDate = parseDate(todayString);
+
+      return isDateBetween(currentDate, fromDate, toDate);
+    }) || null
+  );
 };
 
 /**
@@ -51,17 +45,17 @@ export const getStopTimeStatus = (stop: TripStop): 'past' | 'current' | 'upcomin
   const today = getCurrentNZDate();
   const todayString = formatDate(today);
   const currentDate = parseDate(todayString);
-  
+
   const fromDate = parseDate(stop.date.from);
   const toDate = parseDate(stop.date.to);
-  
+
   if (currentDate < fromDate) {
     return 'upcoming';
-  } else if (currentDate > toDate) {
-    return 'past';
-  } else {
-    return 'current';
   }
+  if (currentDate > toDate) {
+    return 'past';
+  }
+  return 'current';
 };
 
 /**
@@ -72,7 +66,7 @@ export const getDaysUntilStop = (stop: TripStop): number => {
   const todayString = formatDate(today);
   const currentDate = parseDate(todayString);
   const fromDate = parseDate(stop.date.from);
-  
+
   const diffTime = fromDate.getTime() - currentDate.getTime();
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };
@@ -85,7 +79,7 @@ export const getDaysSinceStop = (stop: TripStop): number => {
   const todayString = formatDate(today);
   const currentDate = parseDate(todayString);
   const toDate = parseDate(stop.date.to);
-  
+
   const diffTime = currentDate.getTime() - toDate.getTime();
   return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 };

@@ -1,0 +1,79 @@
+{
+  "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
+  "extends": ["ultracite/core", "ultracite/react"],
+  "files": {
+    "includes": ["!!src/services/tripDataService.ts"]
+  },
+  "linter": {
+    "rules": {
+      "a11y": {
+        "noNoninteractiveElementInteractions": "off",
+        "noStaticElementInteractions": "off",
+        "noSvgWithoutTitle": "off",
+        "useAriaPropsSupportedByRole": "off",
+        "useButtonType": "off",
+        "useKeyWithClickEvents": "off"
+      },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": "off",
+        "noForEach": "off",
+        "noStaticOnlyClass": "off",
+        "useLiteralKeys": "off"
+      },
+      "correctness": {
+        "noConstAssign": "off",
+        "noUndeclaredVariables": "off",
+        "noUnreachable": "off",
+        "noUnusedVariables": "off",
+        "useImageSize": "off"
+      },
+      "nursery": {
+        "noLeakedRender": "off",
+        "noShadow": "off"
+      },
+      "performance": {
+        "noBarrelFile": "off",
+        "noDelete": "off",
+        "noNamespaceImport": "off",
+        "useTopLevelRegex": "off"
+      },
+      "suspicious": {
+        "noArrayIndexKey": "off",
+        "noAssignInExpressions": "off",
+        "noDoubleEquals": "off",
+        "noEmptyBlockStatements": "off",
+        "noEvolvingTypes": "off",
+        "noExplicitAny": "off",
+        "noGlobalIsNan": "off",
+        "noSelfCompare": "off",
+        "noUnknownAtRules": "off",
+        "noVar": "off",
+        "useAwait": "off",
+        "useIterableCallbackReturn": "off"
+      },
+      "style": {
+        "noNestedTernary": "off",
+        "noNonNullAssertion": "off",
+        "useAtIndex": "off",
+        "useBlockStatements": "off",
+        "useConsistentMemberAccessibility": "off",
+        "useConsistentTypeDefinitions": "off",
+        "useConst": "off",
+        "useDefaultParameterLast": "off",
+        "useFilenamingConvention": "off",
+        "useNodejsImportProtocol": "off",
+        "useReadonlyClassProperties": "off",
+        "useTemplate": "off"
+      }
+    }
+  },
+  "formatter": {
+    "lineWidth": 140
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "always"
+    }
+  }
+}

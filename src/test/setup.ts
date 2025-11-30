@@ -1,5 +1,5 @@
-import { afterEach, vi } from 'vitest';
 import { cleanup } from '@testing-library/react';
+import { afterEach, vi } from 'vitest';
 import '@testing-library/jest-dom';
 
 // Cleanup after each test case (e.g. clearing jsdom)
@@ -12,9 +12,7 @@ const localStorageMock = (() => {
   let store: { [key: string]: string } = {};
 
   return {
-    getItem: (key: string) => {
-      return store[key] || null;
-    },
+    getItem: (key: string) => store[key] || null,
     setItem: (key: string, value: string) => {
       store[key] = value.toString();
     },

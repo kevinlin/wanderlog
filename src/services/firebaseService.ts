@@ -1,19 +1,19 @@
 import {
   collection,
+  type DocumentData,
   doc,
   getDoc,
   getDocs,
-  setDoc,
-  updateDoc,
-  query,
   orderBy,
+  type QueryDocumentSnapshot,
+  query,
+  setDoc,
   Timestamp,
-  QueryDocumentSnapshot,
-  DocumentData,
+  updateDoc,
 } from 'firebase/firestore';
 import { getDb } from '../config/firebase';
-import { TripData, UserModifications } from '../types';
-import { WeatherData } from '../types/weather';
+import type { TripData, UserModifications } from '../types';
+import type { WeatherData } from '../types/weather';
 
 // Collection names
 const COLLECTIONS = {
@@ -25,16 +25,12 @@ const COLLECTIONS = {
 /**
  * Convert Firestore Timestamp to ISO string
  */
-const timestampToISO = (timestamp: Timestamp | undefined): string | undefined => {
-  return timestamp?.toDate().toISOString();
-};
+const timestampToISO = (timestamp: Timestamp | undefined): string | undefined => timestamp?.toDate().toISOString();
 
 /**
  * Convert ISO string to Firestore Timestamp
  */
-const isoToTimestamp = (iso: string | undefined): Timestamp | undefined => {
-  return iso ? Timestamp.fromDate(new Date(iso)) : undefined;
-};
+const isoToTimestamp = (iso: string | undefined): Timestamp | undefined => (iso ? Timestamp.fromDate(new Date(iso)) : undefined);
 
 /**
  * Convert Firestore document to TripData
@@ -110,10 +106,7 @@ export const getTripById = async (tripId: string): Promise<TripData | null> => {
  * @param tripId - Optional custom ID (auto-generated if not provided)
  * @returns The created trip ID
  */
-export const createTrip = async (
-  tripData: TripData,
-  tripId?: string
-): Promise<string> => {
+export const createTrip = async (tripData: TripData, tripId?: string): Promise<string> => {
   try {
     const db = getDb();
     const id = tripId || doc(collection(db, COLLECTIONS.TRIPS)).id;
@@ -141,10 +134,7 @@ export const createTrip = async (
  * @param tripId - The trip document ID
  * @param updates - Partial trip data to update
  */
-export const updateTrip = async (
-  tripId: string,
-  updates: Partial<TripData>
-): Promise<void> => {
+export const updateTrip = async (tripId: string, updates: Partial<TripData>): Promise<void> => {
   try {
     const db = getDb();
     const tripRef = doc(db, COLLECTIONS.TRIPS, tripId);
@@ -172,9 +162,7 @@ export const updateTrip = async (
  * @param tripId - The trip document ID
  * @returns User modifications or empty object if not found
  */
-export const getUserModifications = async (
-  tripId: string
-): Promise<UserModifications> => {
+export const getUserModifications = async (tripId: string): Promise<UserModifications> => {
   try {
     const db = getDb();
     const modRef = doc(db, COLLECTIONS.USER_MODIFICATIONS, tripId);
@@ -209,10 +197,7 @@ export const getUserModifications = async (
  * @param tripId - The trip document ID
  * @param modifications - The user modifications to save
  */
-export const saveUserModifications = async (
-  tripId: string,
-  modifications: UserModifications
-): Promise<void> => {
+export const saveUserModifications = async (tripId: string, modifications: UserModifications): Promise<void> => {
   try {
     const db = getDb();
     const modRef = doc(db, COLLECTIONS.USER_MODIFICATIONS, tripId);
@@ -221,9 +206,7 @@ export const saveUserModifications = async (
       activityStatus: modifications.activityStatus || {},
       activityOrders: modifications.activityOrders || {},
       lastViewedBase: modifications.lastViewedBase,
-      lastViewedDate: modifications.lastViewedDate
-        ? isoToTimestamp(modifications.lastViewedDate)
-        : Timestamp.now(),
+      lastViewedDate: modifications.lastViewedDate ? isoToTimestamp(modifications.lastViewedDate) : Timestamp.now(),
       updated_at: Timestamp.now(),
     };
 
@@ -241,11 +224,7 @@ export const saveUserModifications = async (
  * @param activityId - The activity ID
  * @param done - Whether the activity is done
  */
-export const updateActivityStatus = async (
-  tripId: string,
-  activityId: string,
-  done: boolean
-): Promise<void> => {
+export const updateActivityStatus = async (tripId: string, activityId: string, done: boolean): Promise<void> => {
   try {
     const db = getDb();
     const modRef = doc(db, COLLECTIONS.USER_MODIFICATIONS, tripId);
@@ -271,10 +250,7 @@ export const updateActivityStatus = async (
  * @param baseId - The base/stop ID
  * @returns Cached weather data or null if not found/expired
  */
-export const getWeatherCache = async (
-  tripId: string,
-  baseId: string
-): Promise<WeatherData | null> => {
+export const getWeatherCache = async (tripId: string, baseId: string): Promise<WeatherData | null> => {
   try {
     const db = getDb();
     const cacheKey = `${tripId}_${baseId}`;
@@ -308,12 +284,7 @@ export const getWeatherCache = async (
  * @param data - The weather data to cache
  * @param ttlHours - Time to live in hours (default: 6)
  */
-export const saveWeatherCache = async (
-  tripId: string,
-  baseId: string,
-  data: WeatherData,
-  ttlHours: number = 6
-): Promise<void> => {
+export const saveWeatherCache = async (tripId: string, baseId: string, data: WeatherData, ttlHours = 6): Promise<void> => {
   try {
     const db = getDb();
     const cacheKey = `${tripId}_${baseId}`;
@@ -345,10 +316,7 @@ export const saveWeatherCache = async (
  * @param baseId - The base/stop ID
  * @returns True if cache exists and is not expired
  */
-export const isWeatherCacheValid = async (
-  tripId: string,
-  baseId: string
-): Promise<boolean> => {
+export const isWeatherCacheValid = async (tripId: string, baseId: string): Promise<boolean> => {
   try {
     const db = getDb();
     const cacheKey = `${tripId}_${baseId}`;

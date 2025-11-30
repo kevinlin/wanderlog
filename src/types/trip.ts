@@ -1,5 +1,5 @@
 // Trip data models for Wanderlog Travel Journal
-import { Coordinates, ScenicWaypoint } from './map';
+import type { Coordinates, ScenicWaypoint } from './map';
 
 export interface TripData {
   trip_id?: string;
@@ -19,7 +19,7 @@ export interface TripBase {
   name: string;
   date: {
     from: string; // YYYY-MM-DD
-    to: string;   // YYYY-MM-DD
+    to: string; // YYYY-MM-DD
   };
   location: Coordinates;
   duration_days: number;
@@ -34,8 +34,8 @@ export interface TripBase {
 export interface Accommodation {
   name: string;
   address: string;
-  check_in: string;    // YYYY-MM-DD HH:mm
-  check_out: string;   // YYYY-MM-DD HH:mm
+  check_in: string; // YYYY-MM-DD HH:mm
+  check_out: string; // YYYY-MM-DD HH:mm
   confirmation?: string;
   url?: string;
   thumbnail_url?: string;
@@ -49,15 +49,15 @@ export interface Accommodation {
 
 export const ActivityType = {
   RESTAURANT: 'restaurant',
-  ATTRACTION: 'attraction', 
+  ATTRACTION: 'attraction',
   SHOPPING: 'shopping',
   OUTDOOR: 'outdoor',
   CULTURAL: 'cultural',
   TRANSPORT: 'transport',
-  OTHER: 'other'
+  OTHER: 'other',
 } as const;
 
-export type ActivityType = typeof ActivityType[keyof typeof ActivityType];
+export type ActivityType = (typeof ActivityType)[keyof typeof ActivityType];
 
 export interface Activity {
   activity_id: string;
@@ -86,7 +86,7 @@ export interface Location extends Coordinates {
 
 export interface DateRange {
   from: string; // YYYY-MM-DD format
-  to: string;   // YYYY-MM-DD format
+  to: string; // YYYY-MM-DD format
 }
 
 export interface ActivityStatus {

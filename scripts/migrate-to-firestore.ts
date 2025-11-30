@@ -53,13 +53,11 @@ function validateFirebaseConfig(): void {
     'VITE_FIREBASE_APP_ID',
   ];
 
-  const missing = requiredVars.filter(
-    varName => !process.env[varName]
-  );
+  const missing = requiredVars.filter((varName) => !process.env[varName]);
 
   if (missing.length > 0) {
     console.error('❌ Missing required environment variables:');
-    missing.forEach(varName => console.error(`   - ${varName}`));
+    missing.forEach((varName) => console.error(`   - ${varName}`));
     console.error('\nPlease set these in your .env.local file');
     process.exit(1);
   }
@@ -80,7 +78,7 @@ async function readTripDataFile(filename: string): Promise<TripData> {
     // Handle both wrapped and unwrapped formats
     const tripData = data.tripData || data;
 
-    if (!tripData.trip_name || !tripData.timezone || !Array.isArray(tripData.stops)) {
+    if (!(tripData.trip_name && tripData.timezone && Array.isArray(tripData.stops))) {
       throw new Error('Invalid trip data format');
     }
 
@@ -108,7 +106,7 @@ async function getAllTripDataFiles(): Promise<string[]> {
   try {
     const tripDataDir = path.join(__dirname, '../public/trip-data');
     const files = await fs.readdir(tripDataDir);
-    return files.filter(file => file.endsWith('_trip-plan.json'));
+    return files.filter((file) => file.endsWith('_trip-plan.json'));
   } catch (error) {
     console.error('❌ Failed to read trip-data directory:', error);
     return [];
@@ -143,15 +141,12 @@ async function main(): Promise<void> {
   // Parse command line arguments
   const args = process.argv.slice(2);
   const overwrite = args.includes('--overwrite');
-  const filenames = args.filter(arg => !arg.startsWith('--'));
+  const filenames = args.filter((arg) => !arg.startsWith('--'));
 
   /**
    * Migrate a single trip to Firestore
    */
-  async function migrateTripToFirestore(
-    filename: string,
-    shouldOverwrite: boolean = false
-  ): Promise<void> {
+  async function migrateTripToFirestore(filename: string, shouldOverwrite = false): Promise<void> {
     // Read trip data from JSON file
     const tripData = await readTripDataFile(filename);
     const tripId = generateTripId(filename);

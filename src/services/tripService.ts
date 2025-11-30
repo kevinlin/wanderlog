@@ -1,6 +1,6 @@
-import { TripData } from '@/types';
-import { getAllTrips as getAllTripsFromFirestore, getTripById as getTripByIdFromFirestore } from './firebaseService';
+import type { TripData } from '@/types';
 import { isValidTripData } from '@/utils/validationUtils';
+import { getAllTrips as getAllTripsFromFirestore, getTripById as getTripByIdFromFirestore } from './firebaseService';
 
 /**
  * Validation result interface
@@ -97,9 +97,7 @@ export const validateTripData = (data: unknown): ValidationResult => {
  * @returns Promise resolving to trip data
  * @deprecated Use loadTripData instead
  */
-export const loadTripDataWithFallback = async (
-  tripIdOrFilename?: string
-): Promise<TripData> => {
+export const loadTripDataWithFallback = async (tripIdOrFilename?: string): Promise<TripData> => {
   const tripId = tripIdOrFilename || '202512_NZ_trip-plan';
 
   try {

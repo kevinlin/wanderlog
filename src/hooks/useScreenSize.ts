@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ScreenSize {
   width: number;
@@ -22,7 +22,7 @@ export const useScreenSize = (): ScreenSize => {
 
     const width = window.innerWidth;
     const height = window.innerHeight;
-    
+
     return {
       width,
       height,
@@ -36,7 +36,7 @@ export const useScreenSize = (): ScreenSize => {
     const handleResize = () => {
       const width = window.innerWidth;
       const height = window.innerHeight;
-      
+
       setScreenSize({
         width,
         height,

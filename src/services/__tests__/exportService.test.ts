@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Activity, TripData, TripStop, UserModifications } from '@/types';
 import { ExportService } from '../exportService';
-import { Activity, TripData, TripStop,UserModifications } from '@/types';
 
 // Mock the mergeUserModificationsWithTripData function
 vi.mock('@/utils/exportUtils', () => ({
@@ -64,7 +64,7 @@ describe('ExportService', () => {
       createObjectURL: vi.fn(() => 'mock-blob-url'),
       revokeObjectURL: vi.fn(),
     });
-    
+
     // Mock document methods
     const mockLink = {
       href: '',
@@ -83,7 +83,7 @@ describe('ExportService', () => {
   describe('exportTripData', () => {
     it('should merge user modifications with trip data', () => {
       const result = ExportService.exportTripData(mockTripData, mockUserModifications);
-      
+
       expect(result).toBeDefined();
       expect(result.trip_name).toBe('Test Trip');
       expect(result?.stops[0]?.activities[0]?.status?.done).toBe(true);
@@ -91,7 +91,7 @@ describe('ExportService', () => {
 
     it('should return merged data with correct structure', () => {
       const result = ExportService.exportTripData(mockTripData, mockUserModifications);
-      
+
       expect(result).toHaveProperty('trip_name');
       expect(result).toHaveProperty('timezone');
       expect(result).toHaveProperty('stops');
@@ -102,7 +102,7 @@ describe('ExportService', () => {
   describe('downloadAsJSON', () => {
     it('should create and trigger download link', () => {
       ExportService.downloadAsJSON(mockTripData);
-      
+
       expect(document.createElement).toHaveBeenCalledWith('a');
       expect(document.body.appendChild).toHaveBeenCalled();
       expect(document.body.removeChild).toHaveBeenCalled();
@@ -119,7 +119,7 @@ describe('ExportService', () => {
       document.createElement = vi.fn(() => mockLink as any);
 
       ExportService.downloadAsJSON(mockTripData);
-      
+
       expect(mockLink.download).toBe('test_trip_updated.json');
     });
 
@@ -132,7 +132,7 @@ describe('ExportService', () => {
       document.createElement = vi.fn(() => mockLink as any);
 
       ExportService.downloadAsJSON(mockTripData, 'custom_export');
-      
+
       expect(mockLink.download).toBe('custom_export.json');
     });
 
@@ -143,11 +143,11 @@ describe('ExportService', () => {
       });
 
       ExportService.downloadAsJSON(mockTripData);
-      
+
       // Verify that the function creates a blob with the right type
       expect(URL.createObjectURL).toHaveBeenCalledWith(
         expect.objectContaining({
-          type: 'application/json'
+          type: 'application/json',
         })
       );
     });
@@ -163,7 +163,7 @@ describe('ExportService', () => {
       document.createElement = vi.fn(() => mockLink as any);
 
       ExportService.exportAndDownload(mockTripData, mockUserModifications);
-      
+
       expect(document.createElement).toHaveBeenCalledWith('a');
       expect(mockLink.click).toHaveBeenCalled();
       expect(URL.createObjectURL).toHaveBeenCalled();
@@ -179,7 +179,7 @@ describe('ExportService', () => {
       document.createElement = vi.fn(() => mockLink as any);
 
       ExportService.exportAndDownload(mockTripData, mockUserModifications, 'my_export');
-      
+
       expect(mockLink.download).toBe('my_export.json');
     });
   });
@@ -187,7 +187,7 @@ describe('ExportService', () => {
   describe('generateFilename', () => {
     it('should generate filename from trip name', () => {
       const filename = ExportService.generateFilename(mockTripData);
-      
+
       expect(filename).toMatch(/^test_trip_export_\d{4}-\d{2}-\d{2}$/);
     });
 
@@ -196,9 +196,9 @@ describe('ExportService', () => {
         ...mockTripData,
         trip_name: 'My Amazing Trip! @#$%',
       };
-      
+
       const filename = ExportService.generateFilename(tripWithSpecialChars);
-      
+
       // 'My Amazing Trip! @#$%' -> 'my_amazing_trip_______' (7 underscores: space, space, !, space, @, #, $, %)
       expect(filename).toMatch(/^my_amazing_trip_______export_\d{4}-\d{2}-\d{2}$/);
     });
@@ -206,7 +206,7 @@ describe('ExportService', () => {
     it('should include current date in filename', () => {
       const today = new Date().toISOString().split('T')[0];
       const filename = ExportService.generateFilename(mockTripData);
-      
+
       expect(filename).toContain(today);
     });
   });

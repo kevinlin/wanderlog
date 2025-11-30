@@ -1,4 +1,4 @@
-import { StopStatus, ActivityStatus, ActivityOrder, UserModifications, WeatherCache } from '@/types';
+import type { ActivityOrder, ActivityStatus, StopStatus, UserModifications, WeatherCache } from '@/types';
 import * as firebaseService from './firebaseService';
 
 const STORAGE_KEYS = {
@@ -37,20 +37,16 @@ export const saveStopStatus = (stopStatus: StopStatus): void => {
 /**
  * Update activity status for a specific stop
  */
-export const updateActivityStatus = (
-  stopId: string,
-  activityId: string,
-  status: ActivityStatus
-): void => {
+export const updateActivityStatus = (stopId: string, activityId: string, status: ActivityStatus): void => {
   const stopStatus = getStopStatus();
-  
+
   if (!stopStatus[stopId]) {
     stopStatus[stopId] = {
       activities: {},
       activityOrder: {},
     };
   }
-  
+
   stopStatus[stopId].activities[activityId] = status;
   saveStopStatus(stopStatus);
 };
@@ -58,19 +54,16 @@ export const updateActivityStatus = (
 /**
  * Update activity order for a specific stop
  */
-export const updateActivityOrder = (
-  stopId: string,
-  activityOrder: ActivityOrder
-): void => {
+export const updateActivityOrder = (stopId: string, activityOrder: ActivityOrder): void => {
   const stopStatus = getStopStatus();
-  
+
   if (!stopStatus[stopId]) {
     stopStatus[stopId] = {
       activities: {},
       activityOrder: {},
     };
   }
-  
+
   stopStatus[stopId].activityOrder = activityOrder;
   saveStopStatus(stopStatus);
 };
@@ -103,7 +96,7 @@ export const saveLastViewedStop = (stopId: string): void => {
  */
 export const clearStorageData = (): void => {
   try {
-    Object.values(STORAGE_KEYS).forEach(key => {
+    Object.values(STORAGE_KEYS).forEach((key) => {
       localStorage.removeItem(key);
     });
   } catch (error) {
@@ -246,10 +239,7 @@ export const getUserModifications = async (tripId: string): Promise<UserModifica
  * @param tripId - The trip ID to save modifications for
  * @param modifications - The modifications to save
  */
-export const saveUserModifications = async (
-  tripId: string,
-  modifications: UserModifications
-): Promise<void> => {
+export const saveUserModifications = async (tripId: string, modifications: UserModifications): Promise<void> => {
   // Always save to localStorage first (immediate, synchronous)
   try {
     const key = `${STORAGE_KEYS.USER_MODIFICATIONS}_${tripId}`;
@@ -274,11 +264,7 @@ export const saveUserModifications = async (
  * @param activityId - The activity ID
  * @param done - Whether the activity is done
  */
-export const updateActivityDoneStatus = async (
-  tripId: string,
-  activityId: string,
-  done: boolean
-): Promise<void> => {
+export const updateActivityDoneStatus = async (tripId: string, activityId: string, done: boolean): Promise<void> => {
   const modifications = await getUserModifications(tripId);
   modifications.activityStatus[activityId] = done;
   await saveUserModifications(tripId, modifications);
@@ -291,11 +277,7 @@ export const updateActivityDoneStatus = async (
  * @param baseId - The base/stop ID
  * @param activityIds - Ordered array of activity IDs
  */
-export const updateActivityOrderForBase = async (
-  tripId: string,
-  baseId: string,
-  activityIds: string[]
-): Promise<void> => {
+export const updateActivityOrderForBase = async (tripId: string, baseId: string, activityIds: string[]): Promise<void> => {
   const modifications = await getUserModifications(tripId);
   modifications.activityOrders[baseId] = activityIds.map((_, index) => index);
   await saveUserModifications(tripId, modifications);
@@ -341,16 +323,16 @@ export const saveWeatherCache = (cache: WeatherCache): void => {
 /**
  * Update weather data for a specific base
  */
-export const updateWeatherForBase = (baseId: string, weatherData: import('@/types').WeatherData, cacheExpirationHours: number = 6): void => {
+export const updateWeatherForBase = (baseId: string, weatherData: import('@/types').WeatherData, cacheExpirationHours = 6): void => {
   const cache = getWeatherCache();
   const now = Date.now();
-  
+
   cache[baseId] = {
     data: weatherData,
     lastFetched: now,
-    expires: now + (cacheExpirationHours * 60 * 60 * 1000),
+    expires: now + cacheExpirationHours * 60 * 60 * 1000,
   };
-  
+
   saveWeatherCache(cache);
 };
 
@@ -360,11 +342,11 @@ export const updateWeatherForBase = (baseId: string, weatherData: import('@/type
 export const isWeatherCacheValid = (baseId: string): boolean => {
   const cache = getWeatherCache();
   const cacheEntry = cache[baseId];
-  
+
   if (!cacheEntry) {
     return false;
   }
-  
+
   return Date.now() < cacheEntry.expires;
 };
 
@@ -375,7 +357,7 @@ export const getCachedWeather = (baseId: string): import('@/types').WeatherData 
   if (!isWeatherCacheValid(baseId)) {
     return null;
   }
-  
+
   const cache = getWeatherCache();
   return cache[baseId]?.data || null;
 };
@@ -388,25 +370,25 @@ const migrateStopStatusToUserModifications = (stopStatus: StopStatus): UserModif
     activityStatus: {},
     activityOrders: {},
   };
-  
+
   Object.entries(stopStatus).forEach(([stopId, stopData]) => {
     // Migrate activity status
     Object.entries(stopData.activities).forEach(([activityId, status]) => {
       userModifications.activityStatus[activityId] = status.done;
     });
-    
+
     // Migrate activity order
     const orderEntries = Object.entries(stopData.activityOrder);
     if (orderEntries.length > 0) {
       userModifications.activityOrders[stopId] = orderEntries.map(([, order]) => order);
     }
   });
-  
+
   // Migrate last viewed stop
   const lastViewed = getLastViewedStop();
   if (lastViewed) {
     userModifications.lastViewedBase = lastViewed;
   }
-  
+
   return userModifications;
 };

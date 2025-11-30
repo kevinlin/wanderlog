@@ -1,5 +1,5 @@
-import { TripData, StopStatus, ExportData, UserModifications } from '@/types';
 import { getUserModifications } from '@/services/storageService';
+import type { ExportData, StopStatus, TripData, UserModifications } from '@/types';
 
 /**
  * Export trip data with current localStorage state
@@ -7,7 +7,7 @@ import { getUserModifications } from '@/services/storageService';
 export const exportTripData = (tripData: TripData): void => {
   const userModifications = getUserModifications();
   const exportData = mergeUserModificationsWithTripData(tripData, userModifications);
-  
+
   const exportObj: ExportData = {
     tripData: exportData,
     exportDate: new Date().toISOString(),
@@ -16,12 +16,12 @@ export const exportTripData = (tripData: TripData): void => {
 
   const dataStr = JSON.stringify(exportObj, null, 2);
   const dataBlob = new Blob([dataStr], { type: 'application/json' });
-  
+
   const url = URL.createObjectURL(dataBlob);
   const link = document.createElement('a');
   link.href = url;
   link.download = `${tripData.trip_name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_updated.json`;
-  
+
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -31,12 +31,9 @@ export const exportTripData = (tripData: TripData): void => {
 /**
  * Export trip data with UserModifications (new format)
  */
-export const exportTripDataWithUserModifications = (
-  tripData: TripData,
-  userModifications: UserModifications
-): void => {
+export const exportTripDataWithUserModifications = (tripData: TripData, userModifications: UserModifications): void => {
   const exportData = mergeUserModificationsWithTripData(tripData, userModifications);
-  
+
   const exportObj: ExportData = {
     tripData: exportData,
     exportDate: new Date().toISOString(),
@@ -45,12 +42,12 @@ export const exportTripDataWithUserModifications = (
 
   const dataStr = JSON.stringify(exportObj, null, 2);
   const dataBlob = new Blob([dataStr], { type: 'application/json' });
-  
+
   const url = URL.createObjectURL(dataBlob);
   const link = document.createElement('a');
   link.href = url;
   link.download = `${tripData.trip_name.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_updated.json`;
-  
+
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -60,18 +57,15 @@ export const exportTripDataWithUserModifications = (
 /**
  * Merge UserModifications back into trip data (new format)
  */
-export const mergeUserModificationsWithTripData = (
-  tripData: TripData,
-  userModifications: UserModifications
-): TripData => {
-  return {
-    ...tripData,
-    stops: tripData.stops.map(stop => ({
-      ...stop,
-      activities: stop.activities.map((activity, index) => {
+export const mergeUserModificationsWithTripData = (tripData: TripData, userModifications: UserModifications): TripData => ({
+  ...tripData,
+  stops: tripData.stops.map((stop) => ({
+    ...stop,
+    activities: stop.activities
+      .map((activity, index) => {
         const isDone = userModifications.activityStatus[activity.activity_id];
         const customOrder = userModifications.activityOrders[stop.stop_id];
-        
+
         return {
           ...activity,
           status: {
@@ -79,40 +73,37 @@ export const mergeUserModificationsWithTripData = (
           },
           order: customOrder ? customOrder[index] : (activity.order ?? index),
         };
-      }).sort((a, b) => {
+      })
+      .sort((a, b) => {
         const orderA = a.order ?? 0;
         const orderB = b.order ?? 0;
         return orderA - orderB;
       }),
-    })),
-  };
-};
+  })),
+});
 
 /**
  * Merge localStorage status back into trip data (legacy format - for backward compatibility)
  */
-export const mergeStopStatusWithTripData = (
-  tripData: TripData, 
-  stopStatus: StopStatus
-): TripData => {
-  return {
-    ...tripData,
-    stops: tripData.stops.map(stop => ({
-      ...stop,
-      activities: stop.activities.map(activity => {
+export const mergeStopStatusWithTripData = (tripData: TripData, stopStatus: StopStatus): TripData => ({
+  ...tripData,
+  stops: tripData.stops.map((stop) => ({
+    ...stop,
+    activities: stop.activities
+      .map((activity) => {
         const statusOverride = stopStatus[stop.stop_id]?.activities[activity.activity_id];
         const orderOverride = stopStatus[stop.stop_id]?.activityOrder[activity.activity_id];
-        
+
         return {
           ...activity,
           status: statusOverride || activity.status,
           order: orderOverride !== undefined ? orderOverride : activity.order,
         };
-      }).sort((a, b) => {
+      })
+      .sort((a, b) => {
         const orderA = stopStatus[stop.stop_id]?.activityOrder[a.activity_id] ?? a.order;
         const orderB = stopStatus[stop.stop_id]?.activityOrder[b.activity_id] ?? b.order;
         return orderA - orderB;
       }),
-    })),
-  };
-};
+  })),
+});

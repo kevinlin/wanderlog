@@ -1,8 +1,8 @@
-import { useEffect, useCallback } from 'react';
-import { TripData, LoadingState } from '@/types';
-import { loadTripData } from '@/services/tripService';
-import { getUserModifications, setCurrentTripId, getCurrentTripId } from '@/services/storageService';
+import { useCallback, useEffect } from 'react';
 import { useAppStateContext } from '@/contexts/AppStateContext';
+import { getCurrentTripId, getUserModifications, setCurrentTripId } from '@/services/storageService';
+import { loadTripData } from '@/services/tripService';
+import type { LoadingState, TripData } from '@/types';
 
 interface UseTripDataReturn extends LoadingState {
   tripData: TripData | null;
@@ -35,10 +35,7 @@ export const useTripData = (options: UseTripDataOptions = {}): UseTripDataReturn
       }
 
       // Load trip data and user modifications in parallel
-      const [tripData, userModifications] = await Promise.all([
-        loadTripData(tripId),
-        getUserModifications(tripId),
-      ]);
+      const [tripData, userModifications] = await Promise.all([loadTripData(tripId), getUserModifications(tripId)]);
 
       // Save current trip ID for future use
       setCurrentTripId(tripId);
@@ -65,9 +62,7 @@ export const useTripData = (options: UseTripDataOptions = {}): UseTripDataReturn
     // Fetch trip data when:
     // 1. We don't have trip data yet, OR
     // 2. The provided tripId is different from the current tripId
-    const shouldFetch =
-      (!state.tripData && !state.loading) ||
-      (providedTripId && providedTripId !== state.currentTripId);
+    const shouldFetch = !(state.tripData || state.loading) || (providedTripId && providedTripId !== state.currentTripId);
 
     if (shouldFetch) {
       fetchTripData();

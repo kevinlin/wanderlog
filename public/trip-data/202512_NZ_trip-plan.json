@@ -13,9 +13,7 @@
     "constraints": {
       "max_daily_driving_hours": "3–4h",
       "min_nights_per_stop": 2,
-      "exceptions": [
-        "13 Dec Christchurch = 1 night for groceries & shopping"
-      ]
+      "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"]
     },
     "stops": [
       {

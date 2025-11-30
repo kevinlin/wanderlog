@@ -3,11 +3,11 @@
  * Covers API integration, caching, and error handling
  */
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { WeatherService } from '../weatherService';
-import { WeatherData, WeatherApiResponse } from '@/types/weather';
-import { Coordinates } from '@/types/map';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { Coordinates } from '@/types/map';
+import type { WeatherApiResponse, WeatherData } from '@/types/weather';
 import * as storageService from '../storageService';
+import { WeatherService } from '../weatherService';
 
 // Mock the storage service
 vi.mock('../storageService', () => ({
@@ -84,15 +84,15 @@ describe('WeatherService', () => {
         statusText: 'Bad Request',
       });
 
-      await expect(WeatherService.fetchWeatherData(mockCoordinates))
-        .rejects.toThrow('Failed to fetch weather data: Weather API request failed: 400 Bad Request');
+      await expect(WeatherService.fetchWeatherData(mockCoordinates)).rejects.toThrow(
+        'Failed to fetch weather data: Weather API request failed: 400 Bad Request'
+      );
     });
 
     it('should handle network errors', async () => {
       mockFetch.mockRejectedValueOnce(new Error('Network error'));
 
-      await expect(WeatherService.fetchWeatherData(mockCoordinates))
-        .rejects.toThrow('Failed to fetch weather data: Network error');
+      await expect(WeatherService.fetchWeatherData(mockCoordinates)).rejects.toThrow('Failed to fetch weather data: Network error');
     });
 
     it('should handle invalid response format', async () => {
@@ -101,8 +101,9 @@ describe('WeatherService', () => {
         json: async () => ({ invalid: 'response' }),
       });
 
-      await expect(WeatherService.fetchWeatherData(mockCoordinates))
-        .rejects.toThrow('Failed to fetch weather data: Invalid weather API response format');
+      await expect(WeatherService.fetchWeatherData(mockCoordinates)).rejects.toThrow(
+        'Failed to fetch weather data: Invalid weather API response format'
+      );
     });
 
     it('should handle empty response data', async () => {
@@ -119,8 +120,9 @@ describe('WeatherService', () => {
         }),
       });
 
-      await expect(WeatherService.fetchWeatherData(mockCoordinates))
-        .rejects.toThrow('Failed to fetch weather data: Invalid weather API response format');
+      await expect(WeatherService.fetchWeatherData(mockCoordinates)).rejects.toThrow(
+        'Failed to fetch weather data: Invalid weather API response format'
+      );
     });
   });
 
@@ -238,10 +240,7 @@ describe('WeatherService', () => {
 
       WeatherService.fetchWeatherData(mockCoordinates);
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        expect.stringContaining('https://custom-api.example.com'),
-        expect.any(Object)
-      );
+      expect(mockFetch).toHaveBeenCalledWith(expect.stringContaining('https://custom-api.example.com'), expect.any(Object));
     });
   });
 });

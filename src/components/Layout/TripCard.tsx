@@ -1,6 +1,6 @@
-import React from 'react';
-import { TripSummary } from '@/contexts/AppStateContext';
 import { format } from 'date-fns';
+import type React from 'react';
+import type { TripSummary } from '@/contexts/AppStateContext';
 
 interface TripCardProps {
   trip: TripSummary;
@@ -27,29 +27,23 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, isSelected, onSelect }
 
   return (
     <button
-      onClick={handleClick}
-      className={`
-        w-full p-4 rounded-lg border-2 transition-all text-left
-        ${
-          isSelected
-            ? 'border-alpine-teal-500 bg-alpine-teal-50 shadow-md'
-            : 'border-gray-200 bg-white hover:border-alpine-teal-300 hover:shadow-sm'
-        }
+      className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+        isSelected
+          ? 'border-alpine-teal-500 bg-alpine-teal-50 shadow-md'
+          : 'border-gray-200 bg-white hover:border-alpine-teal-300 hover:shadow-sm'
+      }
       `}
+      onClick={handleClick}
     >
       <div className="flex flex-col gap-2">
         <div className="flex items-start justify-between">
-          <h3 className="text-lg font-semibold text-gray-900">
-            {trip.trip_name}
-          </h3>
+          <h3 className="font-semibold text-gray-900 text-lg">{trip.trip_name}</h3>
           {isSelected && (
-            <span className="flex-shrink-0 px-2 py-1 text-xs font-medium text-alpine-teal-700 bg-alpine-teal-100 rounded">
-              Current
-            </span>
+            <span className="flex-shrink-0 rounded bg-alpine-teal-100 px-2 py-1 font-medium text-alpine-teal-700 text-xs">Current</span>
           )}
         </div>
 
-        <div className="flex flex-col gap-1 text-sm text-gray-600">
+        <div className="flex flex-col gap-1 text-gray-600 text-sm">
           <div className="flex items-center gap-2">
             <span className="font-medium">Timezone:</span>
             <span>{trip.timezone}</span>

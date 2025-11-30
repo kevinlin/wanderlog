@@ -1,4 +1,4 @@
-import React from 'react';
+import type React from 'react';
 
 interface ErrorMessageProps {
   message: string;
@@ -9,16 +9,9 @@ interface ErrorMessageProps {
   details?: string;
 }
 
-export const ErrorMessage: React.FC<ErrorMessageProps> = ({ 
-  message, 
-  onRetry, 
-  fullScreen = false,
-  title,
-  type = 'general',
-  details
-}) => {
-  const containerClass = fullScreen 
-    ? 'min-h-screen bg-gradient-to-br from-sandy-beige to-white flex items-center justify-center p-4' 
+export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, fullScreen = false, title, type = 'general', details }) => {
+  const containerClass = fullScreen
+    ? 'min-h-screen bg-gradient-to-br from-sandy-beige to-white flex items-center justify-center p-4'
     : 'flex items-center justify-center p-8';
 
   // Get appropriate icon and styling based on error type
@@ -30,7 +23,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
           title: title || 'Connection Lost',
           bgColor: 'bg-orange-50',
           borderColor: 'border-orange-200',
-          iconColor: 'text-orange-500'
+          iconColor: 'text-orange-500',
         };
       case 'data':
         return {
@@ -38,7 +31,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
           title: title || 'Data Unavailable',
           bgColor: 'bg-blue-50',
           borderColor: 'border-blue-200',
-          iconColor: 'text-blue-500'
+          iconColor: 'text-blue-500',
         };
       case 'permission':
         return {
@@ -46,7 +39,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
           title: title || 'Access Denied',
           bgColor: 'bg-yellow-50',
           borderColor: 'border-yellow-200',
-          iconColor: 'text-yellow-600'
+          iconColor: 'text-yellow-600',
         };
       default:
         return {
@@ -54,7 +47,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
           title: title || 'Something Went Wrong',
           bgColor: 'bg-red-50',
           borderColor: 'border-red-200',
-          iconColor: 'text-red-500'
+          iconColor: 'text-red-500',
         };
     }
   };
@@ -63,32 +56,26 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
 
   return (
     <div className={containerClass}>
-      <div className="bg-white rounded-xl shadow-xl border border-gray-100 p-8 max-w-lg w-full">
+      <div className="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
         {/* Travel-themed header */}
-        <div className="text-center mb-6">
-          <div className="text-6xl mb-4">{config.icon}</div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">
-            {config.title}
-          </h3>
-          <p className="text-gray-600 leading-relaxed">
-            {message}
-          </p>
+        <div className="mb-6 text-center">
+          <div className="mb-4 text-6xl">{config.icon}</div>
+          <h3 className="mb-2 font-bold text-gray-900 text-xl">{config.title}</h3>
+          <p className="text-gray-600 leading-relaxed">{message}</p>
         </div>
 
         {/* Additional details if provided */}
         {details && (
-          <div className={`${config.bgColor} ${config.borderColor} border rounded-lg p-4 mb-6`}>
-            <h4 className="text-sm font-semibold text-gray-700 mb-2">Details:</h4>
-            <p className="text-sm text-gray-600">
-              {details}
-            </p>
+          <div className={`${config.bgColor} ${config.borderColor} mb-6 rounded-lg border p-4`}>
+            <h4 className="mb-2 font-semibold text-gray-700 text-sm">Details:</h4>
+            <p className="text-gray-600 text-sm">{details}</p>
           </div>
         )}
 
         {/* Helpful suggestions based on error type */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-6">
-          <h4 className="text-sm font-semibold text-gray-700 mb-2">What you can try:</h4>
-          <ul className="text-sm text-gray-600 space-y-1">
+        <div className="mb-6 rounded-lg bg-gray-50 p-4">
+          <h4 className="mb-2 font-semibold text-gray-700 text-sm">What you can try:</h4>
+          <ul className="space-y-1 text-gray-600 text-sm">
             {type === 'network' && (
               <>
                 <li>• Check your internet connection</li>
@@ -121,19 +108,19 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
         </div>
 
         {/* Action buttons */}
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="flex flex-col gap-3 sm:flex-row">
           {onRetry && (
             <button
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-alpine-teal px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-opacity-90"
               onClick={onRetry}
-              className="flex-1 bg-alpine-teal text-white px-6 py-3 rounded-lg hover:bg-opacity-90 transition-all duration-200 font-medium flex items-center justify-center gap-2"
             >
               <span>🔄</span>
               Try Again
             </button>
           )}
           <button
+            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-gray-100 px-6 py-3 font-medium text-gray-700 transition-all duration-200 hover:bg-gray-200"
             onClick={() => window.location.reload()}
-            className="flex-1 bg-gray-100 text-gray-700 px-6 py-3 rounded-lg hover:bg-gray-200 transition-all duration-200 font-medium flex items-center justify-center gap-2"
           >
             <span>↻</span>
             Refresh Page
@@ -142,7 +129,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({
 
         {/* Help text */}
         <div className="mt-6 text-center">
-          <p className="text-xs text-gray-500 leading-relaxed">
+          <p className="text-gray-500 text-xs leading-relaxed">
             If this problem continues, try clearing your browser's cache and cookies for this site.
           </p>
         </div>

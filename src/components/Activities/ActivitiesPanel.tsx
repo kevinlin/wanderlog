@@ -1,14 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Activity, Accommodation, TripData, UserModifications } from '@/types';
-import { Coordinates, ScenicWaypoint } from '@/types/map';
+import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import type React from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
-import { WeatherCard } from '@/components/Cards/WeatherCard';
 import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
-import { DraggableActivitiesList } from './DraggableActivity';
-import { useWeather } from '@/hooks/useWeather';
+import { WeatherCard } from '@/components/Cards/WeatherCard';
 import { useScreenSize } from '@/hooks/useScreenSize';
+import { useWeather } from '@/hooks/useWeather';
 import { ExportService } from '@/services/exportService';
-import { ChevronDownIcon, ChevronUpIcon, ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import type { Accommodation, Activity, TripData, UserModifications } from '@/types';
+import type { Coordinates, ScenicWaypoint } from '@/types/map';
+import { DraggableActivitiesList } from './DraggableActivity';
 
 interface ActivitiesPanelProps {
   accommodation: Accommodation;
@@ -70,7 +71,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   };
 
   const handleExport = () => {
-    if (!tripData || !userModifications) {
+    if (!(tripData && userModifications)) {
       console.warn('Export failed: Missing trip data or user modifications');
       return;
     }
@@ -107,7 +108,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           activityElement.scrollIntoView({
             behavior: 'smooth',
             block: 'center',
-            inline: 'nearest'
+            inline: 'nearest',
           });
         }, 350); // Slightly longer than the 300ms transition
       }
@@ -115,9 +116,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   }, [selectedActivityId, isExpanded]);
 
   // Mobile slide-out animation classes
-  const mobileClasses = isVisible
-    ? 'translate-y-0'
-    : 'translate-y-full';
+  const mobileClasses = isVisible ? 'translate-y-0' : 'translate-y-full';
 
   // Hide panel completely on mobile when not visible
   if (!isVisible && isMobile) {
@@ -126,81 +125,67 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   return (
     <div
-      className={`
-        fixed bottom-0 left-0 right-0 sm:absolute sm:top-2 sm:right-2 sm:left-auto sm:bottom-auto sm:top-4 sm:right-4
-        rounded-t-xl sm:rounded-xl bg-white/30 backdrop-blur border-t sm:border border-white/20 shadow-md
-        transition-all duration-400 ease-in-out z-20
-        ${mobileClasses}
-        ${isExpanded
-          ? 'h-[calc(100vh-4rem)] sm:bottom-2 sm:bottom-4 w-full sm:w-96 max-w-full sm:max-w-96 overflow-hidden'
-          : 'h-auto w-full sm:w-96 max-w-full sm:max-w-96 max-h-[60vh] sm:max-h-[calc(100vh-8rem)]'
+      className={`fixed right-0 bottom-0 left-0 z-20 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur transition-all duration-400 ease-in-out sm:absolute sm:top-2 sm:top-4 sm:right-2 sm:right-4 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
+        ${
+          isExpanded
+            ? 'h-[calc(100vh-4rem)] w-full max-w-full overflow-hidden sm:bottom-2 sm:bottom-4 sm:w-96 sm:max-w-96'
+            : 'h-auto max-h-[60vh] w-full max-w-full sm:max-h-[calc(100vh-8rem)] sm:w-96 sm:max-w-96'
         }
         ${className}
       `}
     >
       {/* Panel Content */}
-      <div className={`
-        ${isExpanded ? 'h-full flex flex-col' : ''}
-      `}>
+      <div
+        className={`
+        ${isExpanded ? 'flex h-full flex-col' : ''}
+      `}
+      >
         {/* Mobile Collapse Button */}
         {isMobile && onHide && (
-          <div className="flex justify-center px-3 border-b border-white/20 flex-shrink-0">
+          <div className="flex flex-shrink-0 justify-center border-white/20 border-b px-3">
             <button
-              onClick={onHide}
-              className="px-2 hover:bg-gray-500/20 active:bg-gray-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
               aria-label="Hide activities panel"
+              className="min-h-[44px] min-w-[44px] touch-manipulation rounded-lg px-2 transition-colors hover:bg-gray-500/20 active:bg-gray-500/30"
+              onClick={onHide}
             >
-              <ChevronDownIcon className="w-6 h-6 text-gray-600" />
+              <ChevronDownIcon className="h-6 w-6 text-gray-600" />
             </button>
           </div>
         )}
 
         {/* Scrollable Content Area */}
         <div
-          ref={scrollContainerRef}
           className={`
-            ${isExpanded ? 'flex-1 overflow-y-auto' : 'max-h-[50vh] overflow-y-auto'} 
-            overscroll-contain
-          `}
+            ${isExpanded ? 'flex-1 overflow-y-auto' : 'max-h-[50vh] overflow-y-auto'} overscroll-contain`}
+          ref={scrollContainerRef}
         >
           {/* Accommodation Card - Always Visible */}
           <div className="px-3 pb-3">
-            <AccommodationCard
-              accommodation={accommodation}
-              stopName={stopName}
-            />
+            <AccommodationCard accommodation={accommodation} stopName={stopName} />
           </div>
 
           {/* Scenic Waypoints Section */}
           {scenicWaypoints.length > 0 && (
             <div className="px-3 pb-3">
               <button
+                className="mb-3 flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/20 px-4 py-3 font-medium text-violet-700 transition-all duration-200 hover:bg-violet-500/30 hover:shadow-md active:bg-violet-500/40"
                 onClick={toggleScenicWaypoints}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 
-                         bg-violet-500/20 hover:bg-violet-500/30 active:bg-violet-500/40
-                         border border-violet-500/30 rounded-lg
-                         text-violet-700 font-medium transition-all duration-200
-                         hover:shadow-md touch-manipulation min-h-[44px] mb-3"
               >
                 <span>🏞️ Scenic Waypoints ({scenicWaypoints.length})</span>
-                {isScenicWaypointsExpanded ? (
-                  <ChevronUpIcon className="w-4 h-4" />
-                ) : (
-                  <ChevronDownIcon className="w-4 h-4" />
-                )}
+                {isScenicWaypointsExpanded ? <ChevronUpIcon className="h-4 w-4" /> : <ChevronDownIcon className="h-4 w-4" />}
               </button>
 
               {isScenicWaypointsExpanded && (
                 <div className="space-y-3">
                   {scenicWaypoints.map((waypoint) => (
                     <ScenicWaypointCard
-                      key={waypoint.activity_id}
-                      waypoint={waypoint}
                       accommodation={accommodation}
+                      isDone={activityStatus[waypoint.activity_id] || waypoint.status?.done}
                       isSelected={selectedActivityId === waypoint.activity_id}
-                      isDone={activityStatus[waypoint.activity_id] || waypoint.status?.done || false}
-                      onToggleDone={onToggleDone}
+                      key={waypoint.activity_id}
                       onSelect={onActivitySelect}
+                      onToggleDone={onToggleDone}
+                      waypoint={waypoint}
                     />
                   ))}
                 </div>
@@ -212,15 +197,11 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           {!isExpanded && (
             <div className="px-3 pb-3">
               <button
+                className="flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-sky-500/30 bg-sky-500/20 px-4 py-3 font-medium text-sky-700 transition-all duration-200 hover:bg-sky-500/30 hover:shadow-md active:bg-sky-500/40"
                 onClick={toggleExpanded}
-                className="w-full flex items-center justify-center gap-2 py-3 px-4 
-                         bg-sky-500/20 hover:bg-sky-500/30 active:bg-sky-500/40
-                         border border-sky-500/30 rounded-lg
-                         text-sky-700 font-medium transition-all duration-200
-                         hover:shadow-md touch-manipulation min-h-[44px]"
               >
                 <span>📋 Activities ({activities.length})</span>
-                <ChevronDownIcon className="w-4 h-4" />
+                <ChevronDownIcon className="h-4 w-4" />
               </button>
             </div>
           )}
@@ -229,17 +210,15 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           {isExpanded && (
             <>
               {/* Activities Header */}
-              <div className="px-3 pb-3 flex-shrink-0">
+              <div className="flex-shrink-0 px-3 pb-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    📋 Activities ({activities.length})
-                  </h3>
+                  <h3 className="font-semibold text-gray-900 text-lg">📋 Activities ({activities.length})</h3>
                   <button
-                    onClick={toggleExpanded}
-                    className="p-2 hover:bg-orange-500/20 active:bg-orange-500/30 rounded-lg transition-colors touch-manipulation min-h-[44px] min-w-[44px]"
                     aria-label="Collapse activities panel"
+                    className="min-h-[44px] min-w-[44px] touch-manipulation rounded-lg p-2 transition-colors hover:bg-orange-500/20 active:bg-orange-500/30"
+                    onClick={toggleExpanded}
                   >
-                    <ChevronUpIcon className="w-5 h-5 text-gray-600" />
+                    <ChevronUpIcon className="h-5 w-5 text-gray-600" />
                   </button>
                 </div>
               </div>
@@ -252,31 +231,25 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               {/* Activities List */}
               <div className="px-3 pb-3">
                 <DraggableActivitiesList
-                  activities={activities}
                   accommodation={accommodation}
-                  selectedActivityId={selectedActivityId}
+                  activities={activities}
                   activityStatus={activityStatus}
                   onActivitySelect={onActivitySelect}
-                  onToggleDone={onToggleDone}
                   onReorder={onReorder}
+                  onToggleDone={onToggleDone}
+                  selectedActivityId={selectedActivityId}
                 />
               </div>
 
               {/* Export Button */}
-              <div className="px-3 pb-6 border-t border-white/20 pt-3">
+              <div className="border-white/20 border-t px-3 pt-3 pb-6">
                 <button
+                  className="flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/20 px-4 py-3 font-medium text-emerald-700 transition-all duration-200 hover:bg-emerald-500/30 hover:shadow-md active:bg-emerald-500/40 disabled:cursor-not-allowed disabled:border-gray-500/30 disabled:bg-gray-500/20 disabled:text-gray-500 disabled:hover:bg-gray-500/20"
+                  disabled={!(tripData && userModifications)}
                   onClick={handleExport}
-                  disabled={!tripData || !userModifications}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-4 
-                           bg-emerald-500/20 hover:bg-emerald-500/30 active:bg-emerald-500/40
-                           disabled:bg-gray-500/20 disabled:hover:bg-gray-500/20
-                           border border-emerald-500/30 disabled:border-gray-500/30 
-                           rounded-lg text-emerald-700 disabled:text-gray-500 
-                           font-medium transition-all duration-200
-                           hover:shadow-md disabled:cursor-not-allowed touch-manipulation min-h-[44px]"
                   title="Download your updated trip data with activity status and custom order"
                 >
-                  <ArrowDownTrayIcon className="w-4 h-4" />
+                  <ArrowDownTrayIcon className="h-4 w-4" />
                   <span className="text-sm">💾 Download Trip Data</span>
                 </button>
               </div>

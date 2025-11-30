@@ -1,21 +1,21 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
+import type { Coordinates, ScenicWaypoint } from '@/types';
 import {
-  calculateDistance,
-  toRadians,
-  toDegrees,
-  calculateCentroid,
-  calculateBounds,
   calculateBearing,
-  isValidCoordinates,
-  formatCoordinatesForUrl,
-  parseCoordinatesFromString,
+  calculateBounds,
+  calculateCentroid,
+  calculateDistance,
   calculateEstimatedTravelTime,
+  formatCoordinatesForUrl,
   generateDirectionsUrl,
-  isWithinRadius,
-  snapToGrid,
   getMidpoint,
+  isValidCoordinates,
+  isWithinRadius,
+  parseCoordinatesFromString,
+  snapToGrid,
+  toDegrees,
+  toRadians,
 } from '../mapUtils';
-import { Coordinates, ScenicWaypoint } from '@/types';
 
 describe('MapUtils', () => {
   const aucklandCoords: Coordinates = { lat: -36.8485, lng: 174.7633 };
@@ -24,7 +24,7 @@ describe('MapUtils', () => {
   describe('calculateDistance', () => {
     it('should calculate distance between two coordinates', () => {
       const distance = calculateDistance(aucklandCoords, wellingtonCoords);
-      
+
       // Distance between Auckland and Wellington is approximately 495 km
       expect(distance).toBeGreaterThan(490);
       expect(distance).toBeLessThan(500);
@@ -57,7 +57,7 @@ describe('MapUtils', () => {
         { lat: 10, lng: 10 },
         { lat: 20, lng: 20 },
       ];
-      
+
       const centroid = calculateCentroid(coords);
       expect(centroid.lat).toBeCloseTo(10);
       expect(centroid.lng).toBeCloseTo(10);
@@ -80,13 +80,13 @@ describe('MapUtils', () => {
         { lat: -41.2924, lng: 174.7787 }, // Wellington
         { lat: -45.8788, lng: 170.5028 }, // Dunedin
       ];
-      
+
       const bounds = calculateBounds(coords);
-      
+
       expect(bounds.north).toBe(-36.8485); // Auckland (northernmost)
       expect(bounds.south).toBe(-45.8788); // Dunedin (southernmost)
-      expect(bounds.east).toBe(174.7787);  // Wellington (easternmost)
-      expect(bounds.west).toBe(170.5028);  // Dunedin (westernmost)
+      expect(bounds.east).toBe(174.7787); // Wellington (easternmost)
+      expect(bounds.west).toBe(170.5028); // Dunedin (westernmost)
     });
 
     it('should throw error for empty array', () => {
@@ -98,7 +98,7 @@ describe('MapUtils', () => {
     it('should calculate bearing between two points', () => {
       // Auckland to Wellington should be roughly south
       const bearing = calculateBearing(aucklandCoords, wellingtonCoords);
-      
+
       // Should be roughly between 170-190 degrees (south)
       expect(bearing).toBeGreaterThan(170);
       expect(bearing).toBeLessThan(190);
@@ -107,7 +107,7 @@ describe('MapUtils', () => {
     it('should return 0 for north bearing', () => {
       const northPoint = { lat: aucklandCoords.lat + 1, lng: aucklandCoords.lng };
       const bearing = calculateBearing(aucklandCoords, northPoint);
-      
+
       expect(bearing).toBeCloseTo(0, 1);
     });
   });
@@ -123,8 +123,8 @@ describe('MapUtils', () => {
     it('should reject invalid coordinates', () => {
       expect(isValidCoordinates({ lat: 91, lng: 0 })).toBe(false);
       expect(isValidCoordinates({ lat: 0, lng: 181 })).toBe(false);
-      expect(isValidCoordinates({ lat: NaN, lng: 0 })).toBe(false);
-      expect(isValidCoordinates({ lat: 0, lng: NaN })).toBe(false);
+      expect(isValidCoordinates({ lat: Number.NaN, lng: 0 })).toBe(false);
+      expect(isValidCoordinates({ lat: 0, lng: Number.NaN })).toBe(false);
     });
   });
 
@@ -156,7 +156,7 @@ describe('MapUtils', () => {
   describe('calculateEstimatedTravelTime', () => {
     it('should calculate travel time based on distance and speed', () => {
       const time = calculateEstimatedTravelTime(aucklandCoords, wellingtonCoords, 100);
-      
+
       // Distance ~495km at 100km/h should be ~495/100*60 = ~297 minutes
       expect(time).toBeGreaterThan(290);
       expect(time).toBeLessThan(300);
@@ -171,7 +171,7 @@ describe('MapUtils', () => {
   describe('generateDirectionsUrl', () => {
     it('should generate URL without waypoints', () => {
       const url = generateDirectionsUrl(aucklandCoords, wellingtonCoords);
-      
+
       expect(url).toContain('https://www.google.com/maps/dir/');
       expect(url).toContain('-36.848500,174.763300');
       expect(url).toContain('-41.292400,174.778700');
@@ -179,15 +179,15 @@ describe('MapUtils', () => {
 
     it('should generate URL with waypoints', () => {
       const waypoints: ScenicWaypoint[] = [
-        { 
+        {
           activity_id: 'waypoint-1',
           activity_name: 'Waypoint 1',
-          location: { lat: -38.0, lng: 175.0, address: 'Waypoint Address' }
+          location: { lat: -38.0, lng: 175.0, address: 'Waypoint Address' },
         },
       ];
-      
+
       const url = generateDirectionsUrl(aucklandCoords, wellingtonCoords, waypoints);
-      
+
       expect(url).toContain('https://www.google.com/maps/dir/');
       expect(url).toContain('-38.000000,175.000000');
     });
@@ -203,17 +203,17 @@ describe('MapUtils', () => {
 
   describe('snapToGrid', () => {
     it('should snap coordinates to grid', () => {
-      const coord = { lat: -36.84851, lng: 174.76334 };
+      const coord = { lat: -36.848_51, lng: 174.763_34 };
       const snapped = snapToGrid(coord, 0.01);
-      
+
       expect(snapped.lat).toBe(-36.85);
       expect(snapped.lng).toBe(174.76);
     });
 
     it('should use default grid size', () => {
-      const coord = { lat: -36.84851, lng: 174.76334 };
+      const coord = { lat: -36.848_51, lng: 174.763_34 };
       const snapped = snapToGrid(coord);
-      
+
       // Default grid size is 0.001
       expect(snapped.lat).toBeCloseTo(-36.849, 3);
       expect(snapped.lng).toBeCloseTo(174.763, 3);
@@ -223,7 +223,7 @@ describe('MapUtils', () => {
   describe('getMidpoint', () => {
     it('should calculate midpoint between two coordinates', () => {
       const midpoint = getMidpoint(aucklandCoords, wellingtonCoords);
-      
+
       // Midpoint should be roughly between Auckland and Wellington
       expect(midpoint.lat).toBeGreaterThan(wellingtonCoords.lat);
       expect(midpoint.lat).toBeLessThan(aucklandCoords.lat);

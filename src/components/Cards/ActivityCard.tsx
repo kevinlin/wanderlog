@@ -1,10 +1,10 @@
-import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Activity, Accommodation } from '@/types';
+import type React from 'react';
+import { LocationWarning } from '@/components/Layout/LocationWarning';
+import type { Accommodation, Activity } from '@/types';
 import { generateGoogleMapsUrl } from '@/utils/tripUtils';
 import { activityHasLocationIssues } from '@/utils/validationUtils';
-import { LocationWarning } from '@/components/Layout/LocationWarning';
 
 interface ActivityCardProps {
   activity: Activity;
@@ -28,24 +28,19 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   const showLocationWarning = activityHasLocationIssues(activity);
 
   // Only use sortable if draggable is enabled
-  const sortable = useSortable({ 
+  const sortable = useSortable({
     id: activity.activity_id,
-    disabled: !isDraggable
+    disabled: !isDraggable,
   });
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = sortable;
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = sortable;
 
-  const style = isDraggable ? {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  } : {};
+  const style = isDraggable
+    ? {
+        transform: CSS.Transform.toString(transform),
+        transition,
+      }
+    : {};
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.stopPropagation();
@@ -60,39 +55,29 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
 
   return (
     <div
+      className={`
+        ${isDraggable && isDragging ? 'z-50 scale-105 opacity-50' : ''}
+        ${isDraggable ? 'touch-none' : ''} w-full transition-transform duration-200`}
       ref={isDraggable ? setNodeRef : undefined}
       style={style}
-      className={`
-        ${isDraggable && isDragging ? 'opacity-50 z-50 scale-105' : ''}
-        ${isDraggable ? 'touch-none' : ''} 
-        transition-transform duration-200 w-full
-      `}
       {...(isDraggable ? attributes : {})}
     >
       <div
+        className={`relative w-full cursor-pointer rounded-lg bg-white p-3 shadow-md transition-all duration-200 ${isSelected ? 'bg-sky-500/10 ring-2 ring-sky-500 ring-offset-2' : ''}
+          ${isDone ? 'bg-emerald-500/10 opacity-75' : ''}hover:shadow-lg min-h-[60px] touch-manipulation active:bg-orange-500/10`}
         onClick={() => onSelect(activity.activity_id)}
-        className={`
-          relative w-full bg-white rounded-lg shadow-md p-3 cursor-pointer transition-all duration-200
-          ${isSelected ? 'ring-2 ring-sky-500 ring-offset-2 bg-sky-500/10' : ''}
-          ${isDone ? 'opacity-75 bg-emerald-500/10' : ''}
-          hover:shadow-lg active:bg-orange-500/10
-          touch-manipulation min-h-[60px]
-        `}
       >
         {/* Drag Handle - positioned inside the card on the left edge middle */}
         {isDraggable && (
           <div
             {...listeners}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 
-                       cursor-grab active:cursor-grabbing
-                       p-1 hover:bg-sky-500/20 active:bg-sky-500/30 rounded-md transition-all duration-200
-                       touch-none min-h-[32px] min-w-[32px] flex items-center justify-center"
             aria-label="Drag to reorder activity"
+            className="-translate-y-1/2 absolute top-1/2 left-2 z-10 flex min-h-[32px] min-w-[32px] transform cursor-grab touch-none items-center justify-center rounded-md p-1 transition-all duration-200 hover:bg-sky-500/20 active:cursor-grabbing active:bg-sky-500/30"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Drag handle icon */}
-            <svg className="w-4 h-4 text-gray-400 hover:text-sky-500" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8 9h8m-8 6h8" />
+            <svg className="h-4 w-4 text-gray-400 hover:text-sky-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
+              <path d="M8 9h8m-8 6h8" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </div>
         )}
@@ -100,31 +85,27 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         {/* Card content with left padding when draggable */}
         <div className={isDraggable ? 'pl-8' : ''}>
           {/* Header with checkbox and title */}
-          <div className="flex items-start space-x-3 mb-2">
+          <div className="mb-2 flex items-start space-x-3">
             <div className="flex-shrink-0 pt-1">
               <input
-                type="checkbox"
                 checked={isDone}
+                className="h-4 w-4 touch-manipulation rounded border-gray-300 text-emerald-500 focus:ring-2 focus:ring-emerald-500"
                 onChange={handleCheckboxChange}
-                className="w-4 h-4 text-emerald-500 border-gray-300 rounded focus:ring-emerald-500 focus:ring-2 touch-manipulation"
+                type="checkbox"
               />
             </div>
 
-            <div className="flex-1 min-w-0">
+            <div className="min-w-0 flex-1">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <h4 className={`text-base font-semibold ${isDone ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+                  <h4 className={`font-semibold text-base ${isDone ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
                     {activity.activity_name}
                   </h4>
                 </div>
 
                 {activity.thumbnail_url && (
                   <div className="ml-3 flex-shrink-0">
-                    <img 
-                      src={activity.thumbnail_url} 
-                      alt={activity.activity_name}
-                      className="w-12 h-12 object-cover rounded-lg"
-                    />
+                    <img alt={activity.activity_name} className="h-12 w-12 rounded-lg object-cover" src={activity.thumbnail_url} />
                   </div>
                 )}
               </div>
@@ -132,54 +113,46 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           </div>
 
           {/* Content section */}
-          {activity.location?.address && (
-            <p className="text-sm text-gray-600 mb-2">
-              📍 {activity.location.address}
-            </p>
-          )}
+          {activity.location?.address && <p className="mb-2 text-gray-600 text-sm">📍 {activity.location.address}</p>}
 
-          <div className="grid grid-cols-2 gap-2 mb-2 text-sm">
+          <div className="mb-2 grid grid-cols-2 gap-2 text-sm">
             <div>
-              <span className="text-gray-500 font-medium">Duration:</span>
-              <span className="text-gray-900 ml-1">{activity.duration}</span>
+              <span className="font-medium text-gray-500">Duration:</span>
+              <span className="ml-1 text-gray-900">{activity.duration}</span>
             </div>
             <div>
-              <span className="text-gray-500 font-medium">Travel time:</span>
-              <span className="text-gray-900 ml-1">{activity.travel_time_from_accommodation}</span>
+              <span className="font-medium text-gray-500">Travel time:</span>
+              <span className="ml-1 text-gray-900">{activity.travel_time_from_accommodation}</span>
             </div>
           </div>
 
-          {activity.remarks && (
-            <p className="text-sm text-gray-700 mb-2 italic">
-              💡 {activity.remarks}
-            </p>
-          )}
+          {activity.remarks && <p className="mb-2 text-gray-700 text-sm italic">💡 {activity.remarks}</p>}
 
           {/* Location warning */}
           {showLocationWarning && (
             <div className="mb-2">
               <LocationWarning
-                type="activity"
                 message="This activity cannot be displayed on the map due to missing or invalid location data."
+                type="activity"
               />
             </div>
           )}
 
           {/* Action buttons */}
-          <div className="flex gap-2 pt-2 border-t border-gray-100">
+          <div className="flex gap-2 border-gray-100 border-t pt-2">
             <a
+              className="flex min-h-[44px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
               href={activity.url}
-              target="_blank"
-              rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex-1 text-sky-500 hover:text-sky-600 active:text-sky-700 text-sm font-medium touch-manipulation min-h-[44px] flex items-center justify-center border border-sky-200 hover:border-sky-300 rounded transition-colors"
+              rel="noopener noreferrer"
+              target="_blank"
             >
               View Details →
             </a>
-            
+
             <button
+              className="min-h-[44px] flex-1 touch-manipulation rounded bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
               onClick={handleNavigate}
-              className="flex-1 bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation min-h-[44px]"
             >
               🧭 Navigate
             </button>

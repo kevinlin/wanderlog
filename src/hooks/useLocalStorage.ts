@@ -1,19 +1,16 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 /**
  * Custom hook for LocalStorage operations with type safety and error handling
  */
-export function useLocalStorage<T>(
-  key: string,
-  defaultValue: T
-): [T, (value: T | ((prev: T) => T)) => void, () => void] {
+export function useLocalStorage<T>(key: string, defaultValue: T): [T, (value: T | ((prev: T) => T)) => void, () => void] {
   // Initialize state with value from localStorage or default
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       if (typeof window === 'undefined') {
         return defaultValue;
       }
-      
+
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
@@ -23,21 +20,24 @@ export function useLocalStorage<T>(
   });
 
   // Function to update both state and localStorage
-  const setValue = useCallback((value: T | ((prev: T) => T)) => {
-    try {
-      // Allow value to be a function so we have the same API as useState
-      const valueToStore = value instanceof Function ? value(storedValue) : value;
-      
-      setStoredValue(valueToStore);
-      
-      // Save to localStorage
-      if (typeof window !== 'undefined') {
-        window.localStorage.setItem(key, JSON.stringify(valueToStore));
+  const setValue = useCallback(
+    (value: T | ((prev: T) => T)) => {
+      try {
+        // Allow value to be a function so we have the same API as useState
+        const valueToStore = value instanceof Function ? value(storedValue) : value;
+
+        setStoredValue(valueToStore);
+
+        // Save to localStorage
+        if (typeof window !== 'undefined') {
+          window.localStorage.setItem(key, JSON.stringify(valueToStore));
+        }
+      } catch (error) {
+        console.error(`Error setting localStorage key "${key}":`, error);
       }
-    } catch (error) {
-      console.error(`Error setting localStorage key "${key}":`, error);
-    }
-  }, [key, storedValue]);
+    },
+    [key, storedValue]
+  );
 
   // Function to remove the item from localStorage
   const removeValue = useCallback(() => {

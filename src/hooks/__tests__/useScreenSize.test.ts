@@ -1,5 +1,5 @@
-import { renderHook, act } from '@testing-library/react';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { act, renderHook } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { useScreenSize } from '../useScreenSize';
 
 // Mock window object
@@ -115,7 +115,7 @@ describe('useScreenSize', () => {
 
   it('should update screen size on window resize', () => {
     let resizeHandler: ((event: Event) => void) | undefined;
-    
+
     vi.spyOn(window, 'addEventListener').mockImplementation((event, handler) => {
       if (event === 'resize') {
         resizeHandler = handler as (event: Event) => void;

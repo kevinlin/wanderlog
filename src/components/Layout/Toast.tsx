@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
 import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import type React from 'react';
+import { useEffect, useState } from 'react';
 
 export interface ToastProps {
   message: string;
@@ -9,13 +10,7 @@ export interface ToastProps {
   show?: boolean;
 }
 
-export const Toast: React.FC<ToastProps> = ({
-  message,
-  type = 'info',
-  duration = 4000,
-  onClose,
-  show = true,
-}) => {
+export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration = 4000, onClose, show = true }) => {
   const [isVisible, setIsVisible] = useState(show);
 
   useEffect(() => {
@@ -43,13 +38,13 @@ export const Toast: React.FC<ToastProps> = ({
   const getIcon = () => {
     switch (type) {
       case 'success':
-        return <CheckCircleIcon className="w-5 h-5 text-emerald-600" />;
+        return <CheckCircleIcon className="h-5 w-5 text-emerald-600" />;
       case 'error':
-        return <ExclamationTriangleIcon className="w-5 h-5 text-red-600" />;
+        return <ExclamationTriangleIcon className="h-5 w-5 text-red-600" />;
       case 'warning':
-        return <ExclamationTriangleIcon className="w-5 h-5 text-amber-600" />;
+        return <ExclamationTriangleIcon className="h-5 w-5 text-amber-600" />;
       default:
-        return <CheckCircleIcon className="w-5 h-5 text-sky-600" />;
+        return <CheckCircleIcon className="h-5 w-5 text-sky-600" />;
     }
   };
 
@@ -68,23 +63,13 @@ export const Toast: React.FC<ToastProps> = ({
 
   return (
     <div
-      className={`
-        fixed top-16 sm:top-4 left-1/2 transform -translate-x-1/2 z-50
-        flex items-center gap-3 px-4 py-3
-        rounded-lg border shadow-lg
-        animate-in slide-in-from-top-2 duration-300
-        max-w-md min-w-[300px]
-        ${getStyles()}
+      className={`-translate-x-1/2 slide-in-from-top-2 fixed top-16 left-1/2 z-50 flex min-w-[300px] max-w-md transform animate-in items-center gap-3 rounded-lg border px-4 py-3 shadow-lg duration-300 sm:top-4 ${getStyles()}
       `}
     >
       {getIcon()}
-      <p className="flex-1 text-sm font-medium">{message}</p>
-      <button
-        onClick={handleClose}
-        className="p-1 hover:bg-black/10 rounded-full transition-colors"
-        aria-label="Close notification"
-      >
-        <XMarkIcon className="w-4 h-4" />
+      <p className="flex-1 font-medium text-sm">{message}</p>
+      <button aria-label="Close notification" className="rounded-full p-1 transition-colors hover:bg-black/10" onClick={handleClose}>
+        <XMarkIcon className="h-4 w-4" />
       </button>
     </div>
   );

@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import type { TripData } from '@/types';
 import { loadTripData, validateTripData } from '../tripDataService';
-import { TripData } from '@/types';
 
 describe('TripDataService', () => {
   beforeEach(() => {
@@ -74,7 +74,7 @@ describe('TripDataService', () => {
       };
 
       const result = validateTripData(invalidData);
-      
+
       expect(result.isValid).toBe(false);
       expect(result.errors).toContain('trip_name must be a string');
       expect(result.errors).toContain('timezone must be a string');
@@ -89,7 +89,7 @@ describe('TripDataService', () => {
       };
 
       const result = validateTripData(dataWithoutOptionals);
-      
+
       expect(result.isValid).toBe(true);
       expect(result.warnings).toContain('Trip has no stops defined');
       // Note: we only warn about invalid optional fields, not missing ones
@@ -110,7 +110,7 @@ describe('TripDataService', () => {
       } as Response);
 
       const result = await loadTripData();
-      
+
       expect(result).toEqual(mockTripData);
       expect(fetch).toHaveBeenCalledWith('/wanderlog/trip-data/202512_NZ_trip-plan.json');
     });
@@ -122,9 +122,7 @@ describe('TripDataService', () => {
         statusText: 'Not Found',
       } as Response);
 
-      await expect(loadTripData('missing-file.json')).rejects.toThrow(
-        'Trip data file not found: missing-file.json'
-      );
+      await expect(loadTripData('missing-file.json')).rejects.toThrow('Trip data file not found: missing-file.json');
     });
 
     it('should handle invalid JSON gracefully', async () => {
@@ -133,9 +131,7 @@ describe('TripDataService', () => {
         json: () => Promise.resolve({ invalid: 'data' }),
       } as Response);
 
-      await expect(loadTripData()).rejects.toThrow(
-        'Trip data format is invalid:'
-      );
+      await expect(loadTripData()).rejects.toThrow('Trip data format is invalid:');
     });
 
     it('should handle network errors', async () => {

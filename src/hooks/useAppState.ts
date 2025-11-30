@@ -1,8 +1,8 @@
-import { useEffect, useCallback } from 'react';
-import { TripStop } from '@/types';
+import { useCallback, useEffect } from 'react';
 import { useAppStateContext } from '@/contexts/AppStateContext';
-import { useUserModifications, useLastViewedBase } from '@/hooks/useLocalStorage';
+import { useLastViewedBase, useUserModifications } from '@/hooks/useLocalStorage';
 import { saveUserModifications } from '@/services/storageService';
+import type { TripStop } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
 
 interface UseAppStateReturn {
@@ -13,10 +13,10 @@ interface UseAppStateReturn {
   userModifications: any;
   loading: boolean;
   error: string | null;
-  
+
   // Legacy compatibility - map new structure to old StopStatus format
   stopStatus: any;
-  
+
   // Actions
   updateActivityStatus: (stopId: string, activityId: string, done: boolean) => void;
   updateActivityOrder: (stopId: string, activityOrder: { [activityId: string]: number }) => void;
@@ -46,10 +46,9 @@ export const useAppState = (stops: TripStop[] = []): UseAppStateReturn => {
 
     // Determine initial current stop
     const currentStop = getCurrentStop(stops);
-    const initialStopId = lastViewedBase && stops.find(s => s.stop_id === lastViewedBase) 
-      ? lastViewedBase
-      : currentStop?.stop_id || stops[0].stop_id;
-    
+    const initialStopId =
+      lastViewedBase && stops.find((s) => s.stop_id === lastViewedBase) ? lastViewedBase : currentStop?.stop_id || stops[0].stop_id;
+
     dispatch({ type: 'SELECT_BASE', payload: initialStopId });
   }, [stops, lastViewedBase, state.currentBase, dispatch]);
 
@@ -65,72 +64,82 @@ export const useAppState = (stops: TripStop[] = []): UseAppStateReturn => {
     ...(state.userModifications.activityOrders || {}),
     // Convert new format to legacy format
     ...Object.keys(state.userModifications.activityStatus || {}).reduce((acc, activityId) => {
-      const baseId = stops.find(stop => 
-        stop.activities.some(activity => activity.activity_id === activityId)
-      )?.stop_id;
-      
+      const baseId = stops.find((stop) => stop.activities.some((activity) => activity.activity_id === activityId))?.stop_id;
+
       if (baseId) {
         if (!acc[baseId]) {
           acc[baseId] = { activities: {}, activityOrder: {} };
         }
-        acc[baseId].activities[activityId] = { 
-          done: state.userModifications.activityStatus[activityId] 
+        acc[baseId].activities[activityId] = {
+          done: state.userModifications.activityStatus[activityId],
         };
       }
       return acc;
-    }, {} as any)
+    }, {} as any),
   };
 
-  const updateActivityStatus = useCallback((_stopId: string, activityId: string, done: boolean) => {
-    // Update global state
-    dispatch({ 
-      type: 'TOGGLE_ACTIVITY_DONE', 
-      payload: { activityId, done } 
-    });
+  const updateActivityStatus = useCallback(
+    (_stopId: string, activityId: string, done: boolean) => {
+      // Update global state
+      dispatch({
+        type: 'TOGGLE_ACTIVITY_DONE',
+        payload: { activityId, done },
+      });
 
-    // Update localStorage
-    const updatedModifications = {
-      ...state.userModifications,
-      activityStatus: {
-        ...state.userModifications.activityStatus,
-        [activityId]: done,
-      },
-    };
-    setUserModifications(updatedModifications);
-    saveUserModifications(updatedModifications);
-  }, [dispatch, state.userModifications, setUserModifications]);
+      // Update localStorage
+      const updatedModifications = {
+        ...state.userModifications,
+        activityStatus: {
+          ...state.userModifications.activityStatus,
+          [activityId]: done,
+        },
+      };
+      setUserModifications(updatedModifications);
+      saveUserModifications(updatedModifications);
+    },
+    [dispatch, state.userModifications, setUserModifications]
+  );
 
-  const updateActivityOrder = useCallback((stopId: string, activityOrder: { [activityId: string]: number }) => {
-    // Convert from legacy format to new format
-    const activityIds = Object.keys(activityOrder);
-    const sortedIds = activityIds.sort((a, b) => activityOrder[a] - activityOrder[b]);
-    const orderArray = sortedIds.map((_, index) => index);
+  const updateActivityOrder = useCallback(
+    (stopId: string, activityOrder: { [activityId: string]: number }) => {
+      // Convert from legacy format to new format
+      const activityIds = Object.keys(activityOrder);
+      const sortedIds = activityIds.sort((a, b) => activityOrder[a] - activityOrder[b]);
+      const orderArray = sortedIds.map((_, index) => index);
 
-    // Update global state
-    dispatch({ 
-      type: 'REORDER_ACTIVITIES', 
-      payload: { baseId: stopId, fromIndex: 0, toIndex: 0 } // This will be recalculated
-    });
+      // Update global state
+      dispatch({
+        type: 'REORDER_ACTIVITIES',
+        payload: { baseId: stopId, fromIndex: 0, toIndex: 0 }, // This will be recalculated
+      });
 
-    // Update localStorage with new format
-    const updatedModifications = {
-      ...state.userModifications,
-      activityOrders: {
-        ...state.userModifications.activityOrders,
-        [stopId]: orderArray,
-      },
-    };
-    setUserModifications(updatedModifications);
-    saveUserModifications(updatedModifications);
-  }, [dispatch, state.userModifications, setUserModifications]);
+      // Update localStorage with new format
+      const updatedModifications = {
+        ...state.userModifications,
+        activityOrders: {
+          ...state.userModifications.activityOrders,
+          [stopId]: orderArray,
+        },
+      };
+      setUserModifications(updatedModifications);
+      saveUserModifications(updatedModifications);
+    },
+    [dispatch, state.userModifications, setUserModifications]
+  );
 
-  const setCurrentStop = useCallback((stopId: string) => {
-    dispatch({ type: 'SELECT_BASE', payload: stopId });
-  }, [dispatch]);
+  const setCurrentStop = useCallback(
+    (stopId: string) => {
+      dispatch({ type: 'SELECT_BASE', payload: stopId });
+    },
+    [dispatch]
+  );
 
-  const setSelectedActivity = useCallback((activityId: string | null) => {
-    dispatch({ type: 'SELECT_ACTIVITY', payload: activityId });
-  }, [dispatch]);
+  const setSelectedActivity = useCallback(
+    (activityId: string | null) => {
+      dispatch({ type: 'SELECT_ACTIVITY', payload: activityId });
+    },
+    [dispatch]
+  );
 
   return {
     // Map global state to expected interface
@@ -140,10 +149,10 @@ export const useAppState = (stops: TripStop[] = []): UseAppStateReturn => {
     userModifications: state.userModifications,
     loading: state.loading,
     error: state.error,
-    
+
     // Legacy compatibility
     stopStatus,
-    
+
     // Actions
     updateActivityStatus,
     updateActivityOrder,

@@ -3,9 +3,9 @@
  * Handles weather data fetching with caching and error handling
  */
 
-import { WeatherData, WeatherApiResponse, WeatherServiceConfig } from '@/types/weather';
-import { Coordinates } from '@/types/map';
-import { getCachedWeather, updateWeatherForBase, isWeatherCacheValid } from './storageService';
+import type { Coordinates } from '@/types/map';
+import type { WeatherApiResponse, WeatherData, WeatherServiceConfig } from '@/types/weather';
+import { getCachedWeather, isWeatherCacheValid, updateWeatherForBase } from './storageService';
 
 // Default configuration for Open-Meteo API
 const DEFAULT_CONFIG: WeatherServiceConfig = {
@@ -23,7 +23,7 @@ export class WeatherService {
    * Configure the weather service
    */
   static configure(config: Partial<WeatherServiceConfig>): void {
-    this.config = { ...DEFAULT_CONFIG, ...config };
+    WeatherService.config = { ...DEFAULT_CONFIG, ...config };
   }
 
   /**
@@ -31,8 +31,8 @@ export class WeatherService {
    */
   static async fetchWeatherData(coordinates: Coordinates): Promise<WeatherData> {
     const { lat, lng } = coordinates;
-    const url = new URL(this.config.baseUrl);
-    
+    const url = new URL(WeatherService.config.baseUrl);
+
     // Add query parameters for Open-Meteo API
     url.searchParams.append('latitude', lat.toString());
     url.searchParams.append('longitude', lng.toString());
@@ -44,7 +44,7 @@ export class WeatherService {
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
       });
 
@@ -53,9 +53,9 @@ export class WeatherService {
       }
 
       const data: WeatherApiResponse = await response.json();
-      
+
       // Validate response structure
-      if (!data.daily || !Array.isArray(data.daily.time) || data.daily.time.length === 0) {
+      if (!(data.daily && Array.isArray(data.daily.time)) || data.daily.time.length === 0) {
         throw new Error('Invalid weather API response format');
       }
 
@@ -88,9 +88,9 @@ export class WeatherService {
     }
 
     // Fetch fresh data and cache it
-    const weatherData = await this.fetchWeatherData(coordinates);
-    updateWeatherForBase(baseId, weatherData, this.config.cacheExpirationHours);
-    
+    const weatherData = await WeatherService.fetchWeatherData(coordinates);
+    updateWeatherForBase(baseId, weatherData, WeatherService.config.cacheExpirationHours);
+
     return weatherData;
   }
 

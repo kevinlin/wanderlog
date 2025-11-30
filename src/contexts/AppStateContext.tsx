@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
-import { TripData, Activity } from '@/types';
-import { UserModifications } from '@/types/storage';
-import { WeatherCache } from '@/types/weather';
-import { POIModalState } from '@/types/poi';
+import type React from 'react';
+import { createContext, type ReactNode, useContext, useReducer } from 'react';
+import type { Activity, TripData } from '@/types';
+import type { POIModalState } from '@/types/poi';
+import type { UserModifications } from '@/types/storage';
+import type { WeatherCache } from '@/types/weather';
 
 // Trip summary interface for trip list
 export interface TripSummary {
@@ -102,8 +103,7 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
         currentTripId: action.payload.tripId,
         tripData: action.payload.tripData,
         userModifications: action.payload.userModifications,
-        currentBase: action.payload.userModifications.lastViewedBase ||
-          action.payload.tripData.stops[0]?.stop_id || null,
+        currentBase: action.payload.userModifications.lastViewedBase || action.payload.tripData.stops[0]?.stop_id || null,
         error: null,
       };
 
@@ -141,12 +141,11 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
 
     case 'REORDER_ACTIVITIES': {
       const { baseId, fromIndex, toIndex } = action.payload;
-      const currentBase = state.tripData?.stops.find(stop => stop.stop_id === baseId);
+      const currentBase = state.tripData?.stops.find((stop) => stop.stop_id === baseId);
       if (!currentBase) return state;
 
       // Get current order or create from original order
-      const currentOrder = state.userModifications.activityOrders[baseId] || 
-        currentBase.activities.map((_, index) => index);
+      const currentOrder = state.userModifications.activityOrders[baseId] || currentBase.activities.map((_, index) => index);
 
       // Perform the reorder
       const newOrder = [...currentOrder];
@@ -204,7 +203,7 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
       const { baseId, activity } = action.payload;
       if (!state.tripData) return state;
 
-      const updatedStops = state.tripData.stops.map(stop => {
+      const updatedStops = state.tripData.stops.map((stop) => {
         if (stop.stop_id === baseId) {
           return {
             ...stop,
@@ -260,11 +259,7 @@ export const AppStateProvider: React.FC<AppStateProviderProps> = ({ children }) 
     dispatch,
   };
 
-  return (
-    <AppStateContext.Provider value={value}>
-      {children}
-    </AppStateContext.Provider>
-  );
+  return <AppStateContext.Provider value={value}>{children}</AppStateContext.Provider>;
 };
 
 // Hook to use the app state context

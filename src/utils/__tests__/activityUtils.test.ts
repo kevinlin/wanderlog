@@ -1,18 +1,18 @@
-import { describe, it, expect } from 'vitest';
-import { 
-  inferActivityType, 
-  enrichActivityWithType, 
-  enrichActivitiesWithTypes, 
-  getActivityTypeIcon, 
+import { describe, expect, it } from 'vitest';
+import { type Activity, ActivityType } from '@/types/trip';
+import {
+  enrichActivitiesWithTypes,
+  enrichActivityWithType,
   getActivityTypeColor,
-  getActivityTypeSvgPath
+  getActivityTypeIcon,
+  getActivityTypeSvgPath,
+  inferActivityType,
 } from '../activityUtils';
-import { Activity, ActivityType } from '@/types/trip';
 
 describe('ActivityUtils', () => {
   describe('inferActivityType', () => {
     it('should infer RESTAURANT type from restaurant keywords', () => {
-      expect(inferActivityType('Fisherman\'s Wharf Restaurant')).toBe(ActivityType.RESTAURANT);
+      expect(inferActivityType("Fisherman's Wharf Restaurant")).toBe(ActivityType.RESTAURANT);
       expect(inferActivityType('Coffee at Beans Cafe')).toBe(ActivityType.RESTAURANT);
       expect(inferActivityType('Dinner at Local Bistro')).toBe(ActivityType.RESTAURANT);
       expect(inferActivityType('Brewery Tour and Tasting')).toBe(ActivityType.RESTAURANT);
@@ -90,7 +90,7 @@ describe('ActivityUtils', () => {
       const activity: Activity = {
         activity_id: '1',
         activity_name: 'Restaurant Dinner',
-        location: { lat: -45.0, lng: 170.0 }
+        location: { lat: -45.0, lng: 170.0 },
       };
 
       const enriched = enrichActivityWithType(activity);
@@ -104,7 +104,7 @@ describe('ActivityUtils', () => {
         activity_id: '1',
         activity_name: 'Restaurant Dinner',
         activity_type: ActivityType.CULTURAL,
-        location: { lat: -45.0, lng: 170.0 }
+        location: { lat: -45.0, lng: 170.0 },
       };
 
       const enriched = enrichActivityWithType(activity);
@@ -118,7 +118,7 @@ describe('ActivityUtils', () => {
         location: { lat: -45.0, lng: 170.0, address: '123 Main St' },
         duration: '2 hours',
         url: 'https://example.com',
-        remarks: 'Bring camera'
+        remarks: 'Bring camera',
       };
 
       const enriched = enrichActivityWithType(activity);
@@ -134,7 +134,7 @@ describe('ActivityUtils', () => {
       const activities: Activity[] = [
         { activity_id: '1', activity_name: 'Restaurant Dinner' },
         { activity_id: '2', activity_name: 'Hiking Trail' },
-        { activity_id: '3', activity_name: 'Museum Visit' }
+        { activity_id: '3', activity_name: 'Museum Visit' },
       ];
 
       const enriched = enrichActivitiesWithTypes(activities);
@@ -165,7 +165,7 @@ describe('ActivityUtils', () => {
   describe('getActivityTypeColor', () => {
     it('should return valid hex colors for each activity type', () => {
       const hexColorRegex = /^#[0-9A-F]{6}$/i;
-      
+
       expect(getActivityTypeColor(ActivityType.RESTAURANT)).toMatch(hexColorRegex);
       expect(getActivityTypeColor(ActivityType.ATTRACTION)).toMatch(hexColorRegex);
       expect(getActivityTypeColor(ActivityType.SHOPPING)).toMatch(hexColorRegex);
@@ -183,7 +183,7 @@ describe('ActivityUtils', () => {
         getActivityTypeColor(ActivityType.OUTDOOR),
         getActivityTypeColor(ActivityType.CULTURAL),
         getActivityTypeColor(ActivityType.TRANSPORT),
-        getActivityTypeColor(ActivityType.OTHER)
+        getActivityTypeColor(ActivityType.OTHER),
       ];
 
       const uniqueColors = new Set(colors);
@@ -209,7 +209,9 @@ describe('ActivityUtils', () => {
 
     it('should return attraction icon path for attraction type', () => {
       const path = getActivityTypeSvgPath(ActivityType.ATTRACTION);
-      expect(path).toBe('M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V7a2 2 0 00-2-2H4zm8 2a4 4 0 100 8 4 4 0 000-8z');
+      expect(path).toBe(
+        'M9 2a1 1 0 000 2h2a1 1 0 100-2H9zM4 5a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V7a2 2 0 00-2-2H4zm8 2a4 4 0 100 8 4 4 0 000-8z'
+      );
     });
 
     it('should return shopping icon path for shopping type', () => {
@@ -224,12 +226,16 @@ describe('ActivityUtils', () => {
 
     it('should return cultural icon path for cultural type', () => {
       const path = getActivityTypeSvgPath(ActivityType.CULTURAL);
-      expect(path).toBe('M6.5 2a.5.5 0 01.5.5V3h10v-.5a.5.5 0 011 0V3h1a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1h1v-.5a.5.5 0 01.5-.5zM6 5v2h12V5H6zm0 4v2h2V9H6zm4 0v2h2V9h-2zm4 0v2h2V9h-2zM6 13v2h2v-2H6zm4 0v2h2v-2h-2zm4 0v2h2v-2h-2z');
+      expect(path).toBe(
+        'M6.5 2a.5.5 0 01.5.5V3h10v-.5a.5.5 0 011 0V3h1a1 1 0 011 1v16a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1h1v-.5a.5.5 0 01.5-.5zM6 5v2h12V5H6zm0 4v2h2V9H6zm4 0v2h2V9h-2zm4 0v2h2V9h-2zM6 13v2h2v-2H6zm4 0v2h2v-2h-2zm4 0v2h2v-2h-2z'
+      );
     });
 
     it('should return transport icon path for transport type', () => {
       const path = getActivityTypeSvgPath(ActivityType.TRANSPORT);
-      expect(path).toBe('M5 17a2 2 0 104 0 2 2 0 00-4 0zm10 0a2 2 0 104 0 2 2 0 00-4 0zM4 5a1 1 0 011-1h14a1 1 0 011 1v8a1 1 0 01-1 1H5a1 1 0 01-1-1V5z');
+      expect(path).toBe(
+        'M5 17a2 2 0 104 0 2 2 0 00-4 0zm10 0a2 2 0 104 0 2 2 0 00-4 0zM4 5a1 1 0 011-1h14a1 1 0 011 1v8a1 1 0 01-1 1H5a1 1 0 01-1-1V5z'
+      );
     });
 
     it('should return flag icon path for other type', () => {

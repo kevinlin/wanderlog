@@ -1,7 +1,7 @@
-import React from 'react';
-import { POIDetails } from '@/types/poi';
-import { XMarkIcon, StarIcon, ClockIcon, PhoneIcon, GlobeAltIcon, MapIcon } from '@heroicons/react/24/outline';
+import { ClockIcon, GlobeAltIcon, MapIcon, PhoneIcon, StarIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
+import type React from 'react';
+import type { POIDetails } from '@/types/poi';
 
 interface POIModalProps {
   poi: POIDetails | null;
@@ -12,14 +12,7 @@ interface POIModalProps {
   onAddToActivities: (poi: POIDetails) => void;
 }
 
-export const POIModal: React.FC<POIModalProps> = ({
-  poi,
-  isOpen,
-  loading,
-  error,
-  onClose,
-  onAddToActivities,
-}) => {
+export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error, onClose, onAddToActivities }) => {
   if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -37,7 +30,7 @@ export const POIModal: React.FC<POIModalProps> = ({
 
   const getPhotoUrl = (poi: POIDetails): string | null => {
     if (!poi.photos || poi.photos.length === 0) return null;
-    
+
     const photo = poi.photos[0];
     // The photo_reference now contains the full URL from Google Places API
     return photo.photo_reference || null;
@@ -50,29 +43,25 @@ export const POIModal: React.FC<POIModalProps> = ({
 
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.push(
-          <StarIconSolid key={i} className="w-4 h-4 text-yellow-400" />
-        );
+        stars.push(<StarIconSolid className="h-4 w-4 text-yellow-400" key={i} />);
       } else if (i === fullStars && hasHalfStar) {
         stars.push(
-          <div key={i} className="relative w-4 h-4">
-            <StarIcon className="w-4 h-4 text-gray-300 absolute" />
-            <div className="overflow-hidden w-2">
-              <StarIconSolid className="w-4 h-4 text-yellow-400 absolute" />
+          <div className="relative h-4 w-4" key={i}>
+            <StarIcon className="absolute h-4 w-4 text-gray-300" />
+            <div className="w-2 overflow-hidden">
+              <StarIconSolid className="absolute h-4 w-4 text-yellow-400" />
             </div>
           </div>
         );
       } else {
-        stars.push(
-          <StarIcon key={i} className="w-4 h-4 text-gray-300" />
-        );
+        stars.push(<StarIcon className="h-4 w-4 text-gray-300" key={i} />);
       }
     }
 
     return (
       <div className="flex items-center space-x-1">
         <div className="flex">{stars}</div>
-        <span className="text-sm text-gray-600">
+        <span className="text-gray-600 text-sm">
           {rating.toFixed(1)} ({totalRatings} reviews)
         </span>
       </div>
@@ -89,50 +78,41 @@ export const POIModal: React.FC<POIModalProps> = ({
     if (poi.place_id) {
       return `https://www.google.com/maps/place/?q=place_id:${poi.place_id}`;
     }
-    
+
     // Fallback to coordinates if place_id is not available
     if (poi.location.lat && poi.location.lng) {
       return `https://www.google.com/maps/search/?api=1&query=${poi.location.lat},${poi.location.lng}`;
     }
-    
+
     // Final fallback to search by name and address
     const query = poi.formatted_address ? `${poi.name} ${poi.formatted_address}` : poi.name;
     return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
   };
 
   return (
-    <div 
-      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-      onClick={handleBackdropClick}
-    >
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4" onClick={handleBackdropClick}>
+      <div className="max-h-[90vh] w-full max-w-md overflow-hidden rounded-xl bg-white shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Place Details</h3>
-          <button
-            onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-full transition-colors"
-          >
-            <XMarkIcon className="w-6 h-6 text-gray-500" />
+        <div className="flex items-center justify-between border-gray-200 border-b p-4">
+          <h3 className="font-semibold text-gray-900 text-lg">Place Details</h3>
+          <button className="rounded-full p-1 transition-colors hover:bg-gray-100" onClick={onClose}>
+            <XMarkIcon className="h-6 w-6 text-gray-500" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div className="max-h-[calc(90vh-140px)] overflow-y-auto">
           {loading && (
             <div className="p-6 text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-sky-500 mx-auto"></div>
+              <div className="mx-auto h-8 w-8 animate-spin rounded-full border-sky-500 border-b-2" />
               <p className="mt-2 text-gray-600">Loading place details...</p>
             </div>
           )}
 
           {error && (
             <div className="p-6 text-center">
-              <p className="text-red-600 mb-4">{error}</p>
-              <button
-                onClick={onClose}
-                className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
-              >
+              <p className="mb-4 text-red-600">{error}</p>
+              <button className="rounded bg-gray-500 px-4 py-2 text-white transition-colors hover:bg-gray-600" onClick={onClose}>
                 Close
               </button>
             </div>
@@ -144,29 +124,24 @@ export const POIModal: React.FC<POIModalProps> = ({
               {getPhotoUrl(poi) && (
                 <div className="mb-4">
                   <img
-                    src={getPhotoUrl(poi)!}
                     alt={poi.name}
-                    className="w-full h-48 object-cover rounded-lg"
+                    className="h-48 w-full rounded-lg object-cover"
                     onError={(e) => {
                       const target = e.target as HTMLImageElement;
                       target.style.display = 'none';
                     }}
+                    src={getPhotoUrl(poi)!}
                   />
                 </div>
               )}
 
               {/* Name and Type */}
               <div className="mb-4">
-                <h4 className="text-xl font-semibold text-gray-900 mb-2">
-                  {poi.name}
-                </h4>
+                <h4 className="mb-2 font-semibold text-gray-900 text-xl">{poi.name}</h4>
                 {poi.types && poi.types.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mb-2">
+                  <div className="mb-2 flex flex-wrap gap-1">
                     {poi.types.slice(0, 3).map((type, index) => (
-                      <span
-                        key={index}
-                        className="px-2 py-1 bg-sky-100 text-sky-800 text-xs rounded-full"
-                      >
+                      <span className="rounded-full bg-sky-100 px-2 py-1 text-sky-800 text-xs" key={index}>
                         {type.replace(/_/g, ' ').toLowerCase()}
                       </span>
                     ))}
@@ -177,25 +152,17 @@ export const POIModal: React.FC<POIModalProps> = ({
               {/* Address */}
               {poi.formatted_address && (
                 <div className="mb-4">
-                  <p className="text-sm text-gray-600">
-                    📍 {poi.formatted_address}
-                  </p>
+                  <p className="text-gray-600 text-sm">📍 {poi.formatted_address}</p>
                 </div>
               )}
 
               {/* Rating and Price */}
               <div className="mb-4 space-y-2">
-                {poi.rating && poi.user_ratings_total && (
-                  <div>
-                    {renderStarRating(poi.rating, poi.user_ratings_total)}
-                  </div>
-                )}
+                {poi.rating && poi.user_ratings_total && <div>{renderStarRating(poi.rating, poi.user_ratings_total)}</div>}
                 {poi.price_level && (
                   <div className="flex items-center space-x-2">
-                    <span className="text-sm text-gray-500 font-medium">Price:</span>
-                    <span className="text-sm text-green-600 font-medium">
-                      {getPriceLevel(poi.price_level)}
-                    </span>
+                    <span className="font-medium text-gray-500 text-sm">Price:</span>
+                    <span className="font-medium text-green-600 text-sm">{getPriceLevel(poi.price_level)}</span>
                   </div>
                 )}
               </div>
@@ -203,27 +170,25 @@ export const POIModal: React.FC<POIModalProps> = ({
               {/* Opening Hours */}
               {poi.opening_hours && (
                 <div className="mb-4">
-                  <div className="flex items-center space-x-2 mb-2">
-                    <ClockIcon className="w-4 h-4 text-gray-500" />
-                    <span className="text-sm font-medium text-gray-700">Hours</span>
+                  <div className="mb-2 flex items-center space-x-2">
+                    <ClockIcon className="h-4 w-4 text-gray-500" />
+                    <span className="font-medium text-gray-700 text-sm">Hours</span>
                     {poi.opening_hours.open_now !== undefined && (
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        poi.opening_hours.open_now 
-                          ? 'bg-green-100 text-green-800' 
-                          : 'bg-red-100 text-red-800'
-                      }`}>
+                      <span
+                        className={`rounded-full px-2 py-1 text-xs ${
+                          poi.opening_hours.open_now ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                        }`}
+                      >
                         {poi.opening_hours.open_now ? 'Open Now' : 'Closed'}
                       </span>
                     )}
                   </div>
                   {poi.opening_hours.weekday_text && (
-                    <div className="text-xs text-gray-600 space-y-1">
+                    <div className="space-y-1 text-gray-600 text-xs">
                       {poi.opening_hours.weekday_text.slice(0, 3).map((day, index) => (
                         <div key={index}>{day}</div>
                       ))}
-                      {poi.opening_hours.weekday_text.length > 3 && (
-                        <div className="text-gray-500 italic">...</div>
-                      )}
+                      {poi.opening_hours.weekday_text.length > 3 && <div className="text-gray-500 italic">...</div>}
                     </div>
                   )}
                 </div>
@@ -233,35 +198,32 @@ export const POIModal: React.FC<POIModalProps> = ({
               <div className="mb-4 space-y-2">
                 {poi.formatted_phone_number && (
                   <div className="flex items-center space-x-2">
-                    <PhoneIcon className="w-4 h-4 text-gray-500" />
-                    <a
-                      href={`tel:${poi.formatted_phone_number}`}
-                      className="text-sm text-sky-600 hover:text-sky-700"
-                    >
+                    <PhoneIcon className="h-4 w-4 text-gray-500" />
+                    <a className="text-sky-600 text-sm hover:text-sky-700" href={`tel:${poi.formatted_phone_number}`}>
                       {poi.formatted_phone_number}
                     </a>
                   </div>
                 )}
                 {poi.website && (
                   <div className="flex items-center space-x-2">
-                    <GlobeAltIcon className="w-4 h-4 text-gray-500" />
+                    <GlobeAltIcon className="h-4 w-4 text-gray-500" />
                     <a
+                      className="truncate text-sky-600 text-sm hover:text-sky-700"
                       href={poi.website}
-                      target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-sky-600 hover:text-sky-700 truncate"
+                      target="_blank"
                     >
                       Visit Website
                     </a>
                   </div>
                 )}
                 <div className="flex items-center space-x-2">
-                  <MapIcon className="w-4 h-4 text-gray-500" />
+                  <MapIcon className="h-4 w-4 text-gray-500" />
                   <a
+                    className="text-sky-600 text-sm hover:text-sky-700"
                     href={getGoogleMapsUrl(poi)}
-                    target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-sky-600 hover:text-sky-700"
+                    target="_blank"
                   >
                     Open in Google Maps
                   </a>
@@ -271,7 +233,7 @@ export const POIModal: React.FC<POIModalProps> = ({
               {/* Business Status */}
               {poi.business_status && poi.business_status !== 'OPERATIONAL' && (
                 <div className="mb-4">
-                  <span className="inline-block px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">
+                  <span className="inline-block rounded-full bg-yellow-100 px-2 py-1 text-xs text-yellow-800">
                     {poi.business_status.replace(/_/g, ' ').toLowerCase()}
                   </span>
                 </div>
@@ -282,17 +244,17 @@ export const POIModal: React.FC<POIModalProps> = ({
 
         {/* Footer */}
         {poi && !loading && !error && (
-          <div className="p-4 border-t border-gray-200 bg-gray-50">
-            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+          <div className="border-gray-200 border-t bg-gray-50 p-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
               <button
+                className="min-h-[44px] flex-1 touch-manipulation rounded bg-gray-500 px-4 py-2 text-white transition-colors hover:bg-gray-600 active:bg-gray-700"
                 onClick={onClose}
-                className="flex-1 bg-gray-500 hover:bg-gray-600 active:bg-gray-700 text-white px-4 py-2 rounded transition-colors touch-manipulation min-h-[44px]"
               >
                 Close
               </button>
               <button
+                className="min-h-[44px] flex-1 touch-manipulation rounded bg-emerald-500 px-4 py-2 font-medium text-white transition-colors hover:bg-emerald-600 active:bg-emerald-700"
                 onClick={handleAddToActivities}
-                className="flex-1 bg-emerald-500 hover:bg-emerald-600 active:bg-emerald-700 text-white px-4 py-2 rounded transition-colors touch-manipulation min-h-[44px] font-medium"
               >
                 ➕ Add to Activities
               </button>

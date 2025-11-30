@@ -1,8 +1,8 @@
-import React from 'react';
-import { ScenicWaypoint, Accommodation } from '@/types';
+import type React from 'react';
+import { LocationWarning } from '@/components/Layout/LocationWarning';
+import type { Accommodation, ScenicWaypoint } from '@/types';
 import { generateGoogleMapsUrl } from '@/utils/tripUtils';
 import { activityHasLocationIssues } from '@/utils/validationUtils';
-import { LocationWarning } from '@/components/Layout/LocationWarning';
 
 interface ScenicWaypointCardProps {
   waypoint: ScenicWaypoint;
@@ -27,7 +27,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
     activity_name: waypoint.activity_name,
     location: waypoint.location,
   };
-  
+
   const showLocationWarning = activityHasLocationIssues(waypointAsActivity);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,59 +43,46 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
 
   return (
     <div
+      className={`cursor-pointer rounded-lg border border-violet-200/50 bg-gradient-to-r from-violet-50 to-sky-50 p-3 shadow-md transition-all duration-200 ${isSelected ? 'bg-violet-500/10 ring-2 ring-violet-500 ring-offset-2' : ''}
+        ${isDone ? 'bg-emerald-500/10 opacity-75' : ''}hover:shadow-lg min-h-[60px] touch-manipulation hover:bg-violet-500/5 active:bg-violet-500/10`}
       onClick={() => onSelect(waypoint.activity_id)}
-      className={`
-        bg-gradient-to-r from-violet-50 to-sky-50 border border-violet-200/50 rounded-lg shadow-md p-3 cursor-pointer transition-all duration-200
-        ${isSelected ? 'ring-2 ring-violet-500 ring-offset-2 bg-violet-500/10' : ''}
-        ${isDone ? 'opacity-75 bg-emerald-500/10' : ''}
-        hover:shadow-lg hover:bg-violet-500/5 active:bg-violet-500/10
-        touch-manipulation min-h-[60px]
-      `}
     >
       <div className="flex items-start space-x-3">
         <div className="flex-shrink-0 pt-1">
           <input
-            type="checkbox"
             checked={isDone}
+            className="h-4 w-4 touch-manipulation rounded border-gray-300 text-violet-500 focus:ring-2 focus:ring-violet-500"
             onChange={handleCheckboxChange}
-            className="w-4 h-4 text-violet-500 border-gray-300 rounded focus:ring-violet-500 focus:ring-2 touch-manipulation"
+            type="checkbox"
           />
         </div>
 
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between">
             <div className="flex-1">
-              <div className="flex items-center mb-2">
-                <h4 className={`text-base font-semibold ${isDone ? 'line-through text-gray-500' : 'text-gray-900'}`}>
+              <div className="mb-2 flex items-center">
+                <h4 className={`font-semibold text-base ${isDone ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
                   {waypoint.activity_name}
                 </h4>
               </div>
-              
-              {waypoint.location?.address && (
-                <p className="text-sm text-gray-600 mb-2">
-                  📍 {waypoint.location.address}
-                </p>
-              )}
+
+              {waypoint.location?.address && <p className="mb-2 text-gray-600 text-sm">📍 {waypoint.location.address}</p>}
 
               {waypoint.duration && (
                 <div className="mb-3 text-sm">
-                  <span className="text-gray-500 font-medium">Duration:</span>
-                  <span className="text-gray-900 ml-1">{waypoint.duration}</span>
+                  <span className="font-medium text-gray-500">Duration:</span>
+                  <span className="ml-1 text-gray-900">{waypoint.duration}</span>
                 </div>
               )}
 
-              {waypoint.remarks && (
-                <p className="text-sm text-gray-700 mb-3 italic">
-                  💡 {waypoint.remarks}
-                </p>
-              )}
+              {waypoint.remarks && <p className="mb-3 text-gray-700 text-sm italic">💡 {waypoint.remarks}</p>}
 
               {/* Location warning */}
               {showLocationWarning && (
                 <div className="mb-3">
                   <LocationWarning
-                    type="activity"
                     message="This scenic waypoint cannot be displayed on the map due to missing or invalid location data."
+                    type="activity"
                   />
                 </div>
               )}
@@ -103,31 +90,27 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
 
             {waypoint.thumbnail_url && (
               <div className="ml-3 flex-shrink-0">
-                <img 
-                  src={waypoint.thumbnail_url} 
-                  alt={waypoint.activity_name}
-                  className="w-12 h-12 object-cover rounded-lg"
-                />
+                <img alt={waypoint.activity_name} className="h-12 w-12 rounded-lg object-cover" src={waypoint.thumbnail_url} />
               </div>
             )}
           </div>
 
-          <div className="flex gap-2 pt-3 border-t border-violet-100">
+          <div className="flex gap-2 border-violet-100 border-t pt-3">
             {waypoint.url && (
               <a
+                className="flex min-h-[44px] flex-1 touch-manipulation items-center justify-center rounded border border-violet-200 font-medium text-sm text-violet-500 transition-colors hover:border-violet-300 hover:text-violet-600 active:text-violet-700"
                 href={waypoint.url}
-                target="_blank"
-                rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="flex-1 text-violet-500 hover:text-violet-600 active:text-violet-700 text-sm font-medium touch-manipulation min-h-[44px] flex items-center justify-center border border-violet-200 hover:border-violet-300 rounded transition-colors"
+                rel="noopener noreferrer"
+                target="_blank"
               >
                 View Details →
               </a>
             )}
-            
+
             <button
+              className={`${waypoint.url ? 'flex-1' : 'w-full'} min-h-[44px] touch-manipulation rounded bg-violet-500 px-3 py-2 text-sm text-white transition-colors hover:bg-violet-600 active:bg-violet-700`}
               onClick={handleNavigate}
-              className={`${waypoint.url ? 'flex-1' : 'w-full'} bg-violet-500 hover:bg-violet-600 active:bg-violet-700 text-white px-3 py-2 rounded text-sm transition-colors touch-manipulation min-h-[44px]`}
             >
               🧭 Navigate
             </button>
