@@ -687,6 +687,41 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Added Task 22 to tasks.md documenting all implementation steps
     - **Requirements Reference**: Documentation updates for new functionality
 
+- [x] 23. **Place Selection Centering and Map Scale**
+  - [x] 23.1 Implement place click centering and zooming
+    - Added PLACE_ZOOM_LEVEL constant (14) for neighborhood-level view
+    - Created centerAndZoomOnLocation callback using map.panTo() and map.setZoom()
+    - Updated selectedActivityId effect to center/zoom when activities or scenic waypoints are selected
+    - Updated currentBaseId effect to center/zoom when trip stops are selected from timeline
+    - Centering works for both map pin clicks AND selections from ActivitiesPanel/Timeline
+    - POI search result pins also center and zoom when clicked
+    - **Requirements Reference**: Requirement 1.32, 1.33, 1.34, 1.35 (place click centering)
+
+  - [x] 23.2 Refactor pin click handlers for unified behavior
+    - Removed redundant centerAndZoomOnLocation calls from individual pin click handlers
+    - Centering now handled via useEffect hooks watching selection state changes
+    - Ensures consistent behavior regardless of whether selection comes from map or panel
+    - Simplified accommodation, activity, and scenic waypoint marker onClick handlers
+    - **Requirements Reference**: Requirement 1.32, 1.33, 1.34 (unified centering behavior)
+
+  - [x] 23.3 Add map scale control
+    - Enabled Google Maps built-in scale control with scaleControl: true option
+    - Scale displays at bottom right corner showing distance ruler
+    - Automatically updates as user zooms in/out
+    - Displays in metric and imperial units depending on locale
+    - **Requirements Reference**: Requirement 1.36 (map scale display)
+
+  - [x] 23.4 Update tests for new functionality
+    - Added panTo and setZoom mock methods to mockMap object in MapContainer tests
+    - All 208 tests passing after changes
+    - **Requirements Reference**: Testing ensures requirement compliance
+
+  - [x] 23.5 Update documentation
+    - Updated requirements.md with acceptance criteria 1.32-1.35 for place click centering
+    - Updated design.md MapContainer section with "Place Selection Centering Behavior" documentation
+    - Documented zoom level, trigger sources, and implementation approach
+    - **Requirements Reference**: Documentation updates for new functionality
+
 ## Implementation Notes
 
 - Each task builds incrementally on previous tasks

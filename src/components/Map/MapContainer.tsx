@@ -161,6 +161,19 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     setMapInstance(null);
   }, []);
 
+  // Default zoom level for centering on a place (neighborhood-level view)
+  const PLACE_ZOOM_LEVEL = 14;
+
+  // Center and zoom the map on a specific location
+  const centerAndZoomOnLocation = useCallback(
+    (lat: number, lng: number) => {
+      if (!mapInstance) return;
+      mapInstance.panTo({ lat, lng });
+      mapInstance.setZoom(PLACE_ZOOM_LEVEL);
+    },
+    [mapInstance]
+  );
+
   // Convert lat/lng to screen position for hover card placement
   const getScreenPosition = useCallback(
     (lat: number, lng: number): { x: number; y: number } => {
@@ -317,6 +330,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   useEffect(() => {
     // Animate accommodation pin and scenic waypoints when base selection changes
     if (currentBaseId && currentBaseId !== previousCurrentBaseRef.current && isMapLoaded) {
+      // Find the base and center/zoom on it
+      const currentStop = tripData?.stops?.find((stop) => stop.stop_id === currentBaseId);
+      if (currentStop) {
+        const position = currentStop.accommodation?.location || currentStop.location;
+        centerAndZoomOnLocation(position.lat, position.lng);
+      }
+
+      // Animate the accommodation marker
       const accommodationMarker = accommodationMarkersRef.current.get(currentBaseId);
       if (accommodationMarker && window.google?.maps?.Animation) {
         // Use Google Maps DROP animation
@@ -330,7 +351,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       }
 
       // Animate all scenic waypoints for the current base
-      const currentStop = tripData?.stops?.find((stop) => stop.stop_id === currentBaseId);
       if (currentStop?.scenic_waypoints) {
         currentStop.scenic_waypoints.forEach((waypoint, index) => {
           const marker = scenicWaypointMarkersRef.current.get(waypoint.activity_id);
@@ -350,12 +370,27 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
       previousCurrentBaseRef.current = currentBaseId;
     }
-  }, [currentBaseId, isMapLoaded, tripData?.stops]);
+  }, [currentBaseId, isMapLoaded, tripData?.stops, centerAndZoomOnLocation]);
 
   useEffect(() => {
-    // Animate activity pin when activity selection changes
+    // Animate activity pin and center/zoom when activity selection changes
     if (selectedActivityId && selectedActivityId !== previousSelectedActivityRef.current && isMapLoaded) {
-      const marker = activityMarkersRef.current.get(selectedActivityId);
+      // Find the current base from tripData
+      const currentStop = tripData?.stops?.find((stop) => stop.stop_id === currentBaseId);
+
+      // Find the activity or scenic waypoint location
+      const activity = currentStop?.activities.find((a) => a.activity_id === selectedActivityId);
+      const scenicWaypoint = currentStop?.scenic_waypoints?.find((w) => w.activity_id === selectedActivityId);
+
+      // Center and zoom on the selected place
+      if (activity?.location?.lat && activity?.location?.lng) {
+        centerAndZoomOnLocation(activity.location.lat, activity.location.lng);
+      } else if (scenicWaypoint?.location?.lat && scenicWaypoint?.location?.lng) {
+        centerAndZoomOnLocation(scenicWaypoint.location.lat, scenicWaypoint.location.lng);
+      }
+
+      // Animate the marker
+      const marker = activityMarkersRef.current.get(selectedActivityId) || scenicWaypointMarkersRef.current.get(selectedActivityId);
       if (marker && window.google?.maps?.Animation) {
         // Use Google Maps DROP animation
         marker.setAnimation(window.google.maps.Animation.DROP);
@@ -370,7 +405,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     } else if (!selectedActivityId) {
       previousSelectedActivityRef.current = null;
     }
-  }, [selectedActivityId, isMapLoaded]);
+  }, [selectedActivityId, isMapLoaded, currentBaseId, tripData?.stops, centerAndZoomOnLocation]);
 
   // Map type change handler
   const handleMapTypeChange = useCallback(
@@ -793,6 +828,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           streetViewControl: false,
           mapTypeControl: false, // We use our custom MapLayerPicker
           fullscreenControl: false,
+          scaleControl: true, // Show distance scale ruler at bottom right
           // Mobile touch optimizations
           gestureHandling: 'greedy', // Allow single-finger panning
           zoomControlOptions: {
@@ -810,6 +846,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             {/* Accommodation markers (lodge-style pins) */}
             {tripData.stops.map((base) => {
               const isHovered = hoverState?.type === 'accommodation' && hoverState?.id === base.stop_id;
+              const position = base.accommodation?.location || base.location;
               return (
                 <Marker
                   icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId, isHovered)}
@@ -823,7 +860,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                   onUnmount={() => {
                     accommodationMarkersRef.current.delete(base.stop_id);
                   }}
-                  position={base.accommodation?.location || base.location}
+                  position={position}
                   title={`${base.name} - ${base.accommodation.name}`}
                 />
               );
@@ -892,7 +929,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
               <Marker
                 icon={getSearchResultPinIcon()}
                 key={`search-result-${poi.place_id}`}
-                onClick={() => handlePOIClick(poi.place_id)}
+                onClick={() => {
+                  handlePOIClick(poi.place_id);
+                  centerAndZoomOnLocation(poi.location.lat, poi.location.lng);
+                }}
                 position={{ lat: poi.location.lat, lng: poi.location.lng }}
                 title={poi.name}
               />

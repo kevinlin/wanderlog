@@ -178,6 +178,16 @@ interface MapContainerProps {
 - Click handlers for pin selection and map interaction
 - Coordinated drop pin animations for accommodation and scenic waypoints when stops are selected
 - Map layer picker integration for changing map types and toggling overlay layers
+- **Place click centering and zooming**: When any place pin is clicked, the map automatically pans and zooms to center on the location
+
+**Place Selection Centering Behavior**:
+- **Zoom Level**: Uses a constant `PLACE_ZOOM_LEVEL = 14` (neighborhood-level view) for all place types
+- **Pan Animation**: Smooth pan transition using `map.panTo()` to center the selected location
+- **Zoom Animation**: Automatic zoom using `map.setZoom()` to provide detailed view of the area
+- **Supported Place Types**: Accommodations, activities, scenic waypoints, and POI search results
+- **Trigger Sources**: Works for both map pin clicks AND selections from the ActivitiesPanel/Timeline
+- **Implementation**: Centering is handled via useEffect hooks watching `selectedActivityId` and `currentBaseId` changes, ensuring consistent behavior regardless of selection source
+- **UX Purpose**: Provides immediate visual context when selecting a place, making it easy to see surrounding POIs and navigation options
 
 #### 2.1. MapLayerPicker Component
 **Purpose**: Floating control for switching between map types and toggling overlay layers.

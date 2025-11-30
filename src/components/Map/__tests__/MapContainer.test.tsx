@@ -12,6 +12,8 @@ const mockMarker = {
 
 const mockMap = {
   fitBounds: vi.fn(),
+  panTo: vi.fn(),
+  setZoom: vi.fn(),
 };
 
 // Mock @react-google-maps/api

@@ -1,7 +1,12 @@
 {
   "tripData": {
+    "created_at": "2025-11-30T10:08:49.214Z",
+    "constraints": {
+      "min_nights_per_stop": 2,
+      "max_daily_driving_hours": "3–4h",
+      "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"]
+    },
     "trip_name": "NZ South Island Road Trip — 13–29 Dec 2025 (Family of 5)",
-    "timezone": "Pacific/Auckland",
     "travellers": [
       "Sharon",
       "Partner",
@@ -10,625 +15,662 @@
       "Jeremy (9)"
     ],
     "vehicle": "MPV (pickup/return: Christchurch Airport)",
-    "constraints": {
-      "max_daily_driving_hours": "3–4h",
-      "min_nights_per_stop": 2,
-      "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"]
-    },
+    "timezone": "Pacific/Auckland",
+    "updated_at": "2025-11-30T12:47:39.630Z",
     "stops": [
       {
-        "stop_id": "christchurch-arrival",
-        "name": "Christchurch",
-        "location": {
-          "lat": -43.530955,
-          "lng": 172.6366455
-        },
-        "date": {
-          "from": "2025-12-13",
-          "to": "2025-12-14"
-        },
-        "duration_days": 1,
-        "travel_time_from_previous": null,
-        "scenic_waypoints": [],
-        "accommodation": {
-          "name": "Sudima Christchurch Airport",
-          "address": "550 Memorial Ave, Christchurch 8053, New Zealand",
-          "location": {
-            "lat": -43.4888511,
-            "lng": 172.5558985
-          },
-          "check_in": "2025-12-13 15:00",
-          "check_out": "2025-12-14 11:00",
-          "confirmation": "1924863700",
-          "room": "Superior Twin",
-          "phone": "+64 3 358 3139",
-          "url": "https://www.sudimahotels.com/christchurch-airport/",
-          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6AGKpXgJNFKBRs3h-hFnsiRX4txamdsiZFODtUcvNQBqph9Xpay8KMsO2gflFNsh4RzGcvjZQtw5LWSP9-9fduAb3AGGXbZYiyX0F_nl_B40fyZQqPUfj9aElXF-jjVE4JF9M2QonsFv5OjVZ8nJu7e8osKby-nLkXKo-RpYL8QwYveLnd31nNzruHmQBCkTTJKtsu3MwqIlwgFil1UGcUrM8ZXzBaAbvTHKNKazwuDiJUqcfj_7HM55fVo3A6Agd0Bsw8jT4Bw-CiNGV0rBMf7Rt6c7JQIaMo_O001olEwoUQ4u8&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-          "google_place_id": "ChIJBSyMsrj0MW0REewUL-RP5YQ"
-        },
-        "weather": {
-          "forecast_high_c": null,
-          "forecast_low_c": null,
-          "precipitation_chance_pct": null,
-          "notes": "Placeholder forecast — update during trip"
-        },
         "activities": [
           {
-            "activity_id": "christchurch-arrival-act-1",
+            "activity_id": "poi_ChIJ0V7CXcf0MW0Rr-YZarWKrZU_1764513322783",
+            "activity_name": "Woolworths Christchurch Airport",
+            "activity_type": "grocery",
+            "location": {
+              "lat": -43.4900697,
+              "lng": 172.547657,
+              "address": "530/546A Memorial Avenue, Christchurch Airport, Christchurch 8053, New Zealand"
+            },
+            "duration": "1-2 hours",
+            "url": "https://www.woolworths.co.nz/store-finder/9090/christchurch/christchurch-airport-woolworths?utm_source=google&utm_medium=organic&utm_campaign=gmb&utm_term=woolworths-christchurch-airport",
+            "remarks": "Rating: 4.2/5 (1545 reviews)",
+            "order": 0,
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/js/PhotoService.GetPhoto?1sAWn5SU4BGkbGO3oyRILE0-AuDLHiWgq7cj3WpLEsdYciguBG1CfaLt_9dhWCc8ZsRBVceUEAYqJfcu9mmBw54yoC7Su31u1jJtGFiBd0xrQYG2tFxIgGRfRPjryrJwYnBnvZ5ZhUsj7f_p7sKiiuOUStbwwLGl--IfLmJUXi7HWMwBmnCmxTfqV52u8tikLbTjPbwWL_BVmVZjoBBdXwe2Z6ZZ9V5cnNpBbIvb9ZI3Ars5O1P1wix8KcTSweGU9u54O3gEtUFgD7gG6wjhCUckkjxoq_Ux2UyqOR4_ZSJG84eS_BWg&3u400&5m1&2e1&callback=none&r_url=http%3A%2F%2Flocalhost%3A5173%2Fwanderlog%2F&key=AIzaSyCB5n4X58yytDpkXjKeiWegfuG5SIY4C_8&token=47893",
+            "google_place_id": "ChIJ0V7CXcf0MW0Rr-YZarWKrZU",
+            "status": {
+              "done": false
+            }
+          },
+          {
+            "duration": "2–3h",
+            "travel_time_from_accommodation": "5m walk",
+            "url": "http://www.iceberg.co.nz/",
             "order": 1,
+            "thumbnail_url": "https://www.datocms-assets.com/163838/1756080212-hagglund-scaled.webp?auto=format&fit=max&w=1200",
+            "remarks": "Penguin Rescue, Hägglund ride; near airport",
+            "location": {
+              "lat": -43.4892216,
+              "lng": 172.545734,
+              "address": "Roy Place, Christchurch 8052, New Zealand"
+            },
+            "activity_name": "International Antarctic Centre",
+            "google_place_id": "ChIJVxMF4Lj0MW0R_UTTD9kGZCg",
             "status": {
               "done": false
             },
-            "activity_name": "International Antarctic Centre",
-            "location": {
-              "address": "Roy Place, Christchurch 8052, New Zealand",
-              "lat": -43.4892216,
-              "lng": 172.545734
-            },
-            "travel_time_from_accommodation": "5m walk",
-            "duration": "2–3h",
-            "url": "http://www.iceberg.co.nz/",
-            "remarks": "Penguin Rescue, Hägglund ride; near airport",
-            "thumbnail_url": "https://www.datocms-assets.com/163838/1756080212-hagglund-scaled.webp?auto=format&fit=max&w=1200",
-            "google_place_id": "ChIJVxMF4Lj0MW0R_UTTD9kGZCg"
+            "activity_id": "christchurch-arrival-act-1"
           }
-        ]
+        ],
+        "duration_days": 1,
+        "date": {
+          "to": "2025-12-14",
+          "from": "2025-12-13"
+        },
+        "location": {
+          "lng": 172.6366455,
+          "lat": -43.530955
+        },
+        "name": "Christchurch",
+        "weather": {
+          "forecast_high_c": null,
+          "precipitation_chance_pct": null,
+          "notes": "Placeholder forecast — update during trip",
+          "forecast_low_c": null
+        },
+        "stop_id": "christchurch-arrival",
+        "scenic_waypoints": [],
+        "travel_time_from_previous": null,
+        "accommodation": {
+          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6AGKpXgJNFKBRs3h-hFnsiRX4txamdsiZFODtUcvNQBqph9Xpay8KMsO2gflFNsh4RzGcvjZQtw5LWSP9-9fduAb3AGGXbZYiyX0F_nl_B40fyZQqPUfj9aElXF-jjVE4JF9M2QonsFv5OjVZ8nJu7e8osKby-nLkXKo-RpYL8QwYveLnd31nNzruHmQBCkTTJKtsu3MwqIlwgFil1UGcUrM8ZXzBaAbvTHKNKazwuDiJUqcfj_7HM55fVo3A6Agd0Bsw8jT4Bw-CiNGV0rBMf7Rt6c7JQIaMo_O001olEwoUQ4u8&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+          "url": "https://www.sudimahotels.com/christchurch-airport/",
+          "confirmation": "1924863700",
+          "check_in": "2025-12-13 15:00",
+          "room": "Superior Twin",
+          "phone": "+64 3 358 3139",
+          "google_place_id": "ChIJBSyMsrj0MW0REewUL-RP5YQ",
+          "address": "550 Memorial Ave, Christchurch 8053, New Zealand",
+          "location": {
+            "lng": 172.5558985,
+            "lat": -43.4888511
+          },
+          "check_out": "2025-12-14 11:00",
+          "name": "Sudima Christchurch Airport"
+        }
       },
       {
-        "stop_id": "lake-tekapo",
-        "name": "Lake Tekapo",
-        "location": {
-          "lat": -44.00697,
-          "lng": 170.48383
-        },
         "date": {
           "from": "2025-12-14",
           "to": "2025-12-16"
         },
-        "duration_days": 2,
+        "location": {
+          "lng": 170.48383,
+          "lat": -44.00697
+        },
         "travel_time_from_previous": "3h 0m (from Christchurch)",
         "scenic_waypoints": [
           {
-            "activity_id": "lake-tekapo-wp-1",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Rakaia River Bridge Walkway (SH1)",
             "location": {
-              "address": "Rakaia River Bridge, Rakaia 7710",
+              "lng": 172.014,
               "lat": -43.7496,
-              "lng": 172.014
+              "address": "Rakaia River Bridge, Rakaia 7710"
             },
-            "duration": "10–20 min",
             "url": "https://www.google.com/maps/place/Rakaia+River+Bridge",
             "remarks": "Quick pull-off for river views on the way south.",
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4Wg7sipR3Lb5vzCMyrm6nyPlra4fNzmPaXbagKNnTCP_pLCttmKlNySa8z-b0W_-vOsp46EeUwKiIXftg3QhriDPN36plYPc57SCaWZ3EXC_QR3MHCYe2QyYt7_-A9-OZwxtaiN8EwRzUJaxfibL4czEAGNdg8RKzBdxJCdK9BOrdEyieQcUKLmUeb1fte7Y8TTAPoyUW8GsckWW88tvTKeBRkrQw8GVt56OC6U46qKgjzVxHaZSRtPD8OpPA8icxOIc5Uz-aS-HUvKylyYa_N0f6rVERql5-MmnWJly8mNGnVnxqwzmy2GhcmnN9YwEt2ZN7CnQ38E178w1gThJX3LU9KNInfqPapqE8jwtGq_wrlnulaGxq_zJ61OLRBwdI6iSUalEaccii0Fm6UhGycl53Fhu_tOAbutZ7NK8Ol_PYENnARLyyntqpRtS-GUPliImTmk9byqVZzH0UjI69m5R_GcFCz9tGuUOkxctgq7kB5IYh-cehq_wq0Fc1ODwDYk7-NbfymrVE81BmNQ3O7ouh7W3qotZmChKVLYUZKLua2l1d-pAY4y4k50sdIFRq-0-WV&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "activity_name": "Rakaia River Bridge Walkway (SH1)",
+            "status": {
+              "done": false
+            },
+            "duration": "10–20 min",
+            "activity_id": "lake-tekapo-wp-1",
             "google_place_id": "ChIJ6dFH1zPtLW0R4DV6bAQKiAU"
           },
           {
-            "activity_id": "lake-tekapo-wp-2",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4BBBy6hHdbHf96g4gdpKgUPTdfEBTLmPIUSI7l4Tg2-ex7MhGnNSzzMIKT0CPU0OThb-hHolNzO3_PSsn5FHMMPwl3iuXfvXTyWAgcQRcYPeqN0cv2gyKKgT4Rsj16Bc1h3PsdOO853xnQf7t6zdqb767tSI0GFY1H2kPzhtlI8vqdRq9l7w3DNko84CZLXi9BypfO5rKhCq0tgFAx8WiiA28VtCkVbawrE6ahgKw7d-MiQb2UJcdsznzA6Z4y0nTe1Z-VznTJxTaVupdd19RI17UtRav80wim6XibAmguCORlCElW2dYSPzKqc0TH-k7p67tI3E74TjBJTdV4G6gQIcsYiFtgmmMIIkWQ_RQ2X_YDl0Y0cMAfhB77WrMtY9SecIrmSPIXFs-t3rRlgwy5G1Y4fF34IWodf9idwnaG4zoSD4y2cnJWAxvXLq8yVzI9KlpS0ARFkv7PBG6yqqZmNnoGnlMzULxMihyRJ1_5PtPlgPhIMrN1AsjgWonSBWb9kGDOdHXtOlQln4_JMIQ0KCXxFVtNaHmEydk6HArOuNOiTh918G-lv4dc1Wb0Q2PRFArg&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "activity_name": "Talbot Forest (Geraldine) short loop",
+            "remarks": "Sheltered native bush loop to break the drive.",
             "status": {
               "done": false
             },
-            "activity_name": "Talbot Forest (Geraldine) short loop",
+            "url": "https://www.google.com/maps/place/Talbot+Forest+Scenic+Reserve",
+            "activity_id": "lake-tekapo-wp-2",
+            "google_place_id": "ChIJD8kzq7z1LG0RVgPNGysIzM0",
             "location": {
-              "address": "Hislop St entrance, Geraldine 7930",
               "lat": -44.0949,
+              "address": "Hislop St entrance, Geraldine 7930",
               "lng": 171.2426
             },
-            "duration": "20–40 min",
-            "url": "https://www.google.com/maps/place/Talbot+Forest+Scenic+Reserve",
-            "remarks": "Sheltered native bush loop to break the drive.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4BBBy6hHdbHf96g4gdpKgUPTdfEBTLmPIUSI7l4Tg2-ex7MhGnNSzzMIKT0CPU0OThb-hHolNzO3_PSsn5FHMMPwl3iuXfvXTyWAgcQRcYPeqN0cv2gyKKgT4Rsj16Bc1h3PsdOO853xnQf7t6zdqb767tSI0GFY1H2kPzhtlI8vqdRq9l7w3DNko84CZLXi9BypfO5rKhCq0tgFAx8WiiA28VtCkVbawrE6ahgKw7d-MiQb2UJcdsznzA6Z4y0nTe1Z-VznTJxTaVupdd19RI17UtRav80wim6XibAmguCORlCElW2dYSPzKqc0TH-k7p67tI3E74TjBJTdV4G6gQIcsYiFtgmmMIIkWQ_RQ2X_YDl0Y0cMAfhB77WrMtY9SecIrmSPIXFs-t3rRlgwy5G1Y4fF34IWodf9idwnaG4zoSD4y2cnJWAxvXLq8yVzI9KlpS0ARFkv7PBG6yqqZmNnoGnlMzULxMihyRJ1_5PtPlgPhIMrN1AsjgWonSBWb9kGDOdHXtOlQln4_JMIQ0KCXxFVtNaHmEydk6HArOuNOiTh918G-lv4dc1Wb0Q2PRFArg&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJD8kzq7z1LG0RVgPNGysIzM0"
+            "duration": "20–40 min"
           },
           {
-            "activity_id": "lake-tekapo-wp-3",
-            "status": {
-              "done": false
-            },
+            "google_place_id": "ChIJQ1PaufV5K20RLAcQF_fJhTE",
+            "url": "https://www.google.com/maps/place/Burkes+Pass+Scenic+Reserve",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uKsgHBU5xkG5_uyL-CycCD7y_VMI0SIjK9-1J7ViiqouQhn8QJI5_QElL0dQd68rcZYOqZGmMGq1EtuJP6Vmrf1G0qnnP0FAo7F5UGR9z3mqLHJ7J3ulxd96FAOHzlBDN5pkUCV1EfGcaYt5qLiloYE4ooA_Yz9WWcC7YnZTNTR9Z22vJ34XFqcSiNH495ToxQpmFI74iTyNY4RfDf4_esVzWJgxqODTknJ1_1kBb-bX33x-m5untxGu2-nWLKVywYIYwIx-LcYG92e666Ww608ltaEzGufBYYYpdFzlqGCzrKWzUsS_xlWItItt8etBh46Kb87gRsU4aJ6hZDsbz64gYu_m6QRYzIJtdMdBytZlbRPxH7UhIjj_gOr7jzjhKrh4LYmwQ-aUEQjNt4bMMBakeAFzbcLrOWAJisZItBe9dDd6Ld79cTseeRfJf4JmbeuLf62EOEcT-B1-A_IKLZXMeviAgU3L4uisimKRt4G-pbbFAtWD-7-BpAGG67DpdqsleuUFwz4b5e7ZN-b59cowMwIX2og_URZCbATlKZMp9g8WfQ2QVAHgan2vjZ6SkDnYqNWBnrg&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
             "activity_name": "Burkes Pass Scenic Reserve lookout",
+            "activity_id": "lake-tekapo-wp-3",
             "location": {
               "address": "SH8, Burkes Pass 7987",
               "lat": -44.0777,
               "lng": 170.807
             },
-            "duration": "10–20 min",
-            "url": "https://www.google.com/maps/place/Burkes+Pass+Scenic+Reserve",
+            "status": {
+              "done": false
+            },
             "remarks": "First views into the Mackenzie Basin.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uKsgHBU5xkG5_uyL-CycCD7y_VMI0SIjK9-1J7ViiqouQhn8QJI5_QElL0dQd68rcZYOqZGmMGq1EtuJP6Vmrf1G0qnnP0FAo7F5UGR9z3mqLHJ7J3ulxd96FAOHzlBDN5pkUCV1EfGcaYt5qLiloYE4ooA_Yz9WWcC7YnZTNTR9Z22vJ34XFqcSiNH495ToxQpmFI74iTyNY4RfDf4_esVzWJgxqODTknJ1_1kBb-bX33x-m5untxGu2-nWLKVywYIYwIx-LcYG92e666Ww608ltaEzGufBYYYpdFzlqGCzrKWzUsS_xlWItItt8etBh46Kb87gRsU4aJ6hZDsbz64gYu_m6QRYzIJtdMdBytZlbRPxH7UhIjj_gOr7jzjhKrh4LYmwQ-aUEQjNt4bMMBakeAFzbcLrOWAJisZItBe9dDd6Ld79cTseeRfJf4JmbeuLf62EOEcT-B1-A_IKLZXMeviAgU3L4uisimKRt4G-pbbFAtWD-7-BpAGG67DpdqsleuUFwz4b5e7ZN-b59cowMwIX2og_URZCbATlKZMp9g8WfQ2QVAHgan2vjZ6SkDnYqNWBnrg&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJQ1PaufV5K20RLAcQF_fJhTE"
+            "duration": "10–20 min"
           }
         ],
+        "stop_id": "lake-tekapo",
         "accommodation": {
           "name": "The Cairns Alpine Resort & Golf Club",
-          "address": "48 D'Archiac Drive, Lake Tekapo 7999, New Zealand",
+          "phone": "+64 3 680 6952",
+          "check_out": "2025-12-16 10:00",
+          "url": "https://www.thecairns.co.nz/accommodation/homesteads/bunker-house",
+          "room": "The Bunker (3-bedroom unit)",
+          "thumbnail_url": "https://cdn.prod.website-files.com/648a59446853962bcde50573/669c684e9802586b98001a18_Bunker%20front%20spa%20smaller.jpg",
+          "check_in": "2025-12-14 15:00",
+          "confirmation": "175483357669783",
           "location": {
             "lat": -43.9454526,
             "lng": 170.4676672
           },
-          "check_in": "2025-12-14 15:00",
-          "check_out": "2025-12-16 10:00",
-          "confirmation": "175483357669783",
-          "room": "The Bunker (3-bedroom unit)",
-          "phone": "+64 3 680 6952",
-          "url": "https://www.thecairns.co.nz/accommodation/homesteads/bunker-house",
-          "thumbnail_url": "https://cdn.prod.website-files.com/648a59446853962bcde50573/669c684e9802586b98001a18_Bunker%20front%20spa%20smaller.jpg",
+          "address": "48 D'Archiac Drive, Lake Tekapo 7999, New Zealand",
           "google_place_id": "ChIJuUjcMll1K20RhISCZ-br_hE"
         },
+        "duration_days": 2,
+        "name": "Lake Tekapo",
         "weather": {
           "forecast_high_c": null,
-          "forecast_low_c": null,
           "precipitation_chance_pct": null,
+          "forecast_low_c": null,
           "notes": "Placeholder forecast — update during trip"
         },
         "activities": [
           {
+            "url": "https://tekaposprings.co.nz/",
             "activity_id": "lake-tekapo-act-1",
-            "order": 1,
+            "activity_name": "Tekapo Springs (hot pools & kids aqua play)",
+            "remarks": "Book pools; ice rink/tube park seasonal",
+            "location": {
+              "lng": 170.460756,
+              "address": "300 Lakeside Dr, Lake Tekapo 7999",
+              "lat": -43.99508
+            },
             "status": {
               "done": false
             },
-            "activity_name": "Tekapo Springs (hot pools & kids aqua play)",
-            "location": {
-              "address": "300 Lakeside Dr, Lake Tekapo 7999",
-              "lat": -43.99508,
-              "lng": 170.460756
-            },
-            "travel_time_from_accommodation": "5–7m drive",
-            "duration": "1.5–3h",
-            "url": "https://tekaposprings.co.nz/",
-            "remarks": "Book pools; ice rink/tube park seasonal",
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/LakeTekapoNov242024_05.jpg/400px-LakeTekapoNov242024_05.jpg",
-            "google_place_id": "ChIJ59bjll91K20RAqcIV5KgwD8"
+            "travel_time_from_accommodation": "5–7m drive",
+            "order": 1,
+            "google_place_id": "ChIJ59bjll91K20RAqcIV5KgwD8",
+            "duration": "1.5–3h"
           },
           {
-            "activity_id": "lake-tekapo-act-2",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Church_of_the_Good_Shepherd%2C_Tekapo_01.jpg/400px-Church_of_the_Good_Shepherd%2C_Tekapo_01.jpg",
             "order": 2,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Church of the Good Shepherd (photos & short walk)",
+            "url": "https://tekapo.church/",
             "location": {
               "lat": -44.0048,
               "lng": 170.4776
             },
-            "travel_time_from_accommodation": "5m drive / 25m walk",
-            "duration": "30–45m",
-            "url": "https://tekapo.church/",
-            "remarks": "Sunset light is nice; be respectful around the church",
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Church_of_the_Good_Shepherd%2C_Tekapo_01.jpg/400px-Church_of_the_Good_Shepherd%2C_Tekapo_01.jpg",
-            "google_place_id": "ChIJfel69GF1K20RAsz_Rtcyivg"
-          },
-          {
-            "activity_id": "lake-tekapo-wp-3",
             "status": {
               "done": false
             },
-            "activity_name": "Ōtehīwai / Mt John Summit & Astro Café",
+            "activity_id": "lake-tekapo-act-2",
+            "activity_name": "Church of the Good Shepherd (photos & short walk)",
+            "travel_time_from_accommodation": "5m drive / 25m walk",
+            "google_place_id": "ChIJfel69GF1K20RAsz_Rtcyivg",
+            "remarks": "Sunset light is nice; be respectful around the church",
+            "duration": "30–45m"
+          },
+          {
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7-3nodpMlKF59ZjIIXJK8Sh5zj_AhhRMQuvCPr9Izs0VhFiZKQ2FMu9TQ7XdVzTIi6jRbX1OIdbCIMJbUyZ-R-o-rd4CdBsFTVgVVlL9XROnzYZ_wEnGUTl4f6dwX2iXQO0_6BxQMzruJ3mLsCFRp09l-PkogU-Bvpp5eBbdN_zOzy3Lv-fn7Su1xz8BJdCB7L-Od7sfvZVVtLf_4V3pOYn3QsNmu510tBgx8MJun2ZXArGZTYxNlR2N0HQJhgl1Is63_wHEgxOzRew7mMy6K1f5T5nBCadqZbrNPcQURW4WQcAXFASujWh_47yHeiBesHlH4Uaynyfpy8sfjckjhYl9-Xq-WlzTmzuSjVKm4I9UHR-9x-kUo91-psPFdfGPBFWvq28PDva5m0-lGyj7trqpnGgmJ-qOWHb8FQWQbyrGcNqmYsUYZricnpKDmyB_ogaXeOZIG5oSdsqo5ZFioddxlTTnduZtwUuQejm7ALMilYozpU9MUa0hOEuCatTXq-pOimzabAkUQm-Wo9Qe5XSzvd0lz0NZ-VQUaNm9z-7OkdD_wZ9dsKhff3qjswq8F-dzKS&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "order": 2,
+            "status": {
+              "done": false
+            },
+            "duration": "1–2h",
+            "remarks": "Private access road fee; huge basin views; check café/open road hours; very windy.",
             "location": {
               "address": "Godley Peaks Rd (access road), Lake Tekapo 7999",
               "lat": -43.98667,
               "lng": 170.465
             },
-            "duration": "1–2h",
-            "url": "https://www.darkskyproject.co.nz/dine/astro-cafe/",
-            "remarks": "Private access road fee; huge basin views; check café/open road hours; very windy.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7-3nodpMlKF59ZjIIXJK8Sh5zj_AhhRMQuvCPr9Izs0VhFiZKQ2FMu9TQ7XdVzTIi6jRbX1OIdbCIMJbUyZ-R-o-rd4CdBsFTVgVVlL9XROnzYZ_wEnGUTl4f6dwX2iXQO0_6BxQMzruJ3mLsCFRp09l-PkogU-Bvpp5eBbdN_zOzy3Lv-fn7Su1xz8BJdCB7L-Od7sfvZVVtLf_4V3pOYn3QsNmu510tBgx8MJun2ZXArGZTYxNlR2N0HQJhgl1Is63_wHEgxOzRew7mMy6K1f5T5nBCadqZbrNPcQURW4WQcAXFASujWh_47yHeiBesHlH4Uaynyfpy8sfjckjhYl9-Xq-WlzTmzuSjVKm4I9UHR-9x-kUo91-psPFdfGPBFWvq28PDva5m0-lGyj7trqpnGgmJ-qOWHb8FQWQbyrGcNqmYsUYZricnpKDmyB_ogaXeOZIG5oSdsqo5ZFioddxlTTnduZtwUuQejm7ALMilYozpU9MUa0hOEuCatTXq-pOimzabAkUQm-Wo9Qe5XSzvd0lz0NZ-VQUaNm9z-7OkdD_wZ9dsKhff3qjswq8F-dzKS&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "order": 2,
-            "google_place_id": "ChIJVbo3kvqfK20R-Ep_UCxoPCQ"
+            "activity_name": "Ōtehīwai / Mt John Summit & Astro Café",
+            "activity_id": "lake-tekapo-wp-3",
+            "google_place_id": "ChIJVbo3kvqfK20R-Ep_UCxoPCQ",
+            "url": "https://www.darkskyproject.co.nz/dine/astro-cafe/"
           },
           {
-            "activity_id": "lake-tekapo-wp-4",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Cowans Hill Track (lookout loop)",
             "location": {
               "address": "Carpark off SH8 near Hamilton Dr, Lake Tekapo 7999",
               "lat": -44.006824,
               "lng": 170.481405
             },
-            "duration": "1–2h",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/lake-tekapo-area/things-to-do/cowans-hill-track/",
             "remarks": "Easy family walk; tussock & tarns; best light late afternoon.",
             "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/782e99db53db4c37ac4f8d620b23e2c3/cowans-hill-track-1920.jpg",
+            "duration": "1–2h",
             "order": 3,
-            "google_place_id": "ChIJ-z2tSJx1K20R_xkmKsZB8-A"
-          },
-          {
-            "activity_id": "lake-tekapo-wp-5",
             "status": {
               "done": false
             },
-            "activity_name": "Peter’s Lookout (Lake Pukaki → Aoraki views)",
-            "location": {
-              "address": "SH80 (Mount Cook Rd), Ben Ohau 7999",
-              "lat": -44.014,
-              "lng": 170.179
-            },
-            "duration": "15–30 min",
-            "url": "https://www.tripadvisor.com/Attraction_Review-g7042765-d19056143-Reviews-Peter_s_Lookout-Pukaki_Mackenzie_District_Canterbury_Region_South_Island.html",
-            "remarks": "Large car park; classic road-to-Aoraki photo spot; combine with Mt Cook day trip.",
-            "thumbnail_url": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/d9/b4/e1/photo1jpg.jpg?w=1200&amp;h=1200&amp;s=1",
-            "order": 4,
-            "google_place_id": "ChIJWZVsQaoDK20R98KecKWBWPo"
+            "activity_id": "lake-tekapo-wp-4",
+            "google_place_id": "ChIJ-z2tSJx1K20R_xkmKsZB8-A",
+            "activity_name": "Cowans Hill Track (lookout loop)",
+            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/lake-tekapo-area/things-to-do/cowans-hill-track/"
           },
           {
+            "activity_name": "Peter’s Lookout (Lake Pukaki → Aoraki views)",
+            "status": {
+              "done": false
+            },
+            "google_place_id": "ChIJWZVsQaoDK20R98KecKWBWPo",
+            "url": "https://www.tripadvisor.com/Attraction_Review-g7042765-d19056143-Reviews-Peter_s_Lookout-Pukaki_Mackenzie_District_Canterbury_Region_South_Island.html",
+            "activity_id": "lake-tekapo-wp-5",
+            "location": {
+              "lng": 170.179,
+              "address": "SH80 (Mount Cook Rd), Ben Ohau 7999",
+              "lat": -44.014
+            },
+            "duration": "15–30 min",
+            "remarks": "Large car park; classic road-to-Aoraki photo spot; combine with Mt Cook day trip.",
+            "order": 4,
+            "thumbnail_url": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/d9/b4/e1/photo1jpg.jpg?w=1200&amp;h=1200&amp;s=1"
+          },
+          {
+            "google_place_id": "ChIJOXVowdqfK20RyRpfcGdB284",
             "activity_id": "poi_ChIJOXVowdqfK20RyRpfcGdB284_1756320532686",
+            "duration": "1-2 hours",
+            "order": 999,
+            "status": {
+              "done": false
+            },
             "activity_name": "Motuariki View Point",
-            "activity_type": "attraction",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/LakeTekapoNov242024_05.jpg/400px-LakeTekapoNov242024_05.jpg",
             "location": {
               "lat": -43.9654608,
               "lng": 170.5339803,
               "address": "Lake Tekapo 7999, New Zealand"
             },
-            "duration": "1-2 hours",
-            "remarks": "Rating: 4.1/5 (35 reviews)",
-            "order": 999,
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/LakeTekapoNov242024_05.jpg/400px-LakeTekapoNov242024_05.jpg",
-            "google_place_id": "ChIJOXVowdqfK20RyRpfcGdB284"
+            "activity_type": "attraction",
+            "remarks": "Rating: 4.1/5 (35 reviews)"
           }
         ]
       },
       {
-        "stop_id": "queenstown",
-        "name": "Queenstown",
         "location": {
-          "lat": -45.0311622,
-          "lng": 168.662643
+          "lng": 168.662643,
+          "lat": -45.0311622
         },
-        "date": {
-          "from": "2025-12-16",
-          "to": "2025-12-21"
-        },
-        "duration_days": 5,
-        "travel_time_from_previous": "3h 15m (from Tekapo via Lindis Pass)",
         "scenic_waypoints": [
           {
-            "activity_id": "queenstown-wp-1",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Lake Pukaki Lookout (Aoraki view)",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/LakePukakiNov232024_01.jpg/400px-LakePukakiNov232024_01.jpg",
             "location": {
               "address": "SH8, Lake Pukaki 7999",
               "lat": -44.1189,
               "lng": 170.1684
             },
+            "remarks": "Turquoise lake; weather-dependent views to Aoraki.",
+            "activity_name": "Lake Pukaki Lookout (Aoraki view)",
             "duration": "10–20 min",
             "url": "https://www.google.com/maps/place/Lake+Pukaki+Lookout",
-            "remarks": "Turquoise lake; weather-dependent views to Aoraki.",
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/08/LakePukakiNov232024_01.jpg/400px-LakePukakiNov232024_01.jpg",
-            "google_place_id": "ChIJObC9qsUdK20RzEkgBIELnkY"
-          },
-          {
-            "activity_id": "queenstown-wp-2",
             "status": {
               "done": false
             },
-            "activity_name": "Omarama Clay Cliffs (short detour)",
+            "google_place_id": "ChIJObC9qsUdK20RzEkgBIELnkY",
+            "activity_id": "queenstown-wp-1"
+          },
+          {
+            "url": "https://www.google.com/maps/place/Clay+Cliffs+Omarama",
+            "duration": "45–75 min",
             "location": {
               "address": "Henburn Rd, Omarama 9412",
-              "lat": -44.496,
-              "lng": 169.966
+              "lng": 169.966,
+              "lat": -44.496
             },
-            "duration": "45–75 min",
-            "url": "https://www.google.com/maps/place/Clay+Cliffs+Omarama",
             "remarks": "Gravel road + small access fee; short walk to formations.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6p8o1gpeJP0FDvNf-AyhNoScvcV1QzPIlLEwcItvM5_PpFg52kN7mk2Bs6gzfdXP7qYZmU5musICga3lWD6DiSEwcN4K1IhrJqyA-oX-1il3RuraXFDizbnqN4-p-lxDrQz1AdSyHztfuNwNoZpVtQtbt9V-qm9z0OfVuso0uKO8S2NIl6sibsT1SPDkXJbaqsFGsBSWV9DNRMiBYnwmdwWpgVEd3TsjTfZjgU690od5dUTAjTTRp1Q5BkPDrZl0n58sQ8llK2mBdjPhp8JuixwrES7lnqxUhcCr7Htv0r3TAK1925qHImMEYAwCNuzUXxMoIKzWI9HpA1zoX7oMmUwgZlYQVWymnNS5ZaUUevk9cPDmzsSypk0WXkNZb5RjGCiH1Xgm6Hy7A9SXju_0Uecothln5mH_42n7OUx-qjauYRqg5UB1xe-SbZSnWerKyTFXz5h_KUgZsO75I5QkZuWIf4P8p0-bIWzseNc3ycMleOpLghdVaTuDc-v8MRxfiPZ0aE7Jk6J6J_aAM6XouP-Mi3zFLVDYIlGn5GDYjyIuD5JsMKEHmV1UODDzZ44ZYmsjAnEO7LcA&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJJfC3Jw_RKm0RwBEytI_LDAk"
-          },
-          {
-            "activity_id": "queenstown-wp-3",
             "status": {
               "done": false
             },
-            "activity_name": "Lindis Pass Summit Lookout",
-            "location": {
-              "address": "SH8, Lindis Pass 9382",
-              "lat": -44.7063,
-              "lng": 169.4121
-            },
-            "duration": "10–20 min",
-            "url": "https://www.google.com/maps/place/Lindis+Pass+Lookout",
-            "remarks": "Quick pull-off; alpine tussock scenery.",
+            "google_place_id": "ChIJJfC3Jw_RKm0RwBEytI_LDAk",
+            "activity_name": "Omarama Clay Cliffs (short detour)",
+            "activity_id": "queenstown-wp-2",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6p8o1gpeJP0FDvNf-AyhNoScvcV1QzPIlLEwcItvM5_PpFg52kN7mk2Bs6gzfdXP7qYZmU5musICga3lWD6DiSEwcN4K1IhrJqyA-oX-1il3RuraXFDizbnqN4-p-lxDrQz1AdSyHztfuNwNoZpVtQtbt9V-qm9z0OfVuso0uKO8S2NIl6sibsT1SPDkXJbaqsFGsBSWV9DNRMiBYnwmdwWpgVEd3TsjTfZjgU690od5dUTAjTTRp1Q5BkPDrZl0n58sQ8llK2mBdjPhp8JuixwrES7lnqxUhcCr7Htv0r3TAK1925qHImMEYAwCNuzUXxMoIKzWI9HpA1zoX7oMmUwgZlYQVWymnNS5ZaUUevk9cPDmzsSypk0WXkNZb5RjGCiH1Xgm6Hy7A9SXju_0Uecothln5mH_42n7OUx-qjauYRqg5UB1xe-SbZSnWerKyTFXz5h_KUgZsO75I5QkZuWIf4P8p0-bIWzseNc3ycMleOpLghdVaTuDc-v8MRxfiPZ0aE7Jk6J6J_aAM6XouP-Mi3zFLVDYIlGn5GDYjyIuD5JsMKEHmV1UODDzZ44ZYmsjAnEO7LcA&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
+          },
+          {
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6XbbH-uEeaWkG54LxhFq4807NLigamY8NzQKol--RLgsbO0vTmPC0foYU1X_-SxAPjjzoKpr2hN1df5h8Hd-1ub6--UFvX7JM8mCQk2Rs4zQ2BC0aCyWCUaO44O27YwKxSeJdUBhJ1e2lHykuWRlm7IvBsy86RufoPXHaTHNCe6lrPZtzlh-m8AOl_Z7y-q4qtkbpMEl06wxbEkA15LHEVjP5fvaImw5bsqIx2T4hhaBjTVZNZB9VejF8v8KIjgTbNMG_WNvt5BQOX8r_fKux8YOmbITUDwZPmmr6LWyg7Jbsscsbvtq9bC6peB1D3eYqytzJ40rbhXAEy2UhJsEsNE6-0TXuptOhS5UsDUSquOJe4QBQ3xOEHnfb0Wq4L7FtGF5gEnT5lY2hupuGLNXUP0h1QftXcQu8PFWAC4GzMZXe_K8LJT1ZATa-X5vUSALaAlKt07qnsgLzRqmKL3wJmkO5jY3rv-6UKyg4ikKrFnDjsSi7ZGT9Tds8E5QG4oq639NLrA3S9OXWSyPoUN_ZNIdPNOD58chKg7NzbpGS478EpNaCWyR70J8SAu1KnDjX4SNtR&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJwzeFuUChKqgRbx7HwP-BygY"
-          },
-          {
-            "activity_id": "queenstown-wp-4",
+            "activity_id": "queenstown-wp-3",
+            "url": "https://www.google.com/maps/place/Lindis+Pass+Lookout",
             "status": {
               "done": false
             },
-            "activity_name": "Roaring Meg Viewpoint (Kawarau Gorge)",
+            "remarks": "Quick pull-off; alpine tussock scenery.",
+            "activity_name": "Lindis Pass Summit Lookout",
+            "google_place_id": "ChIJwzeFuUChKqgRbx7HwP-BygY",
+            "duration": "10–20 min",
+            "location": {
+              "lat": -44.7063,
+              "address": "SH8, Lindis Pass 9382",
+              "lng": 169.4121
+            }
+          },
+          {
+            "google_place_id": "ChIJhQ_KLjUp1akRRCVvABzAMAU",
+            "duration": "10–20 min",
+            "activity_id": "queenstown-wp-4",
+            "remarks": "Gorge views; small carpark on river side.",
+            "status": {
+              "done": false
+            },
+            "url": "https://www.google.com/maps/place/Roaring+Meg",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6rL0_hYRJ7RvcX4duOTgRshaHL4MCbPT9Z3xrBQsHLfPJFYW1oaARdJZ0K9QcThfpmL2Ke6G6r8-RLJa6N-uAZZ-nCjV7wuKdj7ei13Ow588xPLqjIYP2Vu-ne0WOYg35jCn0P8ucyh6vkqdi4Ewoibl5ipETHdJ7MksuuM5PxuVegNWrWW54gku438w7BmeLeBA-cxlYy5b1p-BUqcQyYxpVK2pnliBTGKXO7pZSKCwOPIQu-Zi0OqLsfv2t2aZaKFWtg07nQS5mto2RvmTQyCMbv28-CKYflFecJqcEcOIzd4FtGnAU2usGKcr4WX1bgzh0GIQvOup8CeVCjbEkmRaMNyX3GBIrI686uEGrkc774MpGnW2e-nPFtzrrOjrarYZN8ElcET0otxpYXpQxKX-416a0SKP5ZyWjrC4o0pZ8ub67Hb05IkyGmyNzlIAeXBGTWUwrBZEGYqH6wS7duasdwGCObKKduHk6D8KWVzBpPH-qOiWEjOVsnvKMIaNXsHnMztKMd71xCLPfYVD3MStFfM4XN6feZY4uUr7bJ22LMsj0y9W3QLIMPnNIfBw3i6dx5&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
             "location": {
               "address": "SH6, Gibbston 9371",
-              "lat": -44.9919,
-              "lng": 168.9102
+              "lng": 168.9102,
+              "lat": -44.9919
             },
-            "duration": "10–20 min",
-            "url": "https://www.google.com/maps/place/Roaring+Meg",
-            "remarks": "Gorge views; small carpark on river side.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6rL0_hYRJ7RvcX4duOTgRshaHL4MCbPT9Z3xrBQsHLfPJFYW1oaARdJZ0K9QcThfpmL2Ke6G6r8-RLJa6N-uAZZ-nCjV7wuKdj7ei13Ow588xPLqjIYP2Vu-ne0WOYg35jCn0P8ucyh6vkqdi4Ewoibl5ipETHdJ7MksuuM5PxuVegNWrWW54gku438w7BmeLeBA-cxlYy5b1p-BUqcQyYxpVK2pnliBTGKXO7pZSKCwOPIQu-Zi0OqLsfv2t2aZaKFWtg07nQS5mto2RvmTQyCMbv28-CKYflFecJqcEcOIzd4FtGnAU2usGKcr4WX1bgzh0GIQvOup8CeVCjbEkmRaMNyX3GBIrI686uEGrkc774MpGnW2e-nPFtzrrOjrarYZN8ElcET0otxpYXpQxKX-416a0SKP5ZyWjrC4o0pZ8ub67Hb05IkyGmyNzlIAeXBGTWUwrBZEGYqH6wS7duasdwGCObKKduHk6D8KWVzBpPH-qOiWEjOVsnvKMIaNXsHnMztKMd71xCLPfYVD3MStFfM4XN6feZY4uUr7bJ22LMsj0y9W3QLIMPnNIfBw3i6dx5&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJhQ_KLjUp1akRRCVvABzAMAU"
+            "activity_name": "Roaring Meg Viewpoint (Kawarau Gorge)"
           },
           {
             "activity_id": "queenstown-wp-5",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU79MkkH1b9-_7hdSMuK7XEanMCc4JrLgsGr269WuGSIiX2M_8YG1SbQicxZx6K5mfmjvw0OX9hN1MyU8doKc_5htw0LeZqQm96Qu9kdb6iKwx-OKnlRvIPnGAhaeWaqYjw7vUPTXHNJUZdVISCvdh9FwXxMdohTh_BPLwZTVbeSVJ4JIc6_KWxI-RAJdF_gPI_ysRztNa5zu1fyUT0u6eWJSO0H2zwFYTNe9kGBagmB0RTdCuAYoUmkirMUQlGZNabJh0euJattDNRALnvtzrzsjjE2P2OBAOMg4ERDe-69bjvMdgk&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
             "status": {
               "done": false
             },
+            "url": "https://www.bungy.co.nz/queenstown/kawarau-bungy-centre/",
             "activity_name": "Kawarau Suspension Bridge (AJ Hackett Bungy)",
+            "duration": "20–40 min",
             "location": {
               "address": "1720 Gibbston Hwy, Gibbston 9371",
               "lat": -45.0169,
               "lng": 168.8287
             },
-            "duration": "20–40 min",
-            "url": "https://www.bungy.co.nz/queenstown/kawarau-bungy-centre/",
-            "remarks": "Watch jumpers from viewing decks; easy access off SH6.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU79MkkH1b9-_7hdSMuK7XEanMCc4JrLgsGr269WuGSIiX2M_8YG1SbQicxZx6K5mfmjvw0OX9hN1MyU8doKc_5htw0LeZqQm96Qu9kdb6iKwx-OKnlRvIPnGAhaeWaqYjw7vUPTXHNJUZdVISCvdh9FwXxMdohTh_BPLwZTVbeSVJ4JIc6_KWxI-RAJdF_gPI_ysRztNa5zu1fyUT0u6eWJSO0H2zwFYTNe9kGBagmB0RTdCuAYoUmkirMUQlGZNabJh0euJattDNRALnvtzrzsjjE2P2OBAOMg4ERDe-69bjvMdgk&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJJRpdg1Im1akRHBnQpqt5HZo"
+            "google_place_id": "ChIJJRpdg1Im1akRHBnQpqt5HZo",
+            "remarks": "Watch jumpers from viewing decks; easy access off SH6."
           }
         ],
-        "accommodation": {
-          "name": "Marina Gem – Lakefront 3-Bedroom Apartment (Airbnb)",
-          "address": "875 Frankton Road, Queenstown 9300, New Zealand",
-          "location": {
-            "lat": -45.0173454,
-            "lng": 168.7174542
-          },
-          "check_in": "2025-12-16 15:00",
-          "check_out": "2025-12-21 10:00",
-          "confirmation": "HMJE5ASMEP",
-          "host": "Ray",
-          "url": "https://abnb.me/TQkt89kjGJb",
-          "thumbnail_url": "https://a0.muscache.com/im/pictures/fe7217ff-0b24-438d-880d-b94722c75bf5.jpg",
-          "google_place_id": "ChIJk3z8QVgf1akRBeX0EBNRDKs"
-        },
+        "travel_time_from_previous": "3h 15m (from Tekapo via Lindis Pass)",
         "weather": {
-          "forecast_high_c": null,
           "forecast_low_c": null,
           "precipitation_chance_pct": null,
-          "notes": "Placeholder forecast — update during trip"
+          "notes": "Placeholder forecast — update during trip",
+          "forecast_high_c": null
         },
+        "stop_id": "queenstown",
+        "date": {
+          "from": "2025-12-16",
+          "to": "2025-12-21"
+        },
+        "accommodation": {
+          "location": {
+            "lng": 168.7174542,
+            "lat": -45.0173454
+          },
+          "thumbnail_url": "https://a0.muscache.com/im/pictures/fe7217ff-0b24-438d-880d-b94722c75bf5.jpg",
+          "check_in": "2025-12-16 15:00",
+          "name": "Marina Gem – Lakefront 3-Bedroom Apartment (Airbnb)",
+          "address": "875 Frankton Road, Queenstown 9300, New Zealand",
+          "google_place_id": "ChIJk3z8QVgf1akRBeX0EBNRDKs",
+          "host": "Ray",
+          "confirmation": "HMJE5ASMEP",
+          "url": "https://abnb.me/TQkt89kjGJb",
+          "check_out": "2025-12-21 10:00"
+        },
+        "name": "Queenstown",
+        "duration_days": 5,
         "activities": [
           {
-            "activity_id": "queenstown-act-1",
-            "order": 1,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Skyline Gondola & Luge",
             "location": {
-              "address": "Brecon St, Queenstown 9300",
               "lat": -45.0298,
+              "address": "Brecon St, Queenstown 9300",
               "lng": 168.6439
             },
             "travel_time_from_accommodation": "10–12m drive",
-            "duration": "2–4h",
-            "url": "https://queenstown.skyline.co.nz/",
-            "remarks": "Book gondola + multiple luge rides; great for kids",
+            "status": {
+              "done": false
+            },
             "thumbnail_url": "https://media.skyline.co.nz/queenstown/media/uploads/2023/11/16094726/11-min-1.png",
-            "google_place_id": "ChIJvW5Ehngd1akRv1_byHfuLCI"
+            "order": 1,
+            "duration": "2–4h",
+            "google_place_id": "ChIJvW5Ehngd1akRv1_byHfuLCI",
+            "remarks": "Book gondola + multiple luge rides; great for kids",
+            "url": "https://queenstown.skyline.co.nz/",
+            "activity_id": "queenstown-act-1",
+            "activity_name": "Skyline Gondola & Luge"
           },
           {
+            "activity_name": "Creative Queenstown Market (Saturdays)",
+            "remarks": "Summer 9am–4pm; local crafts/food",
             "activity_id": "queenstown-act-2",
             "order": 2,
             "status": {
               "done": false
             },
-            "activity_name": "Creative Queenstown Market (Saturdays)",
-            "location": {
-              "address": "Earnslaw Park, Queenstown",
-              "lat": -45.0298,
-              "lng": 168.6439
-            },
-            "travel_time_from_accommodation": "12m drive",
+            "google_place_id": "ChIJJ2chix8d1akRNkU3v7Bzuh8",
+            "thumbnail_url": "https://static.wixstatic.com/media/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg/v1/fit/w_2500,h_1330,al_c/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg",
             "duration": "1–2h",
             "url": "https://www.queenstownmarket.nz/",
-            "remarks": "Summer 9am–4pm; local crafts/food",
-            "thumbnail_url": "https://static.wixstatic.com/media/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg/v1/fit/w_2500,h_1330,al_c/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg",
-            "google_place_id": "ChIJJ2chix8d1akRNkU3v7Bzuh8"
+            "travel_time_from_accommodation": "12m drive",
+            "location": {
+              "address": "Earnslaw Park, Queenstown",
+              "lng": 168.6439,
+              "lat": -45.0298
+            }
           },
           {
-            "activity_id": "queenstown-act-3",
-            "order": 3,
+            "activity_name": "TSS Earnslaw to Walter Peak Farm (RealNZ)",
+            "duration": "3–4h (incl. cruise + farm tour/dining)",
             "status": {
               "done": false
             },
-            "activity_name": "TSS Earnslaw to Walter Peak Farm (RealNZ)",
+            "url": "https://www.realnz.com/en/experiences/tss-earnslaw-walter-peak-experiences/",
+            "activity_id": "queenstown-act-3",
+            "remarks": "Family favourite; animals, shearing demo; book ahead",
             "location": {
               "address": "Steamer Wharf, Queenstown; Walter Peak High Country Farm",
-              "lat": -45.0335057,
-              "lng": 168.6558449
+              "lng": 168.6558449,
+              "lat": -45.0335057
             },
-            "travel_time_from_accommodation": "12m drive to wharf",
-            "duration": "3–4h (incl. cruise + farm tour/dining)",
-            "url": "https://www.realnz.com/en/experiences/tss-earnslaw-walter-peak-experiences/",
-            "remarks": "Family favourite; animals, shearing demo; book ahead",
+            "google_place_id": "ChIJJWOraIP71KkRjK8XfJrlqrA",
             "thumbnail_url": "https://www.realnz.com/media/701113/6-sept15-tss-earnslaw-queenstown.jpg?width=1200&amp;height=630&amp;v=1da55de311ce990",
-            "google_place_id": "ChIJJWOraIP71KkRjK8XfJrlqrA"
+            "travel_time_from_accommodation": "12m drive to wharf",
+            "order": 3
           },
           {
-            "activity_id": "queenstown-act-4",
             "order": 4,
+            "url": "https://kiwibird.co.nz/",
+            "activity_name": "Kiwi Park (native wildlife)",
+            "duration": "1–2h",
+            "remarks": "Keeper talks; tuatara; below Skyline Gondola",
+            "thumbnail_url": "https://kiwibird.co.nz/wp-content/uploads/2024/01/Wings-Spread.jpg",
             "status": {
               "done": false
             },
-            "activity_name": "Kiwi Park (native wildlife)",
+            "activity_id": "queenstown-act-4",
             "location": {
+              "lng": 168.6539962,
               "address": "51 Brecon Street, Queenstown 9300",
-              "lat": -45.0283619,
-              "lng": 168.6539962
+              "lat": -45.0283619
             },
             "travel_time_from_accommodation": "10–12m drive",
-            "duration": "1–2h",
-            "url": "https://kiwibird.co.nz/",
-            "remarks": "Keeper talks; tuatara; below Skyline Gondola",
-            "thumbnail_url": "https://kiwibird.co.nz/wp-content/uploads/2024/01/Wings-Spread.jpg",
             "google_place_id": "ChIJGbzFhngd1akREfa6vQkkB70"
           },
           {
-            "activity_id": "queenstown-act-5",
             "order": 5,
+            "thumbnail_url": "https://www.shotoverjet.com/assets/Uploads/banner__FillWzEyMDAsNjMwXQ.jpg",
+            "activity_id": "queenstown-act-5",
+            "duration": "1–1.5h total (25m on water)",
+            "activity_name": "Shotover Jet (jet boating)",
             "status": {
               "done": false
             },
-            "activity_name": "Shotover Jet (jet boating)",
-            "location": {
-              "address": "Arthurs Point, Queenstown",
-              "lat": -44.9802397,
-              "lng": 168.6050663
-            },
-            "travel_time_from_accommodation": "15m drive",
-            "duration": "1–1.5h total (25m on water)",
-            "url": "https://www.shotoverjet.com/",
             "remarks": "Minimum height varies by conditions (often ~1.0m). Warm layers recommended",
-            "thumbnail_url": "https://www.shotoverjet.com/assets/Uploads/banner__FillWzEyMDAsNjMwXQ.jpg",
-            "google_place_id": "ChIJTe4Vw6Ud1akRlGHny7qc4eA"
+            "google_place_id": "ChIJTe4Vw6Ud1akRlGHny7qc4eA",
+            "travel_time_from_accommodation": "15m drive",
+            "location": {
+              "lat": -44.9802397,
+              "lng": 168.6050663,
+              "address": "Arthurs Point, Queenstown"
+            },
+            "url": "https://www.shotoverjet.com/"
           },
           {
             "activity_id": "queenstown-act-6",
-            "order": 6,
+            "google_place_id": "ChIJTe-7xn0Y1akRb7i4_wN9UGk",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5R2OLRaRG1wYUZ1DIoI4OmIlzdO_aAqXHCNdIw7Yv2gkQ77e--sNXRa3bAzUGJX0vGEi_PPIULV1OMQ4jQHQUfmLvsHsXJiU4zZCId0cZ0GXWFdcsk9_-TW6cdMC7awX6oSaQWWAT1FEBRguQXnDuY76lYhA40da8iLK704ESCD9wzdbj62CRbMkAs4NT0i3tnMHJc9kSiPPw6YE8h8R0J2V7qUcgJxs01INeHkvwvYN2Q0FWtmSzn_zmrx6Fc1X3j3wu35_Bwtim9Ory9-7k0JOEMy5iRAX51sYzyrUhPTO5_M6I&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
             "status": {
               "done": false
             },
-            "activity_name": "Arrowtown village & gold panning",
-            "location": {
-              "address": "Buckingham St & Dudley’s Cottage, Arrowtown",
-              "lat": -44.937799,
-              "lng": 168.828076
-            },
-            "travel_time_from_accommodation": "20–25m drive",
             "duration": "2–3h",
+            "location": {
+              "lat": -44.937799,
+              "lng": 168.828076,
+              "address": "Buckingham St & Dudley’s Cottage, Arrowtown"
+            },
             "url": "https://www.lakesdistrictmuseum.co.nz/",
+            "travel_time_from_accommodation": "20–25m drive",
             "remarks": "Historic main street; easy riverside walk; pan for gold",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5R2OLRaRG1wYUZ1DIoI4OmIlzdO_aAqXHCNdIw7Yv2gkQ77e--sNXRa3bAzUGJX0vGEi_PPIULV1OMQ4jQHQUfmLvsHsXJiU4zZCId0cZ0GXWFdcsk9_-TW6cdMC7awX6oSaQWWAT1FEBRguQXnDuY76lYhA40da8iLK704ESCD9wzdbj62CRbMkAs4NT0i3tnMHJc9kSiPPw6YE8h8R0J2V7qUcgJxs01INeHkvwvYN2Q0FWtmSzn_zmrx6Fc1X3j3wu35_Bwtim9Ory9-7k0JOEMy5iRAX51sYzyrUhPTO5_M6I&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJTe-7xn0Y1akRb7i4_wN9UGk"
+            "order": 6,
+            "activity_name": "Arrowtown village & gold panning"
           },
           {
-            "activity_id": "queenstown-act-7",
-            "order": 7,
+            "url": "https://www.patagoniachocolates.co.nz/",
+            "travel_time_from_accommodation": "10–12m drive",
+            "google_place_id": "ChIJrwm7l7Tj1KkRtwIpvNpNEQs",
+            "activity_name": "Queenstown Gardens & Lakefront Playground + Patagonia Chocolates",
+            "duration": "1–2h",
             "status": {
               "done": false
             },
-            "activity_name": "Queenstown Gardens & Lakefront Playground + Patagonia Chocolates",
             "location": {
               "lat": -45.0370802622603,
               "lng": 168.660821914673,
               "address": "Queenstown Gardens / 50 Beach St"
             },
-            "travel_time_from_accommodation": "10–12m drive",
-            "duration": "1–2h",
-            "url": "https://www.patagoniachocolates.co.nz/",
+            "order": 7,
+            "activity_id": "queenstown-act-7",
             "remarks": "Beach & playground at Marine Parade; ice cream & hot chocolates nearby",
-            "thumbnail_url": "http://www.patagoniachocolates.co.nz/cdn/shop/files/IMG_3426_4032x3024.jpg?v=1763559373",
-            "google_place_id": "ChIJrwm7l7Tj1KkRtwIpvNpNEQs"
+            "thumbnail_url": "http://www.patagoniachocolates.co.nz/cdn/shop/files/IMG_3426_4032x3024.jpg?v=1763559373"
           }
         ]
       },
       {
-        "stop_id": "te-anau",
-        "name": "Te Anau",
-        "location": {
-          "lat": -45.41464889,
-          "lng": 167.7156717
-        },
-        "date": {
-          "from": "2025-12-21",
-          "to": "2025-12-23"
-        },
-        "duration_days": 2,
-        "travel_time_from_previous": "2h 0m (from Queenstown)",
         "scenic_waypoints": [
           {
-            "activity_id": "te-anau-wp-1",
+            "duration": "10–20 min",
             "status": {
               "done": false
             },
-            "activity_name": "Devil’s Staircase lookouts (SH6)",
-            "location": {
-              "address": "SH6 south of Queenstown",
-              "lat": -45.153,
-              "lng": 168.522
-            },
-            "duration": "10–20 min",
-            "url": "https://maps.app.goo.gl/8jHn8B6w4r3yq9wq8",
             "remarks": "Pull-outs above Lake Wakatipu; take care re-entering traffic.",
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7sZ3EwpUU5F_I4wtAFBG_08dKbIObYniy817zt1iLuOQHH5o_HR2IJwU6zKdhQcDs24x9PbqN2b-lMCMke5xotCeTpmsp3BT7TUsNLFa8ijzk_dhyz0LpBAJiA8nGKphRG7QzJnS-d1mBLvm1fcrbEjOPO-uooiporsRCycfBRgLifU9sSfh4N3JwBWdT6L0JjOX_R9bPSl-FLlotjYr2K7KNkF0tZG_RxJsEBz-G7ewbyox2Ro8O0_hhWGdhyetTAfQVQDaFXapn4SHJg_nV-CSGsUb3Pp9qcsTUQ7iJTwq8bPtwnNTVjuFvNnXmefhhK7tGWSMEdi8NbhKTHMw2euJW2_dEjs3pA6rYc6NBDu9i6aCjpXY5DxlmeAOzcszTvIUlRLHUyBYvw7-gZwnY_8Ubb-2HfMuSOsgO-EJKp9RJ10RDWPtbZapmqnAp3Oo3dXiDlbRLYCENm927maEYHLO83V916Wu4qwh-jGSXU_W_7VOLS9uhE9DJUdOpZMepyvQ9X0gSYRwSA2dgoGvoviJHe0UVhK9DJGq92UFrkSMk8NJp5vwfRbbFpJgxr4XKcDeAPH6rqTw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "location": {
+              "address": "SH6 south of Queenstown",
+              "lng": 168.522,
+              "lat": -45.153
+            },
+            "activity_id": "te-anau-wp-1",
+            "url": "https://maps.app.goo.gl/8jHn8B6w4r3yq9wq8",
+            "activity_name": "Devil’s Staircase lookouts (SH6)",
             "google_place_id": "ChIJg92ioEPC1KkR39NpSfOJ2zI"
           },
           {
-            "activity_id": "te-anau-wp-2",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Kingston Foreshore & Wharf",
             "location": {
-              "address": "Kent St, Kingston 9793",
               "lat": -45.4046,
-              "lng": 168.7074
+              "lng": 168.7074,
+              "address": "Kent St, Kingston 9793"
             },
+            "activity_id": "te-anau-wp-2",
+            "activity_name": "Kingston Foreshore & Wharf",
+            "remarks": "Lake-edge stretch stop; toilets and picnic tables nearby.",
+            "google_place_id": "ChIJcUcsGWXA1KkRvWy0PZcYapo",
             "duration": "10–25 min",
             "url": "https://maps.app.goo.gl/8Uu2kqjQX1mjmDqT8",
-            "remarks": "Lake-edge stretch stop; toilets and picnic tables nearby.",
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/KingstonNewZealandNov172024_01.jpg/400px-KingstonNewZealandNov172024_01.jpg",
-            "google_place_id": "ChIJcUcsGWXA1KkRvWy0PZcYapo"
-          },
-          {
-            "activity_id": "te-anau-wp-3",
             "status": {
               "done": false
             },
-            "activity_name": "Five Rivers Lookout (Upper Oreti Valley)",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/KingstonNewZealandNov172024_01.jpg/400px-KingstonNewZealandNov172024_01.jpg"
+          },
+          {
+            "google_place_id": "ChIJn_7v-5aPkCwRcCajbg_tuB8",
+            "url": "https://maps.app.goo.gl/9m6y8YjN2q1QJ3JH6",
             "location": {
               "address": "2485 Mossburn–Five Rivers Rd, Five Rivers 9771",
               "lat": -45.6559,
               "lng": 168.5089
             },
-            "duration": "10–20 min",
-            "url": "https://maps.app.goo.gl/9m6y8YjN2q1QJ3JH6",
-            "remarks": "Wide valley views; easy in–out carpark.",
+            "activity_name": "Five Rivers Lookout (Upper Oreti Valley)",
+            "activity_id": "te-anau-wp-3",
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU66aDX-DIdqCkWDyTHUd6V6bbBnLRN-Nir6I1M8gxqiTDkN7LVfunUq6DSBla5dqX_qFNxdkKKASHnkxGpQWUqltygZHhJMXWEvYge2AJkRkFWR8mG-InqHGbg3Vaim3TftcwiGyUlMraBF34NOIGdRAEflpKMQJdVw32X_V1l3tAjMh5x9Hm6cs3_zaKxCRkL8FYJ_CnoWxk6qP5bRn-DEQsKMI72jhGZAhxiBrxZYAyMVmcbqpqsar-2HvpwJVuR5yq5o5enqa8W8vAlcsqHj6L7Suox0SEG6K8q39ZJPcVRpCGyYKP7CPnxlQAHCKOil0E7wxbGY87kIwxOf1k43s_89dJzMMThYFHfbp_aoUX7GMA5dBznE2vb5oOIBx8OXTfsC4oFLaQo7sMBCXQwz9SWk6156JqPRGWZMFeu0i5bVKTjV14PYmq9wSd2JFr-4wb-FsJ6pn2LiiyZDuOdVWmKvcM2PwzehWqjkbH36kAcZ29TEuGlHCgJ6Cc_9MIkhefGJquO1eGOwpQ0nkwg9sODTR1MLU9_QdEO9Ccm0s9YjHfoFErWgHaxvuYfqZFKJnGBH&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJn_7v-5aPkCwRcCajbg_tuB8"
+            "duration": "10–20 min",
+            "remarks": "Wide valley views; easy in–out carpark.",
+            "status": {
+              "done": false
+            }
           },
           {
-            "activity_id": "te-anau-wp-4",
+            "duration": "10–15 min",
+            "location": {
+              "lng": 168.2909,
+              "lat": -45.6687,
+              "address": "SH94, Mossburn 9792"
+            },
+            "google_place_id": "ChIJoV82TK5-06kR_owx3VoeVoU",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4tN1zuB-5-wAdfjZolgLaEwH3shgwxFDD_VCQ3iBlZd2P7oTArAjKetujISVpd_tSBkF9BZQV2tiyJimVpbuY1meR4UJvYl4j9tVEjm-hO3LP0_nXODmixu2Uk5ru6DsWpwoCabDPDJHnLtPMjYPgYKPSW6X313oNqjllnrdnwt8emJH8lvl2usmCn9jE454o1eiiCKyMaAseNAPMdqmezeBGVw9Wrru5_ulPbopuST4jdCG2X--f2e3XG48ai-INxg5J2MZ6d22FFQGuCFcbX3OtQjtyt3RM9nTfHUSKGhCsizQA&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
             "status": {
               "done": false
             },
-            "activity_name": "Mossburn Railway Reserve stop",
-            "location": {
-              "address": "SH94, Mossburn 9792",
-              "lat": -45.6687,
-              "lng": 168.2909
-            },
-            "duration": "10–15 min",
+            "activity_id": "te-anau-wp-4",
             "url": "https://maps.app.goo.gl/9oXoGL8n3V2i9Q7U8",
-            "remarks": "Short leg-stretch green; last larger stop before Te Anau.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4tN1zuB-5-wAdfjZolgLaEwH3shgwxFDD_VCQ3iBlZd2P7oTArAjKetujISVpd_tSBkF9BZQV2tiyJimVpbuY1meR4UJvYl4j9tVEjm-hO3LP0_nXODmixu2Uk5ru6DsWpwoCabDPDJHnLtPMjYPgYKPSW6X313oNqjllnrdnwt8emJH8lvl2usmCn9jE454o1eiiCKyMaAseNAPMdqmezeBGVw9Wrru5_ulPbopuST4jdCG2X--f2e3XG48ai-INxg5J2MZ6d22FFQGuCFcbX3OtQjtyt3RM9nTfHUSKGhCsizQA&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJoV82TK5-06kR_owx3VoeVoU"
+            "activity_name": "Mossburn Railway Reserve stop",
+            "remarks": "Short leg-stretch green; last larger stop before Te Anau."
           }
         ],
-        "accommodation": {
-          "name": "Distinction Te Anau Hotel & Villas",
-          "address": "64 Lakefront Drive, Te Anau 9600, New Zealand",
-          "location": {
-            "lat": -45.4181647,
-            "lng": 167.7029112
+        "name": "Te Anau",
+        "activities": [
+          {
+            "location": {
+              "lng": 167.7077025,
+              "address": "Departs RealNZ Visitor Centre, 85 Lakefront Dr, Te Anau",
+              "lat": -45.4179466
+            },
+            "url": "https://www.realnz.com/en/experiences/glowworm-caves/te-anau-glowworm-caves/",
+            "remarks": "Warm layers and non-slip shoes; photography not permitted inside caves",
+            "thumbnail_url": "https://www.realnz.com/media/699706/glowworms-min.jpg?cc=0,0.11851851851851852,0,0.18148148148148149&amp;width=1200&amp;height=630&amp;v=1da4ae3e61c58e0",
+            "status": {
+              "done": false
+            },
+            "travel_time_from_accommodation": "2–3m drive / 10m walk",
+            "duration": "2–2.5h",
+            "activity_name": "Te Anau Glowworm Caves (RealNZ)",
+            "google_place_id": "ChIJZdJR6_AX1KkRNLx_oYjEhwI",
+            "order": 1,
+            "activity_id": "te-anau-act-1"
           },
-          "check_in": "2025-12-21 15:00",
-          "check_out": "2025-12-23 11:00",
-          "confirmation": "1928590483",
-          "room": "2-Bedroom Villa",
-          "phone": "+64 3 249 9700",
-          "url": "https://www.distinctionhotels.co.nz/hotels/distinction-te-anau-hotel-villas",
-          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU76oZj2a6sPi3K9gu_LwIZmRK3LD69f1-y_vyPSkDrcgDTNNDmxIFPYD2zrDKMDCX_X7cqujnukMCeVMjNzGsrU0rF2eVP8JLwlP4L0MI47DZuEDp8LCX3qsgxZnOZLWtOBDnmVcvdvf9yktBMwTiK58HW-KNUaDQnSeTq8ao0SLIMWF0CLPtMJ1CqGy84wvS_XZVFg-Xa0DWruL_fjkfcQtkOJEF2u8BTDeeH-ezXhl37OBthZ2qAuX7gOpkTlgHWoKviD7bHeSB3bk1D5pUFs_vW37GD6vAek_XQ2O1WFrOG9jyE&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-          "google_place_id": "ChIJ4Y4eKbMP1KkRuJSCh0RABW0"
+          {
+            "travel_time_from_accommodation": "2h 0m drive (each way)",
+            "activity_id": "te-anau-act-3",
+            "location": {
+              "address": "Milford Sound Visitor Terminal, Milford Sound 9679"
+            },
+            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/",
+            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o",
+            "order": 3,
+            "duration": "1h 45m–2h cruise (+stops)",
+            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
+            "status": {
+              "done": false
+            },
+            "activity_name": "Milford Sound cruise (optional day trip)",
+            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890"
+          }
+        ],
+        "travel_time_from_previous": "2h 0m (from Queenstown)",
+        "date": {
+          "to": "2025-12-23",
+          "from": "2025-12-21"
+        },
+        "stop_id": "te-anau",
+        "location": {
+          "lng": 167.7156717,
+          "lat": -45.41464889
         },
         "weather": {
           "forecast_high_c": null,
@@ -636,696 +678,676 @@
           "precipitation_chance_pct": null,
           "notes": "Placeholder forecast — update during trip"
         },
-        "activities": [
-          {
-            "activity_id": "te-anau-act-1",
-            "order": 1,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Te Anau Glowworm Caves (RealNZ)",
-            "location": {
-              "address": "Departs RealNZ Visitor Centre, 85 Lakefront Dr, Te Anau",
-              "lat": -45.4179466,
-              "lng": 167.7077025
-            },
-            "travel_time_from_accommodation": "2–3m drive / 10m walk",
-            "duration": "2–2.5h",
-            "url": "https://www.realnz.com/en/experiences/glowworm-caves/te-anau-glowworm-caves/",
-            "remarks": "Warm layers and non-slip shoes; photography not permitted inside caves",
-            "thumbnail_url": "https://www.realnz.com/media/699706/glowworms-min.jpg?cc=0,0.11851851851851852,0,0.18148148148148149&amp;width=1200&amp;height=630&amp;v=1da4ae3e61c58e0",
-            "google_place_id": "ChIJZdJR6_AX1KkRNLx_oYjEhwI"
+        "duration_days": 2,
+        "accommodation": {
+          "room": "2-Bedroom Villa",
+          "url": "https://www.distinctionhotels.co.nz/hotels/distinction-te-anau-hotel-villas",
+          "phone": "+64 3 249 9700",
+          "location": {
+            "lng": 167.7029112,
+            "lat": -45.4181647
           },
-          {
-            "activity_id": "te-anau-act-3",
-            "order": 3,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Milford Sound cruise (optional day trip)",
-            "location": {
-              "address": "Milford Sound Visitor Terminal, Milford Sound 9679"
-            },
-            "travel_time_from_accommodation": "2h 0m drive (each way)",
-            "duration": "1h 45m–2h cruise (+stops)",
-            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/",
-            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
-            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890",
-            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o"
-          }
-        ]
+          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU76oZj2a6sPi3K9gu_LwIZmRK3LD69f1-y_vyPSkDrcgDTNNDmxIFPYD2zrDKMDCX_X7cqujnukMCeVMjNzGsrU0rF2eVP8JLwlP4L0MI47DZuEDp8LCX3qsgxZnOZLWtOBDnmVcvdvf9yktBMwTiK58HW-KNUaDQnSeTq8ao0SLIMWF0CLPtMJ1CqGy84wvS_XZVFg-Xa0DWruL_fjkfcQtkOJEF2u8BTDeeH-ezXhl37OBthZ2qAuX7gOpkTlgHWoKviD7bHeSB3bk1D5pUFs_vW37GD6vAek_XQ2O1WFrOG9jyE&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+          "name": "Distinction Te Anau Hotel & Villas",
+          "check_in": "2025-12-21 15:00",
+          "address": "64 Lakefront Drive, Te Anau 9600, New Zealand",
+          "confirmation": "1928590483",
+          "check_out": "2025-12-23 11:00",
+          "google_place_id": "ChIJ4Y4eKbMP1KkRuJSCh0RABW0"
+        }
       },
       {
+        "activities": [
+          {
+            "activity_name": "Milford Sound cruise (optional day trip)",
+            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/",
+            "travel_time_from_accommodation": "2h 0m drive (each way)",
+            "order": 1,
+            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890",
+            "status": {
+              "done": false
+            },
+            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o",
+            "duration": "1h 45m–2h cruise (+stops)",
+            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
+            "location": {
+              "lng": 167.926988,
+              "lat": -44.6681426,
+              "address": "Milford Sound Visitor Terminal, Milford Sound 9679"
+            },
+            "activity_id": "milford-sound-act-1"
+          }
+        ],
         "stop_id": "milford-sound",
+        "duration_days": 0,
+        "scenic_waypoints": [
+          {
+            "activity_id": "milford-sound-wp-1",
+            "activity_name": "Mirror Lakes",
+            "order": 1,
+            "duration": "15–30m",
+            "google_place_id": "ChIJrXCbGuw11KkRK04K3AkXv00",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
+            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
+            "location": {
+              "lng": 168,
+              "lat": -45.033333
+            },
+            "remarks": "Check weather & avalanche advisories on Milford Road"
+          },
+          {
+            "order": 2,
+            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
+            "activity_id": "milford-sound-wp-2",
+            "duration": "45m",
+            "remarks": "Check weather & avalanche advisories on Milford Road",
+            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
+            "location": {
+              "lat": -44.883,
+              "lng": 168.083
+            },
+            "status": {
+              "done": false
+            },
+            "activity_name": "Lake Gunn Nature Walk",
+            "google_place_id": "ChIJY3Znrf3J1akRkjeLUBgqEPs"
+          }
+        ],
+        "travel_time_from_previous": "1h 44m (from Te Anau via Queenstown/Crown Range)",
         "name": "Milford Sound",
         "location": {
-          "lat": -44.6721281,
-          "lng": 167.9248229
+          "lng": 167.9248229,
+          "lat": -44.6721281
         },
         "date": {
           "from": "2025-12-22",
           "to": "2025-12-22"
         },
-        "duration_days": 0,
-        "travel_time_from_previous": "1h 44m (from Te Anau via Queenstown/Crown Range)",
-        "scenic_waypoints": [
-          {
-            "activity_id": "milford-sound-wp-1",
-            "order": 1,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Mirror Lakes",
-            "location": {
-              "lat": -45.033333,
-              "lng": 168
-            },
-            "duration": "15–30m",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
-            "remarks": "Check weather & avalanche advisories on Milford Road",
-            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
-            "google_place_id": "ChIJrXCbGuw11KkRK04K3AkXv00"
-          },
-          {
-            "activity_id": "milford-sound-wp-2",
-            "order": 2,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Lake Gunn Nature Walk",
-            "location": {
-              "lat": -44.883,
-              "lng": 168.083
-            },
-            "duration": "45m",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/",
-            "remarks": "Check weather & avalanche advisories on Milford Road",
-            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
-            "google_place_id": "ChIJY3Znrf3J1akRkjeLUBgqEPs"
-          }
-        ],
-        "accommodation": {},
         "weather": {
-          "forecast_high_c": null,
-          "forecast_low_c": null,
+          "notes": "Placeholder forecast — update during trip",
           "precipitation_chance_pct": null,
-          "notes": "Placeholder forecast — update during trip"
+          "forecast_high_c": null,
+          "forecast_low_c": null
         },
-        "activities": [
-          {
-            "activity_id": "milford-sound-act-1",
-            "order": 1,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Milford Sound cruise (optional day trip)",
-            "location": {
-              "address": "Milford Sound Visitor Terminal, Milford Sound 9679",
-              "lat": -44.6681426,
-              "lng": 167.926988
-            },
-            "travel_time_from_accommodation": "2h 0m drive (each way)",
-            "duration": "1h 45m–2h cruise (+stops)",
-            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/",
-            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
-            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890",
-            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o"
-          }
-        ]
+        "accommodation": {}
       },
       {
+        "scenic_waypoints": [
+          {
+            "location": {
+              "lng": 168.784,
+              "lat": -44.989,
+              "address": "Bendemeer Bay, Lake Hayes 9371"
+            },
+            "remarks": "Calm reflections; easy pull-in near pavilion.",
+            "duration": "10–25 min",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5PbK8NTqrZOiYmLhk4tY6yI78vD3DiAY0hCpKNHoFf7vIzYSnWbPQ3-JLvLNsYIIlgJi8HKNIKKvnNxXicO9gAZBHsPs7POAt3K2BqO98ADMv3u2IbUcLjJu9yN03fGwMxcJZAXToLfZ4NLKYKoadf2z0vSm2X1ivU7PHt9eiE332HMw4Isn-qy7xSQw8JMzyzbwGigMT66tBJwQZvnkYGvVVRiCLAh_hddOp4J-wTFPUGXg0Pqsxg6dqMQsl7ECCkbOmn6GGGE4wKz4IXdo0PEH6JKlcXL7fMQNF1OsecqXurhABAhg41N5zQFKNYKMBxEkJOXb2zfWyDWmj_-czY9ZJaIOr2-lOyk93aMMrmbBB9C-UL1z1pXZqrJHeDr-skGWuIHpa1qcISG9QFJPwUQ43DZuTq_6_1aU_hmO6vJYN2wpg7RwIuSs5PYIhE2HRSZG0bQ20F2KJvU43fgJ14MAEO7ai9hdiwLpG_LXUPmFt9uP3iEaH7n7RnWlAwd_LcQoGjslM3IHiKLV0SYl9lv0mUd40iaYaSabQGZyUYjrvMSy-witF_SjiapuZSeSa8r5Hgw8mAJQ&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "activity_name": "Lake Hayes Scenic Reserve (pavilion stop)",
+            "status": {
+              "done": false
+            },
+            "activity_id": "wanaka-wp-1",
+            "google_place_id": "ChIJi5HhZVkf1akRJ-_vUgAiEbU",
+            "url": "https://maps.app.goo.gl/1xYfZr6q7mDkL2mS8"
+          },
+          {
+            "status": {
+              "done": false
+            },
+            "activity_id": "wanaka-wp-2",
+            "location": {
+              "lng": 168.8346,
+              "address": "Crown Range Rd, Arrow Junction 9371",
+              "lat": -44.9836
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6ZYbHVSLbYAh8mrXQpRXV-nQ04kJOJDwKornIide8snE-HGXI1FnA0Hd2bVC-ae1-zUo0Z9G3ZFYiO-mBbrT9m1VCmjjjOG5wRM4ZczbTbnqFIdHaaPIeAlfV4-_TIZOHGrby4cXr6k-V-IOAhd8cqEIouICre9eyz4Gmu8fVEG2AnZh9M_mGP2Xbu3kjMk9dvanieY6Hf7kU_eO19ajxkE-PCpK34207zbh-j5FTkialXgmuIOEtO_6yAyHyoUFpGCzyPsJ7PeIhZaP8-zUXhqPzZQuiiueLuZmjfq1c-W8NDWZ2fK9cYLa27mMm7zXhwTGlwFR30uB9BW3QMJdbguymshZP1_yhOGIp7TyXA0jSobC96Ot1EybF-i4-bVBBvMb1MfS-IZaFFXvyU7VDHWYY2s8p0vSh2qIa2yxgDxmlHiUGGvRwqt_Nm7u8s5bCRRF1BVJAgUCHFa8-Q0ZyHhupBQvPG7RQAa-F_3zHRcHB9s9pihuv15IWK5yFKd37ddpPMX46fIU8bXZWQhxqYU4YK1z0pfBDlZce3riV1tY7YU5GzXs9YKsXSyKw98zlYSlpL&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "remarks": "Highest sealed road in NZ; alpine tussock views.",
+            "activity_name": "Crown Range Summit Lookout",
+            "google_place_id": "ChIJz3psyJ4m1akRjyoWKDuLllM",
+            "url": "https://maps.app.goo.gl/6cN3q4Q3bL1m7oPZ8",
+            "duration": "10–20 min"
+          },
+          {
+            "google_place_id": "ChIJJ6qM3Dk61akReFNbd93Qf5c",
+            "location": {
+              "address": "2125 Cardrona Valley Rd, Cardrona 9382",
+              "lng": 168.9568,
+              "lat": -44.8976
+            },
+            "status": {
+              "done": false
+            },
+            "remarks": "Quirky roadside charity stop; quick photo.",
+            "activity_name": "Bradrona (Cardrona bra fence)",
+            "duration": "5–10 min",
+            "url": "https://maps.app.goo.gl/8Qm4m7s5qK6n6J2S7",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6ZwE8TraNDY9ExSMZubFTWKcuLgwEQF9ETXIKjUfcy0_em441Om7cx3KmApTaCMNjG62mS_NjWS0-6w-FrOd39mWw157ixmV-f9_VqqWfT9k_4Sg0u1Dr1zlfjI17B6PQQvLgl60Yg8nrknqcY1qIl1ua18V4bLqWGSZqXPlKklLAhHGQ9qb_SXkLSzlZhxuz3isThBhiebtGSEZYdIllSxzLyVpaBFicMBSB8voKFjq_Wq-XyCoygO63XMvc-TIpPttFLQtn-Icuk-1hpGgTD2LJeesZUo5wSymYM_b6LLB84rE9p454uzOVn8vhbMDmAOv8iZ5V-SKVMEB8e-OXuqeVb-Ym4EiIzUPk6Jfg_EQtW2n31-6e2_09WWIFphfBtfojpZ2DB1_E26rKBplw3L2skHjWYsZRG27foKsy8TnmNBKAUMycozN1s8GiADQiJYtRqjw6gycXMK6WoUTBLy6TQ4uxjLFZ4gm9NmSbU0oaj42Rt1uwJlyz4bVGkQLoEfqvnXy4fd8_4YOGKUGV_lNyruKai3CzNIanPse8RkJEZq97-0-5dOsfhI2Lu3FMUUBKV&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "activity_id": "wanaka-wp-3"
+          },
+          {
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4esoJmaIvUx0XhU34BDpsqte-5Ib2fmp3Fxb8EuRRDWsHxFzaxgcgdt4OomXRK2p0t6eTpPNUp3Bvu94L6gLWoxcLU2a_9isY7hf6WF82wsQwTJUEnnjag9JG1_OpKb16vXVF9EN6UAYsqV3KSRjKJ-Dg3FWZRXseXAMkcIBWAR3FKyq1glo9m7Mq67BgGBFyySczWUISJVYVHssKX10gzjvYzZcfjleO77JJQSiZ_Waim7uEDdbqU3cLtZtFV9swAkO-CIpTign5jhPM9tSzvtZVhwQNZinKvAl1n0oVtrye3Rxw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "activity_id": "wanaka-wp-4",
+            "url": "https://cardronahotel.co.nz/",
+            "activity_name": "Cardrona Hotel frontage",
+            "google_place_id": "ChIJa2qAA1BP1akRZopIV8aQYJ8",
+            "remarks": "Historic façade; coffee or quick bite in the garden.",
+            "duration": "15–45 min",
+            "status": {
+              "done": false
+            },
+            "location": {
+              "address": "2312 Cardrona Valley Rd, Cardrona 9382",
+              "lng": 168.9533,
+              "lat": -44.8848
+            }
+          }
+        ],
+        "location": {
+          "lng": 169.1364637,
+          "lat": -44.6941691
+        },
         "stop_id": "wanaka",
         "name": "Wānaka",
-        "location": {
-          "lat": -44.6941691,
-          "lng": 169.1364637
+        "accommodation": {
+          "url": "https://abnb.me/UCZNoQhV5zb",
+          "thumbnail_url": "https://a0.muscache.com/im/pictures/fe7217ff-0b24-438d-880d-b94722c75bf5.jpg",
+          "address": "2 Allenby Place, Wānaka 9305, New Zealand",
+          "check_in": "2025-12-23 15:00",
+          "check_out": "2025-12-25 10:00",
+          "google_place_id": "ChIJvUKhw49P1akRxLWbsI0d-Fc",
+          "name": "Timberstone House (Airbnb)",
+          "location": {
+            "lat": -44.694333,
+            "lng": 169.1563603
+          },
+          "confirmation": "HMDEJSDEMY"
+        },
+        "weather": {
+          "notes": "Placeholder forecast — update during trip",
+          "precipitation_chance_pct": null,
+          "forecast_low_c": null,
+          "forecast_high_c": null
         },
         "date": {
           "from": "2025-12-23",
           "to": "2025-12-25"
         },
-        "duration_days": 2,
         "travel_time_from_previous": "3h 45m (from Te Anau via Queenstown/Crown Range)",
-        "scenic_waypoints": [
-          {
-            "activity_id": "wanaka-wp-1",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Lake Hayes Scenic Reserve (pavilion stop)",
-            "location": {
-              "address": "Bendemeer Bay, Lake Hayes 9371",
-              "lat": -44.989,
-              "lng": 168.784
-            },
-            "duration": "10–25 min",
-            "url": "https://maps.app.goo.gl/1xYfZr6q7mDkL2mS8",
-            "remarks": "Calm reflections; easy pull-in near pavilion.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5PbK8NTqrZOiYmLhk4tY6yI78vD3DiAY0hCpKNHoFf7vIzYSnWbPQ3-JLvLNsYIIlgJi8HKNIKKvnNxXicO9gAZBHsPs7POAt3K2BqO98ADMv3u2IbUcLjJu9yN03fGwMxcJZAXToLfZ4NLKYKoadf2z0vSm2X1ivU7PHt9eiE332HMw4Isn-qy7xSQw8JMzyzbwGigMT66tBJwQZvnkYGvVVRiCLAh_hddOp4J-wTFPUGXg0Pqsxg6dqMQsl7ECCkbOmn6GGGE4wKz4IXdo0PEH6JKlcXL7fMQNF1OsecqXurhABAhg41N5zQFKNYKMBxEkJOXb2zfWyDWmj_-czY9ZJaIOr2-lOyk93aMMrmbBB9C-UL1z1pXZqrJHeDr-skGWuIHpa1qcISG9QFJPwUQ43DZuTq_6_1aU_hmO6vJYN2wpg7RwIuSs5PYIhE2HRSZG0bQ20F2KJvU43fgJ14MAEO7ai9hdiwLpG_LXUPmFt9uP3iEaH7n7RnWlAwd_LcQoGjslM3IHiKLV0SYl9lv0mUd40iaYaSabQGZyUYjrvMSy-witF_SjiapuZSeSa8r5Hgw8mAJQ&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJi5HhZVkf1akRJ-_vUgAiEbU"
-          },
-          {
-            "activity_id": "wanaka-wp-2",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Crown Range Summit Lookout",
-            "location": {
-              "address": "Crown Range Rd, Arrow Junction 9371",
-              "lat": -44.9836,
-              "lng": 168.8346
-            },
-            "duration": "10–20 min",
-            "url": "https://maps.app.goo.gl/6cN3q4Q3bL1m7oPZ8",
-            "remarks": "Highest sealed road in NZ; alpine tussock views.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6ZYbHVSLbYAh8mrXQpRXV-nQ04kJOJDwKornIide8snE-HGXI1FnA0Hd2bVC-ae1-zUo0Z9G3ZFYiO-mBbrT9m1VCmjjjOG5wRM4ZczbTbnqFIdHaaPIeAlfV4-_TIZOHGrby4cXr6k-V-IOAhd8cqEIouICre9eyz4Gmu8fVEG2AnZh9M_mGP2Xbu3kjMk9dvanieY6Hf7kU_eO19ajxkE-PCpK34207zbh-j5FTkialXgmuIOEtO_6yAyHyoUFpGCzyPsJ7PeIhZaP8-zUXhqPzZQuiiueLuZmjfq1c-W8NDWZ2fK9cYLa27mMm7zXhwTGlwFR30uB9BW3QMJdbguymshZP1_yhOGIp7TyXA0jSobC96Ot1EybF-i4-bVBBvMb1MfS-IZaFFXvyU7VDHWYY2s8p0vSh2qIa2yxgDxmlHiUGGvRwqt_Nm7u8s5bCRRF1BVJAgUCHFa8-Q0ZyHhupBQvPG7RQAa-F_3zHRcHB9s9pihuv15IWK5yFKd37ddpPMX46fIU8bXZWQhxqYU4YK1z0pfBDlZce3riV1tY7YU5GzXs9YKsXSyKw98zlYSlpL&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJz3psyJ4m1akRjyoWKDuLllM"
-          },
-          {
-            "activity_id": "wanaka-wp-3",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Bradrona (Cardrona bra fence)",
-            "location": {
-              "address": "2125 Cardrona Valley Rd, Cardrona 9382",
-              "lat": -44.8976,
-              "lng": 168.9568
-            },
-            "duration": "5–10 min",
-            "url": "https://maps.app.goo.gl/8Qm4m7s5qK6n6J2S7",
-            "remarks": "Quirky roadside charity stop; quick photo.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6ZwE8TraNDY9ExSMZubFTWKcuLgwEQF9ETXIKjUfcy0_em441Om7cx3KmApTaCMNjG62mS_NjWS0-6w-FrOd39mWw157ixmV-f9_VqqWfT9k_4Sg0u1Dr1zlfjI17B6PQQvLgl60Yg8nrknqcY1qIl1ua18V4bLqWGSZqXPlKklLAhHGQ9qb_SXkLSzlZhxuz3isThBhiebtGSEZYdIllSxzLyVpaBFicMBSB8voKFjq_Wq-XyCoygO63XMvc-TIpPttFLQtn-Icuk-1hpGgTD2LJeesZUo5wSymYM_b6LLB84rE9p454uzOVn8vhbMDmAOv8iZ5V-SKVMEB8e-OXuqeVb-Ym4EiIzUPk6Jfg_EQtW2n31-6e2_09WWIFphfBtfojpZ2DB1_E26rKBplw3L2skHjWYsZRG27foKsy8TnmNBKAUMycozN1s8GiADQiJYtRqjw6gycXMK6WoUTBLy6TQ4uxjLFZ4gm9NmSbU0oaj42Rt1uwJlyz4bVGkQLoEfqvnXy4fd8_4YOGKUGV_lNyruKai3CzNIanPse8RkJEZq97-0-5dOsfhI2Lu3FMUUBKV&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJJ6qM3Dk61akReFNbd93Qf5c"
-          },
-          {
-            "activity_id": "wanaka-wp-4",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Cardrona Hotel frontage",
-            "location": {
-              "address": "2312 Cardrona Valley Rd, Cardrona 9382",
-              "lat": -44.8848,
-              "lng": 168.9533
-            },
-            "duration": "15–45 min",
-            "url": "https://cardronahotel.co.nz/",
-            "remarks": "Historic façade; coffee or quick bite in the garden.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4esoJmaIvUx0XhU34BDpsqte-5Ib2fmp3Fxb8EuRRDWsHxFzaxgcgdt4OomXRK2p0t6eTpPNUp3Bvu94L6gLWoxcLU2a_9isY7hf6WF82wsQwTJUEnnjag9JG1_OpKb16vXVF9EN6UAYsqV3KSRjKJ-Dg3FWZRXseXAMkcIBWAR3FKyq1glo9m7Mq67BgGBFyySczWUISJVYVHssKX10gzjvYzZcfjleO77JJQSiZ_Waim7uEDdbqU3cLtZtFV9swAkO-CIpTign5jhPM9tSzvtZVhwQNZinKvAl1n0oVtrye3Rxw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJa2qAA1BP1akRZopIV8aQYJ8"
-          }
-        ],
-        "accommodation": {
-          "name": "Timberstone House (Airbnb)",
-          "address": "2 Allenby Place, Wānaka 9305, New Zealand",
-          "location": {
-            "lat": -44.694333,
-            "lng": 169.1563603
-          },
-          "check_in": "2025-12-23 15:00",
-          "check_out": "2025-12-25 10:00",
-          "confirmation": "HMDEJSDEMY",
-          "url": "https://abnb.me/UCZNoQhV5zb",
-          "thumbnail_url": "https://a0.muscache.com/im/pictures/fe7217ff-0b24-438d-880d-b94722c75bf5.jpg",
-          "google_place_id": "ChIJvUKhw49P1akRxLWbsI0d-Fc"
-        },
-        "weather": {
-          "forecast_high_c": null,
-          "forecast_low_c": null,
-          "precipitation_chance_pct": null,
-          "notes": "Placeholder forecast — update during trip"
-        },
+        "duration_days": 2,
         "activities": [
           {
-            "activity_id": "wanaka-act-1",
+            "duration": "45–90m",
+            "url": "https://www.lakewanaka.co.nz/plan/wanaka-for-families/",
+            "travel_time_from_accommodation": "5–7m drive / 25m walk",
+            "remarks": "Great lakefront playground for kids; swim if it’s warm",
+            "google_place_id": "ChIJRf4_9kRP1akR1DoLZ2Jpzmw",
+            "location": {
+              "lat": -44.694822,
+              "lng": 169.135248,
+              "address": "Ardmore St, Wānaka 9305"
+            },
+            "activity_name": "Dinosaur Park (Lakefront Playground)",
             "order": 1,
             "status": {
               "done": false
             },
-            "activity_name": "Dinosaur Park (Lakefront Playground)",
-            "location": {
-              "address": "Ardmore St, Wānaka 9305",
-              "lat": -44.694822,
-              "lng": 169.135248
-            },
-            "travel_time_from_accommodation": "5–7m drive / 25m walk",
-            "duration": "45–90m",
-            "url": "https://www.lakewanaka.co.nz/plan/wanaka-for-families/",
-            "remarks": "Great lakefront playground for kids; swim if it’s warm",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uHSWWUrMhHqMyTgftaCY93mmYR69q5KNt01S4S7p119fwNJY3DIqDr_W09s-JCX3i1zmOrkwoyojbW1viIcjcpa0sbXnhrqdRbgoaWNOHZMk7bnMhWrCqGipSxWy_K7Jo1x55rya4LOfpKAFeLTebWnO6BtQNK6X6PFdouPidJVPsp0-OMT69jk70gRnEWFfI5IbV9hFlGpKeU1KYwmaXo1ZNGojlN182pHvxxPZAI7qyDja0HKJ26I68KSbBdpYNumUD3v6csr2YK9GFa9z6NvrdicZnj5zEkTn-fL3BXmVi6WyAnBK6u8L_lvdJwc_3XCPKn11SiG3cJwJhMVIGwSfkhAuSgCdyLcGeDf1Wg7zZ9Tdwvi4azQ-s5ifoK8LW1VML_YDOjtJ-bpR85BkF5gb2iGTZNYy_CvQOlKI6CnoJuzyth7J_VLQ8zHgZO2rqszj_Ilegk83tTPGEKK6Dhq6recrE6kZFKUSL0aY3QUUQFeL9i-HcXT0vaKBuSH9-rMFWVboil1HEPW9kZi9ST8JBDIcvEHh26Jdw0uKXrtM_vQcYymzsLh8zWeR0eKTFiJdI&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJRf4_9kRP1akR1DoLZ2Jpzmw"
+            "activity_id": "wanaka-act-1",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uHSWWUrMhHqMyTgftaCY93mmYR69q5KNt01S4S7p119fwNJY3DIqDr_W09s-JCX3i1zmOrkwoyojbW1viIcjcpa0sbXnhrqdRbgoaWNOHZMk7bnMhWrCqGipSxWy_K7Jo1x55rya4LOfpKAFeLTebWnO6BtQNK6X6PFdouPidJVPsp0-OMT69jk70gRnEWFfI5IbV9hFlGpKeU1KYwmaXo1ZNGojlN182pHvxxPZAI7qyDja0HKJ26I68KSbBdpYNumUD3v6csr2YK9GFa9z6NvrdicZnj5zEkTn-fL3BXmVi6WyAnBK6u8L_lvdJwc_3XCPKn11SiG3cJwJhMVIGwSfkhAuSgCdyLcGeDf1Wg7zZ9Tdwvi4azQ-s5ifoK8LW1VML_YDOjtJ-bpR85BkF5gb2iGTZNYy_CvQOlKI6CnoJuzyth7J_VLQ8zHgZO2rqszj_Ilegk83tTPGEKK6Dhq6recrE6kZFKUSL0aY3QUUQFeL9i-HcXT0vaKBuSH9-rMFWVboil1HEPW9kZi9ST8JBDIcvEHh26Jdw0uKXrtM_vQcYymzsLh8zWeR0eKTFiJdI&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           },
           {
-            "activity_id": "wanaka-act-2",
-            "order": 2,
-            "status": {
-              "done": false
-            },
             "activity_name": "Puzzling World (Illusion Rooms & Great Maze)",
+            "activity_id": "wanaka-act-2",
             "location": {
-              "address": "188 Wānaka–Luggate Hwy (SH84), Wānaka 9382",
               "lat": -44.7113406,
-              "lng": 169.1451682
+              "lng": 169.1451682,
+              "address": "188 Wānaka–Luggate Hwy (SH84), Wānaka 9382"
             },
-            "travel_time_from_accommodation": "5–7m drive",
-            "duration": "1.5–2.5h",
             "url": "https://www.puzzlingworld.co.nz/",
-            "remarks": "Book a combo ticket; open daily (closed Xmas Day)",
             "thumbnail_url": "https://www.puzzlingworld.co.nz/_resources/themes/custom/images/pw.png",
-            "google_place_id": "ChIJ-e11hSZP1akRz3-bGRxEZvo"
-          },
-          {
-            "activity_id": "wanaka-act-3",
-            "order": 3,
+            "order": 2,
+            "remarks": "Book a combo ticket; open daily (closed Xmas Day)",
+            "duration": "1.5–2.5h",
+            "google_place_id": "ChIJ-e11hSZP1akRz3-bGRxEZvo",
             "status": {
               "done": false
             },
+            "travel_time_from_accommodation": "5–7m drive"
+          },
+          {
             "activity_name": "Mount Iron Track (loop walk, views)",
             "location": {
-              "address": "Mt Iron carpark, SH84, Wānaka",
               "lat": -44.695,
-              "lng": 169.164
+              "lng": 169.164,
+              "address": "Mt Iron carpark, SH84, Wānaka"
             },
             "travel_time_from_accommodation": "6–8m drive",
             "duration": "1–1.5h loop (4.5km)",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/otago/places/wanaka-area/things-to-do/mount-iron-track/",
-            "remarks": "Sunrise/sunset views; take water and hats",
-            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/3aae1d19510144efb7ccb303ec189088/view-mount-iron-1920.jpg",
-            "google_place_id": "ChIJK5mtpjxP1akR7kSpa0ZvUQ8"
-          },
-          {
-            "activity_id": "poi_ChIJUy4XUiRL1akRSDhwN2JmFhA_1756321143547",
-            "activity_name": "National Transport & Toy Museum",
-            "activity_type": "attraction",
-            "location": {
-              "lat": -44.7228678,
-              "lng": 169.239621,
-              "address": "RD 2, 891 Wanaka-Luggate Highway, Wānaka 9382, New Zealand"
-            },
-            "duration": "1-2 hours",
-            "url": "http://www.nttmuseumwanaka.co.nz/",
-            "remarks": "Rating: 4.6/5 (1497 reviews)",
-            "order": 999,
             "status": {
               "done": false
             },
-            "thumbnail_url": "http://static1.squarespace.com/static/623bd7d880135c15cf341d7a/t/624144073b7c21354bec0e72/1651371806758/less+cropped+LOGO+Final+Final+copy.png?format=1500w",
-            "google_place_id": "ChIJUy4XUiRL1akRSDhwN2JmFhA"
+            "activity_id": "wanaka-act-3",
+            "google_place_id": "ChIJK5mtpjxP1akR7kSpa0ZvUQ8",
+            "remarks": "Sunrise/sunset views; take water and hats",
+            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/otago/places/wanaka-area/things-to-do/mount-iron-track/",
+            "order": 3,
+            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/3aae1d19510144efb7ccb303ec189088/view-mount-iron-1920.jpg"
+          },
+          {
+            "url": "http://www.nttmuseumwanaka.co.nz/",
+            "location": {
+              "address": "RD 2, 891 Wanaka-Luggate Highway, Wānaka 9382, New Zealand",
+              "lat": -44.7228678,
+              "lng": 169.239621
+            },
+            "activity_name": "National Transport & Toy Museum",
+            "status": {
+              "done": false
+            },
+            "activity_type": "attraction",
+            "remarks": "Rating: 4.6/5 (1497 reviews)",
+            "order": 999,
+            "google_place_id": "ChIJUy4XUiRL1akRSDhwN2JmFhA",
+            "activity_id": "poi_ChIJUy4XUiRL1akRSDhwN2JmFhA_1756321143547",
+            "duration": "1-2 hours",
+            "thumbnail_url": "http://static1.squarespace.com/static/623bd7d880135c15cf341d7a/t/624144073b7c21354bec0e72/1651371806758/less+cropped+LOGO+Final+Final+copy.png?format=1500w"
           }
         ]
       },
       {
-        "stop_id": "timaru-caroline-bay",
-        "name": "Timaru",
-        "location": {
-          "lat": -44.396972,
-          "lng": 171.254973
+        "accommodation": {
+          "room": "Executive 2-Bedroom Apartment with Spa",
+          "address": "2 Andrews St, Timaru 7910, New Zealand",
+          "google_place_id": "ChIJpaoYH4_BLG0RjFmrls5tKBo",
+          "confirmation": "1928599123",
+          "location": {
+            "lng": 171.2437538,
+            "lat": -44.3909015
+          },
+          "check_in": "2025-12-25 15:00",
+          "phone": "+64 3 688 6145",
+          "check_out": "2025-12-27 11:00",
+          "name": "Bay Viaduct Motor Lodge",
+          "url": "https://bayviaduct.co.nz/",
+          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU76uNhcMpG6VYTl0X_r0SKVuvZi2kx9H2RATRg5Ki3IajXQHTTUaTfktXqG_aVm3HnUN_2aEMLJvC63LsIa-ngxekOKK8ciXoWQBYnFAbtOB13W-UTrW1jUItvrUb2NQv8O9RgDLpNuYyIF2wyT5w2r0uKAIqD10bMr5TNqjdROOaM2y3Kr5KJ39BZxEbt5QupRo2i-F5jIolkG1BQBns3BDnonaP0a4mb_1Ia1mokiNuZ9UU8u3dHxNzk9mVU95Y4hCGI0eWHtZ-fD-Tt9B7pt8wMIh2DlKXJ6zGW6iqBuH2N_9Xw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
         },
-        "date": {
-          "from": "2025-12-25",
-          "to": "2025-12-27"
+        "name": "Timaru",
+        "weather": {
+          "forecast_low_c": null,
+          "notes": "Placeholder forecast — update during trip",
+          "forecast_high_c": null,
+          "precipitation_chance_pct": null
         },
         "duration_days": 2,
         "travel_time_from_previous": "3h 30m (from Wānaka via SH8/SH79)",
-        "scenic_waypoints": [
-          {
-            "activity_id": "timaru-wp-1",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Lindis Pass Summit Lookout",
-            "location": {
-              "address": "SH8, Lindis Pass 9382",
-              "lat": -44.7063,
-              "lng": 169.4121
-            },
-            "duration": "10–20 min",
-            "url": "https://maps.app.goo.gl/6q9JdG7b2o7L7m3H6",
-            "remarks": "Classic tussock scenery; exposed to wind.",
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/20250221-DJI_0950.jpg/400px-20250221-DJI_0950.jpg",
-            "google_place_id": "ChIJwzeFuUChKqgRbx7HwP-BygY"
-          },
-          {
-            "activity_id": "timaru-wp-2",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Benmore Dam Lookout (Waitaki Valley)",
-            "location": {
-              "address": "Benmore Ave, Otematata 9412",
-              "lat": -44.6753,
-              "lng": 170.2504
-            },
-            "duration": "15–30 min",
-            "url": "https://maps.app.goo.gl/ETN6U8H2Wm8w2bqM7",
-            "remarks": "Short detour; views over hydro lake and dam.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU54kD1kgB9bSr0lzkahDL_6nmk_ub-7V5GNS2NkGruBlTPcUA63qdbo1ta4BuS8bBwE-BTKuAbr9LuVzL7G-JJeVPKUcPUmSocTVoEPK64PD8DesJzvhrS9HRxF3dBVnrIITn75J4GUSbXsKq5SNzLZwrAi-C2GD9X2UjyJ4gPyeXqel07QiB8hzr8vtl8jBANBv4-XZ7yEvVRjwZiWkc6XpuJm9CTtzejwzr05YUrwfEoUsnKSTikh40sDnPLaPFlDeWrHIb83zkqgC2TkKhnoP32sMzHT28cR56XoTlY64xKP_H2Sx0mXs31wIMffwOrVVY2055UIEzD00we3xHWvES8xG7VnyA2H1iWgmO0LFnJXfD1R3WMLNvnMmXinjysoedunO0v_zR32FRTkp5pE4ZI4nmIR9I9I96DnniS2iJ0yJ6-y9XwDiGMrlbgOHahkbKeH3WoGV_rr9fF5ljNCk_sjaz-VxvEpAO6Dzn8GiBeFV_pY7L3Yl9YkKRaVn9_F4hyinurROKCaN8hb3bJ-TB9ho20LNuO2nbChqkQy2BC3lKneMyUSk8GX1glIoO79c8U8&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJAfuTl0VzKqgRP5H-ZiLC3Qc"
-          },
-          {
-            "activity_id": "timaru-wp-3",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Elephant Rocks (Limestone outcrops)",
-            "location": {
-              "address": "Island Cliff–Duntroon Rd, Duntroon 9494",
-              "lat": -44.9382,
-              "lng": 170.64
-            },
-            "duration": "20–40 min",
-            "url": "https://maps.app.goo.gl/7kq9x1cLw5h3Xafh7",
-            "remarks": "Short farm track; quirky boulders in paddock.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6HrMYliI7RdUWI5aiA-uW87Z1b17ONKf4CRPiDHMqXDsUzDarPLlrYRG1X858JdTQ4js1AtMnyGTtxpnQtoB1u7VCB7X9m0wRvP7GqsklAq08tNcr8AYcw4FlDgC0qp8HWWXbr0Sqeod2Dg9T1qC20JhfJILeHpF549pKD2Hw8BBK_pc2w5hBaPv7OnfaKpZq_IsQjTNiuWX3FbUo31Ljndm65qXwVtr2-08AK5HUPY1QkcC4r5qtNZyiz3BoA0WzQAXC-48ZOl7V4g1Wsm1LB_yoFayxDfxscWvefVSFKfLs7jn9Wxy6hI9-lcwmPkekafByGBrhqVAwlrsQsBfavIXKAc--Y-O2PmOmFAxipmR4LaW92IyB1bRtSioHn0iOmJJTx7SJrYgToM6eqYhh2YS-HZxL7lI2ZmjOkYn_OE0gFpz7WWrZR-tFyhTuEl-o4KYMaFNdzp4Q7NyCu_8mMYHZ_zYQAiHVc09JHUi88uLDcceAK1r_uNodvGOzX8_WZiyfwfVJJpBPMGRGe65a2H7gIBfIK8SZXjBJUeaApWHx9GBkokdMRdLM3GbQsX3EatffR&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJT07iCBcfKqgRCwZNhtXGGqE"
-          },
-          {
-            "activity_id": "timaru-wp-4",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Takiroa Māori Rock Art Shelter",
-            "location": {
-              "address": "SH83, near Duntroon 9494",
-              "lat": -44.9655,
-              "lng": 170.6138
-            },
-            "duration": "10–20 min",
-            "url": "https://maps.app.goo.gl/HL6u3i2mFj4nYb4o9",
-            "remarks": "Sheltered roadside stop; interpretive panels.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uMyRHUAhtmG_d_yC-cmW14KTqcgw6bvSH-wE6e4DWi4jKDXP5eLpkeCv5rknixDgJ0oIHjMa4rYbWsDtivj57j0z2CXy1rwSd4jP7LUJydLkTu5JC_J7t0pTxMP-DBLxJgB9i-iFzdcJ_vplJFPrRfsFnGaIBr2TdarNIqC0r8HGl2Ry9iTvomDo0fETlIqlS0yuDi3e4YEY0V-7Cn5lE-w61xcnNkkDN_g476bITKxIoEN7adKjfGfuQEVK3xZaZWhZyRuJkUSp68ruMr6rQrST2mRsf4P9kbEN6e4siuljzsHVgOGXTN_7o5KEHoz2XaU5E5jsAr6hSIWVmtg3ikS3bRKQrhTU9ApDJ8ogr8mwVZA3LnN27uCmvLlYoqcBBW0IP1oQnugtnszdbfI0h_LGHf9BSjfmNHCaW-ByXwGSJKgXzQvn6APW-sKNkgtOIp-MEHHorZxmW0ZtXfnS23Jkp7-uqZ_IHWDaKugNu6RPqoq3m76iwFX2_PuR8QKXH_hQA-qG7UY_gQoomSK3gGElQACE3uCEyxvSZ5uNceR9bfO4FGHpPMIQ9suGatdjV0SCr&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJHXYzy1UZKqgRaFFsm3S7pRM"
-          }
-        ],
-        "accommodation": {
-          "name": "Bay Viaduct Motor Lodge",
-          "address": "2 Andrews St, Timaru 7910, New Zealand",
-          "location": {
-            "lat": -44.3909015,
-            "lng": 171.2437538
-          },
-          "check_in": "2025-12-25 15:00",
-          "check_out": "2025-12-27 11:00",
-          "confirmation": "1928599123",
-          "room": "Executive 2-Bedroom Apartment with Spa",
-          "phone": "+64 3 688 6145",
-          "url": "https://bayviaduct.co.nz/",
-          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU76uNhcMpG6VYTl0X_r0SKVuvZi2kx9H2RATRg5Ki3IajXQHTTUaTfktXqG_aVm3HnUN_2aEMLJvC63LsIa-ngxekOKK8ciXoWQBYnFAbtOB13W-UTrW1jUItvrUb2NQv8O9RgDLpNuYyIF2wyT5w2r0uKAIqD10bMr5TNqjdROOaM2y3Kr5KJ39BZxEbt5QupRo2i-F5jIolkG1BQBns3BDnonaP0a4mb_1Ia1mokiNuZ9UU8u3dHxNzk9mVU95Y4hCGI0eWHtZ-fD-Tt9B7pt8wMIh2DlKXJ6zGW6iqBuH2N_9Xw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-          "google_place_id": "ChIJpaoYH4_BLG0RjFmrls5tKBo"
-        },
-        "weather": {
-          "forecast_high_c": null,
-          "forecast_low_c": null,
-          "precipitation_chance_pct": null,
-          "notes": "Placeholder forecast — update during trip"
+        "location": {
+          "lng": 171.254973,
+          "lat": -44.396972
         },
         "activities": [
           {
-            "activity_id": "timaru-act-1",
-            "order": 1,
+            "google_place_id": "ChIJqTQJSgDBLG0Rd56mS5H14VE",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6cGJrUn8SQ1Xf_7UzGsUzgcBLamv4H0H4TrDkTKYEgr9HbRX8zVH--bEby39NHtJ0Xlybil-XHRgtVg-2wBf08xHRsaaaB5Qm7Uur08DH-coqDjNdmNPdHKeXHABk2m4B_dHliyVnH0uJmXt-6TSw8WCbBz8c85IAoVfbdSvScnUoft__VrJMsOAj5MXDBmH8fEpKj8dr1bDhTOHFAt0nRcy1oxjbFQxk3SGChoCbsVC2WyLIhN0h8T8dOmnnXxM7AoQRyy0Pv6ieekxPzEB-jTXSyKuU3Sn7kpO7hjfXJeOUMPsDqoP0kDKgjSAM6zwMAiqo7U_17o5BgByIjEgIIpBC7s-CZmZJTmq4cyRqEfFoSjUgyF66f7XDsRtRzOsQqPgtb9cD4FGDxzBT8pCA_vPGvnhttZfVsvas21EbtQbwECWA6-DmUyoUtt0bkjx3d77KYjaA1CHtPh1XiOOVBt_47Z_WswqQ3l8--KdbWz5yPIIB4OtMjbSvZEPf1uzhSj-xn-EBjBdCoUhYAfJXa9kI5DHz5iXKAJky5ko0y-Ky90tCRYUcrk8HfzmhqFRbqZzdSntDdLw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "url": "https://www.cplay.co.nz/",
+            "location": {
+              "address": "Caroline Bay, Timaru 7910",
+              "lng": 171.2416528,
+              "lat": -44.3887816
+            },
+            "travel_time_from_accommodation": "3–5m drive / 15–20m walk",
+            "duration": "1–3h",
             "status": {
               "done": false
             },
             "activity_name": "Caroline Bay Playground & Beach",
-            "location": {
-              "address": "Caroline Bay, Timaru 7910",
-              "lat": -44.3887816,
-              "lng": 171.2416528
-            },
-            "travel_time_from_accommodation": "3–5m drive / 15–20m walk",
-            "duration": "1–3h",
-            "url": "https://www.cplay.co.nz/",
-            "remarks": "Shallow sandy bay; big new playground; penguin viewing area nearby",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6cGJrUn8SQ1Xf_7UzGsUzgcBLamv4H0H4TrDkTKYEgr9HbRX8zVH--bEby39NHtJ0Xlybil-XHRgtVg-2wBf08xHRsaaaB5Qm7Uur08DH-coqDjNdmNPdHKeXHABk2m4B_dHliyVnH0uJmXt-6TSw8WCbBz8c85IAoVfbdSvScnUoft__VrJMsOAj5MXDBmH8fEpKj8dr1bDhTOHFAt0nRcy1oxjbFQxk3SGChoCbsVC2WyLIhN0h8T8dOmnnXxM7AoQRyy0Pv6ieekxPzEB-jTXSyKuU3Sn7kpO7hjfXJeOUMPsDqoP0kDKgjSAM6zwMAiqo7U_17o5BgByIjEgIIpBC7s-CZmZJTmq4cyRqEfFoSjUgyF66f7XDsRtRzOsQqPgtb9cD4FGDxzBT8pCA_vPGvnhttZfVsvas21EbtQbwECWA6-DmUyoUtt0bkjx3d77KYjaA1CHtPh1XiOOVBt_47Z_WswqQ3l8--KdbWz5yPIIB4OtMjbSvZEPf1uzhSj-xn-EBjBdCoUhYAfJXa9kI5DHz5iXKAJky5ko0y-Ky90tCRYUcrk8HfzmhqFRbqZzdSntDdLw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJqTQJSgDBLG0Rd56mS5H14VE"
+            "order": 1,
+            "activity_id": "timaru-act-1",
+            "remarks": "Shallow sandy bay; big new playground; penguin viewing area nearby"
           },
           {
-            "activity_id": "timaru-act-2",
             "order": 2,
+            "activity_id": "timaru-act-2",
+            "remarks": "Runs 26 Dec 2025 – 11 Jan 2026; rides, shows, fireworks (NYE)",
+            "url": "https://carolinebay.co.nz/",
+            "location": {
+              "lat": -44.3900676,
+              "address": "Caroline Bay Soundshell, Timaru",
+              "lng": 171.2466756
+            },
             "status": {
               "done": false
             },
             "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
-            "location": {
-              "address": "Caroline Bay Soundshell, Timaru",
-              "lat": -44.3900676,
-              "lng": 171.2466756
-            },
             "travel_time_from_accommodation": "3–5m drive / 20m walk",
-            "duration": "Flexible",
-            "url": "https://carolinebay.co.nz/",
-            "remarks": "Runs 26 Dec 2025 – 11 Jan 2026; rides, shows, fireworks (NYE)",
             "thumbnail_url": "http://carolinebay.co.nz/cdn/shop/files/1802158-779358-35_3a7b6956-7d0c-4cd5-aeac-c4fa3dc15abb.png?v=1720750178",
+            "duration": "Flexible",
             "google_place_id": "ChIJ_wDi9YnBLG0RQChcZYfvAA8"
           },
           {
-            "activity_id": "timaru-act-3",
-            "order": 3,
-            "status": {
-              "done": false
-            },
-            "activity_name": "South Canterbury Museum",
+            "duration": "45–90m",
+            "google_place_id": "ChIJkSuHXofBLG0RVzLMKZJy1RE",
+            "url": "https://museum.timaru.govt.nz/",
             "location": {
               "address": "4 Perth St, Timaru 7910",
               "lat": -44.3970936,
               "lng": 171.2483619
             },
-            "travel_time_from_accommodation": "5–7m drive",
-            "duration": "45–90m",
-            "url": "https://museum.timaru.govt.nz/",
-            "remarks": "Local history & natural heritage; free entry",
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Pearse_aeroplane_replica%2C_South_Canterbury_Museum-1.jpg/330px-Pearse_aeroplane_replica%2C_South_Canterbury_Museum-1.jpg",
-            "google_place_id": "ChIJkSuHXofBLG0RVzLMKZJy1RE"
-          },
-          {
-            "activity_id": "timaru-act-4",
-            "order": 4,
+            "order": 3,
             "status": {
               "done": false
             },
+            "remarks": "Local history & natural heritage; free entry",
+            "activity_name": "South Canterbury Museum",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Pearse_aeroplane_replica%2C_South_Canterbury_Museum-1.jpg/330px-Pearse_aeroplane_replica%2C_South_Canterbury_Museum-1.jpg",
+            "activity_id": "timaru-act-3",
+            "travel_time_from_accommodation": "5–7m drive"
+          },
+          {
             "activity_name": "Aigantighe Art Gallery",
-            "location": {
-              "address": "49 Wai-iti Rd, Timaru 7910",
-              "lat": -44.3905755,
-              "lng": 171.2370981
+            "status": {
+              "done": false
             },
+            "order": 4,
             "travel_time_from_accommodation": "5–7m drive",
-            "duration": "45–90m",
-            "url": "https://www.aigantighe.co.nz/",
-            "remarks": "Sculpture garden is always open; free entry",
+            "activity_id": "timaru-act-4",
+            "location": {
+              "lat": -44.3905755,
+              "lng": 171.2370981,
+              "address": "49 Wai-iti Rd, Timaru 7910"
+            },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Aigantighe_Art_Gallery_-_13_-_House_-_North_side.jpg/330px-Aigantighe_Art_Gallery_-_13_-_House_-_North_side.jpg",
+            "remarks": "Sculpture garden is always open; free entry",
+            "url": "https://www.aigantighe.co.nz/",
+            "duration": "45–90m",
             "google_place_id": "ChIJEbXuNZDBLG0R1cKtft_Ggnk"
           }
-        ]
-      },
-      {
-        "stop_id": "christchurch-end",
-        "name": "Christchurch",
-        "location": {
-          "lat": -43.530955,
-          "lng": 172.6366455
-        },
-        "date": {
-          "from": "2025-12-27",
-          "to": "2025-12-29"
-        },
-        "duration_days": 2,
-        "travel_time_from_previous": "2h 15m (from Timaru)",
+        ],
         "scenic_waypoints": [
           {
-            "activity_id": "christchurch-wp-1",
             "status": {
               "done": false
             },
-            "activity_name": "Rangitata River Bridge pull-off (SH1)",
+            "google_place_id": "ChIJwzeFuUChKqgRbx7HwP-BygY",
+            "duration": "10–20 min",
+            "activity_id": "timaru-wp-1",
+            "url": "https://maps.app.goo.gl/6q9JdG7b2o7L7m3H6",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/20250221-DJI_0950.jpg/400px-20250221-DJI_0950.jpg",
+            "activity_name": "Lindis Pass Summit Lookout",
             "location": {
-              "address": "SH1, near Rangitata 7992",
-              "lat": -44.146,
-              "lng": 171.257
+              "address": "SH8, Lindis Pass 9382",
+              "lng": 169.4121,
+              "lat": -44.7063
             },
-            "duration": "10–15 min",
-            "url": "https://maps.app.goo.gl/YkZ7E7eX5LwM3w3c7",
-            "remarks": "Braided river views; short photo stop.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7kTLakipFA8B2wwK8CqGNgw8RS1WRD4TI19rBLPL6Zg54KRq2zxCB22_4t_xFGV6yURUfvfoAI3a3HtE61bM61QpYPk3_W7-io4PmOCN2CuTBlqeKTH9q8ZOQ2dRSH8TPKcFtH28z0xTidATsOCVcE78EVmMFHd8c03PQ-RMeHRya8YdLqbKHEpHY74x-_EQUxlS6_1uPOEqfrhvI6zNlWy3PK5ISh6OK92R6OodOP6oJGTEenBbhUX9p_QC9jsgPdcw6HHGHRhZky6DXu0OKjJsCwYDR23q_-ZnAruRfrxw9QqDUNJbT-ugdGrKAP74XN5FgtW_mXw98k-8kuvbYBqsFxGzM-bUYUYRr9P4s5dEEzvVrqkB--bDDt9iCq43CfefiwE_rxhxEbZwXFivg58W9gT4g4nxzOHrqB9iZkYk4KD5VEtG3LivKVVKieiVIDRR9wqnzO1LDa89QXCO8Uu6P-UkfDlExuAVzvO_kYldU3feVNfOBvEBd0V-rzeBdrdEKvrItFBu4vyzbNZMrL75wTGe3Z1o7iza_2p7bS9OP5xF5go_H6XDI4m1okT3vi_0rx2_ycuQ&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJG5D-4Z79LG0RgOe6GQ0xd7I"
+            "remarks": "Classic tussock scenery; exposed to wind."
           },
           {
-            "activity_id": "christchurch-wp-2",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU54kD1kgB9bSr0lzkahDL_6nmk_ub-7V5GNS2NkGruBlTPcUA63qdbo1ta4BuS8bBwE-BTKuAbr9LuVzL7G-JJeVPKUcPUmSocTVoEPK64PD8DesJzvhrS9HRxF3dBVnrIITn75J4GUSbXsKq5SNzLZwrAi-C2GD9X2UjyJ4gPyeXqel07QiB8hzr8vtl8jBANBv4-XZ7yEvVRjwZiWkc6XpuJm9CTtzejwzr05YUrwfEoUsnKSTikh40sDnPLaPFlDeWrHIb83zkqgC2TkKhnoP32sMzHT28cR56XoTlY64xKP_H2Sx0mXs31wIMffwOrVVY2055UIEzD00we3xHWvES8xG7VnyA2H1iWgmO0LFnJXfD1R3WMLNvnMmXinjysoedunO0v_zR32FRTkp5pE4ZI4nmIR9I9I96DnniS2iJ0yJ6-y9XwDiGMrlbgOHahkbKeH3WoGV_rr9fF5ljNCk_sjaz-VxvEpAO6Dzn8GiBeFV_pY7L3Yl9YkKRaVn9_F4hyinurROKCaN8hb3bJ-TB9ho20LNuO2nbChqkQy2BC3lKneMyUSk8GX1glIoO79c8U8&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "activity_name": "Benmore Dam Lookout (Waitaki Valley)",
+            "activity_id": "timaru-wp-2",
+            "duration": "15–30 min",
+            "remarks": "Short detour; views over hydro lake and dam.",
+            "location": {
+              "lng": 170.2504,
+              "lat": -44.6753,
+              "address": "Benmore Ave, Otematata 9412"
+            },
+            "google_place_id": "ChIJAfuTl0VzKqgRP5H-ZiLC3Qc",
+            "url": "https://maps.app.goo.gl/ETN6U8H2Wm8w2bqM7",
             "status": {
               "done": false
-            },
-            "activity_name": "Ashburton Domain Gardens",
-            "location": {
-              "address": "West St, Ashburton 7700",
-              "lat": -43.904,
-              "lng": 171.748
-            },
-            "duration": "20–40 min",
-            "url": "https://maps.app.goo.gl/4y5m5oZC4Jc4Qe4L9",
-            "remarks": "Formal gardens, ponds, easy parking; good leg stretch.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5UYK0dFpHN2gUZQg2LTg7-Xv4HZvrdg9Lj54tWDlvde_ovuBs-ysBWkBt4DuoqXXGlBTcf22p1hAL7pk4m10aH6suXoRpwwcY1rtvTDaTR8c9Q_sxsHll6n8BMQW1_-pv2o4FpXONcvgKCuLiwBstSPoIs8EdAjdjRx2h2cq8laL-v_ePZxFeUHulBqvaPO2065psKwVu7elzY2RiaFn8q8QKZ9jr_VNGfMTe2TS9IoHnxiA1EsewR_RT2otjiF9eLLRyWhGeshbWlaFaJfOAiaD8DSgQOHgXZriBZnAu6KFuGipo4JaOQeAJvLPNdt9_LD4Hje35vAGFbv-hGKx4M3l04ZL-5ROiGYJXvJUakPyQrqplCBv0f1-yROL-qloJANwAEJbyokh0XUS1pbhp2b-86fAUX_PHPGhkDzt3VPHVJdeCrRp59aMT3AcDpjRbPP2Ebv7T54PRkjjkRSbuamGWtTUNMkJdv1XQE73mzC0YpXnmGPDVwCcGGri3PGGJuDYwxi8bFrlN9xBteZhflguV3lcnGqJxm5yHOHLGhuehxZKLJNje_QhmXFvIi_2KJjA&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJC4DWNbm7LW0RICNcZYfvAA8"
+            }
           },
           {
-            "activity_id": "christchurch-wp-3",
+            "remarks": "Short farm track; quirky boulders in paddock.",
+            "activity_name": "Elephant Rocks (Limestone outcrops)",
             "status": {
               "done": false
             },
-            "activity_name": "Rakaia Salmon Statue & Bridge Walkway",
+            "google_place_id": "ChIJT07iCBcfKqgRCwZNhtXGGqE",
+            "url": "https://maps.app.goo.gl/7kq9x1cLw5h3Xafh7",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6HrMYliI7RdUWI5aiA-uW87Z1b17ONKf4CRPiDHMqXDsUzDarPLlrYRG1X858JdTQ4js1AtMnyGTtxpnQtoB1u7VCB7X9m0wRvP7GqsklAq08tNcr8AYcw4FlDgC0qp8HWWXbr0Sqeod2Dg9T1qC20JhfJILeHpF549pKD2Hw8BBK_pc2w5hBaPv7OnfaKpZq_IsQjTNiuWX3FbUo31Ljndm65qXwVtr2-08AK5HUPY1QkcC4r5qtNZyiz3BoA0WzQAXC-48ZOl7V4g1Wsm1LB_yoFayxDfxscWvefVSFKfLs7jn9Wxy6hI9-lcwmPkekafByGBrhqVAwlrsQsBfavIXKAc--Y-O2PmOmFAxipmR4LaW92IyB1bRtSioHn0iOmJJTx7SJrYgToM6eqYhh2YS-HZxL7lI2ZmjOkYn_OE0gFpz7WWrZR-tFyhTuEl-o4KYMaFNdzp4Q7NyCu_8mMYHZ_zYQAiHVc09JHUi88uLDcceAK1r_uNodvGOzX8_WZiyfwfVJJpBPMGRGe65a2H7gIBfIK8SZXjBJUeaApWHx9GBkokdMRdLM3GbQsX3EatffR&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
             "location": {
-              "address": "Main South Rd, Rakaia 7710",
-              "lat": -43.7511,
-              "lng": 172.0189
+              "lat": -44.9382,
+              "lng": 170.64,
+              "address": "Island Cliff–Duntroon Rd, Duntroon 9494"
+            },
+            "activity_id": "timaru-wp-3",
+            "duration": "20–40 min"
+          },
+          {
+            "activity_name": "Takiroa Māori Rock Art Shelter",
+            "remarks": "Sheltered roadside stop; interpretive panels.",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uMyRHUAhtmG_d_yC-cmW14KTqcgw6bvSH-wE6e4DWi4jKDXP5eLpkeCv5rknixDgJ0oIHjMa4rYbWsDtivj57j0z2CXy1rwSd4jP7LUJydLkTu5JC_J7t0pTxMP-DBLxJgB9i-iFzdcJ_vplJFPrRfsFnGaIBr2TdarNIqC0r8HGl2Ry9iTvomDo0fETlIqlS0yuDi3e4YEY0V-7Cn5lE-w61xcnNkkDN_g476bITKxIoEN7adKjfGfuQEVK3xZaZWhZyRuJkUSp68ruMr6rQrST2mRsf4P9kbEN6e4siuljzsHVgOGXTN_7o5KEHoz2XaU5E5jsAr6hSIWVmtg3ikS3bRKQrhTU9ApDJ8ogr8mwVZA3LnN27uCmvLlYoqcBBW0IP1oQnugtnszdbfI0h_LGHf9BSjfmNHCaW-ByXwGSJKgXzQvn6APW-sKNkgtOIp-MEHHorZxmW0ZtXfnS23Jkp7-uqZ_IHWDaKugNu6RPqoq3m76iwFX2_PuR8QKXH_hQA-qG7UY_gQoomSK3gGElQACE3uCEyxvSZ5uNceR9bfO4FGHpPMIQ9suGatdjV0SCr&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "activity_id": "timaru-wp-4",
+            "url": "https://maps.app.goo.gl/HL6u3i2mFj4nYb4o9",
+            "status": {
+              "done": false
             },
             "duration": "10–20 min",
-            "url": "https://maps.app.goo.gl/iE5i3b3hZx2m7kqf6",
-            "remarks": "Kitsch landmark; quick river vantage nearby.",
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Raikaia_Salmon.JPG/400px-Raikaia_Salmon.JPG",
-            "google_place_id": "ChIJW_KSpO7tLW0Rb5PrK5RA0FE"
+            "google_place_id": "ChIJHXYzy1UZKqgRaFFsm3S7pRM",
+            "location": {
+              "address": "SH83, near Duntroon 9494",
+              "lng": 170.6138,
+              "lat": -44.9655
+            }
           }
         ],
+        "stop_id": "timaru-caroline-bay",
+        "date": {
+          "from": "2025-12-25",
+          "to": "2025-12-27"
+        }
+      },
+      {
+        "activities": [
+          {
+            "location": {
+              "lng": 172.640788,
+              "lat": -43.528497,
+              "address": "177 Armagh Street, Christchurch 8011"
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6PXWSIdYEpg9-a6qLWoj7nM_0schDHNmOuX9QD4m5hpU57wad-DPBRqpOcA8iv6J9weFPfi-MZurfrcW_mpqfxbjxwx6L7xIpTxwpuLijtU2ljJq5GMUKk4Ez0x4AyVpRBWeCikUVE0VH0lO_MTSInknWden9xpa9uyA2gyOa9xPgjmtjTR-uQrx4Gc_fzM5F18tWEhLhkyt5MfYvGlHY9PjKU74lzz0wS8VjeYdYludRO1CTJzs3Xmfff_bTEtzWeKagimvp9QfwNRXRvDJcGsNclGDmNmTLfdAMEOSf9HlaCpiM&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "remarks": "Huge free playground; burn off flight energy",
+            "activity_id": "christchurch-end-act-1",
+            "activity_name": "Margaret Mahy Family Playground",
+            "status": {
+              "done": false
+            },
+            "duration": "1–2h",
+            "google_place_id": "ChIJ4d4oRCSKMW0RTLEXjX5dm2g",
+            "travel_time_from_accommodation": "10m walk",
+            "order": 1,
+            "url": "https://ccc.govt.nz/rec-and-sport/parks-and-gardens/margaret-mahy-family-playground/"
+          },
+          {
+            "duration": "1–2h",
+            "activity_name": "Christchurch Farmers’ Market (Sat mornings)",
+            "travel_time_from_accommodation": "10–15m drive",
+            "activity_id": "christchurch-end-act-2",
+            "order": 2,
+            "url": "https://www.christchurchfarmersmarket.co.nz/",
+            "remarks": "Saturdays 9am–12pm at Riccarton House & Bush",
+            "location": {
+              "address": "16 Kahu Rd, Riccarton, Christchurch 8041",
+              "lat": -43.5275828,
+              "lng": 172.5940663
+            },
+            "google_place_id": "ChIJ4U9ubvGKMW0RI807Sij_t3g",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "http://static1.squarespace.com/static/5e8a6bef1b19230e83820a8e/t/60c39b8d2dd336359bc2474d/1623432077537/Screen+Shot+2021-06-11+at+1.20.57+PM.png?format=1500w"
+          },
+          {
+            "travel_time_from_accommodation": "20–25m drive",
+            "remarks": "Kiwi viewing; nocturnal house; kids love the eels",
+            "url": "https://www.willowbank.co.nz/",
+            "location": {
+              "lng": 172.5914965,
+              "lat": -43.4635263,
+              "address": "60 Hussey Rd, Northwood, Christchurch 8051"
+            },
+            "thumbnail_url": "https://www.willowbank.co.nz/wp-content/uploads/2022/07/Willowbank-Edited-224-Landscape.jpg",
+            "google_place_id": "ChIJoWOBIZCMMW0R8AdcZYfvAA8",
+            "activity_name": "Willowbank Wildlife Reserve",
+            "status": {
+              "done": false
+            },
+            "duration": "1.5–3h",
+            "activity_id": "christchurch-end-act-3",
+            "order": 4
+          },
+          {
+            "travel_time_from_accommodation": "25–30m drive",
+            "location": {
+              "lng": 172.3054317,
+              "lat": -43.483178,
+              "address": "McLeans Island Rd, Harewood, Christchurch 8051"
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4W4LYryca8WsFF-2x6AZqy1pSNelM0altpPfAU3SrTj62zY1Lp8YS1MVZd0Ca7FBNDazlhrkwnR0jDH9xgY-Tmdnead8vS6qaBK2S8zReuZAtJTfv2Be1-xIUgTTB-4h1lti-RYYEbRRILAzAbWSmcTJbVULk1vuZ8ViNuDS7wElMbPNHkRJK4_dlnl02j5c1FNxBUPbmjvfy-TXbLqo7XFAFo3TRAD7cfoUR2R03ILahtia20uDIlYVLwkXmL0uFO2FLZ8xs0rzGpa5t0GKObnH76jtEwS4BIZpebFtpH9d_9B4R-Cxtr6rS9UhmQad4OWnObS5KgdwmNrt1j15fS1sXIUWdhBg-zITvZn4CewLADqwWGz13dKBzaPqBkAOt8-JbZQG14Oo4pAg0_gGd1JIcTc9lPqGrgeb0nK-3ojyhwtiaOiUvhVlk-I6SY9z0s24cWP0-1kXbERHOA-hT59YzdJXuBG7XrP6rxMi7Hg1Elj3-3JMhKylYnGa1JMbArgTa4gIXtKgVJz0UZP3rU2Q8UnfiwnZ9K_pby1IshzkeWDOCIG2Pr2boXf8K4zfPb_ugm&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "url": "https://www.oranawildlifepark.co.nz/",
+            "remarks": "Giraffe feeding, lions; allow half-day if keen",
+            "status": {
+              "done": false
+            },
+            "activity_id": "christchurch-end-act-4",
+            "activity_name": "Orana Wildlife Park (open-range zoo)",
+            "duration": "2–4h",
+            "order": 5,
+            "google_place_id": "ChIJKbb_Hgr0MW0RTqC3chSJS0U"
+          },
+          {
+            "url": "https://www.ccc.govt.nz/rec-and-sport/beaches-and-coast/",
+            "remarks": "Good beach time for kids; combine with hot pools if desired",
+            "location": {
+              "address": "Marine Parade, New Brighton, Christchurch",
+              "lat": -43.50862,
+              "lng": 172.73179
+            },
+            "status": {
+              "done": false
+            },
+            "google_place_id": "ChIJibgqwJ6IMW0RUY1w6yqwnfk",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5pZvnEFnm1bz3HiOe-C6m2ItbAsIeJU1qleC5CxEoAHCjfNQqBg2LAQai3qIxmkCb-PS_4XWhyV4mncqE6BJRcaRlaXawCvzuLBdkbnK3GS6eU7Shgj_ClXeHN45Zo7zlOkDzZdlmB6-6SauoMMCwO-bKSDmSC8xGZPtDcUrV3Y86LHTLQ3vfKLbyjVV8ZWNDtijMho0nsNt8p4TK1LDsE8AFJ7itvKCnuS1KWt_XdVs2KjMJF7Q_1bsaUiwkIVX0h0nEE7oQveNgZ6b3Gh-0kjaUAORcyz4uUDchfar8BVJcJswdLt8dQJA0voNMSaDWiZO0zrWQD62hu81j_4q3xpwDuTh45Qpjd-FoVtPqj1y3KXRLpZD2ZaqI7IrbPULokfOoQxIwgFz_WDLjRDAZphmNMQpl0qCxdugWgXWOokDSc_pXNZeryFMB2bc2GX-nwNsNvdYVozcOwf4sfDetlcNiJxpNYe_wTRu3BOCcA9__t6DXHH2MlWXzfLNEheNSAjSl48p3rNsX1-Z-ijQ1QeEzTBlgYqwISroOp_KCSwvUotJyeo6NEhMC6R011pzU5PjPqVfJNog&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "order": 6,
+            "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
+            "activity_id": "christchurch-end-act-5",
+            "duration": "1–3h",
+            "travel_time_from_accommodation": "20–25m drive"
+          },
+          {
+            "activity_name": "Riverside Market (meals & souvenirs, food hall & groceries)",
+            "thumbnail_url": "http://static1.squarespace.com/static/59b8b832bce176c4a1fa56e6/t/5a85067371c10b7697e94a6c/1518667381616/Riverside_Home.jpg?format=1500w",
+            "url": "https://riverside.nz/",
+            "order": 7,
+            "remarks": "Indoor food hall; easy dinner spot near hotel; 7-day indoor market; good for lunch/dinner and grocery top-ups",
+            "google_place_id": "ChIJL29zmfmLMW0RFb_QeKN-TTM",
+            "location": {
+              "lng": 172.6335607,
+              "address": "96 Oxford Terrace, Christchurch 8011",
+              "lat": -43.5342104
+            },
+            "travel_time_from_accommodation": "10m walk",
+            "duration": "1–2h",
+            "activity_id": "christchurch-end-act-6",
+            "status": {
+              "done": false
+            }
+          }
+        ],
+        "duration_days": 2,
         "accommodation": {
-          "name": "Novotel Christchurch Cathedral Square",
+          "check_out": "2025-12-29 11:00",
+          "google_place_id": "ChIJm_lbTSOKMW0RQm-Faqb1TFo",
           "address": "50 Cathedral Square, Christchurch 8011, New Zealand",
+          "rooms": "2× Superior Room (2 Double Beds)",
           "location": {
             "lat": -43.5304133,
             "lng": 172.6350173
           },
-          "check_in": "2025-12-27 14:00",
-          "check_out": "2025-12-29 11:00",
-          "confirmation": "PPTPDRLH",
-          "rooms": "2× Superior Room (2 Double Beds)",
-          "phone": "+64 3 372 2111",
+          "name": "Novotel Christchurch Cathedral Square",
           "url": "https://all.accor.com/hotel/6592/index.en.shtml",
+          "phone": "+64 3 372 2111",
+          "confirmation": "PPTPDRLH",
           "thumbnail_url": "https://www.ahstatic.com/photos/6592_ho_00_p_1024x768.jpg",
-          "google_place_id": "ChIJm_lbTSOKMW0RQm-Faqb1TFo"
+          "check_in": "2025-12-27 14:00"
         },
+        "name": "Christchurch",
         "weather": {
           "forecast_high_c": null,
           "forecast_low_c": null,
           "precipitation_chance_pct": null,
           "notes": "Placeholder forecast — update during trip"
         },
-        "activities": [
+        "location": {
+          "lat": -43.530955,
+          "lng": 172.6366455
+        },
+        "travel_time_from_previous": "2h 15m (from Timaru)",
+        "stop_id": "christchurch-end",
+        "date": {
+          "from": "2025-12-27",
+          "to": "2025-12-29"
+        },
+        "scenic_waypoints": [
           {
-            "activity_id": "christchurch-end-act-1",
-            "order": 1,
+            "remarks": "Braided river views; short photo stop.",
+            "google_place_id": "ChIJG5D-4Z79LG0RgOe6GQ0xd7I",
+            "url": "https://maps.app.goo.gl/YkZ7E7eX5LwM3w3c7",
+            "location": {
+              "lat": -44.146,
+              "address": "SH1, near Rangitata 7992",
+              "lng": 171.257
+            },
+            "duration": "10–15 min",
+            "activity_name": "Rangitata River Bridge pull-off (SH1)",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7kTLakipFA8B2wwK8CqGNgw8RS1WRD4TI19rBLPL6Zg54KRq2zxCB22_4t_xFGV6yURUfvfoAI3a3HtE61bM61QpYPk3_W7-io4PmOCN2CuTBlqeKTH9q8ZOQ2dRSH8TPKcFtH28z0xTidATsOCVcE78EVmMFHd8c03PQ-RMeHRya8YdLqbKHEpHY74x-_EQUxlS6_1uPOEqfrhvI6zNlWy3PK5ISh6OK92R6OodOP6oJGTEenBbhUX9p_QC9jsgPdcw6HHGHRhZky6DXu0OKjJsCwYDR23q_-ZnAruRfrxw9QqDUNJbT-ugdGrKAP74XN5FgtW_mXw98k-8kuvbYBqsFxGzM-bUYUYRr9P4s5dEEzvVrqkB--bDDt9iCq43CfefiwE_rxhxEbZwXFivg58W9gT4g4nxzOHrqB9iZkYk4KD5VEtG3LivKVVKieiVIDRR9wqnzO1LDa89QXCO8Uu6P-UkfDlExuAVzvO_kYldU3feVNfOBvEBd0V-rzeBdrdEKvrItFBu4vyzbNZMrL75wTGe3Z1o7iza_2p7bS9OP5xF5go_H6XDI4m1okT3vi_0rx2_ycuQ&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
             "status": {
               "done": false
             },
-            "activity_name": "Margaret Mahy Family Playground",
-            "location": {
-              "address": "177 Armagh Street, Christchurch 8011",
-              "lat": -43.528497,
-              "lng": 172.640788
-            },
-            "travel_time_from_accommodation": "10m walk",
-            "duration": "1–2h",
-            "url": "https://ccc.govt.nz/rec-and-sport/parks-and-gardens/margaret-mahy-family-playground/",
-            "remarks": "Huge free playground; burn off flight energy",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6PXWSIdYEpg9-a6qLWoj7nM_0schDHNmOuX9QD4m5hpU57wad-DPBRqpOcA8iv6J9weFPfi-MZurfrcW_mpqfxbjxwx6L7xIpTxwpuLijtU2ljJq5GMUKk4Ez0x4AyVpRBWeCikUVE0VH0lO_MTSInknWden9xpa9uyA2gyOa9xPgjmtjTR-uQrx4Gc_fzM5F18tWEhLhkyt5MfYvGlHY9PjKU74lzz0wS8VjeYdYludRO1CTJzs3Xmfff_bTEtzWeKagimvp9QfwNRXRvDJcGsNclGDmNmTLfdAMEOSf9HlaCpiM&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJ4d4oRCSKMW0RTLEXjX5dm2g"
+            "activity_id": "christchurch-wp-1"
           },
           {
-            "activity_id": "christchurch-end-act-2",
-            "order": 2,
+            "activity_name": "Ashburton Domain Gardens",
+            "location": {
+              "lng": 171.748,
+              "lat": -43.904,
+              "address": "West St, Ashburton 7700"
+            },
+            "url": "https://maps.app.goo.gl/4y5m5oZC4Jc4Qe4L9",
+            "duration": "20–40 min",
+            "google_place_id": "ChIJC4DWNbm7LW0RICNcZYfvAA8",
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5UYK0dFpHN2gUZQg2LTg7-Xv4HZvrdg9Lj54tWDlvde_ovuBs-ysBWkBt4DuoqXXGlBTcf22p1hAL7pk4m10aH6suXoRpwwcY1rtvTDaTR8c9Q_sxsHll6n8BMQW1_-pv2o4FpXONcvgKCuLiwBstSPoIs8EdAjdjRx2h2cq8laL-v_ePZxFeUHulBqvaPO2065psKwVu7elzY2RiaFn8q8QKZ9jr_VNGfMTe2TS9IoHnxiA1EsewR_RT2otjiF9eLLRyWhGeshbWlaFaJfOAiaD8DSgQOHgXZriBZnAu6KFuGipo4JaOQeAJvLPNdt9_LD4Hje35vAGFbv-hGKx4M3l04ZL-5ROiGYJXvJUakPyQrqplCBv0f1-yROL-qloJANwAEJbyokh0XUS1pbhp2b-86fAUX_PHPGhkDzt3VPHVJdeCrRp59aMT3AcDpjRbPP2Ebv7T54PRkjjkRSbuamGWtTUNMkJdv1XQE73mzC0YpXnmGPDVwCcGGri3PGGJuDYwxi8bFrlN9xBteZhflguV3lcnGqJxm5yHOHLGhuehxZKLJNje_QhmXFvIi_2KJjA&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
+            "remarks": "Formal gardens, ponds, easy parking; good leg stretch.",
             "status": {
               "done": false
             },
-            "activity_name": "Christchurch Farmers’ Market (Sat mornings)",
-            "location": {
-              "address": "16 Kahu Rd, Riccarton, Christchurch 8041",
-              "lat": -43.5275828,
-              "lng": 172.5940663
-            },
-            "travel_time_from_accommodation": "10–15m drive",
-            "duration": "1–2h",
-            "url": "https://www.christchurchfarmersmarket.co.nz/",
-            "remarks": "Saturdays 9am–12pm at Riccarton House & Bush",
-            "thumbnail_url": "http://static1.squarespace.com/static/5e8a6bef1b19230e83820a8e/t/60c39b8d2dd336359bc2474d/1623432077537/Screen+Shot+2021-06-11+at+1.20.57+PM.png?format=1500w",
-            "google_place_id": "ChIJ4U9ubvGKMW0RI807Sij_t3g"
+            "activity_id": "christchurch-wp-2"
           },
           {
-            "activity_id": "christchurch-end-act-3",
-            "order": 4,
             "status": {
               "done": false
             },
-            "activity_name": "Willowbank Wildlife Reserve",
+            "activity_name": "Rakaia Salmon Statue & Bridge Walkway",
+            "activity_id": "christchurch-wp-3",
+            "url": "https://maps.app.goo.gl/iE5i3b3hZx2m7kqf6",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Raikaia_Salmon.JPG/400px-Raikaia_Salmon.JPG",
+            "duration": "10–20 min",
+            "remarks": "Kitsch landmark; quick river vantage nearby.",
             "location": {
-              "address": "60 Hussey Rd, Northwood, Christchurch 8051",
-              "lat": -43.4635263,
-              "lng": 172.5914965
+              "lat": -43.7511,
+              "lng": 172.0189,
+              "address": "Main South Rd, Rakaia 7710"
             },
-            "travel_time_from_accommodation": "20–25m drive",
-            "duration": "1.5–3h",
-            "url": "https://www.willowbank.co.nz/",
-            "remarks": "Kiwi viewing; nocturnal house; kids love the eels",
-            "thumbnail_url": "https://www.willowbank.co.nz/wp-content/uploads/2022/07/Willowbank-Edited-224-Landscape.jpg",
-            "google_place_id": "ChIJoWOBIZCMMW0R8AdcZYfvAA8"
-          },
-          {
-            "activity_id": "christchurch-end-act-4",
-            "order": 5,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Orana Wildlife Park (open-range zoo)",
-            "location": {
-              "address": "McLeans Island Rd, Harewood, Christchurch 8051",
-              "lat": -43.483178,
-              "lng": 172.3054317
-            },
-            "travel_time_from_accommodation": "25–30m drive",
-            "duration": "2–4h",
-            "url": "https://www.oranawildlifepark.co.nz/",
-            "remarks": "Giraffe feeding, lions; allow half-day if keen",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4W4LYryca8WsFF-2x6AZqy1pSNelM0altpPfAU3SrTj62zY1Lp8YS1MVZd0Ca7FBNDazlhrkwnR0jDH9xgY-Tmdnead8vS6qaBK2S8zReuZAtJTfv2Be1-xIUgTTB-4h1lti-RYYEbRRILAzAbWSmcTJbVULk1vuZ8ViNuDS7wElMbPNHkRJK4_dlnl02j5c1FNxBUPbmjvfy-TXbLqo7XFAFo3TRAD7cfoUR2R03ILahtia20uDIlYVLwkXmL0uFO2FLZ8xs0rzGpa5t0GKObnH76jtEwS4BIZpebFtpH9d_9B4R-Cxtr6rS9UhmQad4OWnObS5KgdwmNrt1j15fS1sXIUWdhBg-zITvZn4CewLADqwWGz13dKBzaPqBkAOt8-JbZQG14Oo4pAg0_gGd1JIcTc9lPqGrgeb0nK-3ojyhwtiaOiUvhVlk-I6SY9z0s24cWP0-1kXbERHOA-hT59YzdJXuBG7XrP6rxMi7Hg1Elj3-3JMhKylYnGa1JMbArgTa4gIXtKgVJz0UZP3rU2Q8UnfiwnZ9K_pby1IshzkeWDOCIG2Pr2boXf8K4zfPb_ugm&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJKbb_Hgr0MW0RTqC3chSJS0U"
-          },
-          {
-            "activity_id": "christchurch-end-act-5",
-            "order": 6,
-            "status": {
-              "done": false
-            },
-            "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
-            "location": {
-              "address": "Marine Parade, New Brighton, Christchurch",
-              "lat": -43.50862,
-              "lng": 172.73179
-            },
-            "travel_time_from_accommodation": "20–25m drive",
-            "duration": "1–3h",
-            "url": "https://www.ccc.govt.nz/rec-and-sport/beaches-and-coast/",
-            "remarks": "Good beach time for kids; combine with hot pools if desired",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5pZvnEFnm1bz3HiOe-C6m2ItbAsIeJU1qleC5CxEoAHCjfNQqBg2LAQai3qIxmkCb-PS_4XWhyV4mncqE6BJRcaRlaXawCvzuLBdkbnK3GS6eU7Shgj_ClXeHN45Zo7zlOkDzZdlmB6-6SauoMMCwO-bKSDmSC8xGZPtDcUrV3Y86LHTLQ3vfKLbyjVV8ZWNDtijMho0nsNt8p4TK1LDsE8AFJ7itvKCnuS1KWt_XdVs2KjMJF7Q_1bsaUiwkIVX0h0nEE7oQveNgZ6b3Gh-0kjaUAORcyz4uUDchfar8BVJcJswdLt8dQJA0voNMSaDWiZO0zrWQD62hu81j_4q3xpwDuTh45Qpjd-FoVtPqj1y3KXRLpZD2ZaqI7IrbPULokfOoQxIwgFz_WDLjRDAZphmNMQpl0qCxdugWgXWOokDSc_pXNZeryFMB2bc2GX-nwNsNvdYVozcOwf4sfDetlcNiJxpNYe_wTRu3BOCcA9__t6DXHH2MlWXzfLNEheNSAjSl48p3rNsX1-Z-ijQ1QeEzTBlgYqwISroOp_KCSwvUotJyeo6NEhMC6R011pzU5PjPqVfJNog&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "google_place_id": "ChIJibgqwJ6IMW0RUY1w6yqwnfk"
-          },
-          {
-            "activity_id": "christchurch-end-act-6",
-            "order": 7,
-            "status": {
-              "done": false
-            },
-            "activity_name": "Riverside Market (meals & souvenirs, food hall & groceries)",
-            "location": {
-              "address": "96 Oxford Terrace, Christchurch 8011",
-              "lat": -43.5342104,
-              "lng": 172.6335607
-            },
-            "travel_time_from_accommodation": "10m walk",
-            "duration": "1–2h",
-            "url": "https://riverside.nz/",
-            "remarks": "Indoor food hall; easy dinner spot near hotel; 7-day indoor market; good for lunch/dinner and grocery top-ups",
-            "thumbnail_url": "http://static1.squarespace.com/static/59b8b832bce176c4a1fa56e6/t/5a85067371c10b7697e94a6c/1518667381616/Riverside_Home.jpg?format=1500w",
-            "google_place_id": "ChIJL29zmfmLMW0RFb_QeKN-TTM"
+            "google_place_id": "ChIJW_KSpO7tLW0Rb5PrK5RA0FE"
           }
         ]
       }
-    ]
+    ],
+    "trip_id": "202512_NZ"
   },
-  "exportDate": "2025-08-27T18:59:19.580Z",
+  "exportDate": "2025-11-30T14:36:07.431Z",
   "version": "1.0.0"
 }
