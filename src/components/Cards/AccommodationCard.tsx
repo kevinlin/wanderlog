@@ -121,7 +121,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
         <div className="ml-3 flex-shrink-0 sm:ml-4">
           <button
             aria-label={isExpanded ? 'Collapse accommodation details' : 'Expand accommodation details'}
-            className="min-h-[44px] min-w-[44px] touch-manipulation rounded-lg p-2 transition-colors hover:bg-sky-500/20 active:bg-sky-500/30"
+            className="min-h-[44px] min-w-[44px] touch-manipulation rounded-lg p-1 transition-colors hover:bg-sky-500/20 active:bg-sky-500/30"
             onClick={toggleExpanded}
           >
             {isExpanded ? <ChevronUpIcon className="h-5 w-5 text-gray-600" /> : <ChevronDownIcon className="h-5 w-5 text-gray-600" />}
@@ -149,7 +149,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
           </a>
 
           <a
-            className="flex min-h-[44px] touch-manipulation items-center justify-center rounded bg-orange-500/20 px-3 py-2 text-orange-700 text-sm transition-colors hover:bg-orange-500/30 active:bg-orange-500/40 sm:min-h-auto sm:py-1"
+            className="flex min-h-[44px] touch-manipulation items-center justify-center rounded bg-orange-500/20 px-1.5 py-1 text-orange-700 text-sm transition-colors hover:bg-orange-500/30 active:bg-orange-500/40 sm:min-h-auto sm:py-0.5"
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(accommodation.address)}`}
             rel="noopener noreferrer"
             target="_blank"
