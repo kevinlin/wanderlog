@@ -205,7 +205,7 @@ export const saveUserModifications = async (tripId: string, modifications: UserM
     const dataToSave = {
       activityStatus: modifications.activityStatus || {},
       activityOrders: modifications.activityOrders || {},
-      lastViewedBase: modifications.lastViewedBase,
+      ...(modifications.lastViewedBase !== undefined && { lastViewedBase: modifications.lastViewedBase }),
       lastViewedDate: modifications.lastViewedDate ? isoToTimestamp(modifications.lastViewedDate) : Timestamp.now(),
       updated_at: Timestamp.now(),
     };

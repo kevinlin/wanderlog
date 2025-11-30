@@ -172,9 +172,7 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
     errors.push('url must be a string');
   }
 
-  if (!d.thumbnail_url) {
-    warnings.push('thumbnail_url is not defined');
-  } else if (typeof d.thumbnail_url !== 'string') {
+  if (d.thumbnail_url && typeof d.thumbnail_url !== 'string') {
     errors.push('thumbnail_url must be a string');
   }
 
@@ -198,7 +196,7 @@ export const isValidAccommodation = (data: unknown, errors: string[], warnings: 
 /**
  * Validates activity structure
  */
-export const isValidActivity = (data: unknown, errors: string[], warnings: string[]): boolean => {
+export const isValidActivity = (data: unknown, errors: string[], _warnings: string[]): boolean => {
   if (!data || typeof data !== 'object') {
     return false;
   }
@@ -222,45 +220,31 @@ export const isValidActivity = (data: unknown, errors: string[], warnings: strin
   }
 
   // Optional fields - only validate type if present
-  if (!d.duration) {
-    warnings.push('duration is not present');
-  } else if (typeof d.duration !== 'string') {
+  if (d.duration && typeof d.duration !== 'string') {
     errors.push('duration must be a string');
   }
 
-  if (!d.travel_time_from_accommodation) {
-    warnings.push('travel_time_from_accommodation is not present');
-  } else if (typeof d.travel_time_from_accommodation !== 'string') {
+  if (d.travel_time_from_accommodation && typeof d.travel_time_from_accommodation !== 'string') {
     errors.push('travel_time_from_accommodation must be a string');
   }
 
-  if (!d.url) {
-    warnings.push('url is not present');
-  } else if (typeof d.url !== 'string') {
+  if (d.url && typeof d.url !== 'string') {
     errors.push('url must be a string');
   }
 
-  if (!d.remarks) {
-    warnings.push('remarks is not present');
-  } else if (typeof d.remarks !== 'string') {
+  if (d.remarks && typeof d.remarks !== 'string') {
     errors.push('remarks must be a string');
   }
 
-  if (!d.thumbnail_url) {
-    warnings.push('thumbnail_url is not present');
-  } else if (typeof d.thumbnail_url !== 'string') {
+  if (d.thumbnail_url && typeof d.thumbnail_url !== 'string') {
     errors.push('thumbnail_url must be a string');
   }
 
-  if (!d.order) {
-    warnings.push('order is not present');
-  } else if (typeof d.order !== 'number') {
+  if (d.order && typeof d.order !== 'number') {
     errors.push('order must be a number');
   }
 
-  if (!d.status) {
-    warnings.push('status is not present');
-  } else if (!isValidActivityStatus(d.status)) {
+  if (d.status && !isValidActivityStatus(d.status)) {
     errors.push('status must be a valid activity status');
   }
 
