@@ -32,6 +32,16 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 19. WHEN a user hovers over a map pin, THEN the pin SHALL display an enhanced brighter glow effect and increase slightly in size for visual feedback
 20. WHEN a user hovers over a map pin (accommodation, activity, or scenic waypoint), THEN a Place Details popover SHALL appear showing place information from trip data including name, type, thumbnail image (if available), address, and completion status
 21. WHEN the Place Details popover is displayed on hover, THEN it SHALL use frosted glass styling consistent with other UI components and automatically dismiss when the mouse leaves the pin
+22. WHEN the map is displayed, THEN a Map Layer Picker control SHALL be positioned at the bottom-left corner of the map
+23. WHEN the Map Layer Picker button is clicked, THEN a picker panel SHALL expand showing available map types and overlay layers
+24. WHEN the Map Layer Picker is displayed, THEN it SHALL support the following map types: Default (roadmap), Satellite, Terrain, and Hybrid
+25. WHEN the Map Layer Picker is displayed, THEN it SHALL support the following overlay layers: Traffic, Transit, and Bicycling
+26. WHEN a map type is selected, THEN the map SHALL immediately switch to the selected type
+27. WHEN an overlay layer is toggled on, THEN the corresponding layer (Traffic, Transit, or Bicycling) SHALL be displayed on the map
+28. WHEN an overlay layer is toggled off, THEN the corresponding layer SHALL be hidden from the map
+29. WHEN the Map Layer Picker panel is open, THEN clicking outside the panel SHALL close it
+30. WHEN the map type is changed to Satellite, Terrain, or Hybrid, THEN the custom map styling SHALL be disabled to show the native map appearance
+31. WHEN the map type is changed back to Default (roadmap), THEN the custom travel-journal styling SHALL be restored
 
 ### 2. Timeline Navigation and Date Management
 

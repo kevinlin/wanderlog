@@ -1,6 +1,7 @@
 import { DirectionsRenderer, GoogleMap, LoadScript, Marker, Polyline } from '@react-google-maps/api';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { MapLayerPicker, type MapTypeId, type OverlayLayers } from '@/components/Map/MapLayerPicker';
 import { PlaceHoverCard } from '@/components/Map/PlaceHoverCard';
 import { POIModal } from '@/components/Map/POIModal';
 import { useAppStateContext } from '@/contexts/AppStateContext';
@@ -103,6 +104,19 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const [routeError, setRouteError] = useState<string | null>(null);
   const [hoverState, setHoverState] = useState<HoverState | null>(null);
   const placesServiceRef = useRef<PlacesService | null>(null);
+
+  // Map layer state
+  const [mapType, setMapType] = useState<MapTypeId>('roadmap');
+  const [overlayLayers, setOverlayLayers] = useState<OverlayLayers>({
+    traffic: false,
+    transit: false,
+    bicycling: false,
+  });
+
+  // Refs for overlay layer instances
+  const trafficLayerRef = useRef<google.maps.TrafficLayer | null>(null);
+  const transitLayerRef = useRef<google.maps.TransitLayer | null>(null);
+  const bicyclingLayerRef = useRef<google.maps.BicyclingLayer | null>(null);
 
   // Refs to store marker instances for animation
   const accommodationMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
@@ -357,6 +371,76 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       previousSelectedActivityRef.current = null;
     }
   }, [selectedActivityId, isMapLoaded]);
+
+  // Map type change handler
+  const handleMapTypeChange = useCallback(
+    (newMapType: MapTypeId) => {
+      setMapType(newMapType);
+      if (mapInstance) {
+        mapInstance.setMapTypeId(newMapType);
+      }
+    },
+    [mapInstance]
+  );
+
+  // Overlay layer toggle handler
+  const handleOverlayToggle = useCallback((layer: keyof OverlayLayers) => {
+    setOverlayLayers((prev) => ({
+      ...prev,
+      [layer]: !prev[layer],
+    }));
+  }, []);
+
+  // Effect to manage overlay layers
+  useEffect(() => {
+    if (!(mapInstance && isMapLoaded)) return;
+
+    // Traffic layer
+    if (overlayLayers.traffic) {
+      if (!trafficLayerRef.current) {
+        trafficLayerRef.current = new google.maps.TrafficLayer();
+      }
+      trafficLayerRef.current.setMap(mapInstance);
+    } else if (trafficLayerRef.current) {
+      trafficLayerRef.current.setMap(null);
+    }
+
+    // Transit layer
+    if (overlayLayers.transit) {
+      if (!transitLayerRef.current) {
+        transitLayerRef.current = new google.maps.TransitLayer();
+      }
+      transitLayerRef.current.setMap(mapInstance);
+    } else if (transitLayerRef.current) {
+      transitLayerRef.current.setMap(null);
+    }
+
+    // Bicycling layer
+    if (overlayLayers.bicycling) {
+      if (!bicyclingLayerRef.current) {
+        bicyclingLayerRef.current = new google.maps.BicyclingLayer();
+      }
+      bicyclingLayerRef.current.setMap(mapInstance);
+    } else if (bicyclingLayerRef.current) {
+      bicyclingLayerRef.current.setMap(null);
+    }
+  }, [mapInstance, isMapLoaded, overlayLayers]);
+
+  // Cleanup overlay layers on unmount
+  useEffect(
+    () => () => {
+      if (trafficLayerRef.current) {
+        trafficLayerRef.current.setMap(null);
+      }
+      if (transitLayerRef.current) {
+        transitLayerRef.current.setMap(null);
+      }
+      if (bicyclingLayerRef.current) {
+        bicyclingLayerRef.current.setMap(null);
+      }
+    },
+    []
+  );
 
   // Determine base status for styling
   const getBaseStatus = (baseId: string): 'past' | 'current' | 'upcoming' => {
@@ -652,11 +736,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         onLoad={onLoad}
         onUnmount={onUnmount}
         options={{
-          styles: customMapStyle,
+          styles: mapType === 'roadmap' ? customMapStyle : undefined, // Only apply custom styles to roadmap
+          mapTypeId: mapType,
           disableDefaultUI: false,
           zoomControl: true,
           streetViewControl: false,
-          mapTypeControl: false,
+          mapTypeControl: false, // We use our custom MapLayerPicker
           fullscreenControl: false,
           // Mobile touch optimizations
           gestureHandling: 'greedy', // Allow single-finger panning
@@ -812,6 +897,15 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             stopName={hoverState.stopName}
           />
         )}
+
+        {/* Map Layer Picker */}
+        <MapLayerPicker
+          currentMapType={mapType}
+          map={mapInstance}
+          onMapTypeChange={handleMapTypeChange}
+          onOverlayToggle={handleOverlayToggle}
+          overlayLayers={overlayLayers}
+        />
       </GoogleMap>
     </LoadScript>
   );

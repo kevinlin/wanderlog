@@ -177,6 +177,59 @@ interface MapContainerProps {
 - Pin status-based styling and interactions
 - Click handlers for pin selection and map interaction
 - Coordinated drop pin animations for accommodation and scenic waypoints when stops are selected
+- Map layer picker integration for changing map types and toggling overlay layers
+
+#### 2.1. MapLayerPicker Component
+**Purpose**: Floating control for switching between map types and toggling overlay layers.
+
+```typescript
+type MapTypeId = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
+
+interface OverlayLayers {
+  traffic: boolean;
+  transit: boolean;
+  bicycling: boolean;
+}
+
+interface MapLayerPickerProps {
+  map: google.maps.Map | null;
+  currentMapType: MapTypeId;
+  overlayLayers: OverlayLayers;
+  onMapTypeChange: (mapType: MapTypeId) => void;
+  onOverlayToggle: (layer: keyof OverlayLayers) => void;
+}
+```
+
+**Key Features**:
+- **Position**: Bottom-left corner of the map with `absolute bottom-4 left-4 z-10` positioning
+- **Toggle Button**: Layers icon button (40x40px) with frosted glass styling
+- **Expandable Panel**: Opens upward from the button when clicked
+- **Map Types Section**: Grid of options for Default, Satellite, Terrain, and Hybrid map types
+- **Overlay Layers Section**: Toggle buttons for Traffic, Transit, and Bicycling layers
+- **Visual Feedback**: Selected map type highlighted with Sky-500, active overlay layers highlighted with Emerald-500
+- **Dismiss Behavior**: Panel closes when clicking outside or pressing Escape key
+- **Accessibility**: ARIA labels and keyboard navigation support
+
+**Map Type Options**:
+| Type | Label | Icon | Description |
+|------|-------|------|-------------|
+| roadmap | Default | 🗺️ | Standard road map with custom travel-journal styling |
+| satellite | Satellite | 🛰️ | Satellite imagery view |
+| terrain | Terrain | ⛰️ | Physical relief map showing terrain features |
+| hybrid | Hybrid | 🌍 | Satellite imagery with road labels overlay |
+
+**Overlay Layer Options**:
+| Layer | Label | Icon | Description |
+|-------|-------|------|-------------|
+| traffic | Traffic | 🚗 | Real-time traffic conditions overlay |
+| transit | Transit | 🚇 | Public transportation routes and stations |
+| bicycling | Bicycling | 🚴 | Bike paths and bike-friendly routes |
+
+**Styling Notes**:
+- Panel uses frosted glass aesthetic: `bg-white/90 backdrop-blur-md rounded-xl border border-white/30 shadow-lg`
+- Button transitions between normal and active states with color changes
+- Hover effects with scale transitions for better interactivity
+- Custom map styling is only applied to roadmap type; other types use native Google Maps appearance
 
 #### 3. TimelineStrip Component
 **Purpose**: Timeline panel with responsive positioning - full-width at top on mobile, floating panel at top-left on desktop.

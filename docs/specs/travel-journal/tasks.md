@@ -608,6 +608,34 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Added PlaceHoverCard component documentation to design.md
     - **Requirements Reference**: Documentation updates for new functionality
 
+- [x] 21. **Map Layer Picker**
+  - [x] 21.1 Create MapLayerPicker component
+    - Created MapLayerPicker.tsx in src/components/Map/ directory
+    - Implemented toggle button with layers icon at bottom-left of map
+    - Added expandable panel with map type selection (Default, Satellite, Terrain, Hybrid)
+    - Added overlay layer toggles (Traffic, Transit, Bicycling)
+    - Implemented frosted glass styling consistent with other UI components
+    - Added click-outside and Escape key handlers for panel dismissal
+    - Included ARIA labels for accessibility
+    - **Requirements Reference**: Requirement 1.22, 1.23, 1.24, 1.25 (layer picker UI)
+
+  - [x] 21.2 Integrate MapLayerPicker into MapContainer
+    - Added mapType and overlayLayers state to MapContainer
+    - Created refs for TrafficLayer, TransitLayer, and BicyclingLayer instances
+    - Implemented handleMapTypeChange callback to update map type
+    - Implemented handleOverlayToggle callback to toggle overlay layers
+    - Added useEffect to manage overlay layer visibility based on state
+    - Added cleanup effect to remove overlay layers on unmount
+    - Updated GoogleMap options to include mapTypeId and conditional custom styling
+    - Custom map styling now only applies to roadmap type
+    - **Requirements Reference**: Requirement 1.26, 1.27, 1.28, 1.30, 1.31 (layer functionality)
+
+  - [x] 21.3 Update documentation
+    - Added requirements 1.22-1.31 to requirements.md for map layer picker
+    - Added MapLayerPicker component documentation to design.md (section 2.1)
+    - Documented map type options and overlay layer options with descriptions
+    - **Requirements Reference**: Documentation updates for new functionality
+
 ## Implementation Notes
 
 - Each task builds incrementally on previous tasks
