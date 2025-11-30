@@ -121,7 +121,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
         <div className="ml-3 flex-shrink-0 sm:ml-4">
           <button
             aria-label={isExpanded ? 'Collapse accommodation details' : 'Expand accommodation details'}
-            className="min-h-[44px] min-w-[44px] touch-manipulation rounded-lg p-1 transition-colors hover:bg-sky-500/20 active:bg-sky-500/30"
+            className="min-h-[30px] min-w-[44px] touch-manipulation rounded-lg p-1 transition-colors hover:bg-sky-500/20 active:bg-sky-500/30"
             onClick={toggleExpanded}
           >
             {isExpanded ? <ChevronUpIcon className="h-5 w-5 text-gray-600" /> : <ChevronDownIcon className="h-5 w-5 text-gray-600" />}
@@ -138,9 +138,9 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
       </div>
 
       {isExpanded && (
-        <div className="flex flex-col items-stretch justify-between gap-2 border-gray-100 border-t pt-3 sm:flex-row sm:items-center sm:gap-0">
+        <div className="flex gap-2 border-gray-100 border-t pt-3">
           <a
-            className="flex min-h-[44px] touch-manipulation items-center justify-center font-medium text-sky-500 text-sm hover:text-sky-600 active:text-sky-700 sm:min-h-auto sm:justify-start"
+            className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
             href={accommodation.url}
             rel="noopener noreferrer"
             target="_blank"
@@ -149,7 +149,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
           </a>
 
           <a
-            className="flex min-h-[44px] touch-manipulation items-center justify-center rounded bg-orange-500/20 px-1.5 py-1 text-orange-700 text-sm transition-colors hover:bg-orange-500/30 active:bg-orange-500/40 sm:min-h-auto sm:py-0.5"
+            className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded bg-sky-500 px-1.5 py-1 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(accommodation.address)}`}
             rel="noopener noreferrer"
             target="_blank"
