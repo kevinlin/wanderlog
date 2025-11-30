@@ -122,7 +122,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
               )}
 
               <button
-                className={`${waypoint.url ? 'flex-1' : 'w-full'} min-h-[30px] touch-manipulation rounded bg-violet-500 px-1.5 py-1 text-sm text-white transition-colors hover:bg-violet-600 active:bg-violet-700`}
+                className={`${waypoint.url ? 'flex-1' : 'w-full'} min-h-[30px] touch-manipulation rounded bg-violet-500 px-3 py-2 text-sm text-white transition-colors hover:bg-violet-600 active:bg-violet-700`}
                 onClick={handleNavigate}
               >
                 🧭 Navigate

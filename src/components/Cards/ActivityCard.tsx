@@ -76,7 +76,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             <div
               {...listeners}
               aria-label="Drag to reorder activity"
-              className="-translate-y-1/2 absolute top-1/2 left-2 z-10 flex min-h-[32px] min-w-[32px] transform cursor-grab touch-none items-center justify-center rounded-md p-0.5 transition-all duration-200 hover:bg-sky-500/20 active:cursor-grabbing active:bg-sky-500/30"
+              className="-translate-y-1/2 absolute top-1/2 left-2 z-10 flex min-h-[32px] min-w-[32px] transform cursor-grab touch-none items-center justify-center rounded-md p-1 transition-all duration-200 hover:bg-sky-500/20 active:cursor-grabbing active:bg-sky-500/30"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Drag handle icon */}
@@ -169,7 +169,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               </a>
 
               <button
-                className="min-h-[30px] flex-1 touch-manipulation rounded bg-sky-500 px-1.5 py-1 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
+                className="min-h-[30px] flex-1 touch-manipulation rounded bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
                 onClick={handleNavigate}
               >
                 🧭 Navigate
