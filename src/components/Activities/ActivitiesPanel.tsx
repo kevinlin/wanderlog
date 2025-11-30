@@ -299,11 +299,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
       style={mobilePanelStyle}
     >
       {/* Panel Content */}
-      <div
-        className={`
-        ${isExpanded || isScenicWaypointsExpanded || isMobile ? 'flex h-full flex-col' : ''}
-      `}
-      >
+      <div className="flex h-full flex-col">
         {/* Mobile Resize Handle */}
         {isMobile && (
           <div
@@ -320,11 +316,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         )}
 
         {/* Scrollable Content Area */}
-        <div
-          className={`
-            ${isExpanded || isScenicWaypointsExpanded || isMobile ? 'flex-1 overflow-y-auto' : 'max-h-[60vh] overflow-y-auto'} overscroll-contain`}
-          ref={scrollContainerRef}
-        >
+        <div className="flex-1 overflow-y-auto overscroll-contain" ref={scrollContainerRef}>
           {/* Accommodation Card - Always Visible */}
           <div className="px-3 pb-3">
             <AccommodationCard accommodation={accommodation} stopName={stopName} />
