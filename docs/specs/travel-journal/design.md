@@ -257,6 +257,9 @@ interface AccommodationCardProps {
 - Toggle button using ChevronDownIcon/ChevronUpIcon from @heroicons/react
 - Smooth transitions between collapsed and expanded states
 - Thumbnail image display only when expanded
+- **Interactive thumbnail**: Standardized h-16 w-16 size with click-to-view functionality
+- **Thumbnail hover effect**: Scale animation (1.05x) to indicate clickability
+- **Image viewer integration**: Opens full-screen modal when thumbnail is clicked
 - Website link and directions button only shown when expanded
 - Location warning indicator when coordinates are missing or invalid
 - Warning message with suggestions for address correction
@@ -288,6 +291,9 @@ interface ActivityCardProps {
 - Comprehensive activity information display with travel time calculation from accommodation
 - "Mark Done" functionality with visual feedback using vivid color palette
 - Thumbnail image display positioned in header section
+- **Interactive thumbnail**: Standardized h-16 w-16 size with click-to-view functionality
+- **Thumbnail hover effect**: Scale animation (1.05x) to indicate clickability
+- **Image viewer integration**: Opens full-screen modal with stopPropagation to prevent card selection
 - Location warning indicator when coordinates are missing or invalid
 - Warning message with suggestions for address correction
 - **Reduced Bottom Spacing**: Eliminated excessive spacing for more compact card presentation
@@ -315,6 +321,9 @@ interface ScenicWaypointCardProps {
 - Location warning indicator using the same validation system as activities
 - Non-draggable design to maintain original sequence from trip data
 - Thumbnail image display when available
+- **Interactive thumbnail**: Standardized h-16 w-16 size with click-to-view functionality
+- **Thumbnail hover effect**: Scale animation (1.05x) to indicate clickability
+- **Image viewer integration**: Opens full-screen modal with stopPropagation to prevent card selection
 - Duration display (no travel time calculation as it's route-based)
 
 #### 6.2. Scenic Waypoints Section Layout
@@ -424,7 +433,39 @@ interface POIDetails {
 - Integrates with global app state for activity creation
 - Responsive design for mobile and desktop
 
-#### 9. Pin Components
+#### 9. ImageViewerModal Component
+**Purpose**: Full-screen modal for viewing enlarged thumbnail images from cards.
+
+```typescript
+interface ImageViewerModalProps {
+  imageUrl: string;
+  altText: string;
+  isOpen: boolean;
+  onClose: () => void;
+}
+```
+
+**Key Features**:
+- **Portal rendering**: Uses React Portal (createPortal) to render modal at document.body level, ensuring it displays over entire application
+- **Full-screen overlay**: Fixed positioning with dark backdrop (bg-black bg-opacity-90)
+- **Centered image display**: Maximum dimensions 90vh × 90vw with object-contain for aspect ratio preservation
+- **Close button**: Top-right positioned X button with white styling on dark background
+- **Dismissal methods**: Backdrop click, close button, and ESC key support
+- **Loading state**: Spinner animation while image loads
+- **Error handling**: Error message display for failed image loads
+- **Body scroll prevention**: Prevents background scrolling while modal is open
+- **Accessibility**: ARIA labels, role="dialog", focus management
+- **Touch optimization**: Min 44px touch targets following mobile guidelines
+
+**Modal Behavior**:
+- Opens when thumbnail image is clicked in any card component
+- Resets loading/error states when opening with new image
+- Prevents body scroll while open
+- Removes event listeners on unmount
+- Uses local state in parent card components (not global state)
+- Renders via React Portal to escape parent container hierarchy and display over entire app
+
+#### 10. Pin Components
 **Purpose**: Map marker components with enhanced visibility and location-specific styling using vivid color palette.
 
 **Pin Icon Specifications**:

@@ -27,6 +27,7 @@
         "noUnreachable": "off",
         "noUnusedFunctionParameters": "off",
         "noUnusedVariables": "off",
+        "useExhaustiveDependencies": "off",
         "useImageSize": "off"
       },
       "nursery": {

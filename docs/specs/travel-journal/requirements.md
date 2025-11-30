@@ -106,7 +106,25 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 8. WHEN accommodation includes a thumbnail URL, THEN the thumbnail image SHALL be displayed on the card only when expanded
 9. WHEN the accommodation card is expanded, THEN the website link and directions button SHALL be shown at the bottom
 
-### 5. Data Persistence and Export Functionality
+### 5. Image Viewer and Thumbnail Display
+
+**User Story:** As a traveler, I want to view enlarged images of accommodations, activities, and scenic waypoints, so that I can better visualize and plan my trip.
+
+**Acceptance Criteria:**
+1. WHEN thumbnail images are displayed in cards, THEN they SHALL use a standardized size of h-16 w-16 (64px × 64px) across all card types
+2. WHEN a user hovers over a thumbnail image, THEN it SHALL display a subtle scale animation (1.05x) and cursor pointer to indicate clickability
+3. WHEN a user clicks on a thumbnail image in AccommodationCard, THEN a full-screen image viewer modal SHALL open displaying the enlarged image
+4. WHEN a user clicks on a thumbnail image in ActivityCard, THEN a full-screen image viewer modal SHALL open without triggering the card's selection behavior
+5. WHEN a user clicks on a thumbnail image in ScenicWaypointCard, THEN a full-screen image viewer modal SHALL open without triggering the card's selection behavior
+6. WHEN the image viewer modal is open, THEN it SHALL display a dark backdrop with 90% opacity to focus attention on the image
+7. WHEN the image viewer modal is open, THEN the image SHALL be displayed with maximum dimensions of 90vh × 90vw while preserving aspect ratio
+8. WHEN the image viewer modal is open, THEN users SHALL be able to close it by clicking the X button, clicking the backdrop, or pressing the ESC key
+9. WHEN an image is loading in the viewer, THEN a loading spinner SHALL be displayed
+10. WHEN an image fails to load in the viewer, THEN an error message SHALL be displayed with a close button
+11. WHEN the image viewer modal is open, THEN body scrolling SHALL be prevented to maintain focus on the modal
+12. WHEN the image viewer is displayed, THEN it SHALL include proper ARIA labels and keyboard navigation for accessibility
+
+### 6. Data Persistence and Export Functionality
 
 **User Story:** As a traveler, I want my activity completion status and customizations to be saved and exportable, so that I can maintain my progress across sessions and share my updated itinerary.
 
@@ -119,7 +137,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 6. WHEN JSON export occurs, THEN it SHALL merge LocalStorage states (done status, manual order) back into the original trip data format
 7. WHEN LocalStorage is unavailable or full, THEN the application SHALL remain functional but display a warning about lack of persistence
 
-### 6. Weather Information Integration
+### 7. Weather Information Integration
 
 **User Story:** As a traveler, I want to see weather forecasts for each location, so that I can plan my activities according to weather conditions.
 
@@ -130,7 +148,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN weather API calls fail, THEN the system SHALL display "Weather unavailable" placeholder without breaking functionality
 5. WHEN cached weather data exists, THEN it SHALL be used to reduce API requests and improve performance
 
-### 7. Responsive Design and Mobile Optimization
+### 8. Responsive Design and Mobile Optimization
 
 **User Story:** As a mobile traveler, I want the application to work seamlessly on my phone and tablet, so that I can access my travel information while on the go.
 
@@ -141,7 +159,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN on mobile devices, THEN map interactions SHALL be optimized for touch input (pinch, zoom, pan)
 5. WHEN activity cards are displayed on mobile, THEN they SHALL be appropriately sized and easily tappable
 
-### 8. Mobile Layout and Panel Management
+### 9. Mobile Layout and Panel Management
 
 **User Story:** As a mobile user, I want the application layout to be optimized for small screens with efficient panel management and space utilization, so that I can access all functionality without compromising usability.
 
@@ -155,7 +173,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 7. WHEN users scroll within the ActivitiesPanel on mobile, THEN the scrolling SHALL be smooth with momentum, overscroll containment, and optimized touch performance to prevent page-level scrolling interference
 8. WHEN the mobile ActivitiesPanel uses compact layout, THEN it SHALL implement reduced padding (px-2 instead of px-3), compact spacing (space-y-2 instead of space-y-3), and smaller section headers to maximize scrollable content area
 
-### 9. Error Handling and Fallback Mechanisms
+### 10. Error Handling and Fallback Mechanisms
 
 **User Story:** As a user, I want the application to handle errors gracefully and provide alternative functionality when services are unavailable, so that I can continue using the app even when connectivity or external services fail.
 
@@ -167,7 +185,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 5. WHEN network connectivity is lost, THEN cached data SHALL continue to function and users SHALL be notified of offline status
 6. WHEN JavaScript errors occur, THEN they SHALL be caught and logged without crashing the entire application
 
-### 10. Performance and Loading Optimization
+### 11. Performance and Loading Optimization
 
 **User Story:** As a user, I want the application to load quickly and respond smoothly to interactions, so that I can efficiently navigate my travel information without delays.
 
@@ -178,7 +196,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN API calls are made, THEN they SHALL implement appropriate timeouts and retry logic
 5. WHEN LocalStorage operations occur, THEN they SHALL be optimized to minimize performance impact
 
-### 11. Visual Design and Color Theme
+### 12. Visual Design and Color Theme
 
 **User Story:** As a user, I want the application to have a modern, vivid, and dynamic visual design that enhances the travel experience and provides excellent visual hierarchy.
 
@@ -199,7 +217,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 4. WHEN visual hierarchy is established, THEN colors SHALL be used consistently across all components to maintain design coherence
 5. WHEN accessibility is considered, THEN color combinations SHALL maintain adequate contrast ratios for readability
 
-### 12. Point of Interest (POI) Discovery and Integration
+### 13. Point of Interest (POI) Discovery and Integration
 
 **User Story:** As a traveler, I want to discover and interact with Points of Interest on the map, so that I can explore new places and easily add them to my itinerary.
 
@@ -231,7 +249,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 12. WHEN the POI modal is open, THEN users SHALL be able to close it by clicking the X button, clicking outside the modal, or pressing the Escape key
 13. WHEN Google Places photo references are available, THEN they SHALL be properly formatted and displayed using the Google Places Photo API
 
-### 13. Deployment and Configuration
+### 14. Deployment and Configuration
 
 **User Story:** As a developer/maintainer, I want the application to be properly configured for GitHub Pages deployment with secure API key management, so that the application can be reliably hosted and maintained.
 

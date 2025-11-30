@@ -468,15 +468,64 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Improved user experience by eliminating confusing transparency effect
     - Ensured all tests continue to pass and build is successful
 
-- [ ] 17. **Final Integration and Deployment Setup**
-  - [ ] 17.1 Wire all components together in main App with new layout
+- [x] 17. **Image Viewer and Thumbnail Standardization**
+  - [x] 17.1 Create ImageViewerModal component
+    - Implement ImageViewerModal.tsx in src/components/Layout/ directory
+    - Add full-screen overlay with dark backdrop (bg-black bg-opacity-90)
+    - Implement centered image display with max-h-[90vh] max-w-[90vw] constraints
+    - Add close button (XMarkIcon) in top-right corner with white styling
+    - Implement backdrop click-to-close with handleBackdropClick
+    - Add ESC key listener for keyboard-based closing
+    - Implement loading state with spinner animation
+    - Add error handling for failed image loads with error message display
+    - Prevent body scrolling when modal is open (overflow: hidden)
+    - Include ARIA labels and accessibility attributes (role="dialog", aria-modal)
+    - Ensure touch-friendly interactions with min-h-[44px] min-w-[44px] targets
+    - **Requirements Reference**: Requirement 5.6, 5.7, 5.8, 5.9, 5.10, 5.11, 5.12
+
+  - [ ] 17.2 Update AccommodationCard with image viewer
+    - Import ImageViewerModal component and useState hook
+    - Add useState hook for isImageViewerOpen state
+    - Standardize thumbnail size to h-16 w-16 (remove responsive sm:h-20 sm:w-20)
+    - Add cursor-pointer and transition-transform hover:scale-105 classes
+    - Add onClick handler to open image viewer modal
+    - Render ImageViewerModal with proper props (imageUrl, altText, isOpen, onClose)
+    - **Requirements Reference**: Requirement 5.1, 5.2, 5.3
+
+  - [ ] 17.3 Update ActivityCard with image viewer
+    - Import useState and ImageViewerModal component
+    - Add useState hook for isImageViewerOpen state
+    - Update thumbnail size from h-12 w-12 to h-16 w-16 for standardization
+    - Add cursor-pointer and transition-transform hover:scale-105 classes
+    - Add onClick handler with stopPropagation to prevent card selection
+    - Render ImageViewerModal with proper props
+    - **Requirements Reference**: Requirement 5.1, 5.2, 5.4
+
+  - [ ] 17.4 Update ScenicWaypointCard with image viewer
+    - Import useState and ImageViewerModal component
+    - Add useState hook for isImageViewerOpen state
+    - Update thumbnail size from h-12 w-12 to h-16 w-16 for standardization
+    - Add cursor-pointer and transition-transform hover:scale-105 classes
+    - Add onClick handler with stopPropagation to prevent card selection
+    - Render ImageViewerModal with proper props
+    - **Requirements Reference**: Requirement 5.1, 5.2, 5.5
+
+  - [x] 17.5 Update documentation
+    - Add new Requirement 5 "Image Viewer and Thumbnail Display" to requirements.md
+    - Renumber existing requirements 5-13 to 6-14 in requirements.md
+    - Add ImageViewerModal component documentation to design.md Components section
+    - Update AccommodationCard, ActivityCard, ScenicWaypointCard documentation with thumbnail features in design.md
+    - **Requirements Reference**: All Requirement 5 acceptance criteria
+
+- [ ] 18. **Final Integration and Deployment Setup**
+  - [ ] 18.1 Wire all components together in main App with new layout
     - Integrate floating Timeline and Activities panels with map background
     - Ensure proper positioning and responsive behavior of floating panels
     - Implement proper z-index stacking for panel interactions
     - Add final error boundary and loading state management with new colors
     - **Requirements Reference**: All requirements - final integration ensures complete functionality
 
-  - [ ] 17.2 Configure deployment settings
+  - [ ] 18.2 Configure deployment settings
     - Set up environment variable injection for VITE_GOOGLE_MAPS_API_KEY
     - Configure Vite build settings for GitHub Pages deployment
     - Create production build configuration with optimizations

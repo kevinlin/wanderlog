@@ -1,6 +1,7 @@
 import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
+import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation } from '@/types';
 import { accommodationHasLocationIssues } from '@/utils/validationUtils';
@@ -12,6 +13,7 @@ interface AccommodationCardProps {
 
 export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodation, stopName }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const showLocationWarning = accommodationHasLocationIssues(accommodation);
   const checkInDate = new Date(accommodation.check_in);
   const checkOutDate = new Date(accommodation.check_out);
@@ -127,7 +129,8 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
           {accommodation.thumbnail_url && isExpanded && (
             <img
               alt={accommodation.name}
-              className="mt-2 h-16 w-16 rounded-lg object-cover sm:h-20 sm:w-20"
+              className="mt-2 h-16 w-16 cursor-pointer rounded-lg object-cover transition-transform hover:scale-105"
+              onClick={() => setIsImageViewerOpen(true)}
               src={accommodation.thumbnail_url}
             />
           )}
@@ -154,6 +157,16 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
             📍 Directions
           </a>
         </div>
+      )}
+
+      {/* Image Viewer Modal */}
+      {accommodation.thumbnail_url && (
+        <ImageViewerModal
+          altText={accommodation.name}
+          imageUrl={accommodation.thumbnail_url}
+          isOpen={isImageViewerOpen}
+          onClose={() => setIsImageViewerOpen(false)}
+        />
       )}
     </div>
   );
