@@ -4,6 +4,7 @@ import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { Toast, ToastState } from '@/components/Layout/Toast';
+import { OfflineIndicator } from '@/components/Layout/OfflineIndicator';
 import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
@@ -12,11 +13,12 @@ import { useScreenSize } from '@/hooks/useScreenSize';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 import { getCurrentStop } from '@/utils/dateUtils';
-import { getUserModifications, saveUserModifications } from '@/services/storageService';
+import { saveUserModifications } from '@/services/storageService';
+import { initializeFirebase } from '@/config/firebase';
 import { Activity } from '@/types';
 
 function App() {
-  const { tripData, isLoading, error, refetch } = useTripData();
+  const { tripData, isLoading, error, refetch } = useTripData({ tripId: '202512_NZ' });
   const { state, dispatch } = useAppStateContext();
   const { isMobile } = useScreenSize();
   const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
@@ -27,20 +29,10 @@ function App() {
     setIsActivitiesPanelVisible(!isMobile);
   }, [isMobile]);
 
-  // Initialize trip data in global state when loaded
+  // Initialize Firebase on app mount
   useEffect(() => {
-    if (tripData) {
-      dispatch({ type: 'SET_TRIP_DATA', payload: tripData });
-    }
-  }, [tripData, dispatch]);
-
-  // Initialize user modifications from localStorage
-  useEffect(() => {
-    const userModifications = getUserModifications();
-    if (userModifications) {
-      dispatch({ type: 'SET_USER_MODIFICATIONS', payload: userModifications });
-    }
-  }, [dispatch]);
+    initializeFirebase();
+  }, []);
 
   // Initialize current base when trip data is available
   useEffect(() => {
@@ -57,10 +49,17 @@ function App() {
     }
   }, [tripData, state.currentBase, state.userModifications.lastViewedBase, dispatch]);
 
-  // Save user modifications to localStorage whenever they change
+  // Save user modifications whenever they change (async with Firebase + localStorage)
   useEffect(() => {
-    saveUserModifications(state.userModifications);
-  }, [state.userModifications]);
+    // Only save if we have a current trip ID
+    if (state.currentTripId) {
+      saveUserModifications(state.currentTripId, state.userModifications)
+        .catch(err => {
+          console.error('Failed to save user modifications:', err);
+          // Don't show error to user - modifications are still saved to localStorage
+        });
+    }
+  }, [state.currentTripId, state.userModifications]);
 
   // Use global state values
   const loading = isLoading || state.loading;
@@ -203,6 +202,9 @@ function App() {
             onClose={handleToastClose}
           />
         )}
+
+        {/* Offline Indicator */}
+        <OfflineIndicator />
       </div>
     </ErrorBoundary>
   );
