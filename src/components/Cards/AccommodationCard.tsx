@@ -31,9 +31,9 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
           <p className="mb-2 text-gray-600 text-sm">{stopName}</p>
           {isExpanded && (
             <>
-              <p className="mb-3 text-gray-700 text-sm">{accommodation.address}</p>
+              <p className="mb-2 text-gray-700 text-sm">{accommodation.address}</p>
 
-              <div className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+              <div className="mb-2 grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-4">
                 <div>
                   <p className="font-medium text-gray-500 text-xs">Check-in</p>
                   <p className="text-gray-900 text-sm">
@@ -69,21 +69,21 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
               </div>
 
               {accommodation.confirmation && (
-                <div className="mb-3">
+                <div className="mb-2">
                   <p className="font-medium text-gray-500 text-xs">Confirmation</p>
                   <p className="font-mono text-gray-900 text-sm">{accommodation.confirmation}</p>
                 </div>
               )}
 
               {accommodation.room && (
-                <div className="mb-3">
+                <div className="mb-2">
                   <p className="font-medium text-gray-500 text-xs">Room</p>
                   <p className="text-gray-900 text-sm">{accommodation.room}</p>
                 </div>
               )}
 
               {accommodation.phone && (
-                <div className="mb-3">
+                <div className="mb-2">
                   <p className="font-medium text-gray-500 text-xs">Phone</p>
                   <a className="text-sky-500 text-sm hover:text-sky-600 hover:underline" href={`tel:${accommodation.phone}`}>
                     {accommodation.phone}
@@ -92,14 +92,14 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
               )}
 
               {accommodation.host && (
-                <div className="mb-3">
+                <div className="mb-2">
                   <p className="font-medium text-gray-500 text-xs">Host</p>
                   <p className="text-gray-900 text-sm">{accommodation.host}</p>
                 </div>
               )}
 
               {accommodation.rooms && (
-                <div className="mb-3">
+                <div className="mb-2">
                   <p className="font-medium text-gray-500 text-xs">Rooms</p>
                   <p className="text-gray-900 text-sm">{accommodation.rooms}</p>
                 </div>
@@ -107,7 +107,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
 
               {/* Location warning */}
               {showLocationWarning && (
-                <div className="mb-3">
+                <div className="mb-2">
                   <LocationWarning
                     message="This accommodation cannot be displayed on the map due to missing or invalid location data."
                     type="accommodation"
@@ -139,7 +139,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
       </div>
 
       {isExpanded && (
-        <div className="flex gap-2 border-gray-100 border-t pt-3">
+        <div className="flex gap-2 border-gray-100 border-t pt-2">
           <a
             className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
             href={accommodation.url}

@@ -74,17 +74,17 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
                 {waypoint.location?.address && <p className="mb-2 text-gray-600 text-sm">📍 {waypoint.location.address}</p>}
 
                 {waypoint.duration && (
-                  <div className="mb-3 text-sm">
+                  <div className="mb-2 text-sm">
                     <span className="font-medium text-gray-500">Duration:</span>
                     <span className="ml-1 text-gray-900">{waypoint.duration}</span>
                   </div>
                 )}
 
-                {waypoint.remarks && <p className="mb-3 text-gray-700 text-sm italic">💡 {waypoint.remarks}</p>}
+                {waypoint.remarks && <p className="mb-2 text-gray-700 text-sm italic">💡 {waypoint.remarks}</p>}
 
                 {/* Location warning */}
                 {showLocationWarning && (
-                  <div className="mb-3">
+                  <div className="mb-2">
                     <LocationWarning
                       message="This scenic waypoint cannot be displayed on the map due to missing or invalid location data."
                       type="activity"
@@ -108,7 +108,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
               )}
             </div>
 
-            <div className="flex gap-2 border-violet-100 border-t pt-3">
+            <div className="flex gap-2 border-violet-100 border-t pt-2">
               {waypoint.url && (
                 <a
                   className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-violet-200 font-medium text-sm text-violet-500 transition-colors hover:border-violet-300 hover:text-violet-600 active:text-violet-700"
