@@ -39,6 +39,7 @@ export interface Accommodation {
   confirmation?: string;
   url?: string;
   thumbnail_url?: string;
+  google_place_id?: string;
   // Legacy fields for backward compatibility
   location?: Coordinates;
   room?: string;
@@ -73,6 +74,7 @@ export interface Activity {
   url?: string;
   remarks?: string;
   thumbnail_url?: string;
+  google_place_id?: string;
   order?: number;
   status?: {
     done: boolean;

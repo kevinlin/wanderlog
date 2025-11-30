@@ -17,6 +17,7 @@ export interface ScenicWaypoint {
   url?: string;
   remarks?: string;
   thumbnail_url?: string | null;
+  google_place_id?: string;
   status?: {
     done: boolean;
   };

@@ -18,18 +18,22 @@
         "noExcessiveCognitiveComplexity": "off",
         "noForEach": "off",
         "noStaticOnlyClass": "off",
-        "useLiteralKeys": "off"
+        "useLiteralKeys": "off",
+        "useOptionalChain": "off"
       },
       "correctness": {
         "noConstAssign": "off",
         "noUndeclaredVariables": "off",
         "noUnreachable": "off",
+        "noUnusedFunctionParameters": "off",
         "noUnusedVariables": "off",
         "useImageSize": "off"
       },
       "nursery": {
+        "noIncrementDecrement": "off",
         "noLeakedRender": "off",
-        "noShadow": "off"
+        "noShadow": "off",
+        "useMaxParams": "off"
       },
       "performance": {
         "noBarrelFile": "off",
