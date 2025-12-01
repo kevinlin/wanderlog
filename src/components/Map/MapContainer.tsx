@@ -857,6 +857,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             {tripData.stops.map((base) => {
               const isHovered = hoverState?.type === 'accommodation' && hoverState?.id === base.stop_id;
               const position = base.accommodation?.location || base.location;
+              const title = base.accommodation ? `${base.name} - ${base.accommodation.name}` : base.name;
               return (
                 <Marker
                   icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId, isHovered)}
@@ -871,7 +872,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
                     accommodationMarkersRef.current.delete(base.stop_id);
                   }}
                   position={position}
-                  title={`${base.name} - ${base.accommodation.name}`}
+                  title={title}
                 />
               );
             })}

@@ -25,7 +25,7 @@ export interface TripBase {
   duration_days: number;
   travel_time_from_previous?: string;
   scenic_waypoints?: ScenicWaypoint[];
-  accommodation: Accommodation;
+  accommodation?: Accommodation;
   activities: Activity[];
   // Legacy field for backward compatibility
   weather?: Weather;

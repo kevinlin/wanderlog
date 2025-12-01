@@ -22,7 +22,7 @@ const MOBILE_TIMELINE_HEIGHT = 64; // 4rem = 64px
 const MOBILE_DEFAULT_PANEL_RATIO = 0.5; // Default to 50% of available height
 
 interface ActivitiesPanelProps {
-  accommodation: Accommodation;
+  accommodation?: Accommodation;
   activities: Activity[];
   scenicWaypoints?: ScenicWaypoint[];
   stopName: string;
@@ -317,10 +317,12 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
         {/* Scrollable Content Area */}
         <div className="flex-1 overflow-y-auto overscroll-contain" ref={scrollContainerRef}>
-          {/* Accommodation Card - Always Visible */}
-          <div className="px-3 py-3">
-            <AccommodationCard accommodation={accommodation} stopName={stopName} />
-          </div>
+          {/* Accommodation Card - Visible when accommodation exists */}
+          {accommodation && (
+            <div className="px-3 py-3">
+              <AccommodationCard accommodation={accommodation} stopName={stopName} />
+            </div>
+          )}
 
           {/* Scenic Waypoints Section */}
           {scenicWaypoints.length > 0 && (

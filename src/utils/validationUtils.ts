@@ -68,10 +68,6 @@ export const isValidStop = (data: unknown, errors: string[], warnings: string[])
     errors.push('duration_days must be a number');
   }
 
-  if (d.accommodation === undefined) {
-    warnings.push('accommodation is not defined');
-  }
-
   if (!Array.isArray(d.activities)) {
     errors.push('activities must be an array');
   } else if (d.activities.length === 0) {
@@ -84,7 +80,7 @@ export const isValidStop = (data: unknown, errors: string[], warnings: string[])
     isValidDateRange(d.date) &&
     isValidCoordinates(d.location) &&
     typeof d.duration_days === 'number' &&
-    isValidAccommodation(d.accommodation, errors, warnings) &&
+    (d.accommodation === undefined || isValidAccommodation(d.accommodation, errors, warnings)) &&
     Array.isArray(d.activities) &&
     d.activities.every((activity) => isValidActivity(activity, errors, warnings))
   );

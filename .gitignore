@@ -28,6 +28,3 @@ coverage/
 
 # Cursor IDE
 .history/
-
-# Local Data
-local/

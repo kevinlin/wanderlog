@@ -7,7 +7,7 @@ import type { Accommodation, Activity } from '@/types';
 // Main draggable activities list component
 interface DraggableActivitiesListProps {
   activities: Activity[];
-  accommodation: Accommodation;
+  accommodation?: Accommodation;
   selectedActivityId?: string | null;
   activityStatus: Record<string, boolean>;
   onActivitySelect: (activityId: string) => void;

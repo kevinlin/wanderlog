@@ -171,10 +171,11 @@ interface MapContainerProps {
 - Route polylines with scenic waypoints
 - Location-specific pin icons:
 
-  - Accommodation locations: Lodge-style pins
+  - Accommodation locations: Lodge-style pins (uses accommodation location if available, otherwise falls back to base location)
   - Activity locations: Activity pins with standardized visited status colors (blue for unvisited, green for visited)
   - Scenic waypoint locations: Violet-styled pins with landscape/mountain icons (violet for unvisited, green for visited)
 - Pin status-based styling and interactions
+- **Marker Titles**: Displays "Stop Name - Accommodation Name" when accommodation exists, or just "Stop Name" when accommodation is not provided
 - Click handlers for pin selection and map interaction
 - Coordinated drop pin animations for accommodation and scenic waypoints when stops are selected
 - Map layer picker integration for changing map types and toggling overlay layers
@@ -293,7 +294,7 @@ interface TimelineStripProps {
 
 ```typescript
 interface ActivitiesPanelProps {
-  accommodation: Accommodation;
+  accommodation?: Accommodation; // Optional - some trip stops may not have accommodation
   activities: Activity[];
   scenicWaypoints?: ScenicWaypoint[];
   isExpanded: boolean;
@@ -307,47 +308,35 @@ interface ActivitiesPanelProps {
 ```
 
 **Key Features**:
-- **Desktop Layout**: Floating panel positioned at top-right with appropriate screen edge gaps
-- **Mobile Layout**: Hidden by default, slides out from bottom when stop is selected
 - Frosted glass styling consistent with timeline panel
-- **Desktop Default State**: Shows accommodation card, scenic waypoints toggle button (if available), and activities expand control
-- **Mobile Default State**: Shows accommodation card and draggable resize handle (iOS-style pill)
-- **Desktop Expanded State**: Extends to bottom of screen with collapse control, becomes scrollable
-- **Mobile Resizable State**: User can drag the resize handle to freely adjust panel height between min (~40px, handle only) and max (calc(100vh - 4rem))
-- **Mobile Scrolling Architecture**: Single unified scrollable container containing all content (accommodation, scenic waypoints, activities, weather, export) with optimized spacing
-- **Mobile Resize Handle**: iOS-style horizontal pill (w-10 h-1.5 rounded-full bg-gray-400) centered in touch-friendly container, always visible when panel is shown
-- **Mobile Compact Layout**: Reduced padding (px-2), compact spacing (space-y-2), smaller section headers, and consolidated action buttons to maximize content visibility
 - Smooth slide-in/slide-out animations for mobile
 - Smooth expand/collapse animations for desktop
 - Dedicated collapsible Scenic Waypoints section with emoji indicators for better visual hierarchy
 - Scenic waypoints section uses violet color scheme with dedicated wide toggle button
 - Independent collapse/expand state for scenic waypoints separate from activities
-- **Enhanced Mobile UX**: Overscroll containment, momentum scrolling, and touch-none on resize handle for smooth interaction
-- **Panel Footer**: Fixed footer section containing search bar and download button, positioned outside scrollable content
+- **Desktop Layout**: Floating panel positioned at top-right with appropriate screen edge gaps
+  - Default State: Shows accommodation card (if available), scenic waypoints toggle button (if available), and activities expand control
+  - Expanded State: Extends to bottom of screen with collapse control, becomes scrollable
+- **Mobile Layout**: Hidden by default, slides out from bottom when stop is selected
+  - Default State: Shows accommodation card (if available) and draggable resize handle (iOS-style pill)
+  - Resizable State: User can drag the resize handle to freely adjust panel height between min (~40px, handle only) and max (calc(100vh - 4rem))
+  - Scrolling Architecture: Single unified scrollable container containing all content (accommodation, scenic waypoints, activities, weather, export) with optimized spacing
+- **Mobile UX**:
+  - Reduced padding (px-2), compact spacing (space-y-2), smaller section headers, and consolidated action buttons to maximize content visibility
+  - Overscroll containment, momentum scrolling, and touch-none on resize handle for smooth interaction
+- **Panel Footer**: Fixed position at bottom of panel (flex-shrink-0)
+  - Contains search row and download button
+  - **Search Row**: Text input with placeholder "Search nearby places...", search button (magnifying glass icon), and clear button (X icon)
+  - **Search Input**: Rose-focused styling with rose-400 border on focus
+  - **Search Button**: Rose color scheme (border-rose-500/30 bg-rose-500/20)
+  - **Clear Button**: Appears when input has text or results exist
+  - **Download Button**: Emerald color scheme, labeled "💾 Download"
+  - Frosted glass background (bg-white/20) with top border
+- **POI Search Results**: Displayed in scrollable content area, below activities list
+  - Shows result count header "🔍 Search Results (x)"
+  - Renders POISearchResultCard for each result
+  - Error display for search failures
 
-**Panel Footer Layout**:
-- Fixed position at bottom of panel (flex-shrink-0)
-- Contains search row and download button
-- **Search Row**: Text input with placeholder "Search nearby places...", search button (magnifying glass icon), and clear button (X icon)
-- **Search Input**: Rose-focused styling with rose-400 border on focus
-- **Search Button**: Rose color scheme (border-rose-500/30 bg-rose-500/20)
-- **Clear Button**: Appears when input has text or results exist
-- **Download Button**: Emerald color scheme, labeled "💾 Download"
-- Frosted glass background (bg-white/20) with top border
-
-**POI Search Results Section**:
-- Displayed in scrollable content area, below activities list
-- Shows result count header "🔍 Search Results (x)"
-- Renders POISearchResultCard for each result
-- Error display for search failures
-
-**Mobile Resize Handle Behavior**:
-- Touch and mouse drag support for resizing
-- Drag up to increase panel height, drag down to decrease
-- Height clamped between MOBILE_MIN_PANEL_HEIGHT (40px) and max viewport height minus timeline (64px)
-- Initial default height: 50% of available viewport space
-- Visual feedback: cursor-grab on hover, cursor-grabbing while dragging
-- touch-none CSS prevents scroll interference during drag operations
 
 #### 5. AccommodationCard Component
 **Purpose**: Collapsible/expandable accommodation display within the activities panel with location validation.
@@ -361,6 +350,7 @@ interface AccommodationCardProps {
 ```
 
 **Key Features**:
+- **Conditional Rendering**: Only rendered in ActivitiesPanel when accommodation data exists for the current stop
 - Collapsible/expandable interface with state management
 - Collapsed state: Shows only accommodation name and stop name
 - Expanded state: Shows comprehensive accommodation information
@@ -382,7 +372,7 @@ interface AccommodationCardProps {
 ```typescript
 interface ActivityCardProps {
   activity: Activity;
-  accommodation: Accommodation;
+  accommodation?: Accommodation; // Optional - used for travel time calculation
   isSelected: boolean;
   onToggleDone: (activityId: string) => void;
   onNavigate: (coordinates: Coordinates) => void;
@@ -807,7 +797,7 @@ interface TripBase {
   duration_days: number;
   travel_time_from_previous?: string;
   scenic_waypoints?: ScenicWaypoint[];
-  accommodation: Accommodation;
+  accommodation?: Accommodation; // Optional - some stops may not have accommodation
   activities: Activity[];
 }
 

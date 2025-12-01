@@ -10,7 +10,7 @@ import { activityHasLocationIssues } from '@/utils/validationUtils';
 
 interface ActivityCardProps {
   activity: Activity;
-  accommodation: Accommodation;
+  accommodation?: Accommodation;
   isSelected: boolean;
   isDone: boolean;
   onToggleDone: (activityId: string, done: boolean) => void;
@@ -52,7 +52,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
 
   const handleNavigate = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const url = generateGoogleMapsUrl(activity, accommodation.location ? { location: accommodation.location } : undefined);
+    const url = generateGoogleMapsUrl(activity, accommodation?.location ? { location: accommodation.location } : undefined);
     window.open(url, '_blank');
   };
 

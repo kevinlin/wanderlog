@@ -129,16 +129,18 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 **User Story:** As a traveler, I want to see detailed accommodation information prominently displayed with the ability to expand/collapse details, so that I can easily access check-in details and location information for each base while maintaining a clean interface.
 
 **Acceptance Criteria:**
-1. WHEN a base is selected, THEN the accommodation card SHALL be displayed prominently at the top of the detail view
-2. WHEN accommodation card is in collapsed state, THEN it SHALL display only the accommodation name and stop name with an expand button using a chevron down icon
-3. WHEN accommodation card is in expanded state, THEN it SHALL display all detailed information including address, check-in/check-out times, confirmation details, room information, phone, host, and booking URL
-4. WHEN the expand/collapse button is clicked, THEN the card SHALL smoothly transition between collapsed and expanded states using the same chevron icons as the activities panel
-5. WHEN accommodation information is available, THEN it SHALL include name, address, check-in/check-out times, confirmation details, and booking URL in the expanded state
-6. WHEN accommodation has location coordinates, THEN a single accommodation pin SHALL be displayed per base on the map
-7. WHEN accommodation cards are displayed, THEN they SHALL maintain visual consistency with the travel-journal aesthetic
-8. WHEN accommodation includes a thumbnail URL, THEN the thumbnail image SHALL be displayed on the card only when expanded
-9. WHEN the accommodation card is expanded, THEN the website link and directions button SHALL be shown at the bottom
-10. WHEN accommodation includes a google_place_id, THEN an "Open in Maps" button SHALL be displayed that opens the Google Maps place page on desktop browsers and the Google Maps app on mobile devices
+1. WHEN a base has accommodation data, THEN the accommodation card SHALL be displayed prominently at the top of the detail view
+2. WHEN a base does not have accommodation data, THEN the accommodation card SHALL not be displayed and the ActivitiesPanel SHALL show activities directly
+3. WHEN accommodation card is in collapsed state, THEN it SHALL display only the accommodation name and stop name with an expand button using a chevron down icon
+4. WHEN accommodation card is in expanded state, THEN it SHALL display all detailed information including address, check-in/check-out times, confirmation details, room information, phone, host, and booking URL
+5. WHEN the expand/collapse button is clicked, THEN the card SHALL smoothly transition between collapsed and expanded states using the same chevron icons as the activities panel
+6. WHEN accommodation information is available, THEN it SHALL include name, address, check-in/check-out times, confirmation details, and booking URL in the expanded state
+7. WHEN accommodation has location coordinates, THEN a single accommodation pin SHALL be displayed per base on the map
+8. WHEN accommodation cards are displayed, THEN they SHALL maintain visual consistency with the travel-journal aesthetic
+9. WHEN accommodation includes a thumbnail URL, THEN the thumbnail image SHALL be displayed on the card only when expanded
+10. WHEN the accommodation card is expanded, THEN the website link and directions button SHALL be shown at the bottom
+11. WHEN accommodation includes a google_place_id, THEN an "Open in Maps" button SHALL be displayed that opens the Google Maps place page on desktop browsers and the Google Maps app on mobile devices
+12. WHEN a base does not have accommodation, THEN the map marker SHALL use the base location coordinates and display only the stop name as the marker title
 
 ### 5. Image Viewer and Thumbnail Display
 
