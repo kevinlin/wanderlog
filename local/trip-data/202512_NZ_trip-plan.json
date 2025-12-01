@@ -723,8 +723,8 @@
             "status": {
               "done": false
             },
-            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/"
+            "thumbnail_url": "https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,q_75,w_1200/v1/crm/southlandnz/Mirror-Lakes---Southland-New-Zealand---Credit-Great-South-3-_EFBA73CF-FBE5-434B-62CDED49727E4026-efba72e5a516491_efba7bae-017e-e917-0ad3688a5c6debab.jpg",
+            "url": "https://southlandnz.com/listing/mirror-lakes/251/"
           },
           {
             "activity_id": "milford-sound-wp-2",
@@ -741,7 +741,7 @@
               "done": false
             },
             "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/fiordland/places/fiordland-national-park/things-to-do/tracks/lake-gunn-nature-walk/"
+            "url": "https://southlandnz.com/listing/cascade-creek-%26-lake-gunn-nature-walk/252/"
           }
         ],
         "stop_id": "milford-sound",
@@ -1124,7 +1124,7 @@
           },
           "name": "Novotel Christchurch Cathedral Square",
           "phone": "+64 3 372 2111",
-          "rooms": "2× Superior Room (2 Double Beds)",
+          "room": "2× Superior Room (2 Double Beds)",
           "thumbnail_url": "https://www.ahstatic.com/photos/6592_ho_00_p_1024x768.jpg",
           "url": "https://all.accor.com/hotel/6592/index.en.shtml"
         },
