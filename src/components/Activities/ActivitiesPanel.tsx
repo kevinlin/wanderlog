@@ -324,7 +324,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
           {/* Scenic Waypoints Section */}
           {scenicWaypoints.length > 0 && (
-            <div className="px-3">
+            <div className="px-3 pb-3">
               <button
                 className="mb-3 flex min-h-[30px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/20 px-4 py-3 font-medium text-violet-700 transition-all duration-200 hover:bg-violet-500/30 hover:shadow-md active:bg-violet-500/40"
                 onClick={toggleScenicWaypoints}
