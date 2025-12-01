@@ -33,7 +33,7 @@
             "url": "https://www.woolworths.co.nz/store-finder/9090/christchurch/christchurch-airport-woolworths?utm_source=google&utm_medium=organic&utm_campaign=gmb&utm_term=woolworths-christchurch-airport",
             "remarks": "Rating: 4.2/5 (1545 reviews)",
             "order": 0,
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/js/PhotoService.GetPhoto?1sAWn5SU4BGkbGO3oyRILE0-AuDLHiWgq7cj3WpLEsdYciguBG1CfaLt_9dhWCc8ZsRBVceUEAYqJfcu9mmBw54yoC7Su31u1jJtGFiBd0xrQYG2tFxIgGRfRPjryrJwYnBnvZ5ZhUsj7f_p7sKiiuOUStbwwLGl--IfLmJUXi7HWMwBmnCmxTfqV52u8tikLbTjPbwWL_BVmVZjoBBdXwe2Z6ZZ9V5cnNpBbIvb9ZI3Ars5O1P1wix8KcTSweGU9u54O3gEtUFgD7gG6wjhCUckkjxoq_Ux2UyqOR4_ZSJG84eS_BWg&3u400&5m1&2e1&callback=none&r_url=http%3A%2F%2Flocalhost%3A5173%2Fwanderlog%2F&token=47893",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Woolworths_NZ_Christchurch_Airport.jpg/400px-Woolworths_NZ_Christchurch_Airport.jpg",
             "google_place_id": "ChIJ0V7CXcf0MW0Rr-YZarWKrZU",
             "status": {
               "done": false
@@ -79,7 +79,7 @@
         "scenic_waypoints": [],
         "travel_time_from_previous": null,
         "accommodation": {
-          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6AGKpXgJNFKBRs3h-hFnsiRX4txamdsiZFODtUcvNQBqph9Xpay8KMsO2gflFNsh4RzGcvjZQtw5LWSP9-9fduAb3AGGXbZYiyX0F_nl_B40fyZQqPUfj9aElXF-jjVE4JF9M2QonsFv5OjVZ8nJu7e8osKby-nLkXKo-RpYL8QwYveLnd31nNzruHmQBCkTTJKtsu3MwqIlwgFil1UGcUrM8ZXzBaAbvTHKNKazwuDiJUqcfj_7HM55fVo3A6Agd0Bsw8jT4Bw-CiNGV0rBMf7Rt6c7JQIaMo_O001olEwoUQ4u8",
+          "thumbnail_url": "https://www.sudimahotels.com/images/jch-optimize/ng/images_christchurch-airport_gallery_Sudima-Christchurch-Airport-Exterior-2.webp",
           "url": "https://www.sudimahotels.com/en/hotels/christchurch-airport/",
           "confirmation": "1924863700",
           "check_in": "2025-12-13 15:00",
@@ -114,7 +114,7 @@
             },
             "url": "https://www.google.com/maps/place/Rakaia+River+Bridge",
             "remarks": "Quick pull-off for river views on the way south.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4Wg7sipR3Lb5vzCMyrm6nyPlra4fNzmPaXbagKNnTCP_pLCttmKlNySa8z-b0W_-vOsp46EeUwKiIXftg3QhriDPN36plYPc57SCaWZ3EXC_QR3MHCYe2QyYt7_-A9-OZwxtaiN8EwRzUJaxfibL4czEAGNdg8RKzBdxJCdK9BOrdEyieQcUKLmUeb1fte7Y8TTAPoyUW8GsckWW88tvTKeBRkrQw8GVt56OC6U46qKgjzVxHaZSRtPD8OpPA8icxOIc5Uz-aS-HUvKylyYa_N0f6rVERql5-MmnWJly8mNGnVnxqwzmy2GhcmnN9YwEt2ZN7CnQ38E178w1gThJX3LU9KNInfqPapqE8jwtGq_wrlnulaGxq_zJ61OLRBwdI6iSUalEaccii0Fm6UhGycl53Fhu_tOAbutZ7NK8Ol_PYENnARLyyntqpRtS-GUPliImTmk9byqVZzH0UjI69m5R_GcFCz9tGuUOkxctgq7kB5IYh-cehq_wq0Fc1ODwDYk7-NbfymrVE81BmNQ3O7ouh7W3qotZmChKVLYUZKLua2l1d-pAY4y4k50sdIFRq-0-WV",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Rakaia_River_mouth%2C_NZ.jpg/400px-Rakaia_River_mouth%2C_NZ.jpg",
             "activity_name": "Rakaia River Bridge Walkway (SH1)",
             "status": {
               "done": false
@@ -124,7 +124,7 @@
             "google_place_id": "ChIJ6dFH1zPtLW0R4DV6bAQKiAU"
           },
           {
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4BBBy6hHdbHf96g4gdpKgUPTdfEBTLmPIUSI7l4Tg2-ex7MhGnNSzzMIKT0CPU0OThb-hHolNzO3_PSsn5FHMMPwl3iuXfvXTyWAgcQRcYPeqN0cv2gyKKgT4Rsj16Bc1h3PsdOO853xnQf7t6zdqb767tSI0GFY1H2kPzhtlI8vqdRq9l7w3DNko84CZLXi9BypfO5rKhCq0tgFAx8WiiA28VtCkVbawrE6ahgKw7d-MiQb2UJcdsznzA6Z4y0nTe1Z-VznTJxTaVupdd19RI17UtRav80wim6XibAmguCORlCElW2dYSPzKqc0TH-k7p67tI3E74TjBJTdV4G6gQIcsYiFtgmmMIIkWQ_RQ2X_YDl0Y0cMAfhB77WrMtY9SecIrmSPIXFs-t3rRlgwy5G1Y4fF34IWodf9idwnaG4zoSD4y2cnJWAxvXLq8yVzI9KlpS0ARFkv7PBG6yqqZmNnoGnlMzULxMihyRJ1_5PtPlgPhIMrN1AsjgWonSBWb9kGDOdHXtOlQln4_JMIQ0KCXxFVtNaHmEydk6HArOuNOiTh918G-lv4dc1Wb0Q2PRFArg",
+            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/1b2f8f8f5c2b4b8fa89a65c9a9e1c9e7/talbot-forest-1920.jpg",
             "activity_name": "Talbot Forest (Geraldine) short loop",
             "remarks": "Sheltered native bush loop to break the drive.",
             "status": {
@@ -143,7 +143,7 @@
           {
             "google_place_id": "ChIJQ1PaufV5K20RLAcQF_fJhTE",
             "url": "https://www.google.com/maps/place/Burkes+Pass+Scenic+Reserve",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uKsgHBU5xkG5_uyL-CycCD7y_VMI0SIjK9-1J7ViiqouQhn8QJI5_QElL0dQd68rcZYOqZGmMGq1EtuJP6Vmrf1G0qnnP0FAo7F5UGR9z3mqLHJ7J3ulxd96FAOHzlBDN5pkUCV1EfGcaYt5qLiloYE4ooA_Yz9WWcC7YnZTNTR9Z22vJ34XFqcSiNH495ToxQpmFI74iTyNY4RfDf4_esVzWJgxqODTknJ1_1kBb-bX33x-m5untxGu2-nWLKVywYIYwIx-LcYG92e666Ww608ltaEzGufBYYYpdFzlqGCzrKWzUsS_xlWItItt8etBh46Kb87gRsU4aJ6hZDsbz64gYu_m6QRYzIJtdMdBytZlbRPxH7UhIjj_gOr7jzjhKrh4LYmwQ-aUEQjNt4bMMBakeAFzbcLrOWAJisZItBe9dDd6Ld79cTseeRfJf4JmbeuLf62EOEcT-B1-A_IKLZXMeviAgU3L4uisimKRt4G-pbbFAtWD-7-BpAGG67DpdqsleuUFwz4b5e7ZN-b59cowMwIX2og_URZCbATlKZMp9g8WfQ2QVAHgan2vjZ6SkDnYqNWBnrg",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Fairlie-Tekapo_Road%2C_Burkes_Pass%2C_New_Zealand_%28Unsplash%29.jpg/400px-Fairlie-Tekapo_Road%2C_Burkes_Pass%2C_New_Zealand_%28Unsplash%29.jpg",
             "activity_name": "Burkes Pass Scenic Reserve lookout",
             "activity_id": "lake-tekapo-wp-3",
             "location": {
@@ -222,7 +222,7 @@
             "duration": "30–45m"
           },
           {
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7-3nodpMlKF59ZjIIXJK8Sh5zj_AhhRMQuvCPr9Izs0VhFiZKQ2FMu9TQ7XdVzTIi6jRbX1OIdbCIMJbUyZ-R-o-rd4CdBsFTVgVVlL9XROnzYZ_wEnGUTl4f6dwX2iXQO0_6BxQMzruJ3mLsCFRp09l-PkogU-Bvpp5eBbdN_zOzy3Lv-fn7Su1xz8BJdCB7L-Od7sfvZVVtLf_4V3pOYn3QsNmu510tBgx8MJun2ZXArGZTYxNlR2N0HQJhgl1Is63_wHEgxOzRew7mMy6K1f5T5nBCadqZbrNPcQURW4WQcAXFASujWh_47yHeiBesHlH4Uaynyfpy8sfjckjhYl9-Xq-WlzTmzuSjVKm4I9UHR-9x-kUo91-psPFdfGPBFWvq28PDva5m0-lGyj7trqpnGgmJ-qOWHb8FQWQbyrGcNqmYsUYZricnpKDmyB_ogaXeOZIG5oSdsqo5ZFioddxlTTnduZtwUuQejm7ALMilYozpU9MUa0hOEuCatTXq-pOimzabAkUQm-Wo9Qe5XSzvd0lz0NZ-VQUaNm9z-7OkdD_wZ9dsKhff3qjswq8F-dzKS",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Mount_John_University_Observatory_%289618676129%29.jpg/400px-Mount_John_University_Observatory_%289618676129%29.jpg",
             "order": 2,
             "status": {
               "done": false
@@ -333,10 +333,10 @@
             "google_place_id": "ChIJJfC3Jw_RKm0RwBEytI_LDAk",
             "activity_name": "Omarama Clay Cliffs (short detour)",
             "activity_id": "queenstown-wp-2",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6p8o1gpeJP0FDvNf-AyhNoScvcV1QzPIlLEwcItvM5_PpFg52kN7mk2Bs6gzfdXP7qYZmU5musICga3lWD6DiSEwcN4K1IhrJqyA-oX-1il3RuraXFDizbnqN4-p-lxDrQz1AdSyHztfuNwNoZpVtQtbt9V-qm9z0OfVuso0uKO8S2NIl6sibsT1SPDkXJbaqsFGsBSWV9DNRMiBYnwmdwWpgVEd3TsjTfZjgU690od5dUTAjTTRp1Q5BkPDrZl0n58sQ8llK2mBdjPhp8JuixwrES7lnqxUhcCr7Htv0r3TAK1925qHImMEYAwCNuzUXxMoIKzWI9HpA1zoX7oMmUwgZlYQVWymnNS5ZaUUevk9cPDmzsSypk0WXkNZb5RjGCiH1Xgm6Hy7A9SXju_0Uecothln5mH_42n7OUx-qjauYRqg5UB1xe-SbZSnWerKyTFXz5h_KUgZsO75I5QkZuWIf4P8p0-bIWzseNc3ycMleOpLghdVaTuDc-v8MRxfiPZ0aE7Jk6J6J_aAM6XouP-Mi3zFLVDYIlGn5GDYjyIuD5JsMKEHmV1UODDzZ44ZYmsjAnEO7LcA"
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Omarama_Clay_Cliffs.jpg/400px-Omarama_Clay_Cliffs.jpg"
           },
           {
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6XbbH-uEeaWkG54LxhFq4807NLigamY8NzQKol--RLgsbO0vTmPC0foYU1X_-SxAPjjzoKpr2hN1df5h8Hd-1ub6--UFvX7JM8mCQk2Rs4zQ2BC0aCyWCUaO44O27YwKxSeJdUBhJ1e2lHykuWRlm7IvBsy86RufoPXHaTHNCe6lrPZtzlh-m8AOl_Z7y-q4qtkbpMEl06wxbEkA15LHEVjP5fvaImw5bsqIx2T4hhaBjTVZNZB9VejF8v8KIjgTbNMG_WNvt5BQOX8r_fKux8YOmbITUDwZPmmr6LWyg7Jbsscsbvtq9bC6peB1D3eYqytzJ40rbhXAEy2UhJsEsNE6-0TXuptOhS5UsDUSquOJe4QBQ3xOEHnfb0Wq4L7FtGF5gEnT5lY2hupuGLNXUP0h1QftXcQu8PFWAC4GzMZXe_K8LJT1ZATa-X5vUSALaAlKt07qnsgLzRqmKL3wJmkO5jY3rv-6UKyg4ikKrFnDjsSi7ZGT9Tds8E5QG4oq639NLrA3S9OXWSyPoUN_ZNIdPNOD58chKg7NzbpGS478EpNaCWyR70J8SAu1KnDjX4SNtR",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/20250221-DJI_0950.jpg/400px-20250221-DJI_0950.jpg",
             "activity_id": "queenstown-wp-3",
             "url": "https://www.google.com/maps/place/Lindis+Pass+Lookout",
             "status": {
@@ -361,7 +361,7 @@
               "done": false
             },
             "url": "https://www.google.com/maps/place/Roaring+Meg",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6rL0_hYRJ7RvcX4duOTgRshaHL4MCbPT9Z3xrBQsHLfPJFYW1oaARdJZ0K9QcThfpmL2Ke6G6r8-RLJa6N-uAZZ-nCjV7wuKdj7ei13Ow588xPLqjIYP2Vu-ne0WOYg35jCn0P8ucyh6vkqdi4Ewoibl5ipETHdJ7MksuuM5PxuVegNWrWW54gku438w7BmeLeBA-cxlYy5b1p-BUqcQyYxpVK2pnliBTGKXO7pZSKCwOPIQu-Zi0OqLsfv2t2aZaKFWtg07nQS5mto2RvmTQyCMbv28-CKYflFecJqcEcOIzd4FtGnAU2usGKcr4WX1bgzh0GIQvOup8CeVCjbEkmRaMNyX3GBIrI686uEGrkc774MpGnW2e-nPFtzrrOjrarYZN8ElcET0otxpYXpQxKX-416a0SKP5ZyWjrC4o0pZ8ub67Hb05IkyGmyNzlIAeXBGTWUwrBZEGYqH6wS7duasdwGCObKKduHk6D8KWVzBpPH-qOiWEjOVsnvKMIaNXsHnMztKMd71xCLPfYVD3MStFfM4XN6feZY4uUr7bJ22LMsj0y9W3QLIMPnNIfBw3i6dx5",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/Roaring_Meg_powerstation.jpg/400px-Roaring_Meg_powerstation.jpg",
             "location": {
               "address": "SH6, Gibbston 9371",
               "lng": 168.9102,
@@ -371,7 +371,7 @@
           },
           {
             "activity_id": "queenstown-wp-5",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU79MkkH1b9-_7hdSMuK7XEanMCc4JrLgsGr269WuGSIiX2M_8YG1SbQicxZx6K5mfmjvw0OX9hN1MyU8doKc_5htw0LeZqQm96Qu9kdb6iKwx-OKnlRvIPnGAhaeWaqYjw7vUPTXHNJUZdVISCvdh9FwXxMdohTh_BPLwZTVbeSVJ4JIc6_KWxI-RAJdF_gPI_ysRztNa5zu1fyUT0u6eWJSO0H2zwFYTNe9kGBagmB0RTdCuAYoUmkirMUQlGZNabJh0euJattDNRALnvtzrzsjjE2P2OBAOMg4ERDe-69bjvMdgk",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ac/The_Kawarau_bridge.jpg/400px-The_Kawarau_bridge.jpg",
             "status": {
               "done": false
             },
@@ -515,7 +515,7 @@
           {
             "activity_id": "queenstown-act-6",
             "google_place_id": "ChIJTe-7xn0Y1akRb7i4_wN9UGk",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5R2OLRaRG1wYUZ1DIoI4OmIlzdO_aAqXHCNdIw7Yv2gkQ77e--sNXRa3bAzUGJX0vGEi_PPIULV1OMQ4jQHQUfmLvsHsXJiU4zZCId0cZ0GXWFdcsk9_-TW6cdMC7awX6oSaQWWAT1FEBRguQXnDuY76lYhA40da8iLK704ESCD9wzdbj62CRbMkAs4NT0i3tnMHJc9kSiPPw6YE8h8R0J2V7qUcgJxs01INeHkvwvYN2Q0FWtmSzn_zmrx6Fc1X3j3wu35_Bwtim9Ory9-7k0JOEMy5iRAX51sYzyrUhPTO5_M6I",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2b/NZL-arrowt-buckinghamstr.jpg/400px-NZL-arrowt-buckinghamstr.jpg",
             "status": {
               "done": false
             },
@@ -560,7 +560,7 @@
               "done": false
             },
             "remarks": "Pull-outs above Lake Wakatipu; take care re-entering traffic.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7sZ3EwpUU5F_I4wtAFBG_08dKbIObYniy817zt1iLuOQHH5o_HR2IJwU6zKdhQcDs24x9PbqN2b-lMCMke5xotCeTpmsp3BT7TUsNLFa8ijzk_dhyz0LpBAJiA8nGKphRG7QzJnS-d1mBLvm1fcrbEjOPO-uooiporsRCycfBRgLifU9sSfh4N3JwBWdT6L0JjOX_R9bPSl-FLlotjYr2K7KNkF0tZG_RxJsEBz-G7ewbyox2Ro8O0_hhWGdhyetTAfQVQDaFXapn4SHJg_nV-CSGsUb3Pp9qcsTUQ7iJTwq8bPtwnNTVjuFvNnXmefhhK7tGWSMEdi8NbhKTHMw2euJW2_dEjs3pA6rYc6NBDu9i6aCjpXY5DxlmeAOzcszTvIUlRLHUyBYvw7-gZwnY_8Ubb-2HfMuSOsgO-EJKp9RJ10RDWPtbZapmqnAp3Oo3dXiDlbRLYCENm927maEYHLO83V916Wu4qwh-jGSXU_W_7VOLS9uhE9DJUdOpZMepyvQ9X0gSYRwSA2dgoGvoviJHe0UVhK9DJGq92UFrkSMk8NJp5vwfRbbFpJgxr4XKcDeAPH6rqTw",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/On_the_side_of_a_mountain_lake_%28Unsplash%29.jpg/400px-On_the_side_of_a_mountain_lake_%28Unsplash%29.jpg",
             "location": {
               "address": "SH6 south of Queenstown",
               "lng": 168.522,
@@ -598,7 +598,7 @@
             },
             "activity_name": "Five Rivers Lookout (Upper Oreti Valley)",
             "activity_id": "te-anau-wp-3",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU66aDX-DIdqCkWDyTHUd6V6bbBnLRN-Nir6I1M8gxqiTDkN7LVfunUq6DSBla5dqX_qFNxdkKKASHnkxGpQWUqltygZHhJMXWEvYge2AJkRkFWR8mG-InqHGbg3Vaim3TftcwiGyUlMraBF34NOIGdRAEflpKMQJdVw32X_V1l3tAjMh5x9Hm6cs3_zaKxCRkL8FYJ_CnoWxk6qP5bRn-DEQsKMI72jhGZAhxiBrxZYAyMVmcbqpqsar-2HvpwJVuR5yq5o5enqa8W8vAlcsqHj6L7Suox0SEG6K8q39ZJPcVRpCGyYKP7CPnxlQAHCKOil0E7wxbGY87kIwxOf1k43s_89dJzMMThYFHfbp_aoUX7GMA5dBznE2vb5oOIBx8OXTfsC4oFLaQo7sMBCXQwz9SWk6156JqPRGWZMFeu0i5bVKTjV14PYmq9wSd2JFr-4wb-FsJ6pn2LiiyZDuOdVWmKvcM2PwzehWqjkbH36kAcZ29TEuGlHCgJ6Cc_9MIkhefGJquO1eGOwpQ0nkwg9sODTR1MLU9_QdEO9Ccm0s9YjHfoFErWgHaxvuYfqZFKJnGBH",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Five_Rivers_Otago_NZ.jpg/400px-Five_Rivers_Otago_NZ.jpg",
             "duration": "10–20 min",
             "remarks": "Wide valley views; easy in–out carpark.",
             "status": {
@@ -613,7 +613,7 @@
               "address": "SH94, Mossburn 9792"
             },
             "google_place_id": "ChIJoV82TK5-06kR_owx3VoeVoU",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4tN1zuB-5-wAdfjZolgLaEwH3shgwxFDD_VCQ3iBlZd2P7oTArAjKetujISVpd_tSBkF9BZQV2tiyJimVpbuY1meR4UJvYl4j9tVEjm-hO3LP0_nXODmixu2Uk5ru6DsWpwoCabDPDJHnLtPMjYPgYKPSW6X313oNqjllnrdnwt8emJH8lvl2usmCn9jE454o1eiiCKyMaAseNAPMdqmezeBGVw9Wrru5_ulPbopuST4jdCG2X--f2e3XG48ai-INxg5J2MZ6d22FFQGuCFcbX3OtQjtyt3RM9nTfHUSKGhCsizQA",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Mossburn_Main_Street.JPG/400px-Mossburn_Main_Street.JPG",
             "status": {
               "done": false
             },
@@ -643,23 +643,6 @@
             "google_place_id": "ChIJZdJR6_AX1KkRNLx_oYjEhwI",
             "order": 1,
             "activity_id": "te-anau-act-1"
-          },
-          {
-            "travel_time_from_accommodation": "2h 0m drive (each way)",
-            "activity_id": "te-anau-act-3",
-            "location": {
-              "address": "Milford Sound Visitor Terminal, Milford Sound 9679"
-            },
-            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/",
-            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o",
-            "order": 3,
-            "duration": "1h 45m–2h cruise (+stops)",
-            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
-            "status": {
-              "done": false
-            },
-            "activity_name": "Milford Sound cruise (optional day trip)",
-            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890"
           }
         ],
         "travel_time_from_previous": "2h 0m (from Queenstown)",
@@ -687,7 +670,7 @@
             "lng": 167.7029112,
             "lat": -45.4181647
           },
-          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU76oZj2a6sPi3K9gu_LwIZmRK3LD69f1-y_vyPSkDrcgDTNNDmxIFPYD2zrDKMDCX_X7cqujnukMCeVMjNzGsrU0rF2eVP8JLwlP4L0MI47DZuEDp8LCX3qsgxZnOZLWtOBDnmVcvdvf9yktBMwTiK58HW-KNUaDQnSeTq8ao0SLIMWF0CLPtMJ1CqGy84wvS_XZVFg-Xa0DWruL_fjkfcQtkOJEF2u8BTDeeH-ezXhl37OBthZ2qAuX7gOpkTlgHWoKviD7bHeSB3bk1D5pUFs_vW37GD6vAek_XQ2O1WFrOG9jyE",
+          "thumbnail_url": "https://www.distinctionhotels.co.nz/media/images/hero-distinction-te-anau-hotel-villas.jpg",
           "name": "Distinction Te Anau Hotel & Villas",
           "check_in": "2025-12-21 15:00",
           "address": "64 Lakefront Drive, Te Anau 9600, New Zealand",
@@ -784,7 +767,7 @@
             },
             "remarks": "Calm reflections; easy pull-in near pavilion.",
             "duration": "10–25 min",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5PbK8NTqrZOiYmLhk4tY6yI78vD3DiAY0hCpKNHoFf7vIzYSnWbPQ3-JLvLNsYIIlgJi8HKNIKKvnNxXicO9gAZBHsPs7POAt3K2BqO98ADMv3u2IbUcLjJu9yN03fGwMxcJZAXToLfZ4NLKYKoadf2z0vSm2X1ivU7PHt9eiE332HMw4Isn-qy7xSQw8JMzyzbwGigMT66tBJwQZvnkYGvVVRiCLAh_hddOp4J-wTFPUGXg0Pqsxg6dqMQsl7ECCkbOmn6GGGE4wKz4IXdo0PEH6JKlcXL7fMQNF1OsecqXurhABAhg41N5zQFKNYKMBxEkJOXb2zfWyDWmj_-czY9ZJaIOr2-lOyk93aMMrmbBB9C-UL1z1pXZqrJHeDr-skGWuIHpa1qcISG9QFJPwUQ43DZuTq_6_1aU_hmO6vJYN2wpg7RwIuSs5PYIhE2HRSZG0bQ20F2KJvU43fgJ14MAEO7ai9hdiwLpG_LXUPmFt9uP3iEaH7n7RnWlAwd_LcQoGjslM3IHiKLV0SYl9lv0mUd40iaYaSabQGZyUYjrvMSy-witF_SjiapuZSeSa8r5Hgw8mAJQ",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lake_Hayes.jpg/400px-Lake_Hayes.jpg",
             "activity_name": "Lake Hayes Scenic Reserve (pavilion stop)",
             "status": {
               "done": false
@@ -803,7 +786,7 @@
               "address": "Crown Range Rd, Arrow Junction 9371",
               "lat": -44.9836
             },
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6ZYbHVSLbYAh8mrXQpRXV-nQ04kJOJDwKornIide8snE-HGXI1FnA0Hd2bVC-ae1-zUo0Z9G3ZFYiO-mBbrT9m1VCmjjjOG5wRM4ZczbTbnqFIdHaaPIeAlfV4-_TIZOHGrby4cXr6k-V-IOAhd8cqEIouICre9eyz4Gmu8fVEG2AnZh9M_mGP2Xbu3kjMk9dvanieY6Hf7kU_eO19ajxkE-PCpK34207zbh-j5FTkialXgmuIOEtO_6yAyHyoUFpGCzyPsJ7PeIhZaP8-zUXhqPzZQuiiueLuZmjfq1c-W8NDWZ2fK9cYLa27mMm7zXhwTGlwFR30uB9BW3QMJdbguymshZP1_yhOGIp7TyXA0jSobC96Ot1EybF-i4-bVBBvMb1MfS-IZaFFXvyU7VDHWYY2s8p0vSh2qIa2yxgDxmlHiUGGvRwqt_Nm7u8s5bCRRF1BVJAgUCHFa8-Q0ZyHhupBQvPG7RQAa-F_3zHRcHB9s9pihuv15IWK5yFKd37ddpPMX46fIU8bXZWQhxqYU4YK1z0pfBDlZce3riV1tY7YU5GzXs9YKsXSyKw98zlYSlpL",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Crown_Range_Road_NZ.jpg/400px-Crown_Range_Road_NZ.jpg",
             "remarks": "Highest sealed road in NZ; alpine tussock views.",
             "activity_name": "Crown Range Summit Lookout",
             "google_place_id": "ChIJz3psyJ4m1akRjyoWKDuLllM",
@@ -824,11 +807,11 @@
             "activity_name": "Bradrona (Cardrona bra fence)",
             "duration": "5–10 min",
             "url": "https://maps.app.goo.gl/8Qm4m7s5qK6n6J2S7",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6ZwE8TraNDY9ExSMZubFTWKcuLgwEQF9ETXIKjUfcy0_em441Om7cx3KmApTaCMNjG62mS_NjWS0-6w-FrOd39mWw157ixmV-f9_VqqWfT9k_4Sg0u1Dr1zlfjI17B6PQQvLgl60Yg8nrknqcY1qIl1ua18V4bLqWGSZqXPlKklLAhHGQ9qb_SXkLSzlZhxuz3isThBhiebtGSEZYdIllSxzLyVpaBFicMBSB8voKFjq_Wq-XyCoygO63XMvc-TIpPttFLQtn-Icuk-1hpGgTD2LJeesZUo5wSymYM_b6LLB84rE9p454uzOVn8vhbMDmAOv8iZ5V-SKVMEB8e-OXuqeVb-Ym4EiIzUPk6Jfg_EQtW2n31-6e2_09WWIFphfBtfojpZ2DB1_E26rKBplw3L2skHjWYsZRG27foKsy8TnmNBKAUMycozN1s8GiADQiJYtRqjw6gycXMK6WoUTBLy6TQ4uxjLFZ4gm9NmSbU0oaj42Rt1uwJlyz4bVGkQLoEfqvnXy4fd8_4YOGKUGV_lNyruKai3CzNIanPse8RkJEZq97-0-5dOsfhI2Lu3FMUUBKV",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Cardrona_bra_fence.jpg/400px-Cardrona_bra_fence.jpg",
             "activity_id": "wanaka-wp-3"
           },
           {
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4esoJmaIvUx0XhU34BDpsqte-5Ib2fmp3Fxb8EuRRDWsHxFzaxgcgdt4OomXRK2p0t6eTpPNUp3Bvu94L6gLWoxcLU2a_9isY7hf6WF82wsQwTJUEnnjag9JG1_OpKb16vXVF9EN6UAYsqV3KSRjKJ-Dg3FWZRXseXAMkcIBWAR3FKyq1glo9m7Mq67BgGBFyySczWUISJVYVHssKX10gzjvYzZcfjleO77JJQSiZ_Waim7uEDdbqU3cLtZtFV9swAkO-CIpTign5jhPM9tSzvtZVhwQNZinKvAl1n0oVtrye3Rxw",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Cardrona_Hotel.JPG/400px-Cardrona_Hotel.JPG",
             "activity_id": "wanaka-wp-4",
             "url": "https://cardronahotel.co.nz/",
             "activity_name": "Cardrona Hotel frontage",
@@ -895,7 +878,7 @@
               "done": false
             },
             "activity_id": "wanaka-act-1",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uHSWWUrMhHqMyTgftaCY93mmYR69q5KNt01S4S7p119fwNJY3DIqDr_W09s-JCX3i1zmOrkwoyojbW1viIcjcpa0sbXnhrqdRbgoaWNOHZMk7bnMhWrCqGipSxWy_K7Jo1x55rya4LOfpKAFeLTebWnO6BtQNK6X6PFdouPidJVPsp0-OMT69jk70gRnEWFfI5IbV9hFlGpKeU1KYwmaXo1ZNGojlN182pHvxxPZAI7qyDja0HKJ26I68KSbBdpYNumUD3v6csr2YK9GFa9z6NvrdicZnj5zEkTn-fL3BXmVi6WyAnBK6u8L_lvdJwc_3XCPKn11SiG3cJwJhMVIGwSfkhAuSgCdyLcGeDf1Wg7zZ9Tdwvi4azQ-s5ifoK8LW1VML_YDOjtJ-bpR85BkF5gb2iGTZNYy_CvQOlKI6CnoJuzyth7J_VLQ8zHgZO2rqszj_Ilegk83tTPGEKK6Dhq6recrE6kZFKUSL0aY3QUUQFeL9i-HcXT0vaKBuSH9-rMFWVboil1HEPW9kZi9ST8JBDIcvEHh26Jdw0uKXrtM_vQcYymzsLh8zWeR0eKTFiJdI"
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Lake_Wanaka_15.jpg/400px-Lake_Wanaka_15.jpg"
           },
           {
             "activity_name": "Puzzling World (Illusion Rooms & Great Maze)",
@@ -971,7 +954,7 @@
           "check_out": "2025-12-27 11:00",
           "name": "Bay Viaduct Motor Lodge",
           "url": "https://bayviaduct.co.nz/",
-          "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU76uNhcMpG6VYTl0X_r0SKVuvZi2kx9H2RATRg5Ki3IajXQHTTUaTfktXqG_aVm3HnUN_2aEMLJvC63LsIa-ngxekOKK8ciXoWQBYnFAbtOB13W-UTrW1jUItvrUb2NQv8O9RgDLpNuYyIF2wyT5w2r0uKAIqD10bMr5TNqjdROOaM2y3Kr5KJ39BZxEbt5QupRo2i-F5jIolkG1BQBns3BDnonaP0a4mb_1Ia1mokiNuZ9UU8u3dHxNzk9mVU95Y4hCGI0eWHtZ-fD-Tt9B7pt8wMIh2DlKXJ6zGW6iqBuH2N_9Xw"
+          "thumbnail_url": "https://bayviaduct.co.nz/wp-content/uploads/2023/04/Bay-Viaduct-Motor-Lodge-exterior.jpg"
         },
         "name": "Timaru",
         "weather": {
@@ -989,7 +972,7 @@
         "activities": [
           {
             "google_place_id": "ChIJqTQJSgDBLG0Rd56mS5H14VE",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6cGJrUn8SQ1Xf_7UzGsUzgcBLamv4H0H4TrDkTKYEgr9HbRX8zVH--bEby39NHtJ0Xlybil-XHRgtVg-2wBf08xHRsaaaB5Qm7Uur08DH-coqDjNdmNPdHKeXHABk2m4B_dHliyVnH0uJmXt-6TSw8WCbBz8c85IAoVfbdSvScnUoft__VrJMsOAj5MXDBmH8fEpKj8dr1bDhTOHFAt0nRcy1oxjbFQxk3SGChoCbsVC2WyLIhN0h8T8dOmnnXxM7AoQRyy0Pv6ieekxPzEB-jTXSyKuU3Sn7kpO7hjfXJeOUMPsDqoP0kDKgjSAM6zwMAiqo7U_17o5BgByIjEgIIpBC7s-CZmZJTmq4cyRqEfFoSjUgyF66f7XDsRtRzOsQqPgtb9cD4FGDxzBT8pCA_vPGvnhttZfVsvas21EbtQbwECWA6-DmUyoUtt0bkjx3d77KYjaA1CHtPh1XiOOVBt_47Z_WswqQ3l8--KdbWz5yPIIB4OtMjbSvZEPf1uzhSj-xn-EBjBdCoUhYAfJXa9kI5DHz5iXKAJky5ko0y-Ky90tCRYUcrk8HfzmhqFRbqZzdSntDdLw",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a8/Caroline_Bay_Timaru.jpg/400px-Caroline_Bay_Timaru.jpg",
             "url": "https://www.cplay.co.nz/",
             "location": {
               "address": "Caroline Bay, Timaru 7910",
@@ -1083,7 +1066,7 @@
             "remarks": "Classic tussock scenery; exposed to wind."
           },
           {
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU54kD1kgB9bSr0lzkahDL_6nmk_ub-7V5GNS2NkGruBlTPcUA63qdbo1ta4BuS8bBwE-BTKuAbr9LuVzL7G-JJeVPKUcPUmSocTVoEPK64PD8DesJzvhrS9HRxF3dBVnrIITn75J4GUSbXsKq5SNzLZwrAi-C2GD9X2UjyJ4gPyeXqel07QiB8hzr8vtl8jBANBv4-XZ7yEvVRjwZiWkc6XpuJm9CTtzejwzr05YUrwfEoUsnKSTikh40sDnPLaPFlDeWrHIb83zkqgC2TkKhnoP32sMzHT28cR56XoTlY64xKP_H2Sx0mXs31wIMffwOrVVY2055UIEzD00we3xHWvES8xG7VnyA2H1iWgmO0LFnJXfD1R3WMLNvnMmXinjysoedunO0v_zR32FRTkp5pE4ZI4nmIR9I9I96DnniS2iJ0yJ6-y9XwDiGMrlbgOHahkbKeH3WoGV_rr9fF5ljNCk_sjaz-VxvEpAO6Dzn8GiBeFV_pY7L3Yl9YkKRaVn9_F4hyinurROKCaN8hb3bJ-TB9ho20LNuO2nbChqkQy2BC3lKneMyUSk8GX1glIoO79c8U8",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Benmore_Dam.jpg/400px-Benmore_Dam.jpg",
             "activity_name": "Benmore Dam Lookout (Waitaki Valley)",
             "activity_id": "timaru-wp-2",
             "duration": "15–30 min",
@@ -1107,7 +1090,7 @@
             },
             "google_place_id": "ChIJT07iCBcfKqgRCwZNhtXGGqE",
             "url": "https://maps.app.goo.gl/7kq9x1cLw5h3Xafh7",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6HrMYliI7RdUWI5aiA-uW87Z1b17ONKf4CRPiDHMqXDsUzDarPLlrYRG1X858JdTQ4js1AtMnyGTtxpnQtoB1u7VCB7X9m0wRvP7GqsklAq08tNcr8AYcw4FlDgC0qp8HWWXbr0Sqeod2Dg9T1qC20JhfJILeHpF549pKD2Hw8BBK_pc2w5hBaPv7OnfaKpZq_IsQjTNiuWX3FbUo31Ljndm65qXwVtr2-08AK5HUPY1QkcC4r5qtNZyiz3BoA0WzQAXC-48ZOl7V4g1Wsm1LB_yoFayxDfxscWvefVSFKfLs7jn9Wxy6hI9-lcwmPkekafByGBrhqVAwlrsQsBfavIXKAc--Y-O2PmOmFAxipmR4LaW92IyB1bRtSioHn0iOmJJTx7SJrYgToM6eqYhh2YS-HZxL7lI2ZmjOkYn_OE0gFpz7WWrZR-tFyhTuEl-o4KYMaFNdzp4Q7NyCu_8mMYHZ_zYQAiHVc09JHUi88uLDcceAK1r_uNodvGOzX8_WZiyfwfVJJpBPMGRGe65a2H7gIBfIK8SZXjBJUeaApWHx9GBkokdMRdLM3GbQsX3EatffR",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Elephant_Rocks.jpg/400px-Elephant_Rocks.jpg",
             "location": {
               "lat": -44.9382,
               "lng": 170.64,
@@ -1119,7 +1102,7 @@
           {
             "activity_name": "Takiroa Māori Rock Art Shelter",
             "remarks": "Sheltered roadside stop; interpretive panels.",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5uMyRHUAhtmG_d_yC-cmW14KTqcgw6bvSH-wE6e4DWi4jKDXP5eLpkeCv5rknixDgJ0oIHjMa4rYbWsDtivj57j0z2CXy1rwSd4jP7LUJydLkTu5JC_J7t0pTxMP-DBLxJgB9i-iFzdcJ_vplJFPrRfsFnGaIBr2TdarNIqC0r8HGl2Ry9iTvomDo0fETlIqlS0yuDi3e4YEY0V-7Cn5lE-w61xcnNkkDN_g476bITKxIoEN7adKjfGfuQEVK3xZaZWhZyRuJkUSp68ruMr6rQrST2mRsf4P9kbEN6e4siuljzsHVgOGXTN_7o5KEHoz2XaU5E5jsAr6hSIWVmtg3ikS3bRKQrhTU9ApDJ8ogr8mwVZA3LnN27uCmvLlYoqcBBW0IP1oQnugtnszdbfI0h_LGHf9BSjfmNHCaW-ByXwGSJKgXzQvn6APW-sKNkgtOIp-MEHHorZxmW0ZtXfnS23Jkp7-uqZ_IHWDaKugNu6RPqoq3m76iwFX2_PuR8QKXH_hQA-qG7UY_gQoomSK3gGElQACE3uCEyxvSZ5uNceR9bfO4FGHpPMIQ9suGatdjV0SCr",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Takiroa_Rock_Art_Site.jpg/400px-Takiroa_Rock_Art_Site.jpg",
             "activity_id": "timaru-wp-4",
             "url": "https://maps.app.goo.gl/HL6u3i2mFj4nYb4o9",
             "status": {
@@ -1148,7 +1131,7 @@
               "lat": -43.528497,
               "address": "177 Armagh Street, Christchurch 8011"
             },
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU6PXWSIdYEpg9-a6qLWoj7nM_0schDHNmOuX9QD4m5hpU57wad-DPBRqpOcA8iv6J9weFPfi-MZurfrcW_mpqfxbjxwx6L7xIpTxwpuLijtU2ljJq5GMUKk4Ez0x4AyVpRBWeCikUVE0VH0lO_MTSInknWden9xpa9uyA2gyOa9xPgjmtjTR-uQrx4Gc_fzM5F18tWEhLhkyt5MfYvGlHY9PjKU74lzz0wS8VjeYdYludRO1CTJzs3Xmfff_bTEtzWeKagimvp9QfwNRXRvDJcGsNclGDmNmTLfdAMEOSf9HlaCpiM",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Margaret_Mahy_Playground_MRD.jpg/400px-Margaret_Mahy_Playground_MRD.jpg",
             "remarks": "Huge free playground; burn off flight energy",
             "activity_id": "christchurch-end-act-1",
             "activity_name": "Margaret Mahy Family Playground",
@@ -1206,7 +1189,7 @@
               "lat": -43.483178,
               "address": "McLeans Island Rd, Harewood, Christchurch 8051"
             },
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU4W4LYryca8WsFF-2x6AZqy1pSNelM0altpPfAU3SrTj62zY1Lp8YS1MVZd0Ca7FBNDazlhrkwnR0jDH9xgY-Tmdnead8vS6qaBK2S8zReuZAtJTfv2Be1-xIUgTTB-4h1lti-RYYEbRRILAzAbWSmcTJbVULk1vuZ8ViNuDS7wElMbPNHkRJK4_dlnl02j5c1FNxBUPbmjvfy-TXbLqo7XFAFo3TRAD7cfoUR2R03ILahtia20uDIlYVLwkXmL0uFO2FLZ8xs0rzGpa5t0GKObnH76jtEwS4BIZpebFtpH9d_9B4R-Cxtr6rS9UhmQad4OWnObS5KgdwmNrt1j15fS1sXIUWdhBg-zITvZn4CewLADqwWGz13dKBzaPqBkAOt8-JbZQG14Oo4pAg0_gGd1JIcTc9lPqGrgeb0nK-3ojyhwtiaOiUvhVlk-I6SY9z0s24cWP0-1kXbERHOA-hT59YzdJXuBG7XrP6rxMi7Hg1Elj3-3JMhKylYnGa1JMbArgTa4gIXtKgVJz0UZP3rU2Q8UnfiwnZ9K_pby1IshzkeWDOCIG2Pr2boXf8K4zfPb_ugm",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/Rothschild_Giraffe_Orana_Wildlife_Park._%289567697328%29.jpg/400px-Rothschild_Giraffe_Orana_Wildlife_Park._%289567697328%29.jpg",
             "url": "https://www.oranawildlifepark.co.nz/",
             "remarks": "Giraffe feeding, lions; allow half-day if keen",
             "status": {
@@ -1230,7 +1213,7 @@
               "done": false
             },
             "google_place_id": "ChIJibgqwJ6IMW0RUY1w6yqwnfk",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5pZvnEFnm1bz3HiOe-C6m2ItbAsIeJU1qleC5CxEoAHCjfNQqBg2LAQai3qIxmkCb-PS_4XWhyV4mncqE6BJRcaRlaXawCvzuLBdkbnK3GS6eU7Shgj_ClXeHN45Zo7zlOkDzZdlmB6-6SauoMMCwO-bKSDmSC8xGZPtDcUrV3Y86LHTLQ3vfKLbyjVV8ZWNDtijMho0nsNt8p4TK1LDsE8AFJ7itvKCnuS1KWt_XdVs2KjMJF7Q_1bsaUiwkIVX0h0nEE7oQveNgZ6b3Gh-0kjaUAORcyz4uUDchfar8BVJcJswdLt8dQJA0voNMSaDWiZO0zrWQD62hu81j_4q3xpwDuTh45Qpjd-FoVtPqj1y3KXRLpZD2ZaqI7IrbPULokfOoQxIwgFz_WDLjRDAZphmNMQpl0qCxdugWgXWOokDSc_pXNZeryFMB2bc2GX-nwNsNvdYVozcOwf4sfDetlcNiJxpNYe_wTRu3BOCcA9__t6DXHH2MlWXzfLNEheNSAjSl48p3rNsX1-Z-ijQ1QeEzTBlgYqwISroOp_KCSwvUotJyeo6NEhMC6R011pzU5PjPqVfJNog",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/New_Brighton_Pier_2023.jpg/400px-New_Brighton_Pier_2023.jpg",
             "order": 6,
             "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
             "activity_id": "christchurch-end-act-5",
@@ -1303,7 +1286,7 @@
             },
             "duration": "10–15 min",
             "activity_name": "Rangitata River Bridge pull-off (SH1)",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU7kTLakipFA8B2wwK8CqGNgw8RS1WRD4TI19rBLPL6Zg54KRq2zxCB22_4t_xFGV6yURUfvfoAI3a3HtE61bM61QpYPk3_W7-io4PmOCN2CuTBlqeKTH9q8ZOQ2dRSH8TPKcFtH28z0xTidATsOCVcE78EVmMFHd8c03PQ-RMeHRya8YdLqbKHEpHY74x-_EQUxlS6_1uPOEqfrhvI6zNlWy3PK5ISh6OK92R6OodOP6oJGTEenBbhUX9p_QC9jsgPdcw6HHGHRhZky6DXu0OKjJsCwYDR23q_-ZnAruRfrxw9QqDUNJbT-ugdGrKAP74XN5FgtW_mXw98k-8kuvbYBqsFxGzM-bUYUYRr9P4s5dEEzvVrqkB--bDDt9iCq43CfefiwE_rxhxEbZwXFivg58W9gT4g4nxzOHrqB9iZkYk4KD5VEtG3LivKVVKieiVIDRR9wqnzO1LDa89QXCO8Uu6P-UkfDlExuAVzvO_kYldU3feVNfOBvEBd0V-rzeBdrdEKvrItFBu4vyzbNZMrL75wTGe3Z1o7iza_2p7bS9OP5xF5go_H6XDI4m1okT3vi_0rx2_ycuQ",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rangitata_River_Canterbury_NZ.jpg/400px-Rangitata_River_Canterbury_NZ.jpg",
             "status": {
               "done": false
             },
@@ -1319,7 +1302,7 @@
             "url": "https://maps.app.goo.gl/4y5m5oZC4Jc4Qe4L9",
             "duration": "20–40 min",
             "google_place_id": "ChIJC4DWNbm7LW0RICNcZYfvAA8",
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AWn5SU5UYK0dFpHN2gUZQg2LTg7-Xv4HZvrdg9Lj54tWDlvde_ovuBs-ysBWkBt4DuoqXXGlBTcf22p1hAL7pk4m10aH6suXoRpwwcY1rtvTDaTR8c9Q_sxsHll6n8BMQW1_-pv2o4FpXONcvgKCuLiwBstSPoIs8EdAjdjRx2h2cq8laL-v_ePZxFeUHulBqvaPO2065psKwVu7elzY2RiaFn8q8QKZ9jr_VNGfMTe2TS9IoHnxiA1EsewR_RT2otjiF9eLLRyWhGeshbWlaFaJfOAiaD8DSgQOHgXZriBZnAu6KFuGipo4JaOQeAJvLPNdt9_LD4Hje35vAGFbv-hGKx4M3l04ZL-5ROiGYJXvJUakPyQrqplCBv0f1-yROL-qloJANwAEJbyokh0XUS1pbhp2b-86fAUX_PHPGhkDzt3VPHVJdeCrRp59aMT3AcDpjRbPP2Ebv7T54PRkjjkRSbuamGWtTUNMkJdv1XQE73mzC0YpXnmGPDVwCcGGri3PGGJuDYwxi8bFrlN9xBteZhflguV3lcnGqJxm5yHOHLGhuehxZKLJNje_QhmXFvIi_2KJjA",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Ashburton_Domain_Gardens.jpg/400px-Ashburton_Domain_Gardens.jpg",
             "remarks": "Formal gardens, ponds, easy parking; good leg stretch.",
             "status": {
               "done": false
