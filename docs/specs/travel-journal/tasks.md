@@ -510,13 +510,6 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Render ImageViewerModal with proper props
     - **Requirements Reference**: Requirement 5.1, 5.2, 5.5
 
-  - [x] 17.5 Update documentation
-    - Add new Requirement 5 "Image Viewer and Thumbnail Display" to requirements.md
-    - Renumber existing requirements 5-13 to 6-14 in requirements.md
-    - Add ImageViewerModal component documentation to design.md Components section
-    - Update AccommodationCard, ActivityCard, ScenicWaypointCard documentation with thumbnail features in design.md
-    - **Requirements Reference**: All Requirement 5 acceptance criteria
-
 - [x] 18. **Add "Open Maps" Button to Place Cards**
   - [x] 18.1 Create utility function for Google Maps place URL
     - Added generateGoogleMapsPlaceUrl function in src/utils/tripUtils.ts
@@ -555,13 +548,6 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Added touch-none CSS to resize handle for smooth drag without scroll interference
     - Added cursor-grab/cursor-grabbing visual feedback
     - **Requirements Reference**: Requirement 9.4, 9.5 (height constraints, scrollable content)
-
-  - [x] 19.3 Update documentation
-    - Updated requirements.md Requirement 9 with resizable panel acceptance criteria
-    - Updated design.md ActivitiesPanel component with resize handle specifications
-    - Updated design.md Mobile Panel Management Strategy section
-    - Updated design.md Animation Specifications with resize handle behavior
-    - **Requirements Reference**: Documentation updates for new functionality
 
 - [x] 20. **Enhanced Pin Icons and Hover Interactions**
   - [x] 20.1 Update SVG icon paths with polished Material Design icons
@@ -602,12 +588,6 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Integrated PlaceHoverCard rendering with hover state
     - **Requirements Reference**: Requirement 1.20, 1.21 (hover behavior, auto-dismiss)
 
-  - [x] 20.6 Update documentation
-    - Added requirements 1.17-1.21 to requirements.md for enhanced pin icons
-    - Updated design.md Pin Components section with glow animation specifications
-    - Added PlaceHoverCard component documentation to design.md
-    - **Requirements Reference**: Documentation updates for new functionality
-
 - [x] 21. **Map Layer Picker**
   - [x] 21.1 Create MapLayerPicker component
     - Created MapLayerPicker.tsx in src/components/Map/ directory
@@ -630,11 +610,22 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Custom map styling now only applies to roadmap type
     - **Requirements Reference**: Requirement 1.26, 1.27, 1.28, 1.30, 1.31 (layer functionality)
 
-  - [x] 21.3 Update documentation
-    - Added requirements 1.22-1.31 to requirements.md for map layer picker
-    - Added MapLayerPicker component documentation to design.md (section 2.1)
-    - Documented map type options and overlay layer options with descriptions
-    - **Requirements Reference**: Documentation updates for new functionality
+  - [x] 21.3 Implement map layer preference persistence
+    - Added MAP_LAYER_PREFERENCES key to STORAGE_KEYS constant in storageService
+    - Created MapTypeId type and OverlayLayers interface for type safety
+    - Created MapLayerPreferences interface combining mapType and overlayLayers
+    - Implemented getMapLayerPreferences() with validation and defaults fallback
+    - Implemented saveMapLayerPreferences(), saveMapType(), saveOverlayLayers() functions
+    - Added isValidMapType() and isValidOverlayLayers() validation functions
+    - Invalid stored data triggers fallback to default values
+    - Updated MapContainer to load preferences on mount and save on change
+    - Updated MapLayerPicker to import types from storageService
+    - Modified mapType and overlayLayers state initialization to load from localStorage
+    - Updated handleMapTypeChange to call saveMapType() on change
+    - Updated handleOverlayToggle to call saveOverlayLayers() on toggle
+    - Added 11 comprehensive tests for map layer storage functions
+    - All 230 tests passing
+    - **Requirements Reference**: Requirement 1.32, 1.33, 1.34, 1.35 (map layer persistence)
 
 - [x] 22. **POI Search Functionality**
   - [x] 22.1 Add POI search state management
@@ -680,13 +671,6 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Pins cleared automatically when search is cleared
     - **Requirements Reference**: Requirement 15.7, 15.8 (map pins)
 
-  - [x] 22.6 Update documentation
-    - Added Requirement 15 "POI Search Functionality" to requirements.md
-    - Added POISearchResultCard component documentation to design.md
-    - Updated ActivitiesPanel documentation with Panel Footer Layout
-    - Added Task 22 to tasks.md documenting all implementation steps
-    - **Requirements Reference**: Documentation updates for new functionality
-
 - [x] 23. **Place Selection Centering and Map Scale**
   - [x] 23.1 Implement place click centering and zooming
     - Added PLACE_ZOOM_LEVEL constant (14) for neighborhood-level view
@@ -716,52 +700,17 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - All 208 tests passing after changes
     - **Requirements Reference**: Testing ensures requirement compliance
 
-  - [x] 23.5 Update documentation
-    - Updated requirements.md with acceptance criteria 1.32-1.35 for place click centering
-    - Updated design.md MapContainer section with "Place Selection Centering Behavior" documentation
-    - Documented zoom level, trigger sources, and implementation approach
-    - **Requirements Reference**: Documentation updates for new functionality
-
-- [x] 24. **Map Layer Preference Persistence**
-  - [x] 24.1 Add map layer storage functions to StorageService
-    - Added MAP_LAYER_PREFERENCES key to STORAGE_KEYS constant
-    - Created MapTypeId type and OverlayLayers interface for type safety
-    - Created MapLayerPreferences interface combining mapType and overlayLayers
-    - Implemented getMapLayerPreferences() with validation and defaults fallback
-    - Implemented saveMapLayerPreferences() for full preference object storage
-    - Implemented saveMapType() for map type only updates
-    - Implemented saveOverlayLayers() for overlay layers only updates
-    - Added isValidMapType() and isValidOverlayLayers() validation functions
-    - Invalid stored data triggers fallback to default values
-    - **Requirements Reference**: Requirement 1.32, 1.33, 1.34, 1.35 (map layer persistence)
-
-  - [x] 24.2 Update MapContainer to load and save preferences
-    - Updated MapLayerPicker to import types from storageService (re-exports for convenience)
-    - Updated MapContainer to import storage functions from storageService
-    - Modified mapType and overlayLayers state initialization to load from localStorage
-    - Updated handleMapTypeChange to call saveMapType() on change
-    - Updated handleOverlayToggle to call saveOverlayLayers() on toggle
-    - Preferences persist immediately on user interaction
-    - **Requirements Reference**: Requirement 1.32, 1.33, 1.34 (preference load/save)
-
-  - [x] 24.3 Add comprehensive tests for map layer storage
-    - Added 11 new tests to storageService.test.ts for Map Layer Preferences API
-    - Tests for default preferences when none exist
-    - Tests for save and retrieve complete preferences
-    - Tests for save and retrieve individual components (mapType, overlayLayers)
-    - Tests for preserving other preferences when updating one component
-    - Tests for validation: invalid map type, invalid overlay layers, malformed JSON
-    - Tests for handling missing overlay layer properties
-    - Tests for graceful error handling on localStorage errors
-    - All 230 tests passing
-    - **Requirements Reference**: Testing ensures requirement compliance
-
-  - [x] 24.4 Update documentation
-    - Updated requirements.md with acceptance criteria 1.32-1.35 for map layer persistence
-    - Added Map Layer Preferences Schema to design.md Data Models section
-    - Updated StorageService documentation in design.md with new functions
-    - Added Task 24 to tasks.md documenting all implementation steps
-    - **Requirements Reference**: Documentation updates for new functionality
+- [x] 24. **Timeline Expand/Collapse Enhancement**
+  - Added isExpanded state with localStorage persistence ('wanderlog_timeline_expanded'), defaulting to expanded (true) on first load
+  - Implemented toggle handler with ChevronDownIcon/ChevronUpIcon for expand/collapse control
+  - Collapsed state: shows single current stop button on desktop (hidden sm:block) and circular icon with initials on mobile (w-12 h-12 with stop color background)
+  - Expanded state: displays all stops with horizontal scroll, maintains existing touch/swipe navigation functionality
+  - Added getCurrentStop utility to determine current stop using currentStopId or date-based fallback
+  - Implemented getInitials() utility function for mobile collapsed state display
+  - Refactored stop button rendering into renderStopButton helper function
+  - Applied smooth transitions (transition-all duration-300 ease-in-out) between states
+  - Responsive width: collapsed shrinks to content (~150-200px desktop, icon size mobile); expanded uses w-full sm:w-auto with max-width constraints
+  - **Requirements Reference**: Requirement 2.13, 2.14, 2.15, 2.16, 2.17, 2.18 (expand/collapse states, persistence, transitions)
 
 ## Implementation Notes
 

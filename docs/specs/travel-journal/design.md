@@ -242,28 +242,51 @@ interface MapLayerPickerProps {
 - Custom map styling is only applied to roadmap type; other types use native Google Maps appearance
 
 #### 3. TimelineStrip Component
-**Purpose**: Timeline panel with responsive positioning - full-width at top on mobile, floating panel at top-left on desktop.
+**Purpose**: Timeline panel with responsive positioning and expand/collapse functionality - full-width at top on mobile, floating panel at top-left on desktop.
 
 ```typescript
 interface TimelineStripProps {
-  bases: TripBase[];
-  currentBase: string;
-  onBaseSelect: (baseId: string) => void;
-  timezone: string;
+  stops: TripBase[];
+  currentStopId: string | null;
+  onStopSelect: (stopId: string) => void;
   className?: string; // For responsive positioning
 }
 ```
 
 **Key Features**:
-- **Mobile Layout**: Full-width panel positioned at top of screen with no gaps
-- **Desktop Layout**: Floating panel positioned at top-left with appropriate screen edge gaps
+- **Desktop Layout**: Floating panel at top-left with expand/collapse functionality
+- **Mobile Layout**: Full-width panel at top with icon-based collapse
+- **Expandable/Collapsible Interface**:
+  - Expanded (default): Shows all stops with horizontal scroll, chevron up button on right
+  - Collapsed: Shows only current stop button (desktop) or initials icon (mobile), chevron down button
+- **State Persistence**: Expand/collapse state persists to localStorage ('wanderlog_timeline_expanded')
+- **Smooth Transitions**: 300ms ease-in-out transitions between states
+- **Responsive Width**: Auto-shrinks to ~150-200px when collapsed (desktop), icon size on mobile
 - Frosted glass styling, i.e. `rounded-xl bg-white/30 backdrop-blur border border-white/20 shadow-md`
 - Proportional base representation based on stay duration
 - Auto-focus on current day using NZ timezone
-- Touch/swipe gesture support for mobile
+- Touch/swipe gesture support for mobile (only in expanded state)
 - Unique color assignment for each base using cycling color palette
 - Selection state with enlargement and brighter colors
 - **Mobile Behavior**: Selecting a stop triggers ActivitiesPanel slide-out animation
+
+**Collapsed State Specifications:**
+- Desktop: Single current stop button + chevron down button (~150-200px width)
+- Mobile: Circular icon with stop initials (2 letters max) + chevron button (w-12 h-12)
+- Chevron button: Integrated on right side with p-2 padding, h-5 w-5 icon size
+- Same frosted glass styling as expanded state
+- Touch/swipe navigation disabled in collapsed state
+
+**Expanded State Specifications:**
+- Shows all stop buttons with horizontal scrolling
+- Chevron up button on right side
+- Touch/swipe navigation remains functional
+- Max width: max-w-2xl lg:max-w-6xl
+
+**Stop Initials Logic:**
+- Takes first letter of each word in stop name
+- Uppercase, max 2 letters (e.g., "Lake Tekapo" → "LT")
+- Displayed in circular button with stop color as background
 
 #### 4. ActivitiesPanel Component
 **Purpose**: Responsive panel for accommodation and activities display with mobile slide-out behavior, resizable height, and optimized scrolling.

@@ -69,6 +69,13 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 10. WHEN a timeline base is selected, THEN the map SHALL center on the corresponding location and display relevant pins
 11. WHEN timeline navigation occurs, THEN the system SHALL persist the last viewed day/base in LocalStorage
 12. WHEN a timeline base is selected on mobile, THEN the ActivitiesPanel SHALL automatically slide out from the bottom of the screen
+13. WHEN the timeline is in expanded state on desktop, THEN it SHALL display all trip stops with a collapse button (ChevronUpIcon) on the right side
+14. WHEN the collapse button is clicked on desktop, THEN the timeline SHALL shrink to show only the current stop button with an expand button (ChevronDownIcon) on the right side
+15. WHEN the timeline is in collapsed state on desktop, THEN it SHALL display only the current stop button with ~150-200px width and an expand button
+16. WHEN the timeline is in collapsed state on mobile, THEN it SHALL display a circular icon button showing the stop initials (e.g., "LT" for Lake Tekapo) with the stop's color as background
+17. WHEN the expand/collapse state changes, THEN it SHALL persist to LocalStorage with key 'wanderlog_timeline_expanded' and restore on page load
+18. WHEN the timeline transitions between expanded and collapsed states, THEN it SHALL use smooth transitions (300ms ease-in-out)
+19. WHEN the timeline is collapsed, THEN touch/swipe navigation SHALL be disabled to prevent conflicts with the single-stop display
 
 ### 3. Activity Management and Organization
 
