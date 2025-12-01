@@ -45,7 +45,6 @@ export interface Accommodation {
   room?: string;
   phone?: string;
   host?: string;
-  rooms?: string;
 }
 
 export const ActivityType = {

@@ -98,13 +98,6 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
                 </div>
               )}
 
-              {accommodation.rooms && (
-                <div className="mb-2">
-                  <p className="font-medium text-gray-500 text-xs">Rooms</p>
-                  <p className="text-gray-900 text-sm">{accommodation.rooms}</p>
-                </div>
-              )}
-
               {/* Location warning */}
               {showLocationWarning && (
                 <div className="mb-2">
