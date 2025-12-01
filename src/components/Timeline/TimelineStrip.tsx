@@ -1,6 +1,6 @@
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
 import type { TripBase } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
 
@@ -33,9 +33,10 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
   };
 
   // Determine current stop
-  const currentStop = useMemo(() => {
-    return stops.find((stop) => stop.stop_id === currentStopId) || getCurrentStop(stops) || stops[0];
-  }, [stops, currentStopId]);
+  const currentStop = useMemo(
+    () => stops.find((stop) => stop.stop_id === currentStopId) || getCurrentStop(stops) || stops[0],
+    [stops, currentStopId]
+  );
 
   // Get stop initials for mobile collapsed view
   const getInitials = (name: string): string => {
@@ -126,7 +127,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
           isSelected
             ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} scale-110 px-1.5 py-0.5 shadow-lg ring-offset-2 ring-offset-white/20 sm:px-2 sm:py-1`
             : `${colors.base} ${colors.text} px-2 py-1 sm:px-3 sm:py-1.5`
-        } hover:shadow-lg hover:scale-105 active:scale-95`}
+        } hover:scale-105 hover:shadow-lg active:scale-95`}
         key={stop.stop_id}
         onClick={() => onStopSelect(stop.stop_id)}
         style={{ width: `${stopWidth}px` }}
@@ -165,7 +166,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
 
   return (
     <div
-      className={`absolute top-0 left-0 z-10 touch-pan-x select-none bg-white/30 p-1.5 shadow-md backdrop-blur transition-all duration-300 ease-in-out sm:top-4 sm:left-2 sm:rounded-xl sm:border sm:p-2 ${
+      className={`absolute top-0 left-0 z-10 touch-pan-x select-none overflow-hidden bg-white/30 p-1.5 shadow-md backdrop-blur transition-all duration-300 ease-in-out sm:top-4 sm:left-2 sm:rounded-xl sm:border sm:p-2 ${
         isExpanded
           ? 'right-0 w-full rounded-none border-white/20 border-b sm:right-auto sm:w-auto sm:max-w-[calc(100vw-2rem)]'
           : 'w-auto rounded-xl border border-white/20 sm:max-w-[calc(100vw-26rem)]'
@@ -177,7 +178,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
     >
       {/* Collapsed State */}
       {!isExpanded && currentStop && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center p-1">
           {/* Mobile: Initials button */}
           <div className="sm:hidden">
             <button
@@ -194,10 +195,10 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
 
           {/* Chevron expand button */}
           <button
+            aria-label="Expand timeline"
             className="flex-shrink-0 rounded-lg p-1 text-gray-700 transition-all duration-200 hover:bg-white/30 active:scale-95"
             onClick={toggleExpanded}
             type="button"
-            aria-label="Expand timeline"
           >
             <ChevronRightIcon className="h-5 w-5" />
           </button>
@@ -208,16 +209,16 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
       {isExpanded && (
         <div className="flex items-center gap-2">
           {/* All stops */}
-          <div className="scrollbar-hide flex-1 overflow-x-auto pb-1">
+          <div className="scrollbar-hide flex-1 overflow-x-auto overflow-y-hidden p-1">
             <div className="flex items-center gap-2">{stops.map((stop, index) => renderStopButton(stop, index))}</div>
           </div>
 
           {/* Chevron collapse button */}
           <button
+            aria-label="Collapse timeline"
             className="flex-shrink-0 rounded-lg p-1 text-gray-700 transition-all duration-200 hover:bg-white/30 active:scale-95"
             onClick={toggleExpanded}
             type="button"
-            aria-label="Collapse timeline"
           >
             <ChevronLeftIcon className="h-5 w-5" />
           </button>

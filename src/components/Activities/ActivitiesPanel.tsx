@@ -286,7 +286,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   return (
     <div
-      className={`fixed right-0 bottom-0 left-0 z-20 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur transition-all duration-400 ease-in-out sm:absolute sm:top-2 sm:top-4 sm:right-2 sm:right-4 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
+      className={`fixed right-0 bottom-0 left-0 z-20 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur transition-all duration-400 ease-in-out sm:absolute sm:top-2 sm:top-4 sm:right-2 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
         ${
           isMobile
             ? 'w-full max-w-full overflow-hidden'
@@ -318,13 +318,13 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         {/* Scrollable Content Area */}
         <div className="flex-1 overflow-y-auto overscroll-contain" ref={scrollContainerRef}>
           {/* Accommodation Card - Always Visible */}
-          <div className="px-3 pb-3">
+          <div className="px-3 py-3">
             <AccommodationCard accommodation={accommodation} stopName={stopName} />
           </div>
 
           {/* Scenic Waypoints Section */}
           {scenicWaypoints.length > 0 && (
-            <div className="px-3 pb-3">
+            <div className="px-3">
               <button
                 className="mb-3 flex min-h-[30px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/20 px-4 py-3 font-medium text-violet-700 transition-all duration-200 hover:bg-violet-500/30 hover:shadow-md active:bg-violet-500/40"
                 onClick={toggleScenicWaypoints}
@@ -424,7 +424,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         </div>
 
         {/* Panel Footer: Search & Download */}
-        <div className="flex-shrink-0 border-white/20 border-t bg-white/20 px-3 py-3">
+        <div className="flex-shrink-0 px-3 pt-3">
           {/* Search Row */}
           <div className="mb-2 flex gap-2">
             <div className="relative flex-1">
