@@ -2,9 +2,7 @@
   "exportDate": "2025-12-01T09:41:10.186Z",
   "tripData": {
     "constraints": {
-      "exceptions": [
-        "13 Dec Christchurch = 1 night for groceries & shopping"
-      ],
+      "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"],
       "max_daily_driving_hours": "3–4h",
       "min_nights_per_stop": 2
     },
@@ -608,7 +606,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/26/On_the_side_of_a_mountain_lake_%28Unsplash%29.jpg/400px-On_the_side_of_a_mountain_lake_%28Unsplash%29.jpg",
-            "url": "https://maps.app.goo.gl/8jHn8B6w4r3yq9wq8"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJg92ioEPC1KkR39NpSfOJ2zI"
           },
           {
             "activity_id": "te-anau-wp-2",
@@ -625,7 +623,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/KingstonNewZealandNov172024_01.jpg/400px-KingstonNewZealandNov172024_01.jpg",
-            "url": "https://maps.app.goo.gl/8Uu2kqjQX1mjmDqT8"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJcUcsGWXA1KkRvWy0PZcYapo"
           },
           {
             "activity_id": "te-anau-wp-3",
@@ -642,7 +640,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Five_Rivers_Otago_NZ.jpg/400px-Five_Rivers_Otago_NZ.jpg",
-            "url": "https://maps.app.goo.gl/9m6y8YjN2q1QJ3JH6"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJn_7v-5aPkCwRcCajbg_tuB8"
           },
           {
             "activity_id": "te-anau-wp-4",
@@ -659,7 +657,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Mossburn_Main_Street.JPG/400px-Mossburn_Main_Street.JPG",
-            "url": "https://maps.app.goo.gl/9oXoGL8n3V2i9Q7U8"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJoV82TK5-06kR_owx3VoeVoU"
           }
         ],
         "stop_id": "te-anau",
@@ -781,7 +779,7 @@
           },
           "name": "Timberstone House (Airbnb)",
           "thumbnail_url": "https://a0.muscache.com/im/pictures/fe7217ff-0b24-438d-880d-b94722c75bf5.jpg",
-          "url": "https://abnb.me/UCZNoQhV5zb"
+          "url": "https://www.airbnb.com.sg/rooms/1120320222829412606?source_impression_id=p3_1764590248_P36BFHi1YESwnI8R"
         },
         "activities": [
           {
@@ -799,9 +797,9 @@
             "status": {
               "done": false
             },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Lake_Wanaka_15.jpg/400px-Lake_Wanaka_15.jpg",
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2d/Dinosaur_slide_Wanaka.jpg/400px-Dinosaur_slide_Wanaka.jpg",
             "travel_time_from_accommodation": "5–7m drive / 25m walk",
-            "url": "https://www.lakewanaka.co.nz/plan/wanaka-for-families/"
+            "url": "https://www.wanaka.co.nz/things-to-do/family-kids/"
           },
           {
             "activity_id": "wanaka-act-2",
@@ -887,7 +885,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Lake_Hayes.jpg/400px-Lake_Hayes.jpg",
-            "url": "https://maps.app.goo.gl/1xYfZr6q7mDkL2mS8"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJi5HhZVkf1akRJ-_vUgAiEbU"
           },
           {
             "activity_id": "wanaka-wp-2",
@@ -904,7 +902,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Crown_Range_Road_NZ.jpg/400px-Crown_Range_Road_NZ.jpg",
-            "url": "https://maps.app.goo.gl/6cN3q4Q3bL1m7oPZ8"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJz3psyJ4m1akRjyoWKDuLllM"
           },
           {
             "activity_id": "wanaka-wp-3",
@@ -921,7 +919,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fa/Cardrona_bra_fence.jpg/400px-Cardrona_bra_fence.jpg",
-            "url": "https://maps.app.goo.gl/8Qm4m7s5qK6n6J2S7"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJJ6qM3Dk61akReFNbd93Qf5c"
           },
           {
             "activity_id": "wanaka-wp-4",
@@ -1071,7 +1069,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/28/20250221-DJI_0950.jpg/400px-20250221-DJI_0950.jpg",
-            "url": "https://maps.app.goo.gl/6q9JdG7b2o7L7m3H6"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJwzeFuUChKqgRbx7HwP-BygY"
           },
           {
             "activity_id": "timaru-wp-2",
@@ -1088,7 +1086,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Benmore_Dam.jpg/400px-Benmore_Dam.jpg",
-            "url": "https://maps.app.goo.gl/ETN6U8H2Wm8w2bqM7"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJAfuTl0VzKqgRP5H-ZiLC3Qc"
           },
           {
             "activity_id": "timaru-wp-3",
@@ -1105,7 +1103,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Elephant_Rocks.jpg/400px-Elephant_Rocks.jpg",
-            "url": "https://maps.app.goo.gl/7kq9x1cLw5h3Xafh7"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJT07iCBcfKqgRCwZNhtXGGqE"
           },
           {
             "activity_id": "timaru-wp-4",
@@ -1122,7 +1120,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Takiroa_Rock_Art_Site.jpg/400px-Takiroa_Rock_Art_Site.jpg",
-            "url": "https://maps.app.goo.gl/HL6u3i2mFj4nYb4o9"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJHXYzy1UZKqgRaFFsm3S7pRM"
           }
         ],
         "stop_id": "timaru-caroline-bay",
@@ -1293,7 +1291,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Rangitata_River_Canterbury_NZ.jpg/400px-Rangitata_River_Canterbury_NZ.jpg",
-            "url": "https://maps.app.goo.gl/YkZ7E7eX5LwM3w3c7"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJG5D-4Z79LG0RgOe6GQ0xd7I"
           },
           {
             "activity_id": "christchurch-wp-2",
@@ -1310,7 +1308,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Ashburton_Domain_Gardens.jpg/400px-Ashburton_Domain_Gardens.jpg",
-            "url": "https://maps.app.goo.gl/4y5m5oZC4Jc4Qe4L9"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJC4DWNbm7LW0RICNcZYfvAA8"
           },
           {
             "activity_id": "christchurch-wp-3",
@@ -1327,7 +1325,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Raikaia_Salmon.JPG/400px-Raikaia_Salmon.JPG",
-            "url": "https://maps.app.goo.gl/iE5i3b3hZx2m7kqf6"
+            "url": "https://www.google.com/maps/place/?q=place_id:ChIJW_KSpO7tLW0Rb5PrK5RA0FE"
           }
         ],
         "stop_id": "christchurch-end",
