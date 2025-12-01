@@ -68,17 +68,17 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ imageUrl, al
       </button>
 
       {/* Image container */}
-      <div className="relative max-h-[90vh] max-w-[90vw]">
+      <div className="relative h-[95vh] w-[95vw]">
         {/* Loading spinner */}
         {!(imageLoaded || imageError) && (
-          <div className="flex h-64 w-64 items-center justify-center">
+          <div className="flex h-full w-full items-center justify-center">
             <div className="h-12 w-12 animate-spin rounded-full border-white border-b-2" />
           </div>
         )}
 
         {/* Error message */}
         {imageError && (
-          <div className="flex h-64 w-64 flex-col items-center justify-center text-white">
+          <div className="flex h-full w-full flex-col items-center justify-center text-white">
             <p className="mb-2 text-lg">Failed to load image</p>
             <button
               className="min-h-[44px] touch-manipulation rounded bg-white/20 px-4 py-2 transition-colors hover:bg-white/30 active:bg-white/40"
@@ -93,7 +93,7 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ imageUrl, al
         {/* Image */}
         <img
           alt={altText}
-          className={`max-h-[90vh] max-w-[90vw] rounded-lg object-contain shadow-2xl ${imageLoaded ? 'block' : 'hidden'}`}
+          className={`h-full w-full rounded-lg object-contain shadow-2xl ${imageLoaded ? 'block' : 'hidden'}`}
           onError={() => setImageError(true)}
           onLoad={() => setImageLoaded(true)}
           src={imageUrl}
