@@ -197,7 +197,7 @@ async function getPlaceDetails(placeId: string): Promise<PlaceDetailsResult | nu
  * Read and parse a trip data JSON file
  */
 async function readTripDataFile(filename: string): Promise<{ tripData: TripData; rawData: unknown }> {
-  const tripDataDir = path.join(__dirname, '../public/trip-data');
+  const tripDataDir = path.join(__dirname, '../local/trip-data');
   const filePath = path.join(tripDataDir, filename);
 
   console.log(`Reading ${filename}...`);
@@ -217,7 +217,7 @@ async function readTripDataFile(filename: string): Promise<{ tripData: TripData;
  * Write trip data back to JSON file
  */
 async function writeTripDataFile(filename: string, rawData: unknown, tripData: TripData): Promise<void> {
-  const tripDataDir = path.join(__dirname, '../public/trip-data');
+  const tripDataDir = path.join(__dirname, '../local/trip-data');
   const filePath = path.join(tripDataDir, filename);
 
   // Update the exportDate
@@ -240,7 +240,7 @@ async function writeTripDataFile(filename: string, rawData: unknown, tripData: T
  * Get all trip data files
  */
 async function getAllTripDataFiles(): Promise<string[]> {
-  const tripDataDir = path.join(__dirname, '../public/trip-data');
+  const tripDataDir = path.join(__dirname, '../local/trip-data');
   const files = await fs.readdir(tripDataDir);
   return files.filter((file) => file.endsWith('_trip-plan.json'));
 }
@@ -491,7 +491,7 @@ async function main(): Promise<void> {
       const allFiles = await getAllTripDataFiles();
 
       if (allFiles.length === 0) {
-        console.log('No trip data files found in public/trip-data/');
+        console.log('No trip data files found in local/trip-data/');
         return;
       }
 

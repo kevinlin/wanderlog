@@ -56,25 +56,18 @@ An interactive map-based travel journal for planning and tracking your adventure
    - Copy your Firebase config to `.env.local`
    - Deploy Firestore security rules (see [Firebase Configuration](#firebase-configuration))
 
-5. Migrate your trip data to Firestore:
-   ```bash
-   # Place trip JSON in public/trip-data/ (format: YYYYMM_LOCATION_trip-plan.json)
-   # Then run migration
-   pnpm migrate
-   ```
-
-6. Start the development server:
+5. Start the development server:
    ```bash
    pnpm dev
    ```
 
-7. Open [http://localhost:5173](http://localhost:5173) in your browser
+6. Open [http://localhost:5173](http://localhost:5173) in your browser
 
 ### Trip Data
 
 Trip data is stored in Firebase Firestore. You can:
 
-1. **Migrate from JSON**: Place JSON files in `public/trip-data/` and run `pnpm migrate`
+1. **Migrate from JSON**: Place JSON files in `local/trip-data/` and run `pnpm migrate`
 2. **Create directly**: Use the Firestore Console to create trip documents
 3. **API**: Use the `firebaseService` to programmatically create trips
 

@@ -46,7 +46,7 @@ Uses React Context with useReducer pattern (`src/contexts/AppStateContext.tsx`):
 ### Data Flow
 
 1. **Trip data** loads from Firebase Firestore via `firebaseService`
-   - Legacy: JSON files in `public/trip-data/` can be migrated with `pnpm migrate`
+   - Legacy: JSON files in `local/trip-data/` can be migrated with `pnpm migrate`
    - Format: `YYYYMM_LOCATION_trip-plan.json`
 2. **useTripData hook** fetches and validates trip data via `tripDataService`
 3. **AppStateContext** manages global state; components dispatch actions

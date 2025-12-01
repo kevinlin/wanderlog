@@ -233,10 +233,9 @@ loadTripData(tripId: string): Promise<TripData>
 
 // Validate trip data structure
 validateTripData(data: unknown): ValidationResult
-
-// [DEPRECATED] Load from static JSON (for migration period)
-loadTripDataWithFallback(tripIdOrFilename: string): Promise<TripData>
 ```
+
+**Note:** The deprecated `loadTripDataWithFallback()` function has been removed. All trip loading now uses Firestore exclusively.
 
 ### storageService
 
@@ -411,23 +410,33 @@ saveUserModifications(tripId, data)
 
 ## Migration from JSON to Firestore
 
-### Backward Compatibility
+### Current Status ✅
 
-During migration period, the app supports both JSON files and Firestore:
+The application now uses **Firestore exclusively**. Static JSON file loading has been fully removed.
+
+**Removed Components:**
+- ❌ `tripDataService.ts` - Static JSON loader (deleted)
+- ❌ `loadTripDataWithFallback()` - Fallback function (deleted)
+- ✅ `tripService.ts` - Firestore-only loader (active)
+
+### Static Files (Backup/Reference Only)
+
+Static JSON files in `local/trip-data/` are **retained** for:
+- Migration scripts (`pnpm migrate`)
+- Data maintenance scripts (`scripts/*.ts`)
+- Backup/reference purposes
+
+**Important:** These files are **not** loaded by the application at runtime.
+
+### Usage
 
 ```typescript
-// Old: Static JSON file
-const tripData = await loadTripData('202512_NZ_trip-plan.json');
-
-// New: Firestore with trip ID
+// Load specific trip by ID (Firestore only)
 const tripData = await loadTripData('202512_NZ');
+
+// Load all trips (Firestore only)
+const trips = await loadAllTrips();
 ```
-
-### Deprecation Timeline
-
-1. **Phase 1** (current): Both JSON and Firestore supported
-2. **Phase 2**: Remove `tripDataService.ts` and JSON file loading
-3. **Phase 3**: Remove static JSON files from `public/trip-data/`
 
 ## Future Enhancements
 
@@ -499,6 +508,6 @@ This integration follows the same license as the main Wanderlog project.
 
 ---
 
-**Document Version**: 1.0
-**Last Updated**: 2025-11-30
-**Status**: Implementation Complete (Phases 1-5)
+**Document Version**: 1.1
+**Last Updated**: 2025-12-01
+**Status**: Implementation Complete (Phases 1-5) + Static JSON Fallback Removed

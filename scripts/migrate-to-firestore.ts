@@ -68,7 +68,7 @@ function validateFirebaseConfig(): void {
  */
 async function readTripDataFile(filename: string): Promise<TripData> {
   try {
-    const tripDataDir = path.join(__dirname, '../public/trip-data');
+    const tripDataDir = path.join(__dirname, '../local/trip-data');
     const filePath = path.join(tripDataDir, filename);
 
     console.log(`Reading ${filename}...`);
@@ -104,7 +104,7 @@ function generateTripId(filename: string): string {
  */
 async function getAllTripDataFiles(): Promise<string[]> {
   try {
-    const tripDataDir = path.join(__dirname, '../public/trip-data');
+    const tripDataDir = path.join(__dirname, '../local/trip-data');
     const files = await fs.readdir(tripDataDir);
     return files.filter((file) => file.endsWith('_trip-plan.json'));
   } catch (error) {
@@ -180,7 +180,7 @@ async function main(): Promise<void> {
       const allFiles = await getAllTripDataFiles();
 
       if (allFiles.length === 0) {
-        console.log('No trip data files found in public/trip-data/');
+        console.log('No trip data files found in local/trip-data/');
         return;
       }
 
