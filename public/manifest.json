@@ -2,7 +2,7 @@
   "name": "Wanderlog - Interactive Travel Journal",
   "short_name": "Wanderlog",
   "description": "Plan and track your trips with an interactive map-based travel journal",
-  "start_url": "/",
+  "start_url": "/wanderlog/",
   "display": "standalone",
   "background_color": "#F2E7D5",
   "theme_color": "#4A9E9E",
