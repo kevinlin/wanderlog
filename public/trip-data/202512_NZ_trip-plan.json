@@ -1,5 +1,5 @@
 {
-  "exportDate": "2025-11-30T14:36:07.431Z",
+  "exportDate": "2025-12-01T09:41:10.186Z",
   "tripData": {
     "constraints": {
       "exceptions": [
@@ -675,6 +675,25 @@
         "accommodation": {},
         "activities": [
           {
+            "activity_id": "poi_ChIJFQD__5nd1akRh3ImpwVnRBE_1764582059533",
+            "activity_name": "Milford Sound Lookout",
+            "activity_type": "attraction",
+            "duration": "1-2 hours",
+            "google_place_id": "ChIJFQD__5nd1akRh3ImpwVnRBE",
+            "location": {
+              "address": "79 Milford Sound Highway, Milford Sound 9679, New Zealand",
+              "lat": -44.67031739999999,
+              "lng": 167.922349
+            },
+            "order": 0,
+            "remarks": "Rating: 4.8/5 (231 reviews)",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/js/PhotoService.GetPhoto?1sAWn5SU6GSJ82ctF-MtYSQ94d_ct4uXl27AtSVGAfyhUfgXdxGKPW5wOSjt2D0vSTuc_CQU8WnCYCKbeRxmrgID81aAmHxyIjYq2rHEt1beCMsdyV_L1Ylig43XavdMiMv4QtMThbWy4TA--O_B2jHD6YbKBKpsCsjgNGoiz9_9iQ3T6lO5GJDF_UsN6cE8TmMDfCRogCkE9kbJyJbsMxGRYTLPWRcSQZltUUPkIvv0im2kJTK8n582pLpWl0-MQnj356ye4e2e-3MtlORB4sHJJ2qm4Z_dSAvIPsuh3BEak6ipCNopvHb3-6Fps8YVI7NYCvOX2O0C4AiT1XCh4jaH-jsxRXdROTJa-wDJ6VxIcdOa0akOMd6z3dDVjnTto8BDT_Gvr5ihfspJ0x0WFodWML3KH6AmJTaiWU7sd1_tqxNpW5ba3U&3u400&5m1&2e1&callback=none&r_url=https%3A%2F%2Fkevinlin.github.io%2Fwanderlog%2F&key=AIzaSyCB5n4X58yytDpkXjKeiWegfuG5SIY4C_8&token=12667",
+            "url": "https://www.aa.co.nz/travel/editorial/milford-sound-lookout-track/"
+          },
+          {
             "activity_id": "milford-sound-act-1",
             "activity_name": "Milford Sound cruise (optional day trip)",
             "duration": "1h 45m–2h cruise (+stops)",
@@ -1331,7 +1350,7 @@
     ],
     "trip_id": "202512_NZ",
     "trip_name": "NZ South Island Road Trip — 13–29 Dec 2025 (Family of 5)",
-    "updated_at": "2025-11-30T12:47:39.630Z",
+    "updated_at": "2025-12-01T09:25:57.723Z",
     "vehicle": "MPV (pickup/return: Christchurch Airport)"
   },
   "version": "1.0.0"
