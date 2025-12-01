@@ -783,6 +783,8 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         url: poi.website,
         remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
         order: 999, // Add at the end
+        thumbnail_url: poi.photos?.[0]?.photo_reference,
+        google_place_id: poi.place_id,
       };
 
       dispatch({
