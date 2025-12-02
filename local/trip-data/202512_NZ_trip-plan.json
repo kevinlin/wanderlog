@@ -138,7 +138,7 @@
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/5/57/Church_of_the_Good_Shepherd%2C_Tekapo_01.jpg",
             "travel_time_from_accommodation": "5m drive / 25m walk",
-            "url": "https://tekapo.church/"
+            "url": "https://www.churchofthegoodshepherd.org.nz/"
           },
           {
             "activity_id": "lake-tekapo-wp-3",
@@ -549,7 +549,7 @@
           "phone": "+64 3 249 9700",
           "room": "2-Bedroom Villa",
           "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=AWn5SU77bN0bNio7MhklUzyzWnLZ0S4hj1S2JOQvnk4lX8pgsWJ_lnGvhUlzBWBzB27gyMWCvXcsLaQQ_LCFeGbkPKI9iMx2THVW88KbCSnks1vexqGnIyOs1eB462Bd-8M7NGeUzTljrV-v0676e3BXdnZ-jfLXb9HvFZAX5Kvnk46BzvquKq8fYNnDTKLLsnQMk3iWP65eRKJgk8Djw56cl5-GFXpEAb4C6f4Lqu3JvBQ9P29OCm6_cue2asHz-spPioBp3eQsPTTvAskcAxUX7-sJuRwI1NEK5U60kgCP4s2jNw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-          "url": "https://www.distinctionhotels.co.nz/hotels/distinction-te-anau-hotel-villas"
+          "url": "https://www.distinctionhotels.co.nz/hotel-te-anau"
         },
         "activities": [
           {
@@ -1146,7 +1146,7 @@
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/1/12/Margaret_Mahy_Playground_MRD.jpg",
             "travel_time_from_accommodation": "10m walk",
-            "url": "https://ccc.govt.nz/rec-and-sport/parks-and-gardens/margaret-mahy-family-playground/"
+            "url": "https://ccc.govt.nz/parks-and-gardens/play-in-parks/playgrounds/find-a-playground/"
           },
           {
             "activity_id": "christchurch-end-act-2",
@@ -1184,7 +1184,7 @@
             },
             "thumbnail_url": "https://www.willowbank.co.nz/wp-content/uploads/2022/07/Willowbank-Edited-224-Landscape.jpg",
             "travel_time_from_accommodation": "20–25m drive",
-            "url": "https://www.willowbank.co.nz/"
+            "url": "http://www.willowbank.co.nz/"
           },
           {
             "activity_id": "christchurch-end-act-4",
@@ -1203,7 +1203,7 @@
             },
             "thumbnail_url": "https://www.oranawildlifepark.co.nz/files/cache/0e96866e5e7f7c24dc49929e89c7e43f.png",
             "travel_time_from_accommodation": "25–30m drive",
-            "url": "https://www.oranawildlifepark.co.nz/"
+            "url": "http://oranawildlifepark.co.nz/"
           },
           {
             "activity_id": "christchurch-end-act-5",
@@ -1222,7 +1222,7 @@
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/2/24/New_Brighton_Pier_2023.jpg",
             "travel_time_from_accommodation": "20–25m drive",
-            "url": "https://www.ccc.govt.nz/rec-and-sport/beaches-and-coast/"
+            "url": "http://ccc.govt.nz/"
           },
           {
             "activity_id": "christchurch-end-act-6",
@@ -1327,5 +1327,6 @@
     "updated_at": "2025-12-01T12:29:47.572Z",
     "vehicle": "MPV (pickup/return: Christchurch Airport)"
   },
-  "version": "1.0.0"
+  "version": "1.0.0",
+  "updated_at": "2025-12-02T09:10:33.617Z"
 }
