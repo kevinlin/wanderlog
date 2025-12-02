@@ -210,7 +210,8 @@
             "status": {
               "done": false
             },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/6/65/LakeTekapoNov242024_05.jpg"
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/6/65/LakeTekapoNov242024_05.jpg",
+            "url": "https://www.locationscout.net/new-zealand/43962-lake-tekapo-from-motuariki-view-point"
           }
         ],
         "date": {
@@ -254,7 +255,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/NZ_Native_Rain_Forest_%2852538831153%29.jpg",
-            "url": "https://www.google.com/maps/place/Talbot+Forest+Scenic+Reserve"
+            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/geraldine-area/things-to-do/talbot-forest-scenic-reserve-tracks/"
           },
           {
             "activity_id": "lake-tekapo-wp-3",
@@ -270,7 +271,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Fairlie-Tekapo_Road%2C_Burkes_Pass%2C_New_Zealand_%28Unsplash%29.jpg",
-            "url": "https://www.google.com/maps/place/Burkes+Pass+Scenic+Reserve"
+            "url": "https://southcanterbury.org.nz/town/burkes-pass/"
           }
         ],
         "stop_id": "lake-tekapo",
@@ -458,7 +459,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/0/08/LakePukakiNov232024_01.jpg",
-            "url": "https://www.google.com/maps/place/Lake+Pukaki+Lookout"
+            "url": "https://trailwalkertravels.com/lake-pukaki-viewpoint-peters-lookout-more/"
           },
           {
             "activity_id": "queenstown-wp-2",
@@ -474,7 +475,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Omarama_Clay_Cliffs.jpg",
-            "url": "https://www.google.com/maps/place/Clay+Cliffs+Omarama"
+            "url": "https://www.waitakinz.com/destinations/omarama"
           },
           {
             "activity_id": "queenstown-wp-3",
@@ -490,7 +491,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/2/28/20250221-DJI_0950.jpg",
-            "url": "https://www.google.com/maps/place/Lindis+Pass+Lookout"
+            "url": "https://www.alltrails.com/trail/new-zealand/otago/lindis-pass-summit-lookout-walk"
           },
           {
             "activity_id": "queenstown-wp-4",
@@ -1051,7 +1052,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/2/28/20250221-DJI_0950.jpg",
-            "url": "https://www.google.com/maps/place/?q=place_id:ChIJwzeFuUChKqgRbx7HwP-BygY"
+            "url": "https://en.wikipedia.org/wiki/Lindis_Pass"
           },
           {
             "activity_id": "timaru-wp-2",
@@ -1067,7 +1068,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Benmore_Dam.jpg",
-            "url": "https://www.waitakinz.com/destinations/otematata-and-benmore"
+            "url": "https://waitakinz.com/explore/benmore-peninsula-track"
           },
           {
             "activity_id": "timaru-wp-3",
