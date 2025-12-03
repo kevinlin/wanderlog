@@ -10,9 +10,10 @@ interface POIModalProps {
   error: string | null;
   onClose: () => void;
   onAddToActivities: (poi: POIDetails) => void;
+  onAddToScenicWaypoints: (poi: POIDetails) => void;
 }
 
-export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error, onClose, onAddToActivities }) => {
+export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error, onClose, onAddToActivities, onAddToScenicWaypoints }) => {
   if (!isOpen) return null;
 
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -24,6 +25,13 @@ export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error,
   const handleAddToActivities = () => {
     if (poi) {
       onAddToActivities(poi);
+      onClose();
+    }
+  };
+
+  const handleAddToScenicWaypoints = () => {
+    if (poi) {
+      onAddToScenicWaypoints(poi);
       onClose();
     }
   };
@@ -245,7 +253,7 @@ export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error,
         {/* Footer */}
         {poi && !loading && !error && (
           <div className="border-gray-200 border-t bg-gray-50 p-4">
-            <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
+            <div className="flex gap-2">
               <button
                 className="min-h-[44px] flex-1 touch-manipulation rounded bg-gray-500 px-4 py-2 text-white transition-colors hover:bg-gray-600 active:bg-gray-700"
                 onClick={onClose}
@@ -253,10 +261,18 @@ export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error,
                 Close
               </button>
               <button
-                className="min-h-[44px] flex-1 touch-manipulation rounded bg-emerald-500 px-4 py-2 font-medium text-white transition-colors hover:bg-emerald-600 active:bg-emerald-700"
-                onClick={handleAddToActivities}
+                className="min-h-[44px] flex-1 touch-manipulation rounded bg-violet-500 px-3 py-2 font-medium text-white transition-colors hover:bg-violet-600 active:bg-violet-700"
+                onClick={handleAddToScenicWaypoints}
+                title="Add as a scenic waypoint"
               >
-                ➕ Add to Activities
+                🏞️ Scenic
+              </button>
+              <button
+                className="min-h-[44px] flex-1 touch-manipulation rounded bg-emerald-500 px-3 py-2 font-medium text-white transition-colors hover:bg-emerald-600 active:bg-emerald-700"
+                onClick={handleAddToActivities}
+                title="Add as an activity"
+              >
+                ➕ Activity
               </button>
             </div>
           </div>

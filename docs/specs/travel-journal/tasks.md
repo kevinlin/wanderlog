@@ -712,6 +712,39 @@ This document outlines the step-by-step implementation tasks for building the Wa
   - Responsive width: collapsed shrinks to content (~150-200px desktop, icon size mobile); expanded uses w-full sm:w-auto with max-width constraints
   - **Requirements Reference**: Requirement 2.13, 2.14, 2.15, 2.16, 2.17, 2.18 (expand/collapse states, persistence, transitions)
 
+- [x] 25. **Add Scenic Waypoints from POI Modal**
+  - [x] 25.1 Add ADD_SCENIC_WAYPOINT_FROM_POI reducer action
+    - Added new action type to AppStateContext
+    - Implemented reducer case to append waypoint to stop's scenic_waypoints array
+    - Handles undefined scenic_waypoints with default empty array
+    - **Requirements Reference**: Requirement 13.14, 13.15 (add to scenic waypoints functionality)
+
+  - [x] 25.2 Create handleAddScenicWaypointFromPOI handler in MapContainer
+    - Implemented handler following ADD_ACTIVITY_FROM_POI pattern
+    - Generates unique waypoint ID: `poi_scenic_${place_id}_${timestamp}`
+    - Maps POI data to ScenicWaypoint interface fields
+    - Sets default duration: "30 mins - 1 hour"
+    - Includes Google Place ID for "Open in Maps" button
+    - Adds rating information to remarks field
+    - **Requirements Reference**: Requirement 13.15 (POI to waypoint conversion)
+
+  - [x] 25.3 Update POIModal UI with three-button layout
+    - Added onAddToScenicWaypoints prop to interface
+    - Implemented handleAddToScenicWaypoints handler with modal close
+    - Updated footer layout with three buttons in single row
+    - Applied violet color scheme (violet-500/600/700) to scenic waypoint button
+    - Shortened button labels for mobile: "🏞️ Scenic" and "➕ Activity"
+    - Added tooltips for clarity
+    - Maintained 44px minimum height for touch targets
+    - **Requirements Reference**: Requirement 13.14, 13.17 (button layout, mobile optimization)
+
+  - [x] 25.4 Update documentation
+    - Added acceptance criteria to requirements.md (Requirement 13.14-13.17)
+    - Updated POIModal component specification in design.md
+    - Documented ADD_SCENIC_WAYPOINT_FROM_POI action in design.md
+    - Added implementation task to tasks.md
+    - **Requirements Reference**: Documentation maintenance
+
 ## Implementation Notes
 
 - Each task builds incrementally on previous tasks

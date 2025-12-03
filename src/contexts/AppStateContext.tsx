@@ -1,6 +1,7 @@
 import type React from 'react';
 import { createContext, type ReactNode, useContext, useReducer } from 'react';
 import type { Activity, TripData } from '@/types';
+import type { ScenicWaypoint } from '@/types/map';
 import type { POIDetails, POIModalState, POISearchState } from '@/types/poi';
 import type { UserModifications } from '@/types/storage';
 import type { WeatherCache } from '@/types/weather';
@@ -52,6 +53,7 @@ export type AppAction =
   | { type: 'SET_POI_MODAL'; payload: Partial<POIModalState> }
   | { type: 'CLOSE_POI_MODAL' }
   | { type: 'ADD_ACTIVITY_FROM_POI'; payload: { baseId: string; activity: Activity } }
+  | { type: 'ADD_SCENIC_WAYPOINT_FROM_POI'; payload: { baseId: string; waypoint: ScenicWaypoint } }
 
   // POI Search actions
   | { type: 'SET_POI_SEARCH_RESULTS'; payload: POIDetails[] }
@@ -222,6 +224,29 @@ function appStateReducer(state: AppState, action: AppAction): AppState {
           return {
             ...stop,
             activities: [...stop.activities, activity],
+          };
+        }
+        return stop;
+      });
+
+      return {
+        ...state,
+        tripData: {
+          ...state.tripData,
+          stops: updatedStops,
+        },
+      };
+    }
+
+    case 'ADD_SCENIC_WAYPOINT_FROM_POI': {
+      const { baseId, waypoint } = action.payload;
+      if (!state.tripData) return state;
+
+      const updatedStops = state.tripData.stops.map((stop) => {
+        if (stop.stop_id === baseId) {
+          return {
+            ...stop,
+            scenic_waypoints: [...(stop.scenic_waypoints || []), waypoint],
           };
         }
         return stop;

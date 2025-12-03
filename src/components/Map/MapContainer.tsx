@@ -795,6 +795,37 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     [currentBaseId, dispatch]
   );
 
+  // Add scenic waypoint from POI
+  const handleAddScenicWaypointFromPOI = useCallback(
+    (poi: POIDetails) => {
+      if (!currentBaseId) return;
+
+      // Generate a unique waypoint ID with scenic prefix
+      const waypointId = `poi_scenic_${poi.place_id}_${Date.now()}`;
+
+      const newWaypoint: ScenicWaypoint = {
+        activity_id: waypointId,
+        activity_name: poi.name,
+        location: {
+          lat: poi.location.lat,
+          lng: poi.location.lng,
+          address: poi.formatted_address,
+        },
+        duration: '30 mins - 1 hour', // Default for scenic stops
+        url: poi.website,
+        remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
+        thumbnail_url: poi.photos?.[0]?.photo_reference,
+        google_place_id: poi.place_id,
+      };
+
+      dispatch({
+        type: 'ADD_SCENIC_WAYPOINT_FROM_POI',
+        payload: { baseId: currentBaseId, waypoint: newWaypoint },
+      });
+    },
+    [currentBaseId, dispatch]
+  );
+
   // Close POI modal
   const handleClosePOIModal = useCallback(() => {
     dispatch({ type: 'CLOSE_POI_MODAL' });
@@ -992,6 +1023,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           isOpen={state.poiModal.isOpen}
           loading={state.poiModal.loading}
           onAddToActivities={handleAddActivityFromPOI}
+          onAddToScenicWaypoints={handleAddScenicWaypointFromPOI}
           onClose={handleClosePOIModal}
           poi={state.poiModal.poi}
         />

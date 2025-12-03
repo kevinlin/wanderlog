@@ -481,6 +481,7 @@ interface POIModalProps {
   error: string | null;
   onClose: () => void;
   onAddToActivities: (poi: POIDetails) => void;
+  onAddToScenicWaypoints: (poi: POIDetails) => void;
 }
 
 interface POIDetails {
@@ -521,9 +522,12 @@ interface POIDetails {
   - Opening hours with current open/closed status
   - Contact information (phone, website)
   - "Open in Google Maps" link with map icon
-- **Footer Actions**: 
+- **Footer Actions**:
   - Close button (gray styling)
-  - "Add to Activities" button (emerald styling for prominence)
+  - "🏞️ Scenic Waypoint" button (violet styling for scenic waypoints)
+  - "➕ Activity" button (emerald styling for activities)
+  - All three buttons arranged in a single row with equal flex widths
+  - Mobile-optimized with shortened labels and touch-friendly targets
 - **Loading States**: Spinner animation with descriptive text
 - **Error Handling**: User-friendly error messages with retry options
 - **Accessibility**: Proper focus management, keyboard navigation, and ARIA labels
@@ -740,13 +744,15 @@ interface AppState {
   error: string | null;
 }
 
-type AppAction = 
+type AppAction =
   | { type: 'SET_TRIP_DATA'; payload: TripData }
   | { type: 'SELECT_BASE'; payload: string }
   | { type: 'SELECT_ACTIVITY'; payload: string }
   | { type: 'TOGGLE_ACTIVITY_DONE'; payload: string }
   | { type: 'REORDER_ACTIVITIES'; payload: { baseId: string; fromIndex: number; toIndex: number } }
   | { type: 'SET_WEATHER_DATA'; payload: { baseId: string; weather: WeatherData } }
+  | { type: 'ADD_ACTIVITY_FROM_POI'; payload: { baseId: string; activity: Activity } }
+  | { type: 'ADD_SCENIC_WAYPOINT_FROM_POI'; payload: { baseId: string; waypoint: ScenicWaypoint } }
   | { type: 'SET_ERROR'; payload: string }
   | { type: 'SET_LOADING'; payload: boolean };
 ```

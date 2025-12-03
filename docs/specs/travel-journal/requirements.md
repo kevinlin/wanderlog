@@ -285,6 +285,16 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 11. WHEN the POI modal is loading place details, THEN it SHALL show a loading spinner with descriptive text
 12. WHEN the POI modal is open, THEN users SHALL be able to close it by clicking the X button, clicking outside the modal, or pressing the Escape key
 13. WHEN Google Places photo references are available, THEN they SHALL be properly formatted and displayed using the Google Places Photo API
+14. WHEN the POI modal is displayed, THEN it SHALL include three action buttons: "Close", "🏞️ Scenic Waypoint" (violet), and "➕ Activity" (emerald)
+15. WHEN the "🏞️ Scenic Waypoint" button is clicked, THEN the system SHALL:
+   - Create a new scenic waypoint with POI data (name, location, photos, rating)
+   - Automatically add the scenic waypoint to the current selected trip base/stop
+   - Generate a unique waypoint ID with prefix `poi_scenic_`
+   - Set a default duration of "30 mins - 1 hour"
+   - Include Google Place ID for "Open in Maps" functionality
+   - Close the POI modal
+16. WHEN a POI is added as a scenic waypoint, THEN it SHALL immediately appear in the scenic waypoints section and on the map with a violet pin
+17. WHEN the POI modal displays three buttons, THEN they SHALL be arranged in a single row with equal widths and properly sized for mobile touch targets (44px minimum height)
 
 ### 14. Deployment and Configuration
 
