@@ -219,13 +219,13 @@ describe('ActivityUtils', () => {
       expect(getActivityTypeColor(ActivityType.SHOPPING)).toBe('#10b981'); // Emerald-500
       expect(getActivityTypeColor(ActivityType.OUTDOOR)).toBe('#f59e0b'); // Amber-500
       expect(getActivityTypeColor(ActivityType.CULTURAL)).toBe('#06b6d4'); // Cyan-500
-      expect(getActivityTypeColor(ActivityType.RECREATION)).toBe('#6366f1'); // Indigo-500 (shared with TRANSPORT)
+      expect(getActivityTypeColor(ActivityType.RECREATION)).toBe('#0ea5e9'); // Sky-500 (shared with OTHER)
       expect(getActivityTypeColor(ActivityType.SCENIC)).toBe('#8b5cf6'); // Violet-500 (shared with ATTRACTION)
       expect(getActivityTypeColor(ActivityType.BEACH)).toBe('#06b6d4'); // Cyan-500 (shared with CULTURAL)
       expect(getActivityTypeColor(ActivityType.PLAYGROUND)).toBe('#f59e0b'); // Amber-500 (shared with OUTDOOR)
       expect(getActivityTypeColor(ActivityType.GROCERY)).toBe('#10b981'); // Emerald-500 (shared with SHOPPING)
-      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#6366f1'); // Indigo-500 (shared with RECREATION)
-      expect(getActivityTypeColor(ActivityType.OTHER)).toBe('#0ea5e9'); // Sky-500
+      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#6366f1'); // Indigo-500
+      expect(getActivityTypeColor(ActivityType.OTHER)).toBe('#0ea5e9'); // Sky-500 (shared with RECREATION)
     });
 
     it('should use a limited color palette with shared colors across related types', () => {
