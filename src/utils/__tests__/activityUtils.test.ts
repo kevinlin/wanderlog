@@ -22,7 +22,6 @@ describe('ActivityUtils', () => {
     it('should infer ATTRACTION type from attraction keywords', () => {
       expect(inferActivityType('Visit Milford Sound')).toBe(ActivityType.ATTRACTION);
       expect(inferActivityType('Museum of Transport')).toBe(ActivityType.ATTRACTION);
-      expect(inferActivityType('Scenic Lookout Point')).toBe(ActivityType.ATTRACTION);
       expect(inferActivityType('Queenstown Gardens')).toBe(ActivityType.ATTRACTION);
       expect(inferActivityType('Heritage Castle Tour')).toBe(ActivityType.ATTRACTION);
       expect(inferActivityType('Waterfall Viewing')).toBe(ActivityType.ATTRACTION);
@@ -39,9 +38,9 @@ describe('ActivityUtils', () => {
       expect(inferActivityType('Hiking Trail Adventure')).toBe(ActivityType.OUTDOOR);
       expect(inferActivityType('Kayaking Activity')).toBe(ActivityType.OUTDOOR);
       expect(inferActivityType('Mountain Climbing')).toBe(ActivityType.OUTDOOR);
-      expect(inferActivityType('Beach Swimming')).toBe(ActivityType.OUTDOOR);
+      expect(inferActivityType('Lake Swimming')).toBe(ActivityType.OUTDOOR);
       expect(inferActivityType('Glacier Walk')).toBe(ActivityType.OUTDOOR);
-      expect(inferActivityType('Jetboat Ride')).toBe(ActivityType.OUTDOOR);
+      expect(inferActivityType('Bike Trail Ride')).toBe(ActivityType.OUTDOOR);
       expect(inferActivityType('Whale Watching Tour')).toBe(ActivityType.OUTDOOR);
     });
 
@@ -59,6 +58,40 @@ describe('ActivityUtils', () => {
       expect(inferActivityType('Flight to Auckland')).toBe(ActivityType.TRANSPORT);
       expect(inferActivityType('Scenic Drive Route')).toBe(ActivityType.TRANSPORT);
       expect(inferActivityType('Airport Transfer')).toBe(ActivityType.TRANSPORT);
+    });
+
+    it('should infer SCENIC type from scenic keywords', () => {
+      expect(inferActivityType('Scenic Lookout Point')).toBe(ActivityType.SCENIC);
+      expect(inferActivityType('Mountain Summit Viewpoint')).toBe(ActivityType.SCENIC);
+      expect(inferActivityType('Mirror Lakes')).toBe(ActivityType.SCENIC);
+      expect(inferActivityType('Bridge Walkway')).toBe(ActivityType.SCENIC);
+    });
+
+    it('should infer BEACH type from beach keywords', () => {
+      expect(inferActivityType('Caroline Bay Beach')).toBe(ActivityType.BEACH);
+      expect(inferActivityType('Brighton Pier')).toBe(ActivityType.BEACH);
+      expect(inferActivityType('Coastline Walk')).toBe(ActivityType.BEACH);
+      expect(inferActivityType('Bay Foreshore')).toBe(ActivityType.BEACH);
+    });
+
+    it('should infer PLAYGROUND type from playground keywords', () => {
+      expect(inferActivityType('Margaret Mahy Family Playground')).toBe(ActivityType.PLAYGROUND);
+      expect(inferActivityType('Lakefront Playground')).toBe(ActivityType.PLAYGROUND);
+      expect(inferActivityType('Dinosaur Park')).toBe(ActivityType.PLAYGROUND);
+      expect(inferActivityType('Kids Play Area')).toBe(ActivityType.PLAYGROUND);
+    });
+
+    it('should infer GROCERY type from grocery keywords', () => {
+      expect(inferActivityType('Woolworths Supermarket')).toBe(ActivityType.GROCERY);
+      expect(inferActivityType('Grocery Shopping')).toBe(ActivityType.GROCERY);
+      expect(inferActivityType('Food Market')).toBe(ActivityType.GROCERY);
+    });
+
+    it('should infer RECREATION type from recreation keywords', () => {
+      expect(inferActivityType('Tekapo Springs Hot Pools')).toBe(ActivityType.RECREATION);
+      expect(inferActivityType('Skyline Gondola and Luge')).toBe(ActivityType.RECREATION);
+      expect(inferActivityType('Glowworm Caves')).toBe(ActivityType.RECREATION);
+      expect(inferActivityType('Puzzling World Maze')).toBe(ActivityType.RECREATION);
     });
 
     it('should default to OTHER type for unrecognized activities', () => {

@@ -4,6 +4,10 @@
  *   - thumbnail_url: Images for places
  *   - google_place_id: Google Places IDs
  *   - activity_type: Activity type classification
+ * Comprehensive enrichment script to populate trip data with:
+ *   - thumbnail_url: Images for places
+ *   - google_place_id: Google Places IDs
+ *   - activity_type: Activity type classification
  *
  * Usage:
  *   pnpm tsx scripts/enrich-trip-data.ts [filename]
@@ -15,8 +19,13 @@
  * Image source priority:
  *   1. Existing thumbnail_url (skip if already set)
  *   2. Google Places API photo
- *   3. og:image from place URL
- *   4. Web search by place name
+ *   3. Web search from place URL (og:image)
+ *   4. Web search based on place name
+ *
+ * Activity type inference:
+ *   1. Existing activity_type (preserved)
+ *   2. Google Places API types → inferred type
+ *   3. Activity name keywords → inferred type
  *
  * Activity type inference:
  *   1. Existing activity_type (preserved)
@@ -33,6 +42,355 @@ import type { ScenicWaypoint } from '../src/types/map';
 // Get __dirname equivalent in ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// ActivityType enum (standalone to avoid @/types path alias issues in Node.js)
+const ActivityType = {
+  RESTAURANT: 'restaurant',
+  ATTRACTION: 'attraction',
+  SHOPPING: 'shopping',
+  OUTDOOR: 'outdoor',
+  CULTURAL: 'cultural',
+  RECREATION: 'recreation',
+  SCENIC: 'scenic',
+  BEACH: 'beach',
+  PLAYGROUND: 'playground',
+  GROCERY: 'grocery',
+  TRANSPORT: 'transport',
+  OTHER: 'other',
+} as const;
+
+type ActivityType = (typeof ActivityType)[keyof typeof ActivityType];
+
+// Keywords for inferring activity types from activity names
+const ACTIVITY_TYPE_KEYWORDS: Record<ActivityType, string[]> = {
+  [ActivityType.RESTAURANT]: [
+    'restaurant',
+    'cafe',
+    'bar',
+    'pub',
+    'bistro',
+    'brewery',
+    'winery',
+    'dining',
+    'food',
+    'meal',
+    'breakfast',
+    'lunch',
+    'dinner',
+    'eat',
+    'drink',
+    'coffee',
+    'bakery',
+    'deli',
+    'pizzeria',
+    'buffet',
+    'kitchen',
+    'grill',
+    'tavern',
+  ],
+  [ActivityType.ATTRACTION]: [
+    'museum',
+    'gallery',
+    'park',
+    'garden',
+    'zoo',
+    'aquarium',
+    'attraction',
+    'monument',
+    'landmark',
+    'sightseeing',
+    'tourist',
+    'visit',
+    'tour',
+    'observatory',
+    'heritage',
+    'historic',
+    'castle',
+    'palace',
+    'cathedral',
+    'church',
+    'temple',
+    'bridge',
+    'tower',
+    'falls',
+    'waterfall',
+    'sound',
+    'fiord',
+    'milford',
+    'head',
+    'cape',
+    'point',
+  ],
+  [ActivityType.SHOPPING]: [
+    'shop',
+    'shopping',
+    'market visit',
+    'store',
+    'mall',
+    'boutique',
+    'outlet',
+    'souvenir',
+    'craft store',
+    'artisan shop',
+    'farmers market',
+    'buy',
+    'purchase',
+    'retail',
+    'shopping centre',
+    'shopping plaza',
+  ],
+  [ActivityType.OUTDOOR]: [
+    'hiking',
+    'walk',
+    'trail',
+    'track',
+    'climb',
+    'climbing',
+    'kayak',
+    'rafting',
+    'fishing',
+    'swimming',
+    'surf',
+    'bike',
+    'cycling',
+    'mountain',
+    'alpine',
+    'glacier',
+    'fjord',
+    'adventure',
+    'outdoor',
+    'nature',
+    'wildlife',
+    'safari',
+    'bungee',
+    'skydive',
+    'zip',
+    'jetboat',
+    'cruise',
+    'sailing',
+    'boat trip',
+    'whale watching',
+    'dolphin',
+    'seal',
+    'penguin',
+    'bird watching',
+  ],
+  [ActivityType.CULTURAL]: [
+    'cultural',
+    'culture',
+    'maori',
+    'indigenous',
+    'traditional',
+    'performance',
+    'show',
+    'theatre',
+    'concert',
+    'festival',
+    'event',
+    'art exhibition',
+    'music',
+    'dance',
+    'workshop',
+    'cultural experience',
+    'cultural village',
+    'community',
+    'hangi',
+    'cultural centre',
+  ],
+  [ActivityType.TRANSPORT]: [
+    'drive',
+    'driving',
+    'flight',
+    'ferry',
+    'bus',
+    'train',
+    'transfer',
+    'pickup',
+    'drop off',
+    'rental',
+    'car hire',
+    'airport',
+    'station',
+    'terminal',
+    'departure',
+    'arrival',
+    'journey',
+    'travel',
+    'scenic drive',
+    'route',
+    'highway',
+    'road',
+  ],
+  [ActivityType.RECREATION]: [
+    'springs',
+    'hot pools',
+    'gondola',
+    'luge',
+    'jet',
+    'jetboat',
+    'cruise',
+    'farm tour',
+    'animal experience',
+    'wildlife',
+    'glowworm',
+    'caves',
+    'puzzling',
+    'maze',
+  ],
+  [ActivityType.SCENIC]: [
+    'lookout',
+    'viewpoint',
+    'view point',
+    'summit',
+    'bridge walkway',
+    'scenic reserve',
+    'pass',
+    'mirror',
+    'lake views',
+  ],
+  [ActivityType.BEACH]: ['beach', 'pier', 'coastline', 'bay', 'foreshore'],
+  [ActivityType.PLAYGROUND]: ['playground', 'play area', 'dinosaur park', 'family playground', 'lakefront playground'],
+  [ActivityType.GROCERY]: ['woolworths', 'supermarket', 'grocery', 'food market'],
+  [ActivityType.OTHER]: [],
+};
+
+/**
+ * Infers activity type from Google Places API types
+ */
+function inferActivityTypeFromGooglePlaces(placeTypes: string[]): ActivityType {
+  const googlePlaceTypeMap: Record<string, ActivityType> = {
+    // Restaurant types
+    restaurant: ActivityType.RESTAURANT,
+    food: ActivityType.RESTAURANT,
+    meal_takeaway: ActivityType.RESTAURANT,
+    meal_delivery: ActivityType.RESTAURANT,
+    cafe: ActivityType.RESTAURANT,
+    bar: ActivityType.RESTAURANT,
+    bakery: ActivityType.RESTAURANT,
+    night_club: ActivityType.RESTAURANT,
+
+    // Grocery types (more specific than general shopping)
+    supermarket: ActivityType.GROCERY,
+    grocery_or_supermarket: ActivityType.GROCERY,
+    convenience_store: ActivityType.GROCERY,
+
+    // Playground types
+    playground: ActivityType.PLAYGROUND,
+
+    // Beach types
+    beach: ActivityType.BEACH,
+
+    // Recreation types
+    amusement_park: ActivityType.RECREATION,
+    aquarium: ActivityType.RECREATION,
+    zoo: ActivityType.RECREATION,
+    spa: ActivityType.RECREATION,
+    bowling_alley: ActivityType.RECREATION,
+
+    // Scenic types (viewpoints and natural landmarks)
+    natural_feature: ActivityType.SCENIC,
+    point_of_interest: ActivityType.SCENIC,
+
+    // Attraction types
+    tourist_attraction: ActivityType.ATTRACTION,
+    museum: ActivityType.ATTRACTION,
+    art_gallery: ActivityType.ATTRACTION,
+    park: ActivityType.ATTRACTION,
+    landmark: ActivityType.ATTRACTION,
+
+    // Shopping types
+    shopping_mall: ActivityType.SHOPPING,
+    store: ActivityType.SHOPPING,
+    clothing_store: ActivityType.SHOPPING,
+    shoe_store: ActivityType.SHOPPING,
+    jewelry_store: ActivityType.SHOPPING,
+    book_store: ActivityType.SHOPPING,
+    electronics_store: ActivityType.SHOPPING,
+    furniture_store: ActivityType.SHOPPING,
+    department_store: ActivityType.SHOPPING,
+
+    // Outdoor types
+    campground: ActivityType.OUTDOOR,
+    rv_park: ActivityType.OUTDOOR,
+    stadium: ActivityType.OUTDOOR,
+    gym: ActivityType.OUTDOOR,
+
+    // Cultural types
+    library: ActivityType.CULTURAL,
+    university: ActivityType.CULTURAL,
+    school: ActivityType.CULTURAL,
+    church: ActivityType.CULTURAL,
+    hindu_temple: ActivityType.CULTURAL,
+    mosque: ActivityType.CULTURAL,
+    synagogue: ActivityType.CULTURAL,
+    place_of_worship: ActivityType.CULTURAL,
+
+    // Transport types
+    airport: ActivityType.TRANSPORT,
+    bus_station: ActivityType.TRANSPORT,
+    train_station: ActivityType.TRANSPORT,
+    transit_station: ActivityType.TRANSPORT,
+    car_rental: ActivityType.TRANSPORT,
+  };
+
+  // Check each place type and return the first match
+  for (const placeType of placeTypes) {
+    const activityType = googlePlaceTypeMap[placeType];
+    if (activityType) {
+      return activityType;
+    }
+  }
+
+  return ActivityType.OTHER;
+}
+
+/**
+ * Infers activity type from activity name using keyword matching
+ */
+function inferActivityType(activityName: string, existingType?: ActivityType, googlePlaceTypes?: string[]): ActivityType {
+  // If activity already has a type, use it
+  if (existingType && Object.values(ActivityType).includes(existingType)) {
+    return existingType;
+  }
+
+  // If Google Places types are provided, use them for inference
+  if (googlePlaceTypes && googlePlaceTypes.length > 0) {
+    const inferredFromPlaces = inferActivityTypeFromGooglePlaces(googlePlaceTypes);
+    if (inferredFromPlaces !== ActivityType.OTHER) {
+      return inferredFromPlaces;
+    }
+  }
+
+  // Convert activity name to lowercase for case-insensitive matching
+  const nameToCheck = activityName.toLowerCase();
+
+  // Check each activity type's keywords in priority order
+  // Order matters: more specific types should be checked first
+  const typeOrder = [
+    ActivityType.GROCERY, // Very specific keywords
+    ActivityType.PLAYGROUND, // Very specific keywords
+    ActivityType.RESTAURANT, // Check before BEACH to avoid false matches on "wharf" etc
+    ActivityType.BEACH, // Specific location type
+    ActivityType.RECREATION, // Specific activity type
+    ActivityType.SCENIC, // Specific viewpoint type
+    ActivityType.SHOPPING,
+    ActivityType.OUTDOOR,
+    ActivityType.CULTURAL,
+    ActivityType.TRANSPORT,
+    ActivityType.ATTRACTION, // Last because it has generic words like "visit"
+  ];
+
+  for (const activityType of typeOrder) {
+    const keywords = ACTIVITY_TYPE_KEYWORDS[activityType];
+    for (const keyword of keywords) {
+      if (nameToCheck.includes(keyword.toLowerCase())) {
+        return activityType;
+      }
+    }
+  }
+
+  return ActivityType.OTHER;
+}
 
 // ActivityType enum (standalone to avoid @/types path alias issues in Node.js)
 const ActivityType = {
@@ -535,6 +893,7 @@ async function searchPlaceByText(query: string, location?: { lat: number; lng: n
         photo_url: photoUrl,
         name: place.name,
         types: place.types || [],
+        types: place.types || [],
       };
     } catch (error) {
       console.error('  ⚠️ Places API request failed:', error);
@@ -630,11 +989,13 @@ async function searchImageByAlternativeSources(placeName: string, location?: str
 
 /**
  * Enrich a single place with thumbnail_url, google_place_id, and activity_type (for activities)
+ * Enrich a single place with thumbnail_url, google_place_id, and activity_type (for activities)
  */
 async function enrichPlace(
   name: string,
   existingThumbnail: string | null | undefined,
   existingPlaceId: string | null | undefined,
+  existingActivityType: ActivityType | null | undefined,
   existingActivityType: ActivityType | null | undefined,
   location?: { lat?: number; lng?: number; address?: string },
   url?: string
@@ -645,10 +1006,19 @@ async function enrichPlace(
   changed: boolean;
   typeChanged: boolean;
 }> {
+): Promise<
+  thumbnail_url: string | null;
+  google_place_id: string | null;
+  activity_type: ActivityType | null;
+  changed: boolean;
+  typeChanged: boolean;> {
   let thumbnail_url = existingThumbnail || null;
   let google_place_id = existingPlaceId || null;
   let activity_type = existingActivityType || null;
+  let activity_type = existingActivityType || null;
   let changed = false;
+  let typeChanged = false;
+  let placeTypes: string[] = [];
   let typeChanged = false;
   let placeTypes: string[] = [];
 
@@ -669,6 +1039,18 @@ async function enrichPlace(
         thumbnail_url = placeResult.photo_url;
         changed = true;
       }
+      if (placeResult.types && placeResult.types.length > 0) {
+        placeTypes = placeResult.types;
+      }
+    }
+  }
+
+  // Infer activity type if not already set
+  if (!activity_type && existingActivityType === undefined) {
+    const inferredType = inferActivityType(name, undefined, placeTypes.length > 0 ? placeTypes : undefined);
+    if (inferredType && inferredType !== 'other') {
+      activity_type = inferredType as ActivityType;
+      typeChanged = true;
       if (placeResult.types && placeResult.types.length > 0) {
         placeTypes = placeResult.types;
       }
@@ -720,6 +1102,7 @@ async function enrichAccommodation(accommodation: Accommodation): Promise<{ acco
     accommodation.thumbnail_url,
     accommodation.google_place_id,
     undefined, // accommodations don't have activity_type
+    undefined, // accommodations don't have activity_type
     accommodation.location ? { ...accommodation.location, address: accommodation.address } : { address: accommodation.address },
     accommodation.url
   );
@@ -744,7 +1127,9 @@ async function enrichAccommodation(accommodation: Accommodation): Promise<{ acco
  * Enrich activity data
  */
 async function enrichActivity(activity: Activity): Promise<{ activity: Activity; enriched: boolean; typeEnriched: boolean }> {
+async function enrichActivity(activity: Activity): Promise<{ activity: Activity; enriched: boolean; typeEnriched: boolean }> {
   if (!(activity && activity.activity_name)) {
+    return { activity, enriched: false, typeEnriched: false };
     return { activity, enriched: false, typeEnriched: false };
   }
 
@@ -755,10 +1140,20 @@ async function enrichActivity(activity: Activity): Promise<{ activity: Activity;
     activity.thumbnail_url,
     activity.google_place_id,
     activity.activity_type,
+    activity.activity_type,
     activity.location,
     activity.url
   );
 
+  const anyChange = result.changed || result.typeChanged;
+
+  if (anyChange) {
+    const changes: string[] = [];
+    if (result.thumbnail_url) changes.push('thumbnail');
+    if (result.google_place_id) changes.push('place_id');
+    if (result.typeChanged && result.activity_type) changes.push(`type:${result.activity_type}`);
+
+    console.log(`     ✅ Enriched (${changes.join(', ')})`);
   const anyChange = result.changed || result.typeChanged;
 
   if (anyChange) {
@@ -774,12 +1169,23 @@ async function enrichActivity(activity: Activity): Promise<{ activity: Activity;
         thumbnail_url: result.thumbnail_url ?? activity.thumbnail_url,
         google_place_id: result.google_place_id ?? activity.google_place_id,
         activity_type: result.activity_type ?? activity.activity_type,
+        thumbnail_url: result.thumbnail_url ?? activity.thumbnail_url,
+        google_place_id: result.google_place_id ?? activity.google_place_id,
+        activity_type: result.activity_type ?? activity.activity_type,
       },
+      enriched: result.changed,
+      typeEnriched: result.typeChanged,
       enriched: result.changed,
       typeEnriched: result.typeChanged,
     };
   }
 
+  if (activity.activity_type) {
+    console.log(`     ⏭️  Skipped (type: ${activity.activity_type})`);
+  } else {
+    console.log('     ⏭️  Skipped (already has data or no results)');
+  }
+  return { activity, enriched: false, typeEnriched: false };
   if (activity.activity_type) {
     console.log(`     ⏭️  Skipped (type: ${activity.activity_type})`);
   } else {
@@ -802,6 +1208,7 @@ async function enrichWaypoint(waypoint: ScenicWaypoint): Promise<{ waypoint: Sce
     waypoint.activity_name,
     waypoint.thumbnail_url,
     waypoint.google_place_id,
+    undefined, // waypoints don't have activity_type
     undefined, // waypoints don't have activity_type
     waypoint.location,
     waypoint.url
@@ -891,6 +1298,7 @@ async function enrichTripData(filename: string): Promise<EnrichmentStats> {
     details: {
       accommodations: { total: 0, enriched: 0 },
       activities: { total: 0, enriched: 0, typesEnriched: 0 },
+      activities: { total: 0, enriched: 0, typesEnriched: 0 },
       waypoints: { total: 0, enriched: 0 },
     },
   };
@@ -910,6 +1318,7 @@ async function enrichTripData(filename: string): Promise<EnrichmentStats> {
       stats.total++;
       stats.details.accommodations.total++;
       const { accommodation, enriched } = await enrichAccommodation(stop.accommodation);
+      const { accommodation, enriched } = await enrichAccommodation(stop.accommodation);
       stop.accommodation = accommodation;
       if (enriched) {
         stats.enriched++;
@@ -924,6 +1333,7 @@ async function enrichTripData(filename: string): Promise<EnrichmentStats> {
       for (let i = 0; i < stop.activities.length; i++) {
         stats.total++;
         stats.details.activities.total++;
+        const { activity, enriched, typeEnriched } = await enrichActivity(stop.activities[i]);
         const { activity, enriched, typeEnriched } = await enrichActivity(stop.activities[i]);
         stop.activities[i] = activity;
         if (enriched) {
@@ -986,8 +1396,7 @@ async function main(): Promise<void> {
   console.log('🚀 Wanderlog Trip Data Enrichment Tool\n');
   console.log('This script enriches trip data with:');
   console.log('  - thumbnail_url: Images for places');
-  console.log('  - google_place_id: Google Places IDs');
-  console.log('  - activity_type: Activity type classification\n');
+  console.log('  - google_place_id: Google Places IDs\n');
   console.log('Image source priority:');
   console.log('  1. Existing thumbnail_url (skip if already set)');
   console.log('  2. Google Places API photo');
@@ -1010,6 +1419,7 @@ async function main(): Promise<void> {
       failed: 0,
       details: {
         accommodations: { total: 0, enriched: 0 },
+        activities: { total: 0, enriched: 0, typesEnriched: 0 },
         activities: { total: 0, enriched: 0, typesEnriched: 0 },
         waypoints: { total: 0, enriched: 0 },
       },
@@ -1037,6 +1447,7 @@ async function main(): Promise<void> {
         totalStats.details.accommodations.enriched += stats.details.accommodations.enriched;
         totalStats.details.activities.total += stats.details.activities.total;
         totalStats.details.activities.enriched += stats.details.activities.enriched;
+        totalStats.details.activities.typesEnriched += stats.details.activities.typesEnriched;
         totalStats.details.activities.typesEnriched += stats.details.activities.typesEnriched;
         totalStats.details.waypoints.total += stats.details.waypoints.total;
         totalStats.details.waypoints.enriched += stats.details.waypoints.enriched;

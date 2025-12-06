@@ -53,6 +53,11 @@ export const ActivityType = {
   SHOPPING: 'shopping',
   OUTDOOR: 'outdoor',
   CULTURAL: 'cultural',
+  RECREATION: 'recreation',
+  SCENIC: 'scenic',
+  BEACH: 'beach',
+  PLAYGROUND: 'playground',
+  GROCERY: 'grocery',
   TRANSPORT: 'transport',
   OTHER: 'other',
 } as const;
