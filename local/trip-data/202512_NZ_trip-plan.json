@@ -791,7 +791,6 @@
               "lat": -45.0285649,
               "lng": 168.01098109999998
             },
-            "order": 1,
             "remarks": "Check weather & avalanche advisories on Milford Road",
             "status": {
               "done": false
@@ -808,7 +807,6 @@
               "lat": -44.8944896,
               "lng": 168.0825303
             },
-            "order": 2,
             "remarks": "Check weather & avalanche advisories on Milford Road",
             "status": {
               "done": false
