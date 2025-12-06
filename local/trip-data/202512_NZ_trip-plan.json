@@ -1,5 +1,5 @@
 {
-  "exportDate": "2025-12-01T12:29:47.573Z",
+  "exportDate": "2025-12-06T12:45:34.222Z",
   "tripData": {
     "constraints": {
       "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"],
@@ -23,7 +23,7 @@
           "phone": "+64 3 358 3139",
           "room": "Superior Twin",
           "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=AWn5SU6PirunMSKzAP1yAkguvTFUB6opgxofpdT8gqOau3L8h-JzlQBzWMjRe0ZXP67LZC2PgelJ3mtp-SRamHvdUw-POxmL5h-0Hh_F2x1Mn4gvYPOV5OVIlfj0rOf3cHX__-WQ4s8le1JUpCj3eYx8MKfs4Fu6bXgpi6NCHG1XMxOBah1l1AnlkvqvTl_q4OGiva6PvtP7ikp8UBULZoS0uS9svbECkl6nt6wnfQXNi60pFogyeOynT9YSuJdaYc-yu2VSiDL0Bq3nOdJQGgoqijh90FEms4Fq8Vkditrv5sj8cg&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-          "url": "https://www.sudimahotels.com/en/hotels/christchurch-airport/"
+          "url": "https://www.agoda.com/account/editbooking.html?bookingId=VouHz37QKkblrjD5u%20votw==&&af_sub3=6e86f5e5-8dbf-4cd6-8bf8-dbc1c756a73d&c=CONFIRMATION_EMAIL_ONELINK&pid=redirect&deep_link_value=agoda%3A%2F%2Fmmb%2F%3FbookingToken%3DVouHz37QKkblrjD5u%20votw%3D%3D&af_sub4=Hotel&af_force_deeplink=true"
         },
         "activities": [
           {
@@ -297,7 +297,7 @@
           },
           "name": "Marina Gem – Lakefront 3-Bedroom Apartment (Airbnb)",
           "thumbnail_url": "https://a0.muscache.com/im/pictures/fe7217ff-0b24-438d-880d-b94722c75bf5.jpg",
-          "url": "https://www.airbnb.com.sg/rooms/745883132749394319"
+          "url": "https://www.airbnb.com.sg/trips/v1/reservation-details/ro/RESERVATION2_CHECKIN/HMJE5ASMEP?c=.pi80.pkYm9va2luZy9ndWVzdC9SZXNlcnZhdGlvbkNvbmZpcm1hdGlvblRlbXBsYXRl&euid=0e10b7c4-b280-319f-27f1-f10f0642151d"
         },
         "activities": [
           {
@@ -550,7 +550,7 @@
           "phone": "+64 3 249 9700",
           "room": "2-Bedroom Villa",
           "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=AWn5SU77bN0bNio7MhklUzyzWnLZ0S4hj1S2JOQvnk4lX8pgsWJ_lnGvhUlzBWBzB27gyMWCvXcsLaQQ_LCFeGbkPKI9iMx2THVW88KbCSnks1vexqGnIyOs1eB462Bd-8M7NGeUzTljrV-v0676e3BXdnZ-jfLXb9HvFZAX5Kvnk46BzvquKq8fYNnDTKLLsnQMk3iWP65eRKJgk8Djw56cl5-GFXpEAb4C6f4Lqu3JvBQ9P29OCm6_cue2asHz-spPioBp3eQsPTTvAskcAxUX7-sJuRwI1NEK5U60kgCP4s2jNw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-          "url": "https://www.distinctionhotels.co.nz/hotel-te-anau"
+          "url": "https://www.agoda.com/account/editbooking.html?bookingId=eyDhyHub0/TTVwr69%20/B5w==&&af_sub3=6e86f5e5-8dbf-4cd6-8bf8-dbc1c756a73d&c=CONFIRMATION_EMAIL_ONELINK&pid=redirect&deep_link_value=agoda%3A%2F%2Fmmb%2F%3FbookingToken%3DeyDhyHub0%2FTTVwr69%20%2FB5w%3D%3D&af_sub4=Hotel&af_force_deeplink=true"
         },
         "activities": [
           {
@@ -661,6 +661,25 @@
       {
         "activities": [
           {
+            "activity_id": "milford-sound-act-1",
+            "activity_name": "Milford Sound cruise (optional day trip)",
+            "duration": "1h 45m–2h cruise (+stops)",
+            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o",
+            "location": {
+              "address": "Milford Sound Visitor Terminal, Milford Sound 9679",
+              "lat": -44.6681426,
+              "lng": 167.926988
+            },
+            "order": 0,
+            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890",
+            "travel_time_from_accommodation": "2h 0m drive (each way)",
+            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/"
+          },
+          {
             "activity_id": "poi_ChIJFQD__5nd1akRh3ImpwVnRBE_1764582059533",
             "activity_name": "Milford Sound Lookout",
             "activity_type": "attraction",
@@ -671,32 +690,13 @@
               "lat": -44.67031739999999,
               "lng": 167.922349
             },
-            "order": 0,
+            "order": 1,
             "remarks": "Rating: 4.8/5 (231 reviews)",
             "status": {
               "done": false
             },
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/js/PhotoService.GetPhoto?1sAWn5SU6GSJ82ctF-MtYSQ94d_ct4uXl27AtSVGAfyhUfgXdxGKPW5wOSjt2D0vSTuc_CQU8WnCYCKbeRxmrgID81aAmHxyIjYq2rHEt1beCMsdyV_L1Ylig43XavdMiMv4QtMThbWy4TA--O_B2jHD6YbKBKpsCsjgNGoiz9_9iQ3T6lO5GJDF_UsN6cE8TmMDfCRogCkE9kbJyJbsMxGRYTLPWRcSQZltUUPkIvv0im2kJTK8n582pLpWl0-MQnj356ye4e2e-3MtlORB4sHJJ2qm4Z_dSAvIPsuh3BEak6ipCNopvHb3-6Fps8YVI7NYCvOX2O0C4AiT1XCh4jaH-jsxRXdROTJa-wDJ6VxIcdOa0akOMd6z3dDVjnTto8BDT_Gvr5ihfspJ0x0WFodWML3KH6AmJTaiWU7sd1_tqxNpW5ba3U&3u400&5m1&2e1&callback=none&r_url=https%3A%2F%2Fkevinlin.github.io%2Fwanderlog%2F&key=AIzaSyCB5n4X58yytDpkXjKeiWegfuG5SIY4C_8&token=12667",
             "url": "https://www.aa.co.nz/travel/editorial/milford-sound-lookout-track/"
-          },
-          {
-            "activity_id": "milford-sound-act-1",
-            "activity_name": "Milford Sound cruise (optional day trip)",
-            "duration": "1h 45m–2h cruise (+stops)",
-            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o",
-            "location": {
-              "address": "Milford Sound Visitor Terminal, Milford Sound 9679",
-              "lat": -44.6681426,
-              "lng": 167.926988
-            },
-            "order": 1,
-            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890",
-            "travel_time_from_accommodation": "2h 0m drive (each way)",
-            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/"
           }
         ],
         "date": {
@@ -767,7 +767,7 @@
           },
           "name": "Timberstone House (Airbnb)",
           "thumbnail_url": "https://a0.muscache.com/im/pictures/fe7217ff-0b24-438d-880d-b94722c75bf5.jpg",
-          "url": "https://www.airbnb.com.sg/rooms/1120320222829412606?source_impression_id=p3_1764590248_P36BFHi1YESwnI8R"
+          "url": "https://www.airbnb.com.sg/trips/v1/reservation-details/ro/RESERVATION2_CHECKIN/HMDEJSDEMY?c=.pi80.pkYm9va2luZy9ndWVzdC9SZXNlcnZhdGlvbkNvbmZpcm1hdGlvblRlbXBsYXRl&euid=1144454d-0a18-efab-94ef-48f31147dbfd"
         },
         "activities": [
           {
@@ -947,9 +947,28 @@
           "phone": "+64 3 688 6145",
           "room": "Executive 2-Bedroom Apartment with Spa",
           "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=1200&photo_reference=AWn5SU5c6pE-AO8tIN3KhEtyc8W9mxEjr-X2sd4_x9xnZiiG04oFiUpoiopuiGnHOa-TuC09wbgsgNOI5YhTEjJanpvrhonCy99H_50YbdHZZYCeQY-I0hceYo92MJwvb9sO2zf1IGm0bDCVWvSa9iJ4opCE3blWn9J1BZfIrNB_aRahDx0sYUCjmC70fwDpBKicLWL0MPsRvQ4yWUbwoEgD9u2OmoSYxcJj54kiFMXLNz-scExNrJ4iSOsNEwtsjoF9uHv4v0-7vBg4Kbwhuu0v8pnqVPzI10UhqsRx3x0Pjq7G8w&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-          "url": "https://bayviaduct.co.nz/"
+          "url": "https://www.agoda.com/account/editbooking.html?bookingId=DqKH3s5YZLG7gs2NTMESHw==&&af_sub3=6e86f5e5-8dbf-4cd6-8bf8-dbc1c756a73d&c=CONFIRMATION_EMAIL_ONELINK&pid=redirect&deep_link_value=agoda%3A%2F%2Fmmb%2F%3FbookingToken%3DDqKH3s5YZLG7gs2NTMESHw%3D%3D&af_sub4=Hotel&af_force_deeplink=true"
         },
         "activities": [
+          {
+            "activity_id": "timaru-act-2",
+            "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
+            "duration": "Flexible",
+            "google_place_id": "ChIJ_wDi9YnBLG0RQChcZYfvAA8",
+            "location": {
+              "address": "Caroline Bay Soundshell, Timaru",
+              "lat": -44.390454399999996,
+              "lng": 171.2481594
+            },
+            "order": 0,
+            "remarks": "Runs 26 Dec 2025 – 11 Jan 2026; rides, shows, fireworks (NYE)",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "http://carolinebay.co.nz/cdn/shop/files/1802158-779358-35_3a7b6956-7d0c-4cd5-aeac-c4fa3dc15abb.png?v=1720750178",
+            "travel_time_from_accommodation": "3–5m drive / 20m walk",
+            "url": "https://carolinebay.co.nz/"
+          },
           {
             "activity_id": "timaru-act-1",
             "activity_name": "Caroline Bay Playground & Beach",
@@ -970,42 +989,21 @@
             "url": "https://www.cplay.co.nz/"
           },
           {
-            "activity_id": "timaru-act-2",
-            "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
-            "duration": "Flexible",
-            "google_place_id": "ChIJ_wDi9YnBLG0RQChcZYfvAA8",
+            "activity_id": "poi_ChIJAWfT7IvBLG0RHDSdb6V2Wx0_1765024856813",
+            "activity_name": "Caroline Bay Beach",
+            "activity_type": "attraction",
+            "duration": "1-2 hours",
+            "google_place_id": "ChIJAWfT7IvBLG0RHDSdb6V2Wx0",
             "location": {
-              "address": "Caroline Bay Soundshell, Timaru",
-              "lat": -44.390454399999996,
-              "lng": 171.2481594
+              "address": "Caroline Bay Beach, Canterbury Region 7910, New Zealand",
+              "lat": -44.38659639999999,
+              "lng": 171.2487857
             },
             "order": 2,
-            "remarks": "Runs 26 Dec 2025 – 11 Jan 2026; rides, shows, fireworks (NYE)",
+            "remarks": "Rating: 4.6/5 (26 reviews)",
             "status": {
               "done": false
-            },
-            "thumbnail_url": "http://carolinebay.co.nz/cdn/shop/files/1802158-779358-35_3a7b6956-7d0c-4cd5-aeac-c4fa3dc15abb.png?v=1720750178",
-            "travel_time_from_accommodation": "3–5m drive / 20m walk",
-            "url": "https://carolinebay.co.nz/"
-          },
-          {
-            "activity_id": "timaru-act-3",
-            "activity_name": "South Canterbury Museum",
-            "duration": "45–90m",
-            "google_place_id": "ChIJkSuHXofBLG0RVzLMKZJy1RE",
-            "location": {
-              "address": "4 Perth St, Timaru 7910",
-              "lat": -44.3970936,
-              "lng": 171.2509368
-            },
-            "order": 3,
-            "remarks": "Local history & natural heritage; free entry",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Pearse_aeroplane_replica%2C_South_Canterbury_Museum-1.jpg",
-            "travel_time_from_accommodation": "5–7m drive",
-            "url": "https://museum.timaru.govt.nz/"
+            }
           },
           {
             "activity_id": "timaru-act-4",
@@ -1017,7 +1015,7 @@
               "lat": -44.3905755,
               "lng": 171.23967299999998
             },
-            "order": 4,
+            "order": 3,
             "remarks": "Sculpture garden is always open; free entry",
             "status": {
               "done": false
@@ -1025,6 +1023,25 @@
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/7/75/Aigantighe_Art_Gallery_-_13_-_House_-_North_side.jpg",
             "travel_time_from_accommodation": "5–7m drive",
             "url": "https://www.aigantighe.co.nz/"
+          },
+          {
+            "activity_id": "timaru-act-3",
+            "activity_name": "South Canterbury Museum",
+            "duration": "45–90m",
+            "google_place_id": "ChIJkSuHXofBLG0RVzLMKZJy1RE",
+            "location": {
+              "address": "4 Perth St, Timaru 7910",
+              "lat": -44.3970936,
+              "lng": 171.2509368
+            },
+            "order": 4,
+            "remarks": "Local history & natural heritage; free entry",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Pearse_aeroplane_replica%2C_South_Canterbury_Museum-1.jpg",
+            "travel_time_from_accommodation": "5–7m drive",
+            "url": "https://museum.timaru.govt.nz/"
           }
         ],
         "date": {
@@ -1127,7 +1144,7 @@
           "phone": "+64 3 372 2111",
           "room": "2× Superior Room (2 Double Beds)",
           "thumbnail_url": "https://www.ahstatic.com/photos/6592_ho_00_p_1024x768.jpg",
-          "url": "https://all.accor.com/hotel/6592/index.en.shtml"
+          "url": "https://secure.accor.com/managebookings/index.en.shtml#/details/qwMq1_jKOCVLo8DhkeY8Nk-eZMXS1BSqCX_t3LcDKRkSkT4Fn8-k92psOax4Sh4tLRp5gOVremT198r7yBSmLE0u6N0"
         },
         "activities": [
           {
@@ -1325,9 +1342,8 @@
     ],
     "trip_id": "202512_NZ",
     "trip_name": "NZ South Island Road Trip — 13–29 Dec 2025 (Family of 5)",
-    "updated_at": "2025-12-01T12:29:47.572Z",
+    "updated_at": "2025-12-06T12:30:48.790Z",
     "vehicle": "MPV (pickup/return: Christchurch Airport)"
   },
-  "version": "1.0.0",
-  "updated_at": "2025-12-02T09:10:33.617Z"
+  "version": "1.0.0"
 }
