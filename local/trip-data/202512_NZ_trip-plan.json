@@ -1,5 +1,5 @@
 {
-  "exportDate": "2025-12-06T12:45:34.222Z",
+  "exportDate": "2025-12-06T13:58:52.660Z",
   "tripData": {
     "constraints": {
       "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"],
@@ -319,6 +319,24 @@
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHquR_DCzpX54qiZWle1Kbzsu1JusF5jyhmlBVRzmJ7y7DdQuQ67r2MXGgOXBzU1r3IdPyOzRyDk_W5X8qGbIykq3O8I1folrqI0ruZwi9iNNVfPajYGEDrOWz1jPkVO5SBX-PqACTpwwze3OmbfXEBbXl2AJdyw869s_VDT2FmHoG2BLxwy4lo44AwiZ7CQn8cpSn0qQb3ICnqC1N2xnsQgD0bWpIclauUz1DUH2YT0q8kDJlgCL_gs4FUujGUSBahVRNJA2QiYUfZdv9BGCdxlzCFA46N_EAFsuPsj9HemwOz0FxoB6Kd1cuiHDG0Tg4-JDbRyo5SdF1M9HGTJksoAjPBHjhklpp9PUxARKG2DE6rZ-ASyrquZTuIWzn7zFn8mR2XfCV9TiAUdWH1CSNJufsRHICr4jJuHlbjsTUpkK5a4Pa_9eAx6Z6h-kE4Y5gHkC3dChIIQAgi_-dFLfVTcyQ5-cDvU2RerI7rwIbVuJDJeP9nW6AN8VKfJfA9ofk9jhUiEgHPRObU1QtbKN4Zl2mWqd2e6cObMTxMD0mosS6qUol0JjnsOJi6riguIHDbwx4x0nTXJ56m_6VfjYIyWW1HZ2Q&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           },
           {
+            "activity_id": "queenstown-act-4",
+            "activity_name": "Kiwi Park (native wildlife)",
+            "duration": "1–2h",
+            "google_place_id": "ChIJGbzFhngd1akREfa6vQkkB70",
+            "location": {
+              "address": "51 Brecon Street, Queenstown 9300",
+              "lat": -45.0283619,
+              "lng": 168.65657109999998
+            },
+            "remarks": "Keeper talks; tuatara; below Skyline Gondola",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://kiwibird.co.nz/wp-content/uploads/2024/01/Wings-Spread.jpg",
+            "travel_time_from_accommodation": "10–12m drive",
+            "url": "https://kiwibird.co.nz/"
+          },
+          {
             "activity_id": "queenstown-act-1",
             "activity_name": "Skyline Gondola & Luge",
             "duration": "2–4h",
@@ -376,6 +394,24 @@
             "url": "https://www.lakesdistrictmuseum.co.nz/"
           },
           {
+            "activity_id": "poi_ChIJ5SQFXNil1akRiqUy9jhpCLw_1765029472169",
+            "activity_name": "Glenorchy Animal Experience",
+            "activity_type": "attraction",
+            "duration": "1-2 hours",
+            "google_place_id": "ChIJ5SQFXNil1akRiqUy9jhpCLw",
+            "location": {
+              "address": "225 Glenorchy-Paradise Road, Glenorchy 9372, New Zealand",
+              "lat": -44.8332104,
+              "lng": 168.3982622
+            },
+            "order": 4,
+            "remarks": "Rating: 4.4/5 (688 reviews)",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHrUQCWauSB33j65L7gY1B4kSCCuYU6zabNegWEdDKn91IppNmhF3_5DfPXp6osq3j1vGgF7--HVhC-XSf3y4_isutwHZdqctoUAkVxUU5ggfXvDb0Ov5XShwSFPQIc-u8GwKYTxrpzNV2wcJaCWkOxkuFJlTTCNNWg8N9vDfrQK1FISO0xNdivVZopaZn4mZTF6QQ93uBu0RMgtjUb_DJP3No4s0dHOyg6YbiFyLNTMfNmPstj6MP1hibQQMxiNo7pZS3CafCcH0kpXIZAGDO0OB1zgcjG5uKCGLEOI6XPWh8FVGwOTb8xhOcgm--Nt9u7z6xY34xXZDERKBg7ZnchnzKdiJo3xyWuP_wrxB71pDrDwpaJY92OmsJ1Wls6sA2kfKyd7RvchckAWJdJblPqcOfqk_vzt1Oo-dj-L3y570KiJqmPoG9uSS9fTbHMduXB0LACcRA30-n-SN6lgH2zGUXciE2cast4CuxPS_-_5aNOUyWvFPzYEnW9CuhunxxBfzVEGXDbc_lrmDxBNMMpthOWLz8y2LV7avIiqlRfp2AnZsQslnCj3BtI-mVFfL7X2X76_aXU6aQ&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
+          },
+          {
             "activity_id": "queenstown-act-7",
             "activity_name": "Queenstown Gardens & Lakefront Playground + Patagonia Chocolates",
             "duration": "1–2h",
@@ -385,7 +421,7 @@
               "lat": -45.0371873,
               "lng": 168.6607345
             },
-            "order": 4,
+            "order": 5,
             "remarks": "Beach & playground at Marine Parade; ice cream & hot chocolates nearby",
             "status": {
               "done": false
@@ -404,7 +440,7 @@
               "lat": -45.032974499999995,
               "lng": 168.65851859999998
             },
-            "order": 5,
+            "order": 6,
             "remarks": "Summer 9am–4pm; local crafts/food",
             "status": {
               "done": false
@@ -412,25 +448,6 @@
             "thumbnail_url": "https://static.wixstatic.com/media/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg/v1/fit/w_2500,h_1330,al_c/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg",
             "travel_time_from_accommodation": "12m drive",
             "url": "https://www.queenstownmarket.nz/"
-          },
-          {
-            "activity_id": "queenstown-act-4",
-            "activity_name": "Kiwi Park (native wildlife)",
-            "duration": "1–2h",
-            "google_place_id": "ChIJGbzFhngd1akREfa6vQkkB70",
-            "location": {
-              "address": "51 Brecon Street, Queenstown 9300",
-              "lat": -45.0283619,
-              "lng": 168.65657109999998
-            },
-            "order": 7,
-            "remarks": "Keeper talks; tuatara; below Skyline Gondola",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://kiwibird.co.nz/wp-content/uploads/2024/01/Wings-Spread.jpg",
-            "travel_time_from_accommodation": "10–12m drive",
-            "url": "https://kiwibird.co.nz/"
           },
           {
             "activity_id": "queenstown-act-5",
@@ -442,7 +459,7 @@
               "lat": -44.9870794,
               "lng": 168.6713311
             },
-            "order": 8,
+            "order": 7,
             "remarks": "Minimum height varies by conditions (often ~1.0m). Warm layers recommended",
             "status": {
               "done": false
@@ -679,25 +696,6 @@
       {
         "activities": [
           {
-            "activity_id": "milford-sound-act-1",
-            "activity_name": "Milford Sound cruise (optional day trip)",
-            "duration": "1h 45m–2h cruise (+stops)",
-            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o",
-            "location": {
-              "address": "Milford Sound Visitor Terminal, Milford Sound 9679",
-              "lat": -44.6681426,
-              "lng": 167.926988
-            },
-            "order": 0,
-            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890",
-            "travel_time_from_accommodation": "2h 0m drive (each way)",
-            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/"
-          },
-          {
             "activity_id": "poi_ChIJFQD__5nd1akRh3ImpwVnRBE_1764582059533",
             "activity_name": "Milford Sound Lookout",
             "activity_type": "attraction",
@@ -708,13 +706,32 @@
               "lat": -44.67031739999999,
               "lng": 167.922349
             },
-            "order": 1,
+            "order": 0,
             "remarks": "Rating: 4.8/5 (231 reviews)",
             "status": {
               "done": false
             },
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/js/PhotoService.GetPhoto?1sAWn5SU6GSJ82ctF-MtYSQ94d_ct4uXl27AtSVGAfyhUfgXdxGKPW5wOSjt2D0vSTuc_CQU8WnCYCKbeRxmrgID81aAmHxyIjYq2rHEt1beCMsdyV_L1Ylig43XavdMiMv4QtMThbWy4TA--O_B2jHD6YbKBKpsCsjgNGoiz9_9iQ3T6lO5GJDF_UsN6cE8TmMDfCRogCkE9kbJyJbsMxGRYTLPWRcSQZltUUPkIvv0im2kJTK8n582pLpWl0-MQnj356ye4e2e-3MtlORB4sHJJ2qm4Z_dSAvIPsuh3BEak6ipCNopvHb3-6Fps8YVI7NYCvOX2O0C4AiT1XCh4jaH-jsxRXdROTJa-wDJ6VxIcdOa0akOMd6z3dDVjnTto8BDT_Gvr5ihfspJ0x0WFodWML3KH6AmJTaiWU7sd1_tqxNpW5ba3U&3u400&5m1&2e1&callback=none&r_url=https%3A%2F%2Fkevinlin.github.io%2Fwanderlog%2F&key=AIzaSyCB5n4X58yytDpkXjKeiWegfuG5SIY4C_8&token=12667",
             "url": "https://www.aa.co.nz/travel/editorial/milford-sound-lookout-track/"
+          },
+          {
+            "activity_id": "milford-sound-act-1",
+            "activity_name": "Milford Sound cruise (optional day trip)",
+            "duration": "1h 45m–2h cruise (+stops)",
+            "google_place_id": "ChIJh8bKJgDd1akRmkIYApkID6o",
+            "location": {
+              "address": "Milford Sound Visitor Terminal, Milford Sound 9679",
+              "lat": -44.6681426,
+              "lng": 167.926988
+            },
+            "order": 1,
+            "remarks": "Leave early; book in advance; consider coach-cruise from Te Anau",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://www.realnz.com/media/ngdfa55u/haven.jpg?width=1200&amp;height=630&amp;v=1dc2c774b4cd890",
+            "travel_time_from_accommodation": "2h 0m drive (each way)",
+            "url": "https://www.realnz.com/en/experiences/day-cruises/milford-sound-cruises/"
           }
         ],
         "date": {
@@ -969,25 +986,6 @@
         },
         "activities": [
           {
-            "activity_id": "timaru-act-2",
-            "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
-            "duration": "Flexible",
-            "google_place_id": "ChIJ_wDi9YnBLG0RQChcZYfvAA8",
-            "location": {
-              "address": "Caroline Bay Soundshell, Timaru",
-              "lat": -44.390454399999996,
-              "lng": 171.2481594
-            },
-            "order": 0,
-            "remarks": "Runs 26 Dec 2025 – 11 Jan 2026; rides, shows, fireworks (NYE)",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "http://carolinebay.co.nz/cdn/shop/files/1802158-779358-35_3a7b6956-7d0c-4cd5-aeac-c4fa3dc15abb.png?v=1720750178",
-            "travel_time_from_accommodation": "3–5m drive / 20m walk",
-            "url": "https://carolinebay.co.nz/"
-          },
-          {
             "activity_id": "timaru-act-1",
             "activity_name": "Caroline Bay Playground & Beach",
             "duration": "1–3h",
@@ -997,7 +995,7 @@
               "lat": -44.388781699999996,
               "lng": 171.24652369999998
             },
-            "order": 1,
+            "order": 0,
             "remarks": "Shallow sandy bay; big new playground; penguin viewing area nearby",
             "status": {
               "done": false
@@ -1007,22 +1005,23 @@
             "url": "https://www.cplay.co.nz/"
           },
           {
-            "activity_id": "poi_ChIJAWfT7IvBLG0RHDSdb6V2Wx0_1765024856813",
-            "activity_name": "Caroline Bay Beach",
-            "activity_type": "attraction",
-            "duration": "1-2 hours",
-            "google_place_id": "ChIJAWfT7IvBLG0RHDSdb6V2Wx0",
+            "activity_id": "timaru-act-2",
+            "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
+            "duration": "Flexible",
+            "google_place_id": "ChIJ_wDi9YnBLG0RQChcZYfvAA8",
             "location": {
-              "address": "Caroline Bay Beach, Canterbury Region 7910, New Zealand",
-              "lat": -44.38659639999999,
-              "lng": 171.2487857
+              "address": "Caroline Bay Soundshell, Timaru",
+              "lat": -44.390454399999996,
+              "lng": 171.2481594
             },
-            "order": 2,
-            "remarks": "Rating: 4.6/5 (26 reviews)",
+            "order": 1,
+            "remarks": "Runs 26 Dec 2025 – 11 Jan 2026; rides, shows, fireworks (NYE)",
             "status": {
               "done": false
             },
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHobOuxRpbH44zycwpPVyf42_8kq6o0hwKjJiixPlLKnCG-M9Idz2GSOTHJRf7WCbu0spBDWJ1PHimFLO8B2a05-uisxOaH6yPZfTImBprvcstvXpe7ePYmdRhHvdwso2xTBiYGjprQ5PvV5XTyrrvRW2PRS6qRCqqT_3L4oBzLQDsmWBVhqE0U6qfOkpuGJnyftrswu9xWukM3gHp9JDv-bbtzHs53AK80i1SPjGIxGdlMcZ9qfHxUir8e-TZUAVv--O5gjiixc73H7s67r8Alj0vwELQQJmt8cImY51dfyNaY8fTtgJhdKWUq6Dg75l1exiHfO1zllYBM2qd4lpNKt20KjbNPA2_Grx0OxJvFgF5BoXvCfVFuBhqqLjv4x-KsExrZ96YBiSUeJRN9-2q86u-DwDHyV9Mh1rSRTtFbT4HozTt8DpvLUAlQwM8XwROU_tVt2qUjAq52oovN7NLRGcbRy7Q29kZe-ThQcxZMjzuci7cB1XDpfYqEONwNP2bDaWeiZybxIL_yEAa9TrQP6BN8J4gtZb3tKvUI1wLFTOknCLdB-Wwaf759HvKJJuKH3LJ3g9A8B4Nlx93mbAIaJVgPH0Q&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
+            "thumbnail_url": "http://carolinebay.co.nz/cdn/shop/files/1802158-779358-35_3a7b6956-7d0c-4cd5-aeac-c4fa3dc15abb.png?v=1720750178",
+            "travel_time_from_accommodation": "3–5m drive / 20m walk",
+            "url": "https://carolinebay.co.nz/"
           },
           {
             "activity_id": "timaru-act-4",
@@ -1034,7 +1033,7 @@
               "lat": -44.3905755,
               "lng": 171.23967299999998
             },
-            "order": 3,
+            "order": 2,
             "remarks": "Sculpture garden is always open; free entry",
             "status": {
               "done": false
@@ -1053,7 +1052,7 @@
               "lat": -44.3970936,
               "lng": 171.2509368
             },
-            "order": 4,
+            "order": 3,
             "remarks": "Local history & natural heritage; free entry",
             "status": {
               "done": false
@@ -1061,6 +1060,24 @@
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/8/83/Pearse_aeroplane_replica%2C_South_Canterbury_Museum-1.jpg",
             "travel_time_from_accommodation": "5–7m drive",
             "url": "https://museum.timaru.govt.nz/"
+          },
+          {
+            "activity_id": "poi_ChIJAWfT7IvBLG0RHDSdb6V2Wx0_1765024856813",
+            "activity_name": "Caroline Bay Beach",
+            "activity_type": "attraction",
+            "duration": "1-2 hours",
+            "google_place_id": "ChIJAWfT7IvBLG0RHDSdb6V2Wx0",
+            "location": {
+              "address": "Caroline Bay Beach, Canterbury Region 7910, New Zealand",
+              "lat": -44.38659639999999,
+              "lng": 171.2487857
+            },
+            "order": 4,
+            "remarks": "Rating: 4.6/5 (26 reviews)",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHobOuxRpbH44zycwpPVyf42_8kq6o0hwKjJiixPlLKnCG-M9Idz2GSOTHJRf7WCbu0spBDWJ1PHimFLO8B2a05-uisxOaH6yPZfTImBprvcstvXpe7ePYmdRhHvdwso2xTBiYGjprQ5PvV5XTyrrvRW2PRS6qRCqqT_3L4oBzLQDsmWBVhqE0U6qfOkpuGJnyftrswu9xWukM3gHp9JDv-bbtzHs53AK80i1SPjGIxGdlMcZ9qfHxUir8e-TZUAVv--O5gjiixc73H7s67r8Alj0vwELQQJmt8cImY51dfyNaY8fTtgJhdKWUq6Dg75l1exiHfO1zllYBM2qd4lpNKt20KjbNPA2_Grx0OxJvFgF5BoXvCfVFuBhqqLjv4x-KsExrZ96YBiSUeJRN9-2q86u-DwDHyV9Mh1rSRTtFbT4HozTt8DpvLUAlQwM8XwROU_tVt2qUjAq52oovN7NLRGcbRy7Q29kZe-ThQcxZMjzuci7cB1XDpfYqEONwNP2bDaWeiZybxIL_yEAa9TrQP6BN8J4gtZb3tKvUI1wLFTOknCLdB-Wwaf759HvKJJuKH3LJ3g9A8B4Nlx93mbAIaJVgPH0Q&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           }
         ],
         "date": {
@@ -1361,7 +1378,7 @@
     ],
     "trip_id": "202512_NZ",
     "trip_name": "NZ South Island Road Trip — 13–29 Dec 2025 (Family of 5)",
-    "updated_at": "2025-12-06T12:30:48.790Z",
+    "updated_at": "2025-12-06T13:46:58.928Z",
     "vehicle": "MPV (pickup/return: Christchurch Airport)"
   },
   "version": "1.0.0"
