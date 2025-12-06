@@ -395,10 +395,10 @@ export function getActivityTypeColor(activityType: ActivityType): string {
   const colorMap = {
     [ActivityType.RESTAURANT]: '#f97316', // Orange-500 - Energetic orange for dining experiences
     [ActivityType.ATTRACTION]: '#8b5cf6', // Violet-500 - Modern violet for sightseeing and attractions
-    [ActivityType.SHOPPING]: '#f59e0b', // Amber-500 - Bright amber for shopping and retail
-    [ActivityType.OUTDOOR]: '#10b981', // Emerald-500 - Rich green for outdoor activities and nature
+    [ActivityType.SHOPPING]: '#10b981', // Emerald-500 - Rich green for shopping and retail
+    [ActivityType.OUTDOOR]: '#f59e0b', // Amber-500 - Bright amber for outdoor activities and nature
     [ActivityType.CULTURAL]: '#06b6d4', // Cyan-500 - Vibrant cyan for cultural experiences
-    [ActivityType.RECREATION]: '#ec4899', // Pink-500 - Vibrant pink for recreation and fun activities
+    [ActivityType.RECREATION]: '#6366f1', // Indigo-500 - Vibrant pink for recreation and fun activities
     [ActivityType.SCENIC]: '#8b5cf6', // Violet-500 - Shared with attraction for scenic views
     [ActivityType.BEACH]: '#06b6d4', // Cyan-500 - Ocean blue for beach locations
     [ActivityType.PLAYGROUND]: '#f59e0b', // Amber-500 - Bright amber for playgrounds

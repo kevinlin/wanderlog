@@ -204,33 +204,49 @@ describe('ActivityUtils', () => {
       expect(getActivityTypeColor(ActivityType.SHOPPING)).toMatch(hexColorRegex);
       expect(getActivityTypeColor(ActivityType.OUTDOOR)).toMatch(hexColorRegex);
       expect(getActivityTypeColor(ActivityType.CULTURAL)).toMatch(hexColorRegex);
+      expect(getActivityTypeColor(ActivityType.RECREATION)).toMatch(hexColorRegex);
+      expect(getActivityTypeColor(ActivityType.SCENIC)).toMatch(hexColorRegex);
+      expect(getActivityTypeColor(ActivityType.BEACH)).toMatch(hexColorRegex);
+      expect(getActivityTypeColor(ActivityType.PLAYGROUND)).toMatch(hexColorRegex);
+      expect(getActivityTypeColor(ActivityType.GROCERY)).toMatch(hexColorRegex);
       expect(getActivityTypeColor(ActivityType.TRANSPORT)).toMatch(hexColorRegex);
       expect(getActivityTypeColor(ActivityType.OTHER)).toMatch(hexColorRegex);
-    });
-
-    it('should return distinct colors for different types', () => {
-      const colors = [
-        getActivityTypeColor(ActivityType.RESTAURANT),
-        getActivityTypeColor(ActivityType.ATTRACTION),
-        getActivityTypeColor(ActivityType.SHOPPING),
-        getActivityTypeColor(ActivityType.OUTDOOR),
-        getActivityTypeColor(ActivityType.CULTURAL),
-        getActivityTypeColor(ActivityType.TRANSPORT),
-        getActivityTypeColor(ActivityType.OTHER),
-      ];
-
-      const uniqueColors = new Set(colors);
-      expect(uniqueColors.size).toBe(colors.length);
     });
 
     it('should return specific expected colors from Tailwind Colors v4 palette', () => {
       expect(getActivityTypeColor(ActivityType.RESTAURANT)).toBe('#f97316'); // Orange-500
       expect(getActivityTypeColor(ActivityType.ATTRACTION)).toBe('#8b5cf6'); // Violet-500
-      expect(getActivityTypeColor(ActivityType.SHOPPING)).toBe('#f59e0b'); // Amber-500
-      expect(getActivityTypeColor(ActivityType.OUTDOOR)).toBe('#10b981'); // Emerald-500
+      expect(getActivityTypeColor(ActivityType.SHOPPING)).toBe('#10b981'); // Emerald-500
+      expect(getActivityTypeColor(ActivityType.OUTDOOR)).toBe('#f59e0b'); // Amber-500
       expect(getActivityTypeColor(ActivityType.CULTURAL)).toBe('#06b6d4'); // Cyan-500
-      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#6366f1'); // Indigo-500
+      expect(getActivityTypeColor(ActivityType.RECREATION)).toBe('#6366f1'); // Indigo-500 (shared with TRANSPORT)
+      expect(getActivityTypeColor(ActivityType.SCENIC)).toBe('#8b5cf6'); // Violet-500 (shared with ATTRACTION)
+      expect(getActivityTypeColor(ActivityType.BEACH)).toBe('#06b6d4'); // Cyan-500 (shared with CULTURAL)
+      expect(getActivityTypeColor(ActivityType.PLAYGROUND)).toBe('#f59e0b'); // Amber-500 (shared with OUTDOOR)
+      expect(getActivityTypeColor(ActivityType.GROCERY)).toBe('#10b981'); // Emerald-500 (shared with SHOPPING)
+      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#6366f1'); // Indigo-500 (shared with RECREATION)
       expect(getActivityTypeColor(ActivityType.OTHER)).toBe('#0ea5e9'); // Sky-500
+    });
+
+    it('should use a limited color palette with shared colors across related types', () => {
+      // The color palette uses 7 distinct colors shared across 12 activity types
+      const allColors = [
+        getActivityTypeColor(ActivityType.RESTAURANT),
+        getActivityTypeColor(ActivityType.ATTRACTION),
+        getActivityTypeColor(ActivityType.SHOPPING),
+        getActivityTypeColor(ActivityType.OUTDOOR),
+        getActivityTypeColor(ActivityType.CULTURAL),
+        getActivityTypeColor(ActivityType.RECREATION),
+        getActivityTypeColor(ActivityType.SCENIC),
+        getActivityTypeColor(ActivityType.BEACH),
+        getActivityTypeColor(ActivityType.PLAYGROUND),
+        getActivityTypeColor(ActivityType.GROCERY),
+        getActivityTypeColor(ActivityType.TRANSPORT),
+        getActivityTypeColor(ActivityType.OTHER),
+      ];
+
+      const uniqueColors = new Set(allColors);
+      expect(uniqueColors.size).toBe(7); // 7 distinct colors across 12 types
     });
   });
 
