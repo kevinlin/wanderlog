@@ -1,5 +1,5 @@
 {
-  "exportDate": "2025-12-06T15:40:03.502Z",
+  "exportDate": "2025-12-06T17:17:10.446Z",
   "tripData": {
     "constraints": {
       "exceptions": [
@@ -49,7 +49,7 @@
             "url": "https://www.woolworths.co.nz/store-finder/9090/christchurch/christchurch-airport-woolworths?utm_source=google&utm_medium=organic&utm_campaign=gmb&utm_term=woolworths-christchurch-airport"
           },
           {
-            "activity_id": "christchurch-arrival-act-1",
+            "activity_id": "poi_ChIJVxMF4Lj0MW0R_UTTD9kGZCg_1765041424274",
             "activity_name": "International Antarctic Centre",
             "activity_type": "attraction",
             "duration": "2–3h",
@@ -108,7 +108,7 @@
         },
         "activities": [
           {
-            "activity_id": "lake-tekapo-act-1",
+            "activity_id": "poi_ChIJ59bjll91K20RAqcIV5KgwD8_1765041424375",
             "activity_name": "Tekapo Springs (hot pools & kids aqua play)",
             "activity_type": "recreation",
             "duration": "1.5–3h",
@@ -128,7 +128,7 @@
             "url": "https://tekaposprings.co.nz/"
           },
           {
-            "activity_id": "lake-tekapo-act-2",
+            "activity_id": "poi_ChIJfel69GF1K20RAsz_Rtcyivg_1765041424476",
             "activity_name": "Church of the Good Shepherd (photos & short walk)",
             "activity_type": "cultural",
             "duration": "30–45m",
@@ -147,7 +147,7 @@
             "url": "https://www.churchofthegoodshepherd.org.nz/"
           },
           {
-            "activity_id": "lake-tekapo-wp-3",
+            "activity_id": "poi_ChIJVbo3kvqfK20R-Ep_UCxoPCQ_1765041424578",
             "activity_name": "Ōtehīwai / Mt John Summit & Astro Café",
             "activity_type": "attraction",
             "duration": "1–2h",
@@ -166,7 +166,7 @@
             "url": "https://www.darkskyproject.co.nz/dine/astro-cafe/"
           },
           {
-            "activity_id": "lake-tekapo-wp-4",
+            "activity_id": "poi_ChIJ-z2tSJx1K20R_xkmKsZB8-A_1765041424678",
             "activity_name": "Cowans Hill Track (lookout loop)",
             "activity_type": "outdoor",
             "duration": "1–2h",
@@ -204,7 +204,7 @@
             "url": "https://www.locationscout.net/new-zealand/43962-lake-tekapo-from-motuariki-view-point"
           },
           {
-            "activity_id": "lake-tekapo-wp-5",
+            "activity_id": "poi_ChIJWZVsQaoDK20R98KecKWBWPo_1765041424883",
             "activity_name": "Peter’s Lookout (Lake Pukaki → Aoraki views)",
             "activity_type": "scenic",
             "duration": "15–30 min",
@@ -235,7 +235,7 @@
         "name": "Lake Tekapo",
         "scenic_waypoints": [
           {
-            "activity_id": "lake-tekapo-wp-1",
+            "activity_id": "poi_ChIJ6dFH1zPtLW0R4DV6bAQKiAU_1765041424984",
             "activity_name": "Rakaia River Bridge Walkway (SH1)",
             "duration": "10–20 min",
             "google_place_id": "ChIJ6dFH1zPtLW0R4DV6bAQKiAU",
@@ -251,7 +251,7 @@
             "url": "https://www.google.com/maps/place/Rakaia+River+Bridge"
           },
           {
-            "activity_id": "lake-tekapo-wp-2",
+            "activity_id": "poi_ChIJD8kzq7z1LG0RVgPNGysIzM0_1765041425086",
             "activity_name": "Talbot Forest Scenic Reserve",
             "duration": "20–40 min",
             "google_place_id": "ChIJD8kzq7z1LG0RVgPNGysIzM0",
@@ -267,7 +267,7 @@
             "url": "https://www.tripadvisor.com/Attraction_Review-g658478-d12179388-Reviews-Talbot_Forest_Scenic_Reserve-Geraldine_Canterbury_Region_South_Island.html"
           },
           {
-            "activity_id": "lake-tekapo-wp-3",
+            "activity_id": "poi_ChIJQ1PaufV5K20RLAcQF_fJhTE_1765041425186",
             "activity_name": "Burkes Pass Scenic Reserve lookout",
             "duration": "10–20 min",
             "google_place_id": "ChIJQ1PaufV5K20RLAcQF_fJhTE",
@@ -328,7 +328,7 @@
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHquR_DCzpX54qiZWle1Kbzsu1JusF5jyhmlBVRzmJ7y7DdQuQ67r2MXGgOXBzU1r3IdPyOzRyDk_W5X8qGbIykq3O8I1folrqI0ruZwi9iNNVfPajYGEDrOWz1jPkVO5SBX-PqACTpwwze3OmbfXEBbXl2AJdyw869s_VDT2FmHoG2BLxwy4lo44AwiZ7CQn8cpSn0qQb3ICnqC1N2xnsQgD0bWpIclauUz1DUH2YT0q8kDJlgCL_gs4FUujGUSBahVRNJA2QiYUfZdv9BGCdxlzCFA46N_EAFsuPsj9HemwOz0FxoB6Kd1cuiHDG0Tg4-JDbRyo5SdF1M9HGTJksoAjPBHjhklpp9PUxARKG2DE6rZ-ASyrquZTuIWzn7zFn8mR2XfCV9TiAUdWH1CSNJufsRHICr4jJuHlbjsTUpkK5a4Pa_9eAx6Z6h-kE4Y5gHkC3dChIIQAgi_-dFLfVTcyQ5-cDvU2RerI7rwIbVuJDJeP9nW6AN8VKfJfA9ofk9jhUiEgHPRObU1QtbKN4Zl2mWqd2e6cObMTxMD0mosS6qUol0JjnsOJi6riguIHDbwx4x0nTXJ56m_6VfjYIyWW1HZ2Q&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           },
           {
-            "activity_id": "queenstown-act-4",
+            "activity_id": "poi_ChIJGbzFhngd1akREfa6vQkkB70_1765041425389",
             "activity_name": "Kiwi Park (native wildlife)",
             "activity_type": "recreation",
             "duration": "1–2h",
@@ -348,7 +348,7 @@
             "url": "https://kiwibird.co.nz/"
           },
           {
-            "activity_id": "queenstown-act-1",
+            "activity_id": "poi_ChIJvW5Ehngd1akRv1_byHfuLCI_1765041425490",
             "activity_name": "Skyline Gondola & Luge",
             "activity_type": "recreation",
             "duration": "2–4h",
@@ -368,7 +368,7 @@
             "url": "https://queenstown.skyline.co.nz/"
           },
           {
-            "activity_id": "queenstown-act-6",
+            "activity_id": "poi_ChIJTe-7xn0Y1akRb7i4_wN9UGk_1765041425590",
             "activity_name": "Arrowtown village & gold panning",
             "activity_type": "other",
             "duration": "2–3h",
@@ -388,7 +388,7 @@
             "url": "https://www.lakesdistrictmuseum.co.nz/"
           },
           {
-            "activity_id": "queenstown-act-7",
+            "activity_id": "poi_ChIJrwm7l7Tj1KkRtwIpvNpNEQs_1765041425691",
             "activity_name": "Queenstown Gardens & Lakefront Playground + Patagonia Chocolates",
             "activity_type": "playground",
             "duration": "1–2h",
@@ -426,7 +426,7 @@
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHrUQCWauSB33j65L7gY1B4kSCCuYU6zabNegWEdDKn91IppNmhF3_5DfPXp6osq3j1vGgF7--HVhC-XSf3y4_isutwHZdqctoUAkVxUU5ggfXvDb0Ov5XShwSFPQIc-u8GwKYTxrpzNV2wcJaCWkOxkuFJlTTCNNWg8N9vDfrQK1FISO0xNdivVZopaZn4mZTF6QQ93uBu0RMgtjUb_DJP3No4s0dHOyg6YbiFyLNTMfNmPstj6MP1hibQQMxiNo7pZS3CafCcH0kpXIZAGDO0OB1zgcjG5uKCGLEOI6XPWh8FVGwOTb8xhOcgm--Nt9u7z6xY34xXZDERKBg7ZnchnzKdiJo3xyWuP_wrxB71pDrDwpaJY92OmsJ1Wls6sA2kfKyd7RvchckAWJdJblPqcOfqk_vzt1Oo-dj-L3y570KiJqmPoG9uSS9fTbHMduXB0LACcRA30-n-SN6lgH2zGUXciE2cast4CuxPS_-_5aNOUyWvFPzYEnW9CuhunxxBfzVEGXDbc_lrmDxBNMMpthOWLz8y2LV7avIiqlRfp2AnZsQslnCj3BtI-mVFfL7X2X76_aXU6aQ&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           },
           {
-            "activity_id": "queenstown-act-3",
+            "activity_id": "poi_ChIJJWOraIP71KkRjK8XfJrlqrA_1765041425894",
             "activity_name": "TSS Earnslaw to Walter Peak Farm (RealNZ)",
             "activity_type": "recreation",
             "duration": "3–4h (incl. cruise + farm tour/dining)",
@@ -446,7 +446,7 @@
             "url": "https://www.realnz.com/en/experiences/tss-earnslaw-walter-peak-experiences/"
           },
           {
-            "activity_id": "queenstown-act-2",
+            "activity_id": "poi_ChIJJ2chix8d1akRNkU3v7Bzuh8_1765041425994",
             "activity_name": "Creative Queenstown Market (Saturdays)",
             "activity_type": "attraction",
             "duration": "1–2h",
@@ -484,7 +484,7 @@
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHobQzMaeEaACKjF8LICazc2utP4E4-r3Ai9i6N2wvynjo87xIEHXwgUa954-ThvYLyp8gjZhQZA7N3XLE51Hw2a-2D7oRKcvonwr1TXXvcr9tIo4poxNawOk9iCjtqUfKw7iU68lcLAz3x1cHdg8b4P2a3zOmF6kLyypb1IR4LF2RM1kbtGDhGT2LOqJe_dL3MGCGKE9bffmsigsxmG1zSYQ5264e9ntPdN1s87kdLyISSF9Fduw6E74VHkNAhTdri4eEMQw0ik4iOBBwffZVHNMnBhuQiTsdYzq5qj0tiRZ2cYj4g&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           },
           {
-            "activity_id": "queenstown-act-5",
+            "activity_id": "poi_ChIJTe4Vw6Ud1akRlGHny7qc4eA_1765041426196",
             "activity_name": "Shotover Jet (jet boating)",
             "activity_type": "recreation",
             "duration": "1–1.5h total (25m on water)",
@@ -516,7 +516,7 @@
         "name": "Queenstown",
         "scenic_waypoints": [
           {
-            "activity_id": "queenstown-wp-1",
+            "activity_id": "poi_ChIJObC9qsUdK20RzEkgBIELnkY_1765041426297",
             "activity_name": "Lake Pukaki Lookout (Aoraki view)",
             "duration": "10–20 min",
             "google_place_id": "ChIJObC9qsUdK20RzEkgBIELnkY",
@@ -532,7 +532,7 @@
             "url": "https://trailwalkertravels.com/lake-pukaki-viewpoint-peters-lookout-more/"
           },
           {
-            "activity_id": "queenstown-wp-2",
+            "activity_id": "poi_ChIJJfC3Jw_RKm0RwBEytI_LDAk_1765041426399",
             "activity_name": "Omarama Clay Cliffs (short detour)",
             "duration": "45–75 min",
             "google_place_id": "ChIJJfC3Jw_RKm0RwBEytI_LDAk",
@@ -548,7 +548,7 @@
             "url": "https://www.waitakinz.com/destinations/omarama"
           },
           {
-            "activity_id": "queenstown-wp-3",
+            "activity_id": "poi_ChIJwzeFuUChKqgRbx7HwP-BygY_1765041426500",
             "activity_name": "Lindis Pass Summit Lookout",
             "duration": "10–20 min",
             "google_place_id": "ChIJwzeFuUChKqgRbx7HwP-BygY",
@@ -564,7 +564,7 @@
             "url": "https://www.alltrails.com/trail/new-zealand/otago/lindis-pass-summit-lookout-walk"
           },
           {
-            "activity_id": "queenstown-wp-4",
+            "activity_id": "poi_ChIJhQ_KLjUp1akRRCVvABzAMAU_1765041426601",
             "activity_name": "Roaring Meg Viewpoint (Kawarau Gorge)",
             "duration": "10–20 min",
             "google_place_id": "ChIJhQ_KLjUp1akRRCVvABzAMAU",
@@ -580,7 +580,7 @@
             "url": "https://www.google.com/maps/place/Roaring+Meg"
           },
           {
-            "activity_id": "queenstown-wp-5",
+            "activity_id": "poi_ChIJJRpdg1Im1akRHBnQpqt5HZo_1765041426702",
             "activity_name": "Kawarau Suspension Bridge (AJ Hackett Bungy)",
             "duration": "20–40 min",
             "google_place_id": "ChIJJRpdg1Im1akRHBnQpqt5HZo",
@@ -624,7 +624,7 @@
         },
         "activities": [
           {
-            "activity_id": "te-anau-act-1",
+            "activity_id": "poi_ChIJZdJR6_AX1KkRNLx_oYjEhwI_1765041426803",
             "activity_name": "Te Anau Glowworm Caves (RealNZ)",
             "activity_type": "recreation",
             "duration": "2–2.5h",
@@ -656,7 +656,7 @@
         "name": "Te Anau",
         "scenic_waypoints": [
           {
-            "activity_id": "te-anau-wp-1",
+            "activity_id": "poi_ChIJg92ioEPC1KkR39NpSfOJ2zI_1765041426904",
             "activity_name": "Devil’s Staircase lookouts (SH6)",
             "duration": "10–20 min",
             "google_place_id": "ChIJg92ioEPC1KkR39NpSfOJ2zI",
@@ -672,7 +672,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJg92ioEPC1KkR39NpSfOJ2zI"
           },
           {
-            "activity_id": "te-anau-wp-2",
+            "activity_id": "poi_ChIJcUcsGWXA1KkRvWy0PZcYapo_1765041427006",
             "activity_name": "Kingston Foreshore & Wharf",
             "duration": "10–25 min",
             "google_place_id": "ChIJcUcsGWXA1KkRvWy0PZcYapo",
@@ -688,7 +688,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJcUcsGWXA1KkRvWy0PZcYapo"
           },
           {
-            "activity_id": "te-anau-wp-3",
+            "activity_id": "poi_ChIJn_7v-5aPkCwRcCajbg_tuB8_1765041427107",
             "activity_name": "Five Rivers Lookout (Upper Oreti Valley)",
             "duration": "10–20 min",
             "google_place_id": "ChIJn_7v-5aPkCwRcCajbg_tuB8",
@@ -704,7 +704,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJn_7v-5aPkCwRcCajbg_tuB8"
           },
           {
-            "activity_id": "te-anau-wp-4",
+            "activity_id": "poi_ChIJoV82TK5-06kR_owx3VoeVoU_1765041427208",
             "activity_name": "Mossburn Railway Reserve stop",
             "duration": "10–15 min",
             "google_place_id": "ChIJoV82TK5-06kR_owx3VoeVoU",
@@ -732,7 +732,7 @@
       {
         "activities": [
           {
-            "activity_id": "milford-sound-act-1",
+            "activity_id": "poi_ChIJh8bKJgDd1akRmkIYApkID6o_1765041427309",
             "activity_name": "Milford Sound cruise (optional day trip)",
             "activity_type": "recreation",
             "duration": "1h 45m–2h cruise (+stops)",
@@ -783,7 +783,7 @@
         "name": "Milford Sound",
         "scenic_waypoints": [
           {
-            "activity_id": "milford-sound-wp-1",
+            "activity_id": "poi_ChIJrXCbGuw11KkRK04K3AkXv00_1765041427511",
             "activity_name": "Mirror Lakes",
             "duration": "15–30m",
             "google_place_id": "ChIJrXCbGuw11KkRK04K3AkXv00",
@@ -799,7 +799,7 @@
             "url": "https://southlandnz.com/listing/mirror-lakes/251/"
           },
           {
-            "activity_id": "milford-sound-wp-2",
+            "activity_id": "poi_ChIJY3Znrf3J1akRkjeLUBgqEPs_1765041427613",
             "activity_name": "Lake Gunn Nature Walk",
             "duration": "45m",
             "google_place_id": "ChIJY3Znrf3J1akRkjeLUBgqEPs",
@@ -841,7 +841,7 @@
         },
         "activities": [
           {
-            "activity_id": "wanaka-act-1",
+            "activity_id": "poi_ChIJRf4_9kRP1akR1DoLZ2Jpzmw_1765041427714",
             "activity_name": "Dinosaur Park (Lakefront Playground)",
             "activity_type": "playground",
             "duration": "45–90m",
@@ -861,7 +861,7 @@
             "url": "https://www.wanaka.co.nz/things-to-do/family-kids/"
           },
           {
-            "activity_id": "wanaka-act-2",
+            "activity_id": "poi_ChIJ-e11hSZP1akRz3-bGRxEZvo_1765041427815",
             "activity_name": "Puzzling World (Illusion Rooms & Great Maze)",
             "activity_type": "recreation",
             "duration": "1.5–2.5h",
@@ -881,7 +881,7 @@
             "url": "https://www.puzzlingworld.co.nz/"
           },
           {
-            "activity_id": "wanaka-act-3",
+            "activity_id": "poi_ChIJK5mtpjxP1akR7kSpa0ZvUQ8_1765041427916",
             "activity_name": "Mount Iron Track (loop walk, views)",
             "activity_type": "outdoor",
             "duration": "1–1.5h loop (4.5km)",
@@ -932,7 +932,7 @@
         "name": "Wānaka",
         "scenic_waypoints": [
           {
-            "activity_id": "wanaka-wp-1",
+            "activity_id": "poi_ChIJi5HhZVkf1akRJ-_vUgAiEbU_1765041428119",
             "activity_name": "Lake Hayes Scenic Reserve (pavilion stop)",
             "duration": "10–25 min",
             "google_place_id": "ChIJi5HhZVkf1akRJ-_vUgAiEbU",
@@ -948,7 +948,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJi5HhZVkf1akRJ-_vUgAiEbU"
           },
           {
-            "activity_id": "wanaka-wp-2",
+            "activity_id": "poi_ChIJz3psyJ4m1akRjyoWKDuLllM_1765041428220",
             "activity_name": "Crown Range Summit Lookout",
             "duration": "10–20 min",
             "google_place_id": "ChIJz3psyJ4m1akRjyoWKDuLllM",
@@ -964,7 +964,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJz3psyJ4m1akRjyoWKDuLllM"
           },
           {
-            "activity_id": "wanaka-wp-3",
+            "activity_id": "poi_ChIJJ6qM3Dk61akReFNbd93Qf5c_1765041428321",
             "activity_name": "Bradrona (Cardrona bra fence)",
             "duration": "5–10 min",
             "google_place_id": "ChIJJ6qM3Dk61akReFNbd93Qf5c",
@@ -980,7 +980,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJJ6qM3Dk61akReFNbd93Qf5c"
           },
           {
-            "activity_id": "wanaka-wp-4",
+            "activity_id": "poi_ChIJa2qAA1BP1akRZopIV8aQYJ8_1765041428422",
             "activity_name": "Cardrona Hotel frontage",
             "duration": "15–45 min",
             "google_place_id": "ChIJa2qAA1BP1akRZopIV8aQYJ8",
@@ -1024,7 +1024,7 @@
         },
         "activities": [
           {
-            "activity_id": "timaru-act-2",
+            "activity_id": "poi_ChIJ_wDi9YnBLG0RQChcZYfvAA8_1765041428523",
             "activity_name": "Caroline Bay Carnival (starts Boxing Day)",
             "activity_type": "attraction",
             "duration": "Flexible",
@@ -1044,7 +1044,7 @@
             "url": "https://carolinebay.co.nz/"
           },
           {
-            "activity_id": "timaru-act-1",
+            "activity_id": "poi_ChIJqTQJSgDBLG0Rd56mS5H14VE_1765041428625",
             "activity_name": "Caroline Bay Playground",
             "activity_type": "playground",
             "duration": "1–3h",
@@ -1064,7 +1064,7 @@
             "url": "https://www.cplay.co.nz/"
           },
           {
-            "activity_id": "timaru-act-3",
+            "activity_id": "poi_ChIJkSuHXofBLG0RVzLMKZJy1RE_1765041428726",
             "activity_name": "South Canterbury Museum",
             "activity_type": "cultural",
             "duration": "45–90m",
@@ -1102,7 +1102,7 @@
             "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHobOuxRpbH44zycwpPVyf42_8kq6o0hwKjJiixPlLKnCG-M9Idz2GSOTHJRf7WCbu0spBDWJ1PHimFLO8B2a05-uisxOaH6yPZfTImBprvcstvXpe7ePYmdRhHvdwso2xTBiYGjprQ5PvV5XTyrrvRW2PRS6qRCqqT_3L4oBzLQDsmWBVhqE0U6qfOkpuGJnyftrswu9xWukM3gHp9JDv-bbtzHs53AK80i1SPjGIxGdlMcZ9qfHxUir8e-TZUAVv--O5gjiixc73H7s67r8Alj0vwELQQJmt8cImY51dfyNaY8fTtgJhdKWUq6Dg75l1exiHfO1zllYBM2qd4lpNKt20KjbNPA2_Grx0OxJvFgF5BoXvCfVFuBhqqLjv4x-KsExrZ96YBiSUeJRN9-2q86u-DwDHyV9Mh1rSRTtFbT4HozTt8DpvLUAlQwM8XwROU_tVt2qUjAq52oovN7NLRGcbRy7Q29kZe-ThQcxZMjzuci7cB1XDpfYqEONwNP2bDaWeiZybxIL_yEAa9TrQP6BN8J4gtZb3tKvUI1wLFTOknCLdB-Wwaf759HvKJJuKH3LJ3g9A8B4Nlx93mbAIaJVgPH0Q&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           },
           {
-            "activity_id": "timaru-act-4",
+            "activity_id": "poi_ChIJEbXuNZDBLG0R1cKtft_Ggnk_1765041428928",
             "activity_name": "Aigantighe Art Gallery",
             "activity_type": "cultural",
             "duration": "45–90m",
@@ -1134,7 +1134,7 @@
         "name": "Timaru",
         "scenic_waypoints": [
           {
-            "activity_id": "timaru-wp-1",
+            "activity_id": "poi_ChIJwzeFuUChKqgRbx7HwP-BygY_1765041429029",
             "activity_name": "Lindis Pass Summit Lookout",
             "duration": "10–20 min",
             "google_place_id": "ChIJwzeFuUChKqgRbx7HwP-BygY",
@@ -1150,7 +1150,7 @@
             "url": "https://en.wikipedia.org/wiki/Lindis_Pass"
           },
           {
-            "activity_id": "timaru-wp-2",
+            "activity_id": "poi_ChIJAfuTl0VzKqgRP5H-ZiLC3Qc_1765041429130",
             "activity_name": "Benmore Dam Lookout (Waitaki Valley)",
             "duration": "15–30 min",
             "google_place_id": "ChIJAfuTl0VzKqgRP5H-ZiLC3Qc",
@@ -1166,7 +1166,7 @@
             "url": "https://waitakinz.com/explore/benmore-peninsula-track"
           },
           {
-            "activity_id": "timaru-wp-3",
+            "activity_id": "poi_ChIJT07iCBcfKqgRCwZNhtXGGqE_1765041429232",
             "activity_name": "Elephant Rocks (Limestone outcrops)",
             "duration": "20–40 min",
             "google_place_id": "ChIJT07iCBcfKqgRCwZNhtXGGqE",
@@ -1182,7 +1182,7 @@
             "url": "https://www.waitakinz.com/destinations/duntroon"
           },
           {
-            "activity_id": "timaru-wp-4",
+            "activity_id": "poi_ChIJHXYzy1UZKqgRaFFsm3S7pRM_1765041429333",
             "activity_name": "Takiroa Māori Rock Art Shelter",
             "duration": "10–20 min",
             "google_place_id": "ChIJHXYzy1UZKqgRaFFsm3S7pRM",
@@ -1226,7 +1226,7 @@
         },
         "activities": [
           {
-            "activity_id": "christchurch-end-act-1",
+            "activity_id": "poi_ChIJ4d4oRCSKMW0RTLEXjX5dm2g_1765041429434",
             "activity_name": "Margaret Mahy Family Playground",
             "activity_type": "playground",
             "duration": "1–2h",
@@ -1246,7 +1246,7 @@
             "url": "https://ccc.govt.nz/parks-and-gardens/play-in-parks/playgrounds/find-a-playground/"
           },
           {
-            "activity_id": "christchurch-end-act-2",
+            "activity_id": "poi_ChIJ4U9ubvGKMW0RI807Sij_t3g_1765041429535",
             "activity_name": "Christchurch Farmers’ Market (Sat mornings)",
             "activity_type": "recreation",
             "duration": "1–2h",
@@ -1266,7 +1266,7 @@
             "url": "https://www.christchurchfarmersmarket.co.nz/"
           },
           {
-            "activity_id": "christchurch-end-act-3",
+            "activity_id": "poi_ChIJoWOBIZCMMW0R8AdcZYfvAA8_1765041429636",
             "activity_name": "Willowbank Wildlife Reserve",
             "activity_type": "recreation",
             "duration": "1.5–3h",
@@ -1286,7 +1286,7 @@
             "url": "http://www.willowbank.co.nz/"
           },
           {
-            "activity_id": "christchurch-end-act-4",
+            "activity_id": "poi_ChIJKbb_Hgr0MW0RTqC3chSJS0U_1765041429738",
             "activity_name": "Orana Wildlife Park (open-range zoo)",
             "activity_type": "recreation",
             "duration": "2–4h",
@@ -1306,7 +1306,7 @@
             "url": "http://oranawildlifepark.co.nz/"
           },
           {
-            "activity_id": "christchurch-end-act-5",
+            "activity_id": "poi_ChIJibgqwJ6IMW0RUY1w6yqwnfk_1765041429839",
             "activity_name": "New Brighton Pier & Beach (playground & splash zone)",
             "activity_type": "beach",
             "duration": "1–3h",
@@ -1326,7 +1326,7 @@
             "url": "http://ccc.govt.nz/"
           },
           {
-            "activity_id": "christchurch-end-act-6",
+            "activity_id": "poi_ChIJL29zmfmLMW0RFb_QeKN-TTM_1765041429940",
             "activity_name": "Riverside Market (meals & souvenirs, food hall & groceries)",
             "activity_type": "attraction",
             "duration": "1–2h",
@@ -1377,7 +1377,7 @@
         "name": "Christchurch",
         "scenic_waypoints": [
           {
-            "activity_id": "christchurch-wp-1",
+            "activity_id": "poi_ChIJG5D-4Z79LG0RgOe6GQ0xd7I_1765041430142",
             "activity_name": "Rangitata River Bridge pull-off (SH1)",
             "duration": "10–15 min",
             "google_place_id": "ChIJG5D-4Z79LG0RgOe6GQ0xd7I",
@@ -1393,7 +1393,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJG5D-4Z79LG0RgOe6GQ0xd7I"
           },
           {
-            "activity_id": "christchurch-wp-2",
+            "activity_id": "poi_ChIJC4DWNbm7LW0RICNcZYfvAA8_1765041430244",
             "activity_name": "Ashburton Domain Gardens",
             "duration": "20–40 min",
             "google_place_id": "ChIJC4DWNbm7LW0RICNcZYfvAA8",
@@ -1409,7 +1409,7 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJC4DWNbm7LW0RICNcZYfvAA8"
           },
           {
-            "activity_id": "christchurch-wp-3",
+            "activity_id": "poi_ChIJW_KSpO7tLW0Rb5PrK5RA0FE_1765041430345",
             "activity_name": "Rakaia Salmon Statue & Bridge Walkway",
             "duration": "10–20 min",
             "google_place_id": "ChIJW_KSpO7tLW0Rb5PrK5RA0FE",
