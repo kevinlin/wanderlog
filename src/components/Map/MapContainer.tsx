@@ -13,6 +13,7 @@ import { type Accommodation, type Activity, ActivityType, type TripBase, type Tr
 import {
   enrichActivityWithType,
   getAccommodationSvgPath,
+  getActivityTypeColor,
   getActivityTypeSvgPath,
   getScenicWaypointSvgPath,
   inferActivityType,
@@ -561,11 +562,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
-  // Activity pin with standardized visited/unvisited colors - Enhanced with glow effect and polished icons
+  // Activity pin with type-specific colors - Enhanced with glow effect and polished icons
   const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean, isVisited = false, isHovered = false) => {
-    // Standardized colors: blue for unvisited, green for visited
-    const color = isVisited ? '#10b981' : '#0ea5e9'; // Emerald-500 for visited, Sky-500 for unvisited
-    const glowColor = isVisited ? 'rgba(16, 185, 129, 0.7)' : 'rgba(14, 165, 233, 0.7)';
+    // Use activity type-specific color from activityUtils, green for visited
+    const color = isVisited ? '#10b981' : getActivityTypeColor(activityType); // Emerald-500 for visited, type-specific for unvisited
+    const glowColor = isVisited ? 'rgba(16, 185, 129, 0.7)' : `${color}b3`; // Add alpha for glow
     const svgPath = getActivityTypeSvgPath(activityType);
 
     // Calculate stroke color (darker version of fill color)

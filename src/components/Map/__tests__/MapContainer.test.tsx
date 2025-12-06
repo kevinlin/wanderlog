@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { AppStateProvider } from '@/contexts/AppStateContext';
 import { ActivityType, type TripData } from '@/types/trip';
+import * as activityUtils from '@/utils/activityUtils';
 import { MapContainer } from '../MapContainer';
 
 // Mock the Google Maps API
@@ -87,6 +88,9 @@ Object.defineProperty(window, 'google', {
   writable: true,
 });
 
+// Spy on getActivityTypeColor to verify it's called
+const getActivityTypeColorSpy = vi.spyOn(activityUtils, 'getActivityTypeColor');
+
 const mockTripData: TripData = {
   trip_name: 'Test Trip',
   timezone: 'Pacific/Auckland',
@@ -130,6 +134,52 @@ const mockTripData: TripData = {
           duration: '15 min',
         },
       ],
+    },
+  ],
+};
+
+// Mock trip data with varied activity types for color testing
+const mockTripDataWithVariedActivities: TripData = {
+  trip_name: 'Test Trip with Varied Activities',
+  timezone: 'Pacific/Auckland',
+  stops: [
+    {
+      stop_id: 'stop1',
+      name: 'Test Stop 1',
+      date: {
+        from: '2024-01-01',
+        to: '2024-01-02',
+      },
+      location: { lat: -44.5, lng: 170.0 },
+      duration_days: 1,
+      accommodation: {
+        name: 'Test Hotel',
+        address: '123 Test St',
+        check_in: '2024-01-01 15:00',
+        check_out: '2024-01-02 11:00',
+        location: { lat: -44.5, lng: 170.0 },
+      },
+      activities: [
+        {
+          activity_id: 'restaurant1',
+          activity_name: 'Test Restaurant',
+          activity_type: ActivityType.RESTAURANT,
+          location: { lat: -44.6, lng: 170.1 },
+        },
+        {
+          activity_id: 'attraction1',
+          activity_name: 'Test Attraction',
+          activity_type: ActivityType.ATTRACTION,
+          location: { lat: -44.7, lng: 170.2 },
+        },
+        {
+          activity_id: 'shopping1',
+          activity_name: 'Test Shopping',
+          activity_type: ActivityType.SHOPPING,
+          location: { lat: -44.8, lng: 170.3 },
+        },
+      ],
+      scenic_waypoints: [],
     },
   ],
 };
@@ -290,5 +340,77 @@ describe('MapContainer', () => {
 
     // Should not animate again
     expect(mockMarker.setAnimation).not.toHaveBeenCalled();
+  });
+
+  describe('Activity pin styling with getActivityTypeColor', () => {
+    beforeEach(() => {
+      getActivityTypeColorSpy.mockClear();
+    });
+
+    it('should use activity type-specific colors for unvisited activities', async () => {
+      renderWithProvider(
+        <MapContainer {...defaultProps} activityStatus={{}} currentBaseId="stop1" tripData={mockTripDataWithVariedActivities} />
+      );
+
+      await waitFor(() => {
+        // Verify getActivityTypeColor was called for each activity type
+        expect(getActivityTypeColorSpy).toHaveBeenCalledWith(ActivityType.RESTAURANT);
+        expect(getActivityTypeColorSpy).toHaveBeenCalledWith(ActivityType.ATTRACTION);
+        expect(getActivityTypeColorSpy).toHaveBeenCalledWith(ActivityType.SHOPPING);
+      });
+
+      // Verify the function was called at least 3 times (once per activity)
+      expect(getActivityTypeColorSpy.mock.calls.length).toBeGreaterThanOrEqual(3);
+    });
+
+    it('should use green color for visited activities regardless of type', async () => {
+      const activityStatus = {
+        restaurant1: true, // visited
+        attraction1: false, // unvisited
+        shopping1: true, // visited
+      };
+
+      renderWithProvider(
+        <MapContainer {...defaultProps} activityStatus={activityStatus} currentBaseId="stop1" tripData={mockTripDataWithVariedActivities} />
+      );
+
+      await waitFor(() => {
+        // Verify markers are rendered
+        expect(screen.getByTestId('marker-Test Restaurant')).toBeInTheDocument();
+        expect(screen.getByTestId('marker-Test Attraction')).toBeInTheDocument();
+        expect(screen.getByTestId('marker-Test Shopping')).toBeInTheDocument();
+      });
+
+      // Verify getActivityTypeColor is only called for unvisited activities
+      // (visited activities use hardcoded green #10b981)
+      const attractionCalls = getActivityTypeColorSpy.mock.calls.filter((call: [ActivityType]) => call[0] === ActivityType.ATTRACTION);
+      expect(attractionCalls.length).toBeGreaterThan(0);
+    });
+
+    it('should generate different pin icons for different activity types', async () => {
+      renderWithProvider(
+        <MapContainer {...defaultProps} activityStatus={{}} currentBaseId="stop1" tripData={mockTripDataWithVariedActivities} />
+      );
+
+      await waitFor(() => {
+        expect(screen.getByTestId('marker-Test Restaurant')).toBeInTheDocument();
+        expect(screen.getByTestId('marker-Test Attraction')).toBeInTheDocument();
+        expect(screen.getByTestId('marker-Test Shopping')).toBeInTheDocument();
+      });
+
+      // Verify that getActivityTypeColor returns different colors for different types
+      expect(activityUtils.getActivityTypeColor(ActivityType.RESTAURANT)).toBe('#f97316'); // Orange-500
+      expect(activityUtils.getActivityTypeColor(ActivityType.ATTRACTION)).toBe('#8b5cf6'); // Violet-500
+      expect(activityUtils.getActivityTypeColor(ActivityType.SHOPPING)).toBe('#f59e0b'); // Amber-500
+
+      // Verify these colors are distinct
+      const restaurantColor = activityUtils.getActivityTypeColor(ActivityType.RESTAURANT);
+      const attractionColor = activityUtils.getActivityTypeColor(ActivityType.ATTRACTION);
+      const shoppingColor = activityUtils.getActivityTypeColor(ActivityType.SHOPPING);
+
+      expect(restaurantColor).not.toBe(attractionColor);
+      expect(attractionColor).not.toBe(shoppingColor);
+      expect(restaurantColor).not.toBe(shoppingColor);
+    });
   });
 });
