@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation, Activity } from '@/types';
+import { getActivityTypeIcon } from '@/utils/activityUtils';
 import { generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripUtils';
 import { activityHasLocationIssues } from '@/utils/validationUtils';
 
@@ -109,6 +110,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
                     <h4 className={`font-semibold text-base ${isDone ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
+                      <span className="mr-2">{getActivityTypeIcon(activity.activity_type)}</span>
                       {activity.activity_name}
                     </h4>
                   </div>
