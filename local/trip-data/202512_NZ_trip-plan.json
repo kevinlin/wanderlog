@@ -463,6 +463,24 @@
             "url": "https://www.queenstownmarket.nz/"
           },
           {
+            "activity_id": "poi_ChIJfYNVwoMd1akRI7Y-oK1QW6c_1765039791102",
+            "activity_name": "Ziptrek Ecotours",
+            "activity_type": "recreation",
+            "duration": "1-2 hours",
+            "google_place_id": "ChIJfYNVwoMd1akRI7Y-oK1QW6c",
+            "location": {
+              "address": "45 Camp Street, Queenstown 9300, New Zealand",
+              "lat": -45.0305237,
+              "lng": 168.6603132
+            },
+            "order": 8,
+            "remarks": "Rating: 4.9/5 (955 reviews)",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHobQzMaeEaACKjF8LICazc2utP4E4-r3Ai9i6N2wvynjo87xIEHXwgUa954-ThvYLyp8gjZhQZA7N3XLE51Hw2a-2D7oRKcvonwr1TXXvcr9tIo4poxNawOk9iCjtqUfKw7iU68lcLAz3x1cHdg8b4P2a3zOmF6kLyypb1IR4LF2RM1kbtGDhGT2LOqJe_dL3MGCGKE9bffmsigsxmG1zSYQ5264e9ntPdN1s87kdLyISSF9Fduw6E74VHkNAhTdri4eEMQw0ik4iOBBwffZVHNMnBhuQiTsdYzq5qj0tiRZ2cYj4g&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
+          },
+          {
             "activity_id": "queenstown-act-5",
             "activity_name": "Shotover Jet (jet boating)",
             "activity_type": "recreation",
@@ -473,7 +491,7 @@
               "lat": -44.9870794,
               "lng": 168.6713311
             },
-            "order": 7,
+            "order": 9,
             "remarks": "Minimum height varies by conditions (often ~1.0m). Warm layers recommended",
             "status": {
               "done": false
