@@ -93,8 +93,8 @@
           "confirmation": "175483357669783",
           "google_place_id": "ChIJuUjcMll1K20RhISCZ-br_hE",
           "location": {
-            "lat": -44.004236899999995,
-            "lng": 170.4714605
+            "lat": -44.0025732,
+            "lng": 170.4718632
           },
           "name": "The Cairns Alpine Resort & Golf Club",
           "phone": "+64 3 680 6952",
@@ -177,24 +177,6 @@
             "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/lake-tekapo-area/things-to-do/cowans-hill-track/"
           },
           {
-            "activity_id": "lake-tekapo-wp-5",
-            "activity_name": "Peter’s Lookout (Lake Pukaki → Aoraki views)",
-            "duration": "15–30 min",
-            "google_place_id": "ChIJWZVsQaoDK20R98KecKWBWPo",
-            "location": {
-              "address": "SH80 (Mount Cook Rd), Ben Ohau 7999",
-              "lat": -44.0891352,
-              "lng": 170.1357676
-            },
-            "order": 4,
-            "remarks": "Large car park; classic road-to-Aoraki photo spot; combine with Mt Cook day trip.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/d9/b4/e1/photo1jpg.jpg?w=1200&amp;h=1200&amp;s=1",
-            "url": "https://www.tripadvisor.com/Attraction_Review-g7042765-d19056143-Reviews-Peter_s_Lookout-Pukaki_Mackenzie_District_Canterbury_Region_South_Island.html"
-          },
-          {
             "activity_id": "poi_ChIJOXVowdqfK20RyRpfcGdB284_1756320532686",
             "activity_name": "Motuariki View Point",
             "activity_type": "attraction",
@@ -205,13 +187,31 @@
               "lat": -43.9654608,
               "lng": 170.5339803
             },
-            "order": 999,
+            "order": 4,
             "remarks": "Rating: 4.1/5 (35 reviews)",
             "status": {
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/6/65/LakeTekapoNov242024_05.jpg",
             "url": "https://www.locationscout.net/new-zealand/43962-lake-tekapo-from-motuariki-view-point"
+          },
+          {
+            "activity_id": "lake-tekapo-wp-5",
+            "activity_name": "Peter’s Lookout (Lake Pukaki → Aoraki views)",
+            "duration": "15–30 min",
+            "google_place_id": "ChIJWZVsQaoDK20R98KecKWBWPo",
+            "location": {
+              "address": "SH80 (Mount Cook Rd), Ben Ohau 7999",
+              "lat": -44.0891352,
+              "lng": 170.1357676
+            },
+            "order": 5,
+            "remarks": "Large car park; classic road-to-Aoraki photo spot; combine with Mt Cook day trip.",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1a/d9/b4/e1/photo1jpg.jpg?w=1200&amp;h=1200&amp;s=1",
+            "url": "https://www.tripadvisor.com/Attraction_Review-g7042765-d19056143-Reviews-Peter_s_Lookout-Pukaki_Mackenzie_District_Canterbury_Region_South_Island.html"
           }
         ],
         "date": {
@@ -243,7 +243,7 @@
           },
           {
             "activity_id": "lake-tekapo-wp-2",
-            "activity_name": "Talbot Forest (Geraldine) short loop",
+            "activity_name": "Talbot Forest Scenic Reserve",
             "duration": "20–40 min",
             "google_place_id": "ChIJD8kzq7z1LG0RVgPNGysIzM0",
             "location": {
@@ -255,7 +255,7 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/NZ_Native_Rain_Forest_%2852538831153%29.jpg",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/geraldine-area/things-to-do/talbot-forest-scenic-reserve-tracks/"
+            "url": "https://www.tripadvisor.com/Attraction_Review-g658478-d12179388-Reviews-Talbot_Forest_Scenic_Reserve-Geraldine_Canterbury_Region_South_Island.html"
           },
           {
             "activity_id": "lake-tekapo-wp-3",
@@ -263,8 +263,8 @@
             "duration": "10–20 min",
             "google_place_id": "ChIJQ1PaufV5K20RLAcQF_fJhTE",
             "location": {
-              "lat": -44.089633899999995,
-              "lng": 170.6525914
+              "lat": -44.1573937,
+              "lng": 170.5732172
             },
             "remarks": "First views into the Mackenzie Basin.",
             "status": {
@@ -301,6 +301,24 @@
         },
         "activities": [
           {
+            "activity_id": "poi_ChIJWY8xDFse1akRt4FBkHrUjS0_1765028134426",
+            "activity_name": "Woolworths Queenstown",
+            "activity_type": "attraction",
+            "duration": "1-2 hours",
+            "google_place_id": "ChIJWY8xDFse1akRt4FBkHrUjS0",
+            "location": {
+              "address": "30 Grant Road, Frankton, Queenstown 9300, New Zealand",
+              "lat": -45.013503,
+              "lng": 168.741984
+            },
+            "order": 0,
+            "remarks": "Rating: 4.3/5 (1926 reviews)",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHquR_DCzpX54qiZWle1Kbzsu1JusF5jyhmlBVRzmJ7y7DdQuQ67r2MXGgOXBzU1r3IdPyOzRyDk_W5X8qGbIykq3O8I1folrqI0ruZwi9iNNVfPajYGEDrOWz1jPkVO5SBX-PqACTpwwze3OmbfXEBbXl2AJdyw869s_VDT2FmHoG2BLxwy4lo44AwiZ7CQn8cpSn0qQb3ICnqC1N2xnsQgD0bWpIclauUz1DUH2YT0q8kDJlgCL_gs4FUujGUSBahVRNJA2QiYUfZdv9BGCdxlzCFA46N_EAFsuPsj9HemwOz0FxoB6Kd1cuiHDG0Tg4-JDbRyo5SdF1M9HGTJksoAjPBHjhklpp9PUxARKG2DE6rZ-ASyrquZTuIWzn7zFn8mR2XfCV9TiAUdWH1CSNJufsRHICr4jJuHlbjsTUpkK5a4Pa_9eAx6Z6h-kE4Y5gHkC3dChIIQAgi_-dFLfVTcyQ5-cDvU2RerI7rwIbVuJDJeP9nW6AN8VKfJfA9ofk9jhUiEgHPRObU1QtbKN4Zl2mWqd2e6cObMTxMD0mosS6qUol0JjnsOJi6riguIHDbwx4x0nTXJ56m_6VfjYIyWW1HZ2Q&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
+          },
+          {
             "activity_id": "queenstown-act-1",
             "activity_name": "Skyline Gondola & Luge",
             "duration": "2–4h",
@@ -320,25 +338,6 @@
             "url": "https://queenstown.skyline.co.nz/"
           },
           {
-            "activity_id": "queenstown-act-2",
-            "activity_name": "Creative Queenstown Market (Saturdays)",
-            "duration": "1–2h",
-            "google_place_id": "ChIJJ2chix8d1akRNkU3v7Bzuh8",
-            "location": {
-              "address": "Earnslaw Park, Queenstown",
-              "lat": -45.032974499999995,
-              "lng": 168.65851859999998
-            },
-            "order": 2,
-            "remarks": "Summer 9am–4pm; local crafts/food",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://static.wixstatic.com/media/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg/v1/fit/w_2500,h_1330,al_c/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg",
-            "travel_time_from_accommodation": "12m drive",
-            "url": "https://www.queenstownmarket.nz/"
-          },
-          {
             "activity_id": "queenstown-act-3",
             "activity_name": "TSS Earnslaw to Walter Peak Farm (RealNZ)",
             "duration": "3–4h (incl. cruise + farm tour/dining)",
@@ -348,7 +347,7 @@
               "lat": -45.0331584,
               "lng": 168.6578846
             },
-            "order": 3,
+            "order": 2,
             "remarks": "Family favourite; animals, shearing demo; book ahead",
             "status": {
               "done": false
@@ -356,44 +355,6 @@
             "thumbnail_url": "https://www.realnz.com/media/701113/6-sept15-tss-earnslaw-queenstown.jpg?width=1200&amp;height=630&amp;v=1da55de311ce990",
             "travel_time_from_accommodation": "12m drive to wharf",
             "url": "https://www.realnz.com/en/experiences/tss-earnslaw-walter-peak-experiences/"
-          },
-          {
-            "activity_id": "queenstown-act-4",
-            "activity_name": "Kiwi Park (native wildlife)",
-            "duration": "1–2h",
-            "google_place_id": "ChIJGbzFhngd1akREfa6vQkkB70",
-            "location": {
-              "address": "51 Brecon Street, Queenstown 9300",
-              "lat": -45.0283619,
-              "lng": 168.65657109999998
-            },
-            "order": 4,
-            "remarks": "Keeper talks; tuatara; below Skyline Gondola",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://kiwibird.co.nz/wp-content/uploads/2024/01/Wings-Spread.jpg",
-            "travel_time_from_accommodation": "10–12m drive",
-            "url": "https://kiwibird.co.nz/"
-          },
-          {
-            "activity_id": "queenstown-act-5",
-            "activity_name": "Shotover Jet (jet boating)",
-            "duration": "1–1.5h total (25m on water)",
-            "google_place_id": "ChIJTe4Vw6Ud1akRlGHny7qc4eA",
-            "location": {
-              "address": "Arthurs Point, Queenstown",
-              "lat": -44.9870794,
-              "lng": 168.6713311
-            },
-            "order": 5,
-            "remarks": "Minimum height varies by conditions (often ~1.0m). Warm layers recommended",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://www.shotoverjet.com/assets/Uploads/banner__FillWzEyMDAsNjMwXQ.jpg",
-            "travel_time_from_accommodation": "15m drive",
-            "url": "https://www.shotoverjet.com/"
           },
           {
             "activity_id": "queenstown-act-6",
@@ -405,7 +366,7 @@
               "lat": -44.937982299999994,
               "lng": 168.8291985
             },
-            "order": 6,
+            "order": 3,
             "remarks": "Historic main street; easy riverside walk; pan for gold",
             "status": {
               "done": false
@@ -424,7 +385,7 @@
               "lat": -45.0371873,
               "lng": 168.6607345
             },
-            "order": 7,
+            "order": 4,
             "remarks": "Beach & playground at Marine Parade; ice cream & hot chocolates nearby",
             "status": {
               "done": false
@@ -432,6 +393,63 @@
             "thumbnail_url": "http://www.patagoniachocolates.co.nz/cdn/shop/files/IMG_3426_4032x3024.jpg?v=1763559373",
             "travel_time_from_accommodation": "10–12m drive",
             "url": "https://www.patagoniachocolates.co.nz/"
+          },
+          {
+            "activity_id": "queenstown-act-2",
+            "activity_name": "Creative Queenstown Market (Saturdays)",
+            "duration": "1–2h",
+            "google_place_id": "ChIJJ2chix8d1akRNkU3v7Bzuh8",
+            "location": {
+              "address": "Earnslaw Park, Queenstown",
+              "lat": -45.032974499999995,
+              "lng": 168.65851859999998
+            },
+            "order": 5,
+            "remarks": "Summer 9am–4pm; local crafts/food",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://static.wixstatic.com/media/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg/v1/fit/w_2500,h_1330,al_c/ae656c_3ccf01080ae844f8b06e495c233e8a7b%7Emv2.jpg",
+            "travel_time_from_accommodation": "12m drive",
+            "url": "https://www.queenstownmarket.nz/"
+          },
+          {
+            "activity_id": "queenstown-act-4",
+            "activity_name": "Kiwi Park (native wildlife)",
+            "duration": "1–2h",
+            "google_place_id": "ChIJGbzFhngd1akREfa6vQkkB70",
+            "location": {
+              "address": "51 Brecon Street, Queenstown 9300",
+              "lat": -45.0283619,
+              "lng": 168.65657109999998
+            },
+            "order": 7,
+            "remarks": "Keeper talks; tuatara; below Skyline Gondola",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://kiwibird.co.nz/wp-content/uploads/2024/01/Wings-Spread.jpg",
+            "travel_time_from_accommodation": "10–12m drive",
+            "url": "https://kiwibird.co.nz/"
+          },
+          {
+            "activity_id": "queenstown-act-5",
+            "activity_name": "Shotover Jet (jet boating)",
+            "duration": "1–1.5h total (25m on water)",
+            "google_place_id": "ChIJTe4Vw6Ud1akRlGHny7qc4eA",
+            "location": {
+              "address": "Arthurs Point, Queenstown",
+              "lat": -44.9870794,
+              "lng": 168.6713311
+            },
+            "order": 8,
+            "remarks": "Minimum height varies by conditions (often ~1.0m). Warm layers recommended",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://www.shotoverjet.com/assets/Uploads/banner__FillWzEyMDAsNjMwXQ.jpg",
+            "travel_time_from_accommodation": "15m drive",
+            "url": "https://www.shotoverjet.com/"
           }
         ],
         "date": {
@@ -1003,7 +1021,8 @@
             "remarks": "Rating: 4.6/5 (26 reviews)",
             "status": {
               "done": false
-            }
+            },
+            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHobOuxRpbH44zycwpPVyf42_8kq6o0hwKjJiixPlLKnCG-M9Idz2GSOTHJRf7WCbu0spBDWJ1PHimFLO8B2a05-uisxOaH6yPZfTImBprvcstvXpe7ePYmdRhHvdwso2xTBiYGjprQ5PvV5XTyrrvRW2PRS6qRCqqT_3L4oBzLQDsmWBVhqE0U6qfOkpuGJnyftrswu9xWukM3gHp9JDv-bbtzHs53AK80i1SPjGIxGdlMcZ9qfHxUir8e-TZUAVv--O5gjiixc73H7s67r8Alj0vwELQQJmt8cImY51dfyNaY8fTtgJhdKWUq6Dg75l1exiHfO1zllYBM2qd4lpNKt20KjbNPA2_Grx0OxJvFgF5BoXvCfVFuBhqqLjv4x-KsExrZ96YBiSUeJRN9-2q86u-DwDHyV9Mh1rSRTtFbT4HozTt8DpvLUAlQwM8XwROU_tVt2qUjAq52oovN7NLRGcbRy7Q29kZe-ThQcxZMjzuci7cB1XDpfYqEONwNP2bDaWeiZybxIL_yEAa9TrQP6BN8J4gtZb3tKvUI1wLFTOknCLdB-Wwaf759HvKJJuKH3LJ3g9A8B4Nlx93mbAIaJVgPH0Q&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k"
           },
           {
             "activity_id": "timaru-act-4",
