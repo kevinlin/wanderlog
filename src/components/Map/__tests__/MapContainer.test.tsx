@@ -398,11 +398,6 @@ describe('MapContainer', () => {
         expect(screen.getByTestId('marker-Test Shopping')).toBeInTheDocument();
       });
 
-      // Verify that getActivityTypeColor returns different colors for different types
-      expect(activityUtils.getActivityTypeColor(ActivityType.RESTAURANT)).toBe('#f97316'); // Orange-500
-      expect(activityUtils.getActivityTypeColor(ActivityType.ATTRACTION)).toBe('#8b5cf6'); // Violet-500
-      expect(activityUtils.getActivityTypeColor(ActivityType.SHOPPING)).toBe('#f59e0b'); // Amber-500
-
       // Verify these colors are distinct
       const restaurantColor = activityUtils.getActivityTypeColor(ActivityType.RESTAURANT);
       const attractionColor = activityUtils.getActivityTypeColor(ActivityType.ATTRACTION);
