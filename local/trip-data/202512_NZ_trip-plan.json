@@ -2,7 +2,10 @@
   "exportDate": "2025-12-06T15:40:03.502Z",
   "tripData": {
     "constraints": {
-      "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"],
+      "exceptions": [
+        "13 Dec Christchurch = 1 night for groceries & shopping",
+        "22 Dec Milford Sound = a day trip from Te Anau,"
+      ],
       "max_daily_driving_hours": "3–4h",
       "min_nights_per_stop": 2
     },
