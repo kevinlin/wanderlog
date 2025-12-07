@@ -172,7 +172,7 @@ interface MapContainerProps {
 - Location-specific pin icons:
 
   - Accommodation locations: Lodge-style pins (uses accommodation location if available, otherwise falls back to base location)
-  - Activity locations: Activity pins with standardized visited status colors (blue for unvisited, green for visited)
+  - Activity locations: Activity pins with location pin and color differentiation by visited status
   - Scenic waypoint locations: Violet-styled pins with landscape/mountain icons (violet for unvisited, green for visited)
 - Pin status-based styling and interactions
 - **Marker Titles**: Displays "Stop Name - Accommodation Name" when accommodation exists, or just "Stop Name" when accommodation is not provided
@@ -611,10 +611,9 @@ interface ImageViewerModalProps {
 - **Icons**: Polished Material Design filled SVG icons for modern, sleek appearance
 
 - **Accommodation Pins**: Material Design home icon with status-based coloring using Orange-500 for active states
-- **Activity Pins**: Type-specific Material Design icons with standardized visited status colors:
-  - All unvisited activities: Sky-500 (#0ea5e9) blue color regardless of activity type
-  - All visited activities: Emerald-500 (#10b981) green color regardless of activity type
-  - Icon shapes: Restaurant (utensils), Attraction (star), Shopping (bag), Outdoor (mountain), Cultural (museum), Transport (car), Other (location pin)
+- **Activity Pins**: Material Design location pin icon with color differentiation by visited status:
+  - All unvisited activities: Color varies by activity type (see getActivityTypeColor() in activityUtils.ts)
+  - All visited activities: Emerald-500 (#10b981) green color
 - **Scenic Waypoint Pins**: Material Design landscape icon with Violet-500 (#8b5cf6) for unvisited, Emerald-500 for visited
 
 **Glow Animation Effects**:

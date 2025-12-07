@@ -106,14 +106,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Implemented enhanced pin visibility with 1.5x larger sizing than Google Maps defaults for all pin types
     - Removed city pins - accommodation pins now serve as the primary location markers
     - Enhanced accommodation pins with lodge icon using Orange-500 for active states with status-based opacity
-    - Implemented activity pins with type-specific SVG paths and vibrant color coding:
-      - Restaurant: Fork and knife icon with Orange-500 (#f97316)
-      - Attraction: Camera/sightseeing icon with Violet-500 (#8b5cf6)
-      - Shopping: Shopping bag icon with Amber-500 (#f59e0b)
-      - Outdoor: Mountain/hiking icon with Emerald-500 (#10b981)
-      - Cultural: Museum/building icon with Cyan-500 (#06b6d4)
-      - Transport: Vehicle icon with Indigo-500 (#6366f1)
-      - Other/Default: Flag icon with Sky-500 (#0ea5e9)
+    - Implemented activity pins with a single location pin icon
     - Added pin shadows using SVG filters for better contrast against map backgrounds
     - Implemented hover state scaling (1.1x) with smooth size transitions
     - Added consistent stroke width and color for icon outlines
@@ -551,8 +544,6 @@ This document outlines the step-by-step implementation tasks for building the Wa
 
 - [x] 20. **Enhanced Pin Icons and Hover Interactions**
   - [x] 20.1 Update SVG icon paths with polished Material Design icons
-    - Replaced activity type SVG paths with polished Material Design filled icons
-    - Updated icons for: Restaurant (utensils), Attraction (star), Shopping (bag), Outdoor (mountain), Cultural (museum), Transport (car), Other (location pin)
     - Added getAccommodationSvgPath() and getScenicWaypointSvgPath() utility functions
     - **Requirements Reference**: Requirement 1.17 (polished Material Design icons)
 

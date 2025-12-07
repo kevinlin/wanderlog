@@ -251,62 +251,34 @@ describe('ActivityUtils', () => {
   });
 
   describe('getActivityTypeSvgPath', () => {
-    it('should return restaurant icon path for restaurant type', () => {
-      const path = getActivityTypeSvgPath(ActivityType.RESTAURANT);
-      // Material Design utensils icon
-      expect(path).toBe(
-        'M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-9.03C11.34 12.84 13 11.12 13 9V2h-2v7zm5-3v8h2.5v8H21V2c-2.76 0-5 2.24-5 4z'
-      );
+    const expectedLocationPinPath =
+      'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z';
+
+    it('should return location pin icon for all activity types', () => {
+      // Test all activity types return the same location pin icon
+      const allTypes = [
+        ActivityType.RESTAURANT,
+        ActivityType.ATTRACTION,
+        ActivityType.SHOPPING,
+        ActivityType.OUTDOOR,
+        ActivityType.CULTURAL,
+        ActivityType.RECREATION,
+        ActivityType.SCENIC,
+        ActivityType.BEACH,
+        ActivityType.PLAYGROUND,
+        ActivityType.GROCERY,
+        ActivityType.TRANSPORT,
+        ActivityType.OTHER,
+      ];
+
+      allTypes.forEach((type) => {
+        expect(getActivityTypeSvgPath(type)).toBe(expectedLocationPinPath);
+      });
     });
 
-    it('should return attraction icon path for attraction type', () => {
-      const path = getActivityTypeSvgPath(ActivityType.ATTRACTION);
-      // Material Design star icon
-      expect(path).toBe('M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z');
-    });
-
-    it('should return shopping icon path for shopping type', () => {
-      const path = getActivityTypeSvgPath(ActivityType.SHOPPING);
-      // Material Design shopping bag icon
-      expect(path).toBe(
-        'M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z'
-      );
-    });
-
-    it('should return outdoor icon path for outdoor type', () => {
-      const path = getActivityTypeSvgPath(ActivityType.OUTDOOR);
-      // Material Design terrain/mountain icon
-      expect(path).toBe('M14 6l-3.75 5 2.85 3.8-1.6 1.2C9.81 13.75 7 10 7 10l-6 8h22L14 6z');
-    });
-
-    it('should return cultural icon path for cultural type', () => {
-      const path = getActivityTypeSvgPath(ActivityType.CULTURAL);
-      // Material Design museum/account balance icon
-      expect(path).toBe('M4 10v7h3v-7H4zm6 0v7h3v-7h-3zM2 22h19v-3H2v3zm14-12v7h3v-7h-3zm-4.5-9L2 6v2h19V6l-9.5-5z');
-    });
-
-    it('should return transport icon path for transport type', () => {
-      const path = getActivityTypeSvgPath(ActivityType.TRANSPORT);
-      // Material Design car icon
-      expect(path).toBe(
-        'M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.21.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.5 16c-.83 0-1.5-.67-1.5-1.5S5.67 13 6.5 13s1.5.67 1.5 1.5S7.33 16 6.5 16zm11 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zM5 11l1.5-4.5h11L19 11H5z'
-      );
-    });
-
-    it('should return location pin icon path for other type', () => {
-      const path = getActivityTypeSvgPath(ActivityType.OTHER);
-      // Material Design place/location pin icon
-      expect(path).toBe(
-        'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'
-      );
-    });
-
-    it('should return location pin icon path for undefined type', () => {
+    it('should return location pin icon for undefined type', () => {
       const path = getActivityTypeSvgPath(undefined as any);
-      // Material Design place/location pin icon (fallback)
-      expect(path).toBe(
-        'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z'
-      );
+      expect(path).toBe(expectedLocationPinPath);
     });
   });
 });

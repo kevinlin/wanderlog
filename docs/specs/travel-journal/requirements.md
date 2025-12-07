@@ -27,7 +27,7 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 14. WHEN the Google Maps API fails to load, THEN the system SHALL display a placeholder grid background with "Map unavailable" message
 15. WHEN UI components are displayed over the map, THEN they SHALL be positioned as floating panels with appropriate gaps from screen edges
 16. WHEN floating panels are rendered, THEN they SHALL use frosted glass styling with rounded corners, semi-transparent white background, backdrop blur, subtle borders, and medium shadows
-17. WHEN map pins are rendered, THEN they SHALL use polished Material Design filled SVG icons for a modern and sleek appearance
+17. WHEN map pins are rendered, THEN they SHALL use a consistent location pin icon for a modern and sleek appearance
 18. WHEN map pins are displayed, THEN they SHALL have a continuous subtle glow animation effect that pulses gently to enhance visual appeal
 19. WHEN a user hovers over a map pin, THEN the pin SHALL display an enhanced brighter glow effect and increase slightly in size for visual feedback
 20. WHEN a user hovers over a map pin (accommodation, activity, or scenic waypoint), THEN a Place Details popover SHALL appear showing place information from trip data including name, type, thumbnail image (if available), address, and completion status
@@ -47,10 +47,10 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 34. WHEN the application loads, THEN the map layer preferences (map type and overlay layers) SHALL be restored from LocalStorage
 35. WHEN LocalStorage contains invalid map layer preferences, THEN the system SHALL use default values (roadmap type, all overlays off)
 36. WHEN an accommodation pin is clicked/tapped or a trip stop is selected from the timeline, THEN the map SHALL pan to center on the accommodation location and zoom to a neighborhood-level view (zoom level 14)
-33. WHEN an activity pin is clicked/tapped or an activity is selected from the ActivitiesPanel, THEN the map SHALL pan to center on the activity location and zoom to a neighborhood-level view (zoom level 14)
-34. WHEN a scenic waypoint pin is clicked/tapped or a scenic waypoint is selected from the ActivitiesPanel, THEN the map SHALL pan to center on the waypoint location and zoom to a neighborhood-level view (zoom level 14)
-1.  WHEN a POI search result pin is clicked/tapped, THEN the map SHALL pan to center on the POI location and zoom to a neighborhood-level view (zoom level 14)
-2.  WHEN the map is displayed, THEN a scale control (distance ruler) SHALL be visible at the bottom right corner showing the current map scale
+37. WHEN an activity pin is clicked/tapped or an activity is selected from the ActivitiesPanel, THEN the map SHALL pan to center on the activity location and zoom to a neighborhood-level view (zoom level 14)
+38. WHEN a scenic waypoint pin is clicked/tapped or a scenic waypoint is selected from the ActivitiesPanel, THEN the map SHALL pan to center on the waypoint location and zoom to a neighborhood-level view (zoom level 14)
+39. WHEN a POI search result pin is clicked/tapped, THEN the map SHALL pan to center on the POI location and zoom to a neighborhood-level view (zoom level 14)
+40. WHEN the map is displayed, THEN a scale control (distance ruler) SHALL be visible at the bottom right corner showing the current map scale
 
 ### 2. Timeline Navigation and Date Management
 
