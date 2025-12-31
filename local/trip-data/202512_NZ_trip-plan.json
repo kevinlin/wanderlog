@@ -248,24 +248,8 @@
             "url": "https://www.google.com/maps/place/Rakaia+River+Bridge"
           },
           {
-            "activity_id": "poi_ChIJD8kzq7z1LG0RVgPNGysIzM0_1765041425086",
-            "activity_name": "Talbot Forest Scenic Reserve",
-            "duration": "20–40 min",
-            "google_place_id": "ChIJD8kzq7z1LG0RVgPNGysIzM0",
-            "location": {
-              "lat": -44.0831297,
-              "lng": 171.2387071
-            },
-            "remarks": "Sheltered native bush loop to break the drive.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/3/36/NZ_Native_Rain_Forest_%2852538831153%29.jpg",
-            "url": "https://www.tripadvisor.com/Attraction_Review-g658478-d12179388-Reviews-Talbot_Forest_Scenic_Reserve-Geraldine_Canterbury_Region_South_Island.html"
-          },
-          {
             "activity_id": "poi_ChIJQ1PaufV5K20RLAcQF_fJhTE_1765041425186",
-            "activity_name": "Burkes Pass Scenic Reserve lookout",
+            "activity_name": "Burkes Pass",
             "duration": "10–20 min",
             "google_place_id": "ChIJQ1PaufV5K20RLAcQF_fJhTE",
             "location": {
@@ -711,6 +695,40 @@
       {
         "activities": [
           {
+            "activity_id": "poi_ChIJrXCbGuw11KkRK04K3AkXv00_1765041427511",
+            "activity_name": "Mirror Lakes",
+            "activity_type": "scenic",
+            "duration": "15–30m",
+            "google_place_id": "ChIJrXCbGuw11KkRK04K3AkXv00",
+            "location": {
+              "lat": -45.0285649,
+              "lng": 168.01098109999998
+            },
+            "remarks": "Check weather & avalanche advisories on Milford Road",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,q_75,w_1200/v1/crm/southlandnz/Mirror-Lakes---Southland-New-Zealand---Credit-Great-South-3-_EFBA73CF-FBE5-434B-62CDED49727E4026-efba72e5a516491_efba7bae-017e-e917-0ad3688a5c6debab.jpg",
+            "url": "https://southlandnz.com/listing/mirror-lakes/251/"
+          },
+          {
+            "activity_id": "poi_ChIJY3Znrf3J1akRkjeLUBgqEPs_1765041427613",
+            "activity_name": "Lake Gunn Nature Walk",
+            "activity_type": "scenic",
+            "duration": "45m",
+            "google_place_id": "ChIJY3Znrf3J1akRkjeLUBgqEPs",
+            "location": {
+              "lat": -44.8944896,
+              "lng": 168.0825303
+            },
+            "remarks": "Check weather & avalanche advisories on Milford Road",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
+            "url": "https://southlandnz.com/listing/cascade-creek-%26-lake-gunn-nature-walk/252/"
+          },
+          {
             "activity_id": "poi_ChIJh8bKJgDd1akRmkIYApkID6o_1765041427309",
             "activity_name": "Milford Sound cruise (optional day trip)",
             "activity_type": "recreation",
@@ -760,40 +778,7 @@
           "lng": 167.9248229
         },
         "name": "Milford Sound",
-        "scenic_waypoints": [
-          {
-            "activity_id": "poi_ChIJrXCbGuw11KkRK04K3AkXv00_1765041427511",
-            "activity_name": "Mirror Lakes",
-            "duration": "15–30m",
-            "google_place_id": "ChIJrXCbGuw11KkRK04K3AkXv00",
-            "location": {
-              "lat": -45.0285649,
-              "lng": 168.01098109999998
-            },
-            "remarks": "Check weather & avalanche advisories on Milford Road",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,q_75,w_1200/v1/crm/southlandnz/Mirror-Lakes---Southland-New-Zealand---Credit-Great-South-3-_EFBA73CF-FBE5-434B-62CDED49727E4026-efba72e5a516491_efba7bae-017e-e917-0ad3688a5c6debab.jpg",
-            "url": "https://southlandnz.com/listing/mirror-lakes/251/"
-          },
-          {
-            "activity_id": "poi_ChIJY3Znrf3J1akRkjeLUBgqEPs_1765041427613",
-            "activity_name": "Lake Gunn Nature Walk",
-            "duration": "45m",
-            "google_place_id": "ChIJY3Znrf3J1akRkjeLUBgqEPs",
-            "location": {
-              "lat": -44.8944896,
-              "lng": 168.0825303
-            },
-            "remarks": "Check weather & avalanche advisories on Milford Road",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/c6e9249dc1e245a7945ff6c6a350d8e1/lake-gunn-nature-walk-1920.jpg",
-            "url": "https://southlandnz.com/listing/cascade-creek-%26-lake-gunn-nature-walk/252/"
-          }
-        ],
+        "scenic_waypoints": [],
         "stop_id": "milford-sound",
         "travel_time_from_previous": "1h 44m (from Te Anau via Queenstown/Crown Range)",
         "weather": {
@@ -1365,23 +1350,6 @@
         "name": "Christchurch",
         "scenic_waypoints": [
           {
-            "activity_id": "poi_ChIJD8kzq7z1LG0RVgPNGysIzM0_1767167575478",
-            "activity_name": "Geraldine: Talbot Forest Scenic Reserve (short bush walk)",
-            "duration": "20–40m",
-            "google_place_id": "ChIJD8kzq7z1LG0RVgPNGysIzM0",
-            "location": {
-              "address": "Talbot Forest Scenic Reserve, Geraldine, Canterbury",
-              "lat": -44.086389,
-              "lng": 171.238611
-            },
-            "remarks": "Good leg stretch before continuing Inland Scenic Route 72.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/14933b5545aa41f898438d53936418b4/geraldine-area-1920.jpg",
-            "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/geraldine-area/"
-          },
-          {
             "activity_id": "poi_ChIJPzPGOpFELG0RoOvk6gFHh_E_1767167575895",
             "activity_name": "Peel Forest Park Scenic Reserve (optional detour)",
             "duration": "30–60m",
@@ -1431,23 +1399,6 @@
             },
             "thumbnail_url": "https://www.doc.govt.nz/thumbs/hero/contentassets/7aaf12b0aa0c4c34908b99ccc43ef420/rakaia-gorge-hero.jpg",
             "url": "https://www.doc.govt.nz/parks-and-recreation/places-to-go/canterbury/places/mount-hutt-area/things-to-do/rakaia-gorge-walkway/"
-          },
-          {
-            "activity_id": "poi_ChIJ-fjTwCQHLm0RlJb2cZO2K94_1767167577275",
-            "activity_name": "Darfield (last easy stop before Christchurch via SH73)",
-            "duration": "10–20m",
-            "google_place_id": "ChIJ-fjTwCQHLm0RlJb2cZO2K94",
-            "location": {
-              "address": "Darfield, Canterbury",
-              "lat": -43.4872333,
-              "lng": 172.1116765
-            },
-            "remarks": "Quick toilet/snack stop, then straight into Christchurch on SH73.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=AZLasHqAIwkIs9O3KbERC1c4aBJaRc7GmFxI3lTbflgGEh2eSWWk0ENKCTLdAADndHHloPORXf2mq4LnXc5o5w96Wk-V0haJK7ZbvSaQuQe-v7a8xv1SXE6Df_1Nd19c9Xx2j3EfXE3kNf3c1EofP3cAzrOJx6nFXyljntifbJsx1N0HnSajPhM3bVZ87SeB4r50UCJqxVuWgTnfFOrKejFv0VQRQDi_mkjTMmvBhWHPNlm13-GTnaK_r-Wkvz5BFSEG_Brd5WuHSDpZSTfE8oqmPj0cLQiVzMYAWiWwUav4Z5DBSzkJRURNMPTCKvgvCDAaCqa7SVfcfATSlkz4bHqv9J7x77BpUYMJ6y2ap85t-mVF_Gq3u7yywGn-c8jiRKCbdBCsTbsYM4GeDfYxIWH1HTAbMdQMHfz1s38JydZxM9C5Sovw5xFTWJPahZ14PnfNF_aDWtZpDbZ5rBVrJt1E8pvdz4G9-bm5VpwfaHWwde8UKkHeovHx67E1jv6yR6NvlA5BdrNUPieolPmGSizqATcRAn-amZH1gk-MyJp9hyTtGFKfghKxWrBYlEFDgC_j3fOF1Qo7TXc2Kw&key=AIzaSyASlHKboDiUlNoYgK8Wd2YDfUjT5DX1L7k",
-            "url": "https://selwyn.govt.nz/"
           }
         ],
         "stop_id": "christchurch-end",

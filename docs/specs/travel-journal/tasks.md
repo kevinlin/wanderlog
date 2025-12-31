@@ -741,7 +741,7 @@ This document outlines the step-by-step implementation tasks for building the Wa
     - Modified route fetching effect in MapContainer.tsx (lines ~287-342)
     - Added scenic waypoints as pass-through points (stopover: false) in Google Directions API request
     - Maintained accommodation stops as formal stopovers (stopover: true)
-    - Scenic waypoints are visited while traveling FROM previous stop TO current stop
+    - Data convention: scenic_waypoints under a stop are waypoints ON THE WAY TO that stop
     - Implemented waypoint truncation when exceeding Google Maps limit (25 max):
       - Prioritizes accommodation stops (always included)
       - Fills remaining slots with scenic waypoints in geographic order

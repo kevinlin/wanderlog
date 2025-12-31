@@ -291,11 +291,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         for (let i = 0; i < stops.length; i++) {
           const currentStop = stops[i];
 
-          // For stops after the first, add scenic waypoints from PREVIOUS stop
-          // (scenic waypoints are visited while traveling FROM previous TO current)
+          // For stops after the first, add scenic waypoints from CURRENT stop
+          // (scenic_waypoints are defined as waypoints TO visit on the way TO this stop)
           if (i > 0) {
-            const prevStop = stops[i - 1];
-            const scenicWaypoints = prevStop.scenic_waypoints || [];
+            const scenicWaypoints = currentStop.scenic_waypoints || [];
             for (const waypoint of scenicWaypoints) {
               if (waypoint.location?.lat && waypoint.location?.lng) {
                 waypoints.push({

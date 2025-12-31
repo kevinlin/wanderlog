@@ -193,8 +193,8 @@ interface MapContainerProps {
 **Route Waypoint Ordering**:
 - Scenic waypoints are included as pass-through points (`stopover: false`) in the Google Directions API request
 - Accommodation stops are included as formal stopovers (`stopover: true`)
-- Waypoint order: origin → scenic waypoints from stop 1 → stop 2 accommodation → scenic waypoints from stop 2 → stop 3 accommodation → ... → destination
-- Scenic waypoints are visited while traveling FROM the previous stop TO the current stop
+- **Data convention**: `scenic_waypoints` under a stop are waypoints to visit ON THE WAY TO that stop (not from it)
+- Waypoint order: origin → scenic waypoints of stop 2 → stop 2 accommodation → scenic waypoints of stop 3 → stop 3 accommodation → ... → scenic waypoints of final stop → destination
 - Google Maps waypoint limit: 25 maximum
   - When exceeded, waypoints are truncated with accommodation stops prioritized
   - Remaining slots filled with scenic waypoints in geographic order
