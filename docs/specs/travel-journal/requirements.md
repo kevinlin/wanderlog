@@ -13,7 +13,9 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 **Acceptance Criteria:**
 1. WHEN the application loads, THEN it SHALL display a Google Maps interface as the primary background with floating UI components overlaid
 2. WHEN trip data is loaded, THEN the system SHALL render route polylines between all trip bases using Google Directions API
-3. WHEN route polylines are displayed, THEN they SHALL include scenic waypoints (e.g., Lindis Pass, Crown Range) as intermediate points
+3. WHEN route polylines are displayed, THEN they SHALL include scenic waypoints as pass-through points, routing the path through each scenic location rather than finding the fastest direct route
+3a. WHEN scenic waypoints have valid location coordinates, THEN the route SHALL pass through each waypoint in sequence, displaying the actual scenic driving path
+3b. WHEN the total number of waypoints exceeds Google Maps API limits (25), THEN the system SHALL log a warning and render the route with available waypoints
 4. WHEN the map is displayed, THEN it SHALL use a custom travel-journal styling with softer pastel colors and reduced POI clutter
 5. WHEN accommodation locations are available, THEN the system SHALL display lodge-style pins at each base location
 6. WHEN activity locations are available, THEN the system SHALL display activity pins with standardized visited status colors (blue for unvisited activities, green for visited activities) for each activity with valid coordinates

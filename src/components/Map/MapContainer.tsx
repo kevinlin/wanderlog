@@ -284,15 +284,40 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         const directionsService = new google.maps.DirectionsService();
         const stops = tripData.stops;
 
-        // Create waypoints array including scenic waypoints
+        // Create waypoints array including scenic waypoints as pass-through points
         const waypoints: google.maps.DirectionsWaypoint[] = [];
+        const MAX_WAYPOINTS = 25;
 
-        // Add intermediate stops as waypoints (all except first and last)
-        for (let i = 1; i < stops.length - 1; i++) {
-          waypoints.push({
-            location: stops[i].accommodation?.location || stops[i].location,
-            stopover: true,
-          });
+        for (let i = 0; i < stops.length; i++) {
+          const currentStop = stops[i];
+
+          // For stops after the first, add scenic waypoints from PREVIOUS stop
+          // (scenic waypoints are visited while traveling FROM previous TO current)
+          if (i > 0) {
+            const prevStop = stops[i - 1];
+            const scenicWaypoints = prevStop.scenic_waypoints || [];
+            for (const waypoint of scenicWaypoints) {
+              if (waypoint.location?.lat && waypoint.location?.lng) {
+                waypoints.push({
+                  location: { lat: waypoint.location.lat, lng: waypoint.location.lng },
+                  stopover: false, // Pass through without formal stop
+                });
+              }
+            }
+          }
+
+          // Add intermediate stops (not first or last) as stopovers
+          if (i > 0 && i < stops.length - 1) {
+            waypoints.push({
+              location: currentStop.accommodation?.location || currentStop.location,
+              stopover: true,
+            });
+          }
+        }
+
+        // Warn if exceeding Google Maps waypoint limit
+        if (waypoints.length > MAX_WAYPOINTS) {
+          console.warn(`Route has ${waypoints.length} waypoints, exceeding limit of ${MAX_WAYPOINTS}`);
         }
 
         const request: google.maps.DirectionsRequest = {

@@ -190,6 +190,13 @@ interface MapContainerProps {
 - **Implementation**: Centering is handled via useEffect hooks watching `selectedActivityId` and `currentBaseId` changes, ensuring consistent behavior regardless of selection source
 - **UX Purpose**: Provides immediate visual context when selecting a place, making it easy to see surrounding POIs and navigation options
 
+**Route Waypoint Ordering**:
+- Scenic waypoints are included as pass-through points (`stopover: false`) in the Google Directions API request
+- Accommodation stops are included as formal stopovers (`stopover: true`)
+- Waypoint order: origin → scenic waypoints from stop 1 → stop 2 accommodation → scenic waypoints from stop 2 → stop 3 accommodation → ... → destination
+- Scenic waypoints are visited while traveling FROM the previous stop TO the current stop
+- Google Maps waypoint limit: 25 maximum (warning logged if exceeded)
+
 #### 2.1. MapLayerPicker Component
 **Purpose**: Floating control for switching between map types and toggling overlay layers.
 
