@@ -1113,22 +1113,6 @@
             "url": "https://waitakinz.com/explore/benmore-peninsula-track"
           },
           {
-            "activity_id": "poi_ChIJT07iCBcfKqgRCwZNhtXGGqE_1765041429232",
-            "activity_name": "Elephant Rocks (Limestone outcrops)",
-            "duration": "20–40 min",
-            "google_place_id": "ChIJT07iCBcfKqgRCwZNhtXGGqE",
-            "location": {
-              "lat": -44.8935508,
-              "lng": 170.6560906
-            },
-            "remarks": "Short farm track; quirky boulders in paddock.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://www.waitakinz.com/assets/1-HERO/Elephant-Rocks__FocusFillWyIwLjAwIiwiMC4wMCIsMzAwLDMwMF0.webp",
-            "url": "https://www.waitakinz.com/destinations/duntroon"
-          },
-          {
             "activity_id": "poi_ChIJHXYzy1UZKqgRaFFsm3S7pRM_1765041429333",
             "activity_name": "Takiroa Māori Rock Art Shelter",
             "duration": "10–20 min",
@@ -1142,6 +1126,22 @@
               "done": false
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/b/b3/Takiroa_Rock_Art_Site.jpg",
+            "url": "https://www.waitakinz.com/destinations/duntroon"
+          },
+          {
+            "activity_id": "poi_ChIJT07iCBcfKqgRCwZNhtXGGqE_1765041429232",
+            "activity_name": "Elephant Rocks (Limestone outcrops)",
+            "duration": "20–40 min",
+            "google_place_id": "ChIJT07iCBcfKqgRCwZNhtXGGqE",
+            "location": {
+              "lat": -44.8935508,
+              "lng": 170.6560906
+            },
+            "remarks": "Short farm track; quirky boulders in paddock.",
+            "status": {
+              "done": false
+            },
+            "thumbnail_url": "https://www.waitakinz.com/assets/1-HERO/Elephant-Rocks__FocusFillWyIwLjAwIiwiMC4wMCIsMzAwLDMwMF0.webp",
             "url": "https://www.waitakinz.com/destinations/duntroon"
           }
         ],
