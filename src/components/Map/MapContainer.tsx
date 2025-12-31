@@ -315,15 +315,27 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           }
         }
 
-        // Warn if exceeding Google Maps waypoint limit
+        // Truncate waypoints if exceeding Google Maps limit (prioritize accommodation stops)
+        let finalWaypoints = waypoints;
         if (waypoints.length > MAX_WAYPOINTS) {
-          console.warn(`Route has ${waypoints.length} waypoints, exceeding limit of ${MAX_WAYPOINTS}`);
+          console.warn(
+            `Route has ${waypoints.length} waypoints, exceeding limit of ${MAX_WAYPOINTS}. ` +
+              `Truncating to ${MAX_WAYPOINTS} waypoints (accommodation stops prioritized).`
+          );
+          // Separate accommodation stops (stopover: true) from scenic waypoints (stopover: false)
+          const accommodationStops = waypoints.filter((w) => w.stopover === true);
+          const scenicWaypoints = waypoints.filter((w) => w.stopover === false);
+          // Always include all accommodation stops, fill remaining slots with scenic waypoints
+          const remainingSlots = MAX_WAYPOINTS - accommodationStops.length;
+          finalWaypoints = [...scenicWaypoints.slice(0, Math.max(0, remainingSlots)), ...accommodationStops];
+          // Re-sort to maintain geographic order (interleave scenic before their destination stop)
+          finalWaypoints = waypoints.filter((w) => finalWaypoints.includes(w));
         }
 
         const request: google.maps.DirectionsRequest = {
           origin: stops[0].accommodation?.location || stops[0].location,
           destination: stops[stops.length - 1].accommodation?.location || stops[stops.length - 1].location,
-          waypoints,
+          waypoints: finalWaypoints,
           travelMode: google.maps.TravelMode.DRIVING,
           optimizeWaypoints: false,
         };

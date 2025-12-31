@@ -2,9 +2,7 @@
   "exportDate": "2025-12-31T08:07:48.982Z",
   "tripData": {
     "constraints": {
-      "exceptions": [
-        "13 Dec Christchurch = 1 night for groceries & shopping"
-      ],
+      "exceptions": ["13 Dec Christchurch = 1 night for groceries & shopping"],
       "max_daily_driving_hours": "3–4h",
       "min_nights_per_stop": 2
     },
@@ -699,22 +697,6 @@
             },
             "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/3/3d/Oreti_River.jpg",
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJn_7v-5aPkCwRcCajbg_tuB8"
-          },
-          {
-            "activity_id": "poi_ChIJoV82TK5-06kR_owx3VoeVoU_1765041427208",
-            "activity_name": "Mossburn Railway Reserve stop",
-            "duration": "10–15 min",
-            "google_place_id": "ChIJoV82TK5-06kR_owx3VoeVoU",
-            "location": {
-              "lat": -45.671205799999996,
-              "lng": 168.2380944
-            },
-            "remarks": "Short leg-stretch green; last larger stop before Te Anau.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/f/fe/Mossburn_Main_Street.JPG",
-            "url": "https://www.google.com/maps/place/?q=place_id:ChIJoV82TK5-06kR_owx3VoeVoU"
           }
         ],
         "stop_id": "te-anau",
@@ -961,22 +943,6 @@
             "url": "https://www.google.com/maps/place/?q=place_id:ChIJz3psyJ4m1akRjyoWKDuLllM"
           },
           {
-            "activity_id": "poi_ChIJJ6qM3Dk61akReFNbd93Qf5c_1765041428321",
-            "activity_name": "Bradrona (Cardrona bra fence)",
-            "duration": "5–10 min",
-            "google_place_id": "ChIJJ6qM3Dk61akReFNbd93Qf5c",
-            "location": {
-              "lat": -44.863590200000004,
-              "lng": 169.0187828
-            },
-            "remarks": "Quirky roadside charity stop; quick photo.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Cardrona_bra_fence.jpg",
-            "url": "https://www.google.com/maps/place/?q=place_id:ChIJJ6qM3Dk61akReFNbd93Qf5c"
-          },
-          {
             "activity_id": "poi_ChIJa2qAA1BP1akRZopIV8aQYJ8_1765041428422",
             "activity_name": "Cardrona Hotel frontage",
             "duration": "15–45 min",
@@ -1130,22 +1096,6 @@
         },
         "name": "Timaru",
         "scenic_waypoints": [
-          {
-            "activity_id": "poi_ChIJwzeFuUChKqgRbx7HwP-BygY_1765041429029",
-            "activity_name": "Lindis Pass Summit Lookout",
-            "duration": "10–20 min",
-            "google_place_id": "ChIJwzeFuUChKqgRbx7HwP-BygY",
-            "location": {
-              "lat": -44.5889233,
-              "lng": 169.64307839999998
-            },
-            "remarks": "Classic tussock scenery; exposed to wind.",
-            "status": {
-              "done": false
-            },
-            "thumbnail_url": "https://upload.wikimedia.org/wikipedia/commons/2/28/20250221-DJI_0950.jpg",
-            "url": "https://en.wikipedia.org/wiki/Lindis_Pass"
-          },
           {
             "activity_id": "poi_ChIJAfuTl0VzKqgRP5H-ZiLC3Qc_1765041429130",
             "activity_name": "Benmore Dam Lookout (Waitaki Valley)",

@@ -195,7 +195,10 @@ interface MapContainerProps {
 - Accommodation stops are included as formal stopovers (`stopover: true`)
 - Waypoint order: origin → scenic waypoints from stop 1 → stop 2 accommodation → scenic waypoints from stop 2 → stop 3 accommodation → ... → destination
 - Scenic waypoints are visited while traveling FROM the previous stop TO the current stop
-- Google Maps waypoint limit: 25 maximum (warning logged if exceeded)
+- Google Maps waypoint limit: 25 maximum
+  - When exceeded, waypoints are truncated with accommodation stops prioritized
+  - Remaining slots filled with scenic waypoints in geographic order
+  - Warning logged to console with truncation details
 
 #### 2.1. MapLayerPicker Component
 **Purpose**: Floating control for switching between map types and toggling overlay layers.

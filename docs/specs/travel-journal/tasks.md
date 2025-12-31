@@ -738,11 +738,14 @@ This document outlines the step-by-step implementation tasks for building the Wa
 
 - [x] 26. **Scenic Waypoints Route Integration**
   - [x] 26.1 Include scenic waypoints in route calculation
-    - Modified route fetching effect in MapContainer.tsx (lines ~287-321)
+    - Modified route fetching effect in MapContainer.tsx (lines ~287-342)
     - Added scenic waypoints as pass-through points (stopover: false) in Google Directions API request
     - Maintained accommodation stops as formal stopovers (stopover: true)
     - Scenic waypoints are visited while traveling FROM previous stop TO current stop
-    - Added Google Maps waypoint limit warning (25 max) with console.warn
+    - Implemented waypoint truncation when exceeding Google Maps limit (25 max):
+      - Prioritizes accommodation stops (always included)
+      - Fills remaining slots with scenic waypoints in geographic order
+      - Logs warning with truncation details to console
     - Route now shows actual scenic driving path instead of fastest direct route
     - Updated requirements.md with new acceptance criteria (1.3, 1.3a, 1.3b)
     - Updated design.md with Route Waypoint Ordering documentation
