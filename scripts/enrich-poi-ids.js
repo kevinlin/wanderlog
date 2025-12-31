@@ -7,7 +7,12 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const GOOGLE_MAPS_API_KEY = 'AIzaSyCB5n4X58yytDpkXjKeiWegfuG5SIY4C_8';
+const GOOGLE_MAPS_API_KEY = process.env.VITE_GOOGLE_MAPS_API_KEY;
+
+if (!GOOGLE_MAPS_API_KEY) {
+  console.error('❌ Missing VITE_GOOGLE_MAPS_API_KEY environment variable.');
+  process.exit(1);
+}
 const TRIP_PLAN_PATH = join(__dirname, '../local/trip-data/202512_NZ_trip-plan.json');
 
 async function findPlaceId(name, address, location) {
