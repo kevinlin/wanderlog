@@ -243,13 +243,13 @@ git commit -m "chore: migrate to tailwind css 4"
 - Consumes: Task 4 baseline.
 - Produces: working `pnpm lint` (currently broken - it calls eslint, which is not installed); pre-commit hook green on Ultracite 7.
 
-- [ ] **Step 1: Bump**
+- [x] **Step 1: Bump**
 
 ```bash
 pnpm add -D ultracite@^7.8.4 @biomejs/biome@^2.5.2
 ```
 
-- [ ] **Step 2: Reconcile `biome.jsonc` with Ultracite 7**
+- [x] **Step 2: Reconcile `biome.jsonc` with Ultracite 7** (presets renamed to `ultracite/biome/core` + `ultracite/biome/react`; four nursery rules moved to their promoted groups; `style/noSubstr` disabled instead of rewriting app code)
 
 ```bash
 npx ultracite check
@@ -257,7 +257,7 @@ npx ultracite check
 
 If the `extends: ["ultracite/core", "ultracite/react"]` preset names changed in v7, update them per https://www.ultracite.ai/docs (migration section). Keep the existing rule-disable list and formatter settings (`lineWidth: 140`, single quotes) untouched unless a rule key was renamed - then rename it, do not drop it.
 
-- [ ] **Step 3: Fix the stale lint script and remove eslint leftovers**
+- [x] **Step 3: Fix the stale lint script and remove eslint leftovers**
 
 `package.json` has `"lint": "eslint ."` but eslint is not a dependency and no eslint config exists. Replace it and drop the orphaned `globals` package:
 
@@ -269,7 +269,7 @@ If the `extends: ["ultracite/core", "ultracite/react"]` preset names changed in 
 pnpm remove globals
 ```
 
-- [ ] **Step 4: Apply formatting and review**
+- [x] **Step 4: Apply formatting and review**
 
 ```bash
 npx ultracite fix
@@ -278,7 +278,7 @@ git diff --stat
 
 Review the diff: formatting-only changes are expected; any semantic-looking change (imports removed, code deleted) gets reverted and the responsible rule disabled in `biome.jsonc` instead.
 
-- [ ] **Step 5: Verify (includes the pre-commit hook, which runs tests + ultracite)**
+- [x] **Step 5: Verify (includes the pre-commit hook, which runs tests + ultracite)**
 
 ```bash
 pnpm test:run && pnpm build && pnpm lint
