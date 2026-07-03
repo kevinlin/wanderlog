@@ -420,7 +420,7 @@ jobs:
 - Supabase Site URL: set to the production domain (Task 4 may have pre-set it - confirm).
 - Google OAuth client JavaScript origins: confirm the production domain is listed.
 
-- [ ] **Step 3: Ship and verify**
+- [x] **Step 3: Ship and verify**
 
 ```bash
 git add .github/workflows/
@@ -453,7 +453,7 @@ Remove `VITE_BASE_PATH` from the Vercel project env (manual). The `basename={imp
 
 README deployment section: production URL is the Vercel domain; note "The former GitHub Pages URL (https://kevinlin.github.io/wanderlog/) is retired." Repo Settings > Pages: disable (manual). Remove the GH Pages origin from the Maps key referrer list (manual).
 
-- [ ] **Step 3: Verify and commit**
+- [x] **Step 3: Verify and commit**
 
 ```bash
 pnpm test:run && pnpm build
