@@ -134,4 +134,14 @@ describe('buildRows', () => {
     expect(bundle.trip.start_date).toBe('2025-12-13');
     expect(bundle.trip.end_date).toBe('2025-12-16');
   });
+
+  it('skips accommodations without a name (degenerate legacy data)', () => {
+    const trip = toTripData(tripRow);
+    const noName = {
+      ...trip,
+      stops: [{ ...trip.stops[0], accommodation: {} as (typeof trip.stops)[0]['accommodation'] }],
+    };
+    const bundle = buildRows(noName, '202512_NZ');
+    expect(bundle.accommodations).toEqual([]);
+  });
 });

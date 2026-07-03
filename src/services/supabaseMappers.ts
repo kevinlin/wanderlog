@@ -189,7 +189,9 @@ export const buildRows = (trip: TripData, tripId: string): RowBundle => {
       created_at: now,
       updated_at: now,
     });
-    if (stop.accommodation) {
+    // Legacy JSON can carry a degenerate empty accommodation object; a row
+    // without a name is meaningless and violates the schema's NOT NULL.
+    if (stop.accommodation?.name) {
       accommodations.push({
         id: `${stop.stop_id}_accommodation`,
         stop_id: stop.stop_id,
