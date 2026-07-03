@@ -12,6 +12,7 @@ import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useTripData } from '@/hooks/useTripData';
+import { useReorderActivities, useToggleActivityDone } from '@/hooks/useTripMutations';
 import { getLastViewedBase, setLastViewedBase } from '@/services/viewStateStorage';
 import type { UserModifications } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
@@ -27,6 +28,8 @@ function App() {
   const { tripData, isLoading, error, refetch } = useTripData({ tripId: CURRENT_TRIP_ID });
   const { state, dispatch } = useAppStateContext();
   const { isMobile } = useScreenSize();
+  const toggleDoneMutation = useToggleActivityDone(CURRENT_TRIP_ID);
+  const reorderMutation = useReorderActivities(CURRENT_TRIP_ID);
   const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
   const [isActivitiesPanelVisible, setIsActivitiesPanelVisible] = useState(false);
 
@@ -100,8 +103,16 @@ function App() {
   // The mapper writes `order` onto each activity, so no custom order map is needed
   const sortedActivities = currentStop ? sortActivitiesByOrder(currentStop.activities) : [];
 
-  const handleActivityToggle = (_activityId: string, _done: boolean) => {
-    // Wired to the Supabase mutation in the next task
+  const handleActivityToggle = (activityId: string, done: boolean) => {
+    const isWaypoint = tripData.stops.some((stop) => (stop.scenic_waypoints ?? []).some((waypoint) => waypoint.activity_id === activityId));
+    toggleDoneMutation.mutate(
+      { activityId, isDone: done, isWaypoint },
+      {
+        onError: (mutationError) => {
+          showToast(`Failed to save: ${mutationError.message}`, 'error');
+        },
+      }
+    );
   };
 
   const handleActivitySelect = (activityId: string) => {
@@ -120,8 +131,21 @@ function App() {
     setIsActivitiesPanelVisible(false);
   };
 
-  const handleActivityReorder = (_fromIndex: number, _toIndex: number) => {
-    // Wired to the Supabase mutation in the next task
+  const handleActivityReorder = (fromIndex: number, toIndex: number) => {
+    if (!state.currentBase || fromIndex === toIndex) {
+      return;
+    }
+    const orderedIds = sortedActivities.map((activity) => activity.activity_id);
+    const [moved] = orderedIds.splice(fromIndex, 1);
+    orderedIds.splice(toIndex, 0, moved);
+    reorderMutation.mutate(
+      { stopId: state.currentBase, orderedActivityIds: orderedIds },
+      {
+        onError: (mutationError) => {
+          showToast(`Failed to save order: ${mutationError.message}`, 'error');
+        },
+      }
+    );
   };
 
   const showToast = (message: string, type: ToastState['type'] = 'info') => {
