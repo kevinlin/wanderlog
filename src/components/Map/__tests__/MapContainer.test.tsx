@@ -62,9 +62,10 @@ Object.defineProperty(window, 'google', {
       },
       Size: vi.fn(),
       Point: vi.fn(),
-      LatLngBounds: vi.fn(() => ({
-        extend: vi.fn(),
-      })),
+      // Vitest 4: constructor mocks must use the function keyword (arrow functions are not constructible)
+      LatLngBounds: vi.fn(function LatLngBoundsMock() {
+        return { extend: vi.fn() };
+      }),
       LatLng: vi.fn(),
       DirectionsService: vi.fn(),
       TravelMode: {
@@ -74,11 +75,13 @@ Object.defineProperty(window, 'google', {
         OK: 'OK',
       },
       places: {
-        PlacesService: vi.fn(() => ({
-          getDetails: vi.fn(),
-          nearbySearch: vi.fn(),
-          textSearch: vi.fn(),
-        })),
+        PlacesService: vi.fn(function PlacesServiceMock() {
+          return {
+            getDetails: vi.fn(),
+            nearbySearch: vi.fn(),
+            textSearch: vi.fn(),
+          };
+        }),
         PlacesServiceStatus: {
           OK: 'OK',
         },

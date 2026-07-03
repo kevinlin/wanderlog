@@ -19,7 +19,10 @@ Object.defineProperty(window, 'google', {
   value: {
     maps: {
       places: {
-        PlacesService: vi.fn(() => mockPlacesService),
+        // Vitest 4: constructor mocks must use the function keyword (arrow functions are not constructible)
+        PlacesService: vi.fn(function PlacesServiceMock() {
+          return mockPlacesService;
+        }),
         PlacesServiceStatus: {
           OK: 'OK',
           ZERO_RESULTS: 'ZERO_RESULTS',
@@ -27,7 +30,9 @@ Object.defineProperty(window, 'google', {
           INVALID_REQUEST: 'INVALID_REQUEST',
         },
       },
-      LatLng: vi.fn((lat, lng) => ({ lat: () => lat, lng: () => lng })),
+      LatLng: vi.fn(function LatLngMock(lat: number, lng: number) {
+        return { lat: () => lat, lng: () => lng };
+      }),
     },
   },
   writable: true,
