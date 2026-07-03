@@ -138,4 +138,4 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 ```
 
-**Important**: Firebase must be configured with Firestore enabled. See [docs/specs/firebase-integration.md](docs/specs/firebase-integration.md) for security rules and detailed architecture.
+**Important**: Firebase must be configured with Firestore enabled. See [docs/specs/plan_firebase-integration.md](docs/specs/plan_firebase-integration.md) for security rules and detailed architecture.

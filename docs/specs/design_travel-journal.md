@@ -1,3 +1,4 @@
+
 # Wanderlog Travel Journal - Design Document
 
 ## Overview
@@ -10,10 +11,12 @@ The Wanderlog Travel Journal is a React-based Single Page Application (SPA) that
 - **Mobile-First Responsive Design**: Optimized for mobile travelers with touch-friendly interactions
 - **Expandable Interface**: Accommodation/activities panel supports collapsed and expanded states for efficient space utilization
 - **Vivid Color Palette**: Modern, dynamic color scheme using Tailwind Colors v4 for enhanced visual appeal
-- **Data Persistence**: Client-side storage with export capabilities for user modifications
+- **Cloud Persistence with Offline Support**: Firebase Firestore stores trip data and user modifications with IndexedDB offline persistence and a localStorage fallback (dual-write); export capabilities for user modifications
 - **Progressive Enhancement**: Graceful degradation when external services are unavailable
 
 ## Architecture
+
+> **Cloud storage.** Trip data and user modifications persist to Firebase Firestore with offline-first IndexedDB persistence and a localStorage fallback. See [plan_firebase-integration.md](plan_firebase-integration.md) for the authoritative data-layer design (schema, dual-write pattern, migration, security rules).
 
 ### High-Level Architecture
 
@@ -29,9 +32,10 @@ graph TB
         C --> C3[Activities Module]
         C --> C4[Weather Module]
         
-        D --> D1[TripDataService]
+        D --> D1[TripService]
         D --> D2[StorageService]
         D --> D3[WeatherService]
+        D --> D4[FirebaseService]
     end
     
     subgraph "External APIs"
@@ -41,15 +45,18 @@ graph TB
     end
     
     subgraph "Data Storage"
-        H[Static JSON Files]
-        I[LocalStorage]
+        H[Firebase Firestore<br/>+ IndexedDB offline cache]
+        I[localStorage fallback]
     end
     
     C1 --> E
     C1 --> F
     C4 --> G
-    D1 --> H
+    D1 --> D4
     D2 --> I
+    D2 --> D4
+    D3 --> D4
+    D4 --> H
 ```
 
 ### Technology Stack
@@ -61,6 +68,7 @@ graph TB
 - **Styling**: Tailwind CSS for utility-first styling
 - **State Management**: React Context API + useReducer for global state
 - **Data Fetching**: Native fetch API with custom hooks
+- **Cloud Storage**: Firebase Firestore (SDK v12) with IndexedDB offline persistence; localStorage as an immediate-write fallback
 - **Date Handling**: date-fns for timezone-aware date operations
 - **Deployment**: GitHub Pages with Vite base path configuration
 
@@ -99,9 +107,12 @@ src/
 │   ├── useWeather.ts          # Weather data fetching
 │   ├── useGeolocation.ts      # Device location services
 │   └── useLocalStorage.ts     # LocalStorage operations
+├── config/                     # App configuration
+│   └── firebase.ts            # Firebase app + Firestore init (IndexedDB offline persistence)
 ├── services/                   # Business logic and API services
-│   ├── tripDataService.ts     # Static JSON data loading
-│   ├── storageService.ts      # LocalStorage persistence
+│   ├── firebaseService.ts     # Firestore CRUD (trips, user modifications, weather cache)
+│   ├── tripService.ts         # Firestore trip loading + validation
+│   ├── storageService.ts      # Dual-write persistence (localStorage + Firestore)
 │   ├── weatherService.ts      # Open-Meteo API integration
 │   ├── mapsService.ts         # Google Maps utilities
 │   └── exportService.ts       # Data export functionality
@@ -936,27 +947,53 @@ interface WeatherCache {
 
 ## Services Architecture
 
-### 1. TripDataService
-**Purpose**: Static JSON data loading and validation.
+### 1. TripService
+**Purpose**: Firestore trip data loading and validation. Replaced the former `TripDataService`; static JSON loading has been removed (see [plan_firebase-integration.md](plan_firebase-integration.md)).
 
 ```typescript
-class TripDataService {
-  static async loadTripData(filename: string): Promise<TripData>;
+class TripService {
+  static async loadAllTrips(): Promise<TripData[]>;
+  static async loadTripData(tripId: string): Promise<TripData>;
   static validateTripData(data: unknown): data is TripData;
-  static calculateTravelTimes(tripData: TripData): Promise<TripData>;
+}
+```
+
+### 1.1. FirebaseService
+**Purpose**: Core Firestore integration for trips, user modifications, and the weather cache.
+
+```typescript
+class FirebaseService {
+  // Trips
+  static async getAllTrips(): Promise<TripData[]>;
+  static async getTripById(tripId: string): Promise<TripData | null>;
+  static async createTrip(tripData: TripData, tripId?: string): Promise<string>;
+  static async updateTrip(tripId: string, updates: Partial<TripData>): Promise<void>;
+  // User modifications
+  static async getUserModifications(tripId: string): Promise<UserModifications>;
+  static async saveUserModifications(tripId: string, mods: UserModifications): Promise<void>;
+  // Weather cache
+  static async getWeatherCache(tripId: string, baseId: string): Promise<WeatherData | null>;
+  static async saveWeatherCache(tripId: string, baseId: string, data: WeatherData, ttlHours: number): Promise<void>;
 }
 ```
 
 ### 2. StorageService
-**Purpose**: LocalStorage operations with error handling.
+**Purpose**: Dual-write persistence. User-modification methods write to localStorage synchronously (immediate) and to Firestore asynchronously (may fail offline), so they are async and keyed by `tripId`. Weather cache and map-layer preferences remain synchronous, localStorage-only.
 
 ```typescript
 class StorageService {
-  static getUserModifications(): UserModifications;
-  static saveUserModifications(modifications: UserModifications): void;
+  // Trip selection
+  static getCurrentTripId(): string | null;
+  static setCurrentTripId(tripId: string): void;
+
+  // User modifications (async, dual-write: localStorage + Firestore)
+  static getUserModifications(tripId: string): Promise<UserModifications>;
+  static saveUserModifications(tripId: string, modifications: UserModifications): Promise<void>;
+  static isAvailable(): boolean;
+
+  // Weather cache (localStorage only, sync)
   static getWeatherCache(): WeatherCache;
   static saveWeatherCache(cache: WeatherCache): void;
-  static isAvailable(): boolean;
   
   // Map Layer Preferences
   static getMapLayerPreferences(): MapLayerPreferences;
@@ -1331,8 +1368,8 @@ export default defineConfig({
 - Key scope limited to required APIs only
 
 ### Data Privacy
-- All user data stored locally in browser
-- No server-side data collection or tracking
+- Trip data and user modifications are stored in Firebase Firestore (single-user mode, no authentication), with a localStorage fallback and IndexedDB offline cache
+- No third-party analytics or tracking
 - Export functionality provides user data portability
 
 ### Content Security Policy
@@ -1357,6 +1394,6 @@ export default defineConfig({
 - Virtual scrolling for large activity lists
 
 ### Caching Strategy
-- Service Worker for offline functionality
-- LocalStorage for user modifications and weather data
+- Firebase Firestore IndexedDB persistence for offline functionality with automatic sync when back online
+- localStorage as an immediate-write fallback for user modifications (dual-write) and for the weather cache
 - Browser caching for static assets

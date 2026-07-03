@@ -142,7 +142,7 @@ The app uses Firebase's IndexedDB persistence for offline functionality:
 - Changes sync automatically when back online
 - Offline indicator shows connection status
 
-See [docs/specs/firebase-integration.md](docs/specs/firebase-integration.md) for detailed Firebase architecture and API documentation.
+See [docs/specs/plan_firebase-integration.md](docs/specs/plan_firebase-integration.md) for detailed Firebase architecture and API documentation.
 
 ### Google Maps
 

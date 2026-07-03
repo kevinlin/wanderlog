@@ -50,9 +50,9 @@ Add search result pins:
 
 ### 6. Documentation Updates
 
-- `docs/specs/travel-journal/requirements.md`: Add Requirement 15 for POI Search
-- `docs/specs/travel-journal/design.md`: Add POISearchResultCard component, update ActivitiesPanel layout
-- `docs/specs/travel-journal/tasks.md`: Add Task 22 for POI Search implementation
+- `docs/specs/requirements_travel-journal.md`: Add Requirement 15 for POI Search
+- `docs/specs/design_travel-journal.md`: Add POISearchResultCard component, update ActivitiesPanel layout
+- `docs/specs/plan_travel-journal.md`: Add Task 22 for POI Search implementation
 
 ## Files to Modify
 
@@ -63,9 +63,9 @@ Add search result pins:
 | `src/components/Cards/POISearchResultCard.tsx` | New component |
 | `src/components/Activities/ActivitiesPanel.tsx` | Layout restructure, search bar |
 | `src/components/Map/MapContainer.tsx` | Render search result pins |
-| `docs/specs/travel-journal/requirements.md` | Add Requirement 15 |
-| `docs/specs/travel-journal/design.md` | Component documentation |
-| `docs/specs/travel-journal/tasks.md` | Add Task 22 |
+| `docs/specs/requirements_travel-journal.md` | Add Requirement 15 |
+| `docs/specs/design_travel-journal.md` | Component documentation |
+| `docs/specs/plan_travel-journal.md` | Add Task 22 |
 
 ## Implementation Order
 
