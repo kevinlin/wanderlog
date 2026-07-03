@@ -6,6 +6,8 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    /* TS 6 defaults "types" to []; node is needed for process.env globals */
+    "types": ["node"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -15,8 +17,7 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
-    /* Path mapping */
-    "baseUrl": ".",
+    /* Path mapping (relative to this tsconfig; baseUrl is deprecated in TS 6) */
     "paths": {
       "@/*": ["./src/*"],
       "@/components/*": ["./src/components/*"],

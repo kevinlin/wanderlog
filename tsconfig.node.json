@@ -5,6 +5,8 @@
     "lib": ["ES2023"],
     "module": "ESNext",
     "skipLibCheck": true,
+    /* TS 6 defaults "types" to []; node is needed for path/__dirname in vite.config.ts */
+    "types": ["node"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
