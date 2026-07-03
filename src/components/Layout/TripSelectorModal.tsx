@@ -37,7 +37,7 @@ export const TripSelectorModal: React.FC<TripSelectorModalProps> = ({ isOpen, cu
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
       <div className="relative mx-4 flex max-h-[80vh] w-full max-w-2xl flex-col rounded-lg bg-white shadow-xl">
         {/* Header */}
         <div className="flex items-center justify-between border-gray-200 border-b p-6">

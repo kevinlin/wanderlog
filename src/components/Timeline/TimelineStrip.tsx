@@ -123,7 +123,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
 
     return (
       <button
-        className={`relative min-h-[36px] flex-shrink-0 touch-manipulation whitespace-nowrap rounded-lg font-medium text-xs transition-all duration-300 ease-in-out sm:min-h-auto ${
+        className={`relative min-h-[36px] shrink-0 touch-manipulation whitespace-nowrap rounded-lg font-medium text-xs transition-all duration-300 ease-in-out sm:min-h-auto ${
           isSelected
             ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} px-1.5 py-0.5 shadow-lg ring-offset-2 ring-offset-white/20 sm:px-2 sm:py-1`
             : `${colors.base} ${colors.text} px-2 py-1 sm:px-3 sm:py-1.5`
@@ -134,7 +134,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
         type="button"
       >
         {/* Duration badge at top-right */}
-        <div className="-top-1 -right-1 absolute flex h-5 min-w-[20px] items-center justify-center rounded-full border border-gray-200 bg-white px-1.5 font-bold text-gray-800 text-xs shadow-sm">
+        <div className="-top-1 -right-1 absolute flex h-5 min-w-[20px] items-center justify-center rounded-full border border-gray-200 bg-white px-1.5 font-bold text-gray-800 text-xs shadow-xs">
           {stop.duration_days}
         </div>
 
@@ -166,7 +166,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
 
   return (
     <div
-      className={`absolute top-0 left-0 z-20 touch-pan-x select-none overflow-hidden bg-white/30 p-1.5 shadow-md backdrop-blur transition-all duration-300 ease-in-out sm:top-4 sm:left-2 sm:rounded-xl sm:border sm:p-2 ${
+      className={`absolute top-0 left-0 z-20 touch-pan-x select-none overflow-hidden bg-white/30 p-1.5 shadow-md backdrop-blur-sm transition-all duration-300 ease-in-out sm:top-4 sm:left-2 sm:rounded-xl sm:border sm:p-2 ${
         isExpanded
           ? 'right-0 w-full rounded-none border-white/20 border-b sm:right-auto sm:w-auto sm:max-w-[calc(100vw-2rem)]'
           : 'w-auto rounded-xl border border-white/20 sm:max-w-[calc(100vw-26rem)]'
@@ -196,7 +196,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
           {/* Chevron expand button */}
           <button
             aria-label="Expand timeline"
-            className="flex-shrink-0 rounded-lg p-2 text-gray-700 transition-all duration-200 hover:bg-white/30 active:scale-95"
+            className="shrink-0 rounded-lg p-2 text-gray-700 transition-all duration-200 hover:bg-white/30 active:scale-95"
             onClick={toggleExpanded}
             type="button"
           >
@@ -216,7 +216,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
           {/* Chevron collapse button */}
           <button
             aria-label="Collapse timeline"
-            className="flex-shrink-0 rounded-lg p-2 text-gray-700 transition-all duration-200 hover:bg-white/30 active:scale-95"
+            className="shrink-0 rounded-lg p-2 text-gray-700 transition-all duration-200 hover:bg-white/30 active:scale-95"
             onClick={toggleExpanded}
             type="button"
           >

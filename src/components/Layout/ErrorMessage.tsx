@@ -11,7 +11,7 @@ interface ErrorMessageProps {
 
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, fullScreen = false, title, type = 'general', details }) => {
   const containerClass = fullScreen
-    ? 'min-h-screen bg-gradient-to-br from-sandy-beige to-white flex items-center justify-center p-4'
+    ? 'min-h-screen bg-linear-to-br from-sandy-beige to-white flex items-center justify-center p-4'
     : 'flex items-center justify-center p-8';
 
   // Get appropriate icon and styling based on error type
@@ -111,7 +111,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, fu
         <div className="flex flex-col gap-3 sm:flex-row">
           {onRetry && (
             <button
-              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-alpine-teal px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-opacity-90"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-alpine-teal px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-alpine-teal/90"
               onClick={onRetry}
             >
               <span>🔄</span>

@@ -14,7 +14,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
   variant = 'default',
 }) => {
   const containerClass = fullScreen
-    ? 'min-h-screen bg-gradient-to-br from-sandy-beige to-white flex items-center justify-center p-4'
+    ? 'min-h-screen bg-linear-to-br from-sandy-beige to-white flex items-center justify-center p-4'
     : 'flex items-center justify-center p-8';
 
   // Size configurations
@@ -39,7 +39,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
             <div className={`${sizeClasses[size]} relative`}>
               <div className="absolute inset-0 rounded-full border-2 border-gray-200" />
               <div className="absolute inset-0 animate-spin rounded-full border-2 border-alpine-teal border-t-transparent" />
-              <div className="absolute inset-2 rounded-full bg-gradient-to-br from-alpine-teal to-lake-blue opacity-20" />
+              <div className="absolute inset-2 rounded-full bg-linear-to-br from-alpine-teal to-lake-blue opacity-20" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="font-bold text-alpine-teal" style={{ fontSize: size === 'lg' ? '8px' : '6px' }}>
                   N

@@ -37,7 +37,7 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ weatherData, className
   }
 
   return (
-    <div className={`rounded-lg border border-white/30 bg-white/40 p-3 backdrop-blur-sm ${className}`}>
+    <div className={`rounded-lg border border-white/30 bg-white/40 p-3 backdrop-blur-xs ${className}`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span aria-label="Weather icon" className="text-2xl" role="img">

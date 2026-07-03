@@ -67,7 +67,7 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
   const photoUrl = getPhotoUrl(poi);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-rose-200/50 bg-gradient-to-br from-rose-50/80 to-orange-50/80 shadow-sm transition-all hover:shadow-md">
+    <div className="overflow-hidden rounded-xl border border-rose-200/50 bg-linear-to-br from-rose-50/80 to-orange-50/80 shadow-xs transition-all hover:shadow-md">
       {/* Photo Section */}
       {photoUrl && (
         <div className="relative h-32 w-full overflow-hidden">
@@ -162,7 +162,7 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
 
         {/* Add to Activities Button */}
         <button
-          className="min-h-[36px] w-full touch-manipulation rounded-lg border border-emerald-500/30 bg-emerald-500/20 px-3 py-2 font-medium text-emerald-700 text-sm transition-all hover:bg-emerald-500/30 hover:shadow-sm active:bg-emerald-500/40"
+          className="min-h-[36px] w-full touch-manipulation rounded-lg border border-emerald-500/30 bg-emerald-500/20 px-3 py-2 font-medium text-emerald-700 text-sm transition-all hover:bg-emerald-500/30 hover:shadow-xs active:bg-emerald-500/40"
           onClick={() => onAddToActivities(poi)}
         >
           ➕ Add to Activities

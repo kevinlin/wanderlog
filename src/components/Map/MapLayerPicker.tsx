@@ -108,7 +108,7 @@ export const MapLayerPicker: React.FC<MapLayerPickerProps> = ({ map, currentMapT
               {MAP_TYPE_OPTIONS.map((option) => (
                 <button
                   className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-left text-sm transition-all ${
-                    currentMapType === option.id ? 'bg-sky-500 text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+                    currentMapType === option.id ? 'bg-sky-500 text-white shadow-xs' : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   key={option.id}
                   onClick={() => handleMapTypeSelect(option.id)}
@@ -128,7 +128,7 @@ export const MapLayerPicker: React.FC<MapLayerPickerProps> = ({ map, currentMapT
               {OVERLAY_OPTIONS.map((option) => (
                 <button
                   className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm transition-all ${
-                    overlayLayers[option.id] ? 'bg-emerald-500 text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100'
+                    overlayLayers[option.id] ? 'bg-emerald-500 text-white shadow-xs' : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   key={option.id}
                   onClick={() => handleOverlayToggle(option.id)}

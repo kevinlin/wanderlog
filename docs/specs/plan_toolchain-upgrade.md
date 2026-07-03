@@ -183,7 +183,7 @@ Current state the migration transforms:
 - `postcss.config.js` - `tailwindcss` + `autoprefixer` plugins.
 - `src/index.css` - Google Fonts `@import` followed by the three `@tailwind` directives.
 
-- [ ] **Step 1: Run the official upgrade tool (requires a clean git tree)**
+- [x] **Step 1: Run the official upgrade tool (requires a clean git tree)**
 
 ```bash
 git status --porcelain   # must be empty
@@ -192,7 +192,7 @@ npx @tailwindcss/upgrade
 
 Expected changes: `@tailwind` directives replaced by `@import "tailwindcss";`, custom colors and font moved into a `@theme` block in `src/index.css` (as `--color-alpine-teal: #4A9E9E;` etc.), `tailwind.config.js` removed, PostCSS config switched to `@tailwindcss/postcss`, `autoprefixer` dropped (built into v4).
 
-- [ ] **Step 2: Check the two things the tool gets wrong most often**
+- [x] **Step 2: Check the two things the tool gets wrong most often**
 
 1. The Google Fonts `@import url(...)` line must remain **above** `@import "tailwindcss";` in `src/index.css` (CSS requires `@import` before other rules).
 2. The `@theme` block must contain all four `--color-*` variables and the `--font-sans` stack. If any are missing, add them:
@@ -207,7 +207,7 @@ Expected changes: `@tailwind` directives replaced by `@import "tailwindcss";`, c
 }
 ```
 
-- [ ] **Step 3: Remove the never-registered typography plugin**
+- [x] **Step 3: Remove the never-registered typography plugin**
 
 `@tailwindcss/typography` is installed but `plugins: []` was empty - it was never active, so it goes rather than gets migrated:
 
@@ -215,7 +215,7 @@ Expected changes: `@tailwind` directives replaced by `@import "tailwindcss";`, c
 pnpm remove @tailwindcss/typography
 ```
 
-- [ ] **Step 4: Verify, including visually**
+- [x] **Step 4: Verify, including visually**
 
 ```bash
 pnpm test:run && pnpm build
@@ -224,7 +224,7 @@ pnpm dev
 
 Expected: 218 passed, build exits 0. In the browser: timeline strip, activity cards, and accommodation cards show the teal/blue/green/beige theme colors; Inter font renders; layout unchanged against production (https://kevinlin.github.io/wanderlog/) side by side.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add -A

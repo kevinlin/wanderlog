@@ -286,7 +286,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   return (
     <div
-      className={`fixed right-0 bottom-0 left-0 z-10 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur transition-all duration-400 ease-in-out sm:absolute sm:top-2 sm:top-4 sm:right-2 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
+      className={`fixed right-0 bottom-0 left-0 z-10 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur-sm transition-all duration-400 ease-in-out sm:absolute sm:top-2 sm:top-4 sm:right-2 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
         ${
           isMobile
             ? 'w-full max-w-full overflow-hidden'
@@ -304,7 +304,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         {isMobile && (
           <div
             aria-label="Drag to resize panel"
-            className="flex flex-shrink-0 cursor-grab touch-none justify-center py-3 active:cursor-grabbing"
+            className="flex shrink-0 cursor-grab touch-none justify-center py-3 active:cursor-grabbing"
             onMouseDown={handleMouseDown}
             onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchMove}
@@ -370,7 +370,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           {isExpanded && (
             <>
               {/* Activities Header */}
-              <div className="flex-shrink-0 px-3 pb-3">
+              <div className="shrink-0 px-3 pb-3">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold text-gray-900 text-lg">📋 Activities ({activities.length})</h3>
                   <button
@@ -426,12 +426,12 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         </div>
 
         {/* Panel Footer: Search & Download */}
-        <div className="flex-shrink-0 px-3 pt-3">
+        <div className="shrink-0 px-3 pt-3">
           {/* Search Row */}
           <div className="mb-2 flex gap-2">
             <div className="relative flex-1">
               <input
-                className="h-9 w-full rounded-lg border border-gray-300/50 bg-white/70 pr-8 pl-3 text-sm placeholder-gray-500 focus:border-emerald-400 focus:outline-none focus:ring-1 focus:ring-emerald-400"
+                className="h-9 w-full rounded-lg border border-gray-300/50 bg-white/70 pr-8 pl-3 text-sm placeholder-gray-500 focus:border-emerald-400 focus:outline-hidden focus:ring-1 focus:ring-emerald-400"
                 onChange={(e) => setSearchInputValue(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="Search nearby places..."
@@ -441,7 +441,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               {(searchInputValue || poiSearch.results.length > 0) && (
                 <button
                   aria-label="Clear search"
-                  className="-translate-y-1/2 absolute top-1/2 right-2 rounded p-0.5 text-gray-400 hover:text-gray-600"
+                  className="-translate-y-1/2 absolute top-1/2 right-2 rounded-sm p-0.5 text-gray-400 hover:text-gray-600"
                   onClick={handleClearSearch}
                 >
                   <XMarkIcon className="h-4 w-4" />

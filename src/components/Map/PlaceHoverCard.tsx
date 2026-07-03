@@ -154,13 +154,13 @@ export const PlaceHoverCard: React.FC<PlaceHoverCardProps> = ({
 
   return (
     <div
-      className={`w-72 rounded-xl border bg-white/95 p-3 shadow-lg backdrop-blur-sm ${borderColor} ${glowColor} fade-in slide-in-from-left-2 animate-in duration-200`}
+      className={`w-72 rounded-xl border bg-white/95 p-3 shadow-lg backdrop-blur-xs ${borderColor} ${glowColor} fade-in slide-in-from-left-2 animate-in duration-200`}
       style={cardStyle}
     >
       <div className="flex gap-3">
         {/* Thumbnail */}
         {thumbnailUrl && (
-          <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg">
+          <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg">
             <img alt={name} className="h-full w-full object-cover" src={thumbnailUrl} />
           </div>
         )}
@@ -191,7 +191,7 @@ export const PlaceHoverCard: React.FC<PlaceHoverCardProps> = ({
           {/* Address */}
           {address && (
             <div className="mb-1 flex items-start gap-1">
-              <MapPinIcon className="mt-0.5 h-3 w-3 flex-shrink-0 text-gray-400" />
+              <MapPinIcon className="mt-0.5 h-3 w-3 shrink-0 text-gray-400" />
               <p className="line-clamp-2 text-gray-500 text-xs">{address}</p>
             </div>
           )}

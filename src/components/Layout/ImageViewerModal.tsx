@@ -53,7 +53,7 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ imageUrl, al
     <div
       aria-labelledby="image-viewer-title"
       aria-modal="true"
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4"
       onClick={handleBackdropClick}
       role="dialog"
     >
@@ -81,7 +81,7 @@ export const ImageViewerModal: React.FC<ImageViewerModalProps> = ({ imageUrl, al
           <div className="flex h-full w-full flex-col items-center justify-center text-white">
             <p className="mb-2 text-lg">Failed to load image</p>
             <button
-              className="min-h-[44px] touch-manipulation rounded bg-white/20 px-4 py-2 transition-colors hover:bg-white/30 active:bg-white/40"
+              className="min-h-[44px] touch-manipulation rounded-sm bg-white/20 px-4 py-2 transition-colors hover:bg-white/30 active:bg-white/40"
               onClick={onClose}
               type="button"
             >

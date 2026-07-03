@@ -98,10 +98,10 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           <div className={isDraggable ? 'pl-8' : ''}>
             {/* Header with checkbox and title */}
             <div className="mb-2 flex items-start space-x-3">
-              <div className="flex-shrink-0 pt-1">
+              <div className="shrink-0 pt-1">
                 <input
                   checked={isDone}
-                  className="h-4 w-4 touch-manipulation rounded border-gray-300 text-emerald-500 focus:ring-2 focus:ring-emerald-500"
+                  className="h-4 w-4 touch-manipulation rounded-sm border-gray-300 text-emerald-500 focus:ring-2 focus:ring-emerald-500"
                   onChange={handleCheckboxChange}
                   type="checkbox"
                 />
@@ -117,7 +117,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                   </div>
 
                   {activity.thumbnail_url && (
-                    <div className="ml-3 flex-shrink-0">
+                    <div className="ml-3 shrink-0">
                       <img
                         alt={activity.activity_name}
                         className="h-16 w-16 cursor-pointer rounded-lg object-cover transition-transform hover:scale-105"
@@ -162,7 +162,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             {/* Action buttons */}
             <div className="flex gap-2 border-gray-100 border-t pt-2">
               <a
-                className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
+                className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded-sm border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
                 href={activity.url}
                 onClick={(e) => e.stopPropagation()}
                 rel="noopener noreferrer"
@@ -173,7 +173,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
 
               {activity.google_place_id && (
                 <a
-                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
+                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded-sm border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
                   href={generateGoogleMapsPlaceUrl(activity.google_place_id, activity.activity_name)}
                   onClick={(e) => e.stopPropagation()}
                   rel="noopener noreferrer"
@@ -184,7 +184,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               )}
 
               <button
-                className="min-h-[30px] flex-1 touch-manipulation rounded bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
+                className="min-h-[30px] flex-1 touch-manipulation rounded-sm bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
                 onClick={handleNavigate}
               >
                 🧭 Direction

@@ -70,7 +70,7 @@ export class ErrorBoundary extends Component<Props, State> {
       }
 
       return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-sandy-beige to-white p-4">
+        <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-sandy-beige to-white p-4">
           <div className="w-full max-w-lg rounded-xl border border-gray-100 bg-white p-8 shadow-xl">
             {/* Travel Journal styled header */}
             <div className="mb-6 text-center">
@@ -93,7 +93,7 @@ export class ErrorBoundary extends Component<Props, State> {
             {/* Action buttons */}
             <div className="flex flex-col gap-3 sm:flex-row">
               <button
-                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-alpine-teal px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-opacity-90"
+                className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-alpine-teal px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-alpine-teal/90"
                 onClick={this.handleRetry}
               >
                 <span>🔄</span>
@@ -117,18 +117,20 @@ export class ErrorBoundary extends Component<Props, State> {
                 <div className="mt-3 space-y-3">
                   <div>
                     <h4 className="font-semibold text-gray-600 text-xs uppercase tracking-wide">Error Message</h4>
-                    <pre className="mt-1 overflow-auto rounded bg-red-50 p-2 text-red-600 text-xs">{this.state.error.message}</pre>
+                    <pre className="mt-1 overflow-auto rounded-sm bg-red-50 p-2 text-red-600 text-xs">{this.state.error.message}</pre>
                   </div>
 
                   <div>
                     <h4 className="font-semibold text-gray-600 text-xs uppercase tracking-wide">Stack Trace</h4>
-                    <pre className="mt-1 max-h-40 overflow-auto rounded bg-red-50 p-2 text-red-600 text-xs">{this.state.error.stack}</pre>
+                    <pre className="mt-1 max-h-40 overflow-auto rounded-sm bg-red-50 p-2 text-red-600 text-xs">
+                      {this.state.error.stack}
+                    </pre>
                   </div>
 
                   {this.state.errorInfo && (
                     <div>
                       <h4 className="font-semibold text-gray-600 text-xs uppercase tracking-wide">Component Stack</h4>
-                      <pre className="mt-1 max-h-40 overflow-auto rounded bg-gray-50 p-2 text-gray-600 text-xs">
+                      <pre className="mt-1 max-h-40 overflow-auto rounded-sm bg-gray-50 p-2 text-gray-600 text-xs">
                         {this.state.errorInfo.componentStack}
                       </pre>
                     </div>

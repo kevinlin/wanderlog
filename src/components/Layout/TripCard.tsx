@@ -30,7 +30,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, isSelected, onSelect }
       className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
         isSelected
           ? 'border-alpine-teal-500 bg-alpine-teal-50 shadow-md'
-          : 'border-gray-200 bg-white hover:border-alpine-teal-300 hover:shadow-sm'
+          : 'border-gray-200 bg-white hover:border-alpine-teal-300 hover:shadow-xs'
       }
       `}
       onClick={handleClick}
@@ -39,7 +39,7 @@ export const TripCard: React.FC<TripCardProps> = ({ trip, isSelected, onSelect }
         <div className="flex items-start justify-between">
           <h3 className="font-semibold text-gray-900 text-lg">{trip.trip_name}</h3>
           {isSelected && (
-            <span className="flex-shrink-0 rounded bg-alpine-teal-100 px-2 py-1 font-medium text-alpine-teal-700 text-xs">Current</span>
+            <span className="shrink-0 rounded-sm bg-alpine-teal-100 px-2 py-1 font-medium text-alpine-teal-700 text-xs">Current</span>
           )}
         </div>
 

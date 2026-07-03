@@ -48,15 +48,15 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
   return (
     <>
       <div
-        className={`cursor-pointer rounded-lg border border-violet-200/50 bg-gradient-to-r from-violet-50 to-sky-50 p-3 shadow-md transition-all duration-200 ${isSelected ? 'bg-violet-500/10 ring-2 ring-violet-500 ring-offset-2' : ''}
+        className={`cursor-pointer rounded-lg border border-violet-200/50 bg-linear-to-r from-violet-50 to-sky-50 p-3 shadow-md transition-all duration-200 ${isSelected ? 'bg-violet-500/10 ring-2 ring-violet-500 ring-offset-2' : ''}
           ${isDone ? 'bg-emerald-500/10 opacity-75' : ''}hover:shadow-lg min-h-[60px] touch-manipulation hover:bg-violet-500/5 active:bg-violet-500/10`}
         onClick={() => onSelect(waypoint.activity_id)}
       >
         <div className="flex items-start space-x-3">
-          <div className="flex-shrink-0 pt-1">
+          <div className="shrink-0 pt-1">
             <input
               checked={isDone}
-              className="h-4 w-4 touch-manipulation rounded border-gray-300 text-violet-500 focus:ring-2 focus:ring-violet-500"
+              className="h-4 w-4 touch-manipulation rounded-sm border-gray-300 text-violet-500 focus:ring-2 focus:ring-violet-500"
               onChange={handleCheckboxChange}
               type="checkbox"
             />
@@ -94,7 +94,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
               </div>
 
               {waypoint.thumbnail_url && (
-                <div className="ml-3 flex-shrink-0">
+                <div className="ml-3 shrink-0">
                   <img
                     alt={waypoint.activity_name}
                     className="h-16 w-16 cursor-pointer rounded-lg object-cover transition-transform hover:scale-105"
@@ -111,7 +111,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
             <div className="flex gap-2 border-violet-100 border-t pt-2">
               {waypoint.url && (
                 <a
-                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-violet-200 font-medium text-sm text-violet-500 transition-colors hover:border-violet-300 hover:text-violet-600 active:text-violet-700"
+                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded-sm border border-violet-200 font-medium text-sm text-violet-500 transition-colors hover:border-violet-300 hover:text-violet-600 active:text-violet-700"
                   href={waypoint.url}
                   onClick={(e) => e.stopPropagation()}
                   rel="noopener noreferrer"
@@ -123,7 +123,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
 
               {waypoint.google_place_id && (
                 <a
-                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-violet-200 font-medium text-sm text-violet-500 transition-colors hover:border-violet-300 hover:text-violet-600 active:text-violet-700"
+                  className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded-sm border border-violet-200 font-medium text-sm text-violet-500 transition-colors hover:border-violet-300 hover:text-violet-600 active:text-violet-700"
                   href={generateGoogleMapsPlaceUrl(waypoint.google_place_id, waypoint.activity_name)}
                   onClick={(e) => e.stopPropagation()}
                   rel="noopener noreferrer"
@@ -134,7 +134,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
               )}
 
               <button
-                className={`${waypoint.url || waypoint.google_place_id ? 'flex-1' : 'w-full'} min-h-[30px] touch-manipulation rounded bg-violet-500 px-3 py-2 text-sm text-white transition-colors hover:bg-violet-600 active:bg-violet-700`}
+                className={`${waypoint.url || waypoint.google_place_id ? 'flex-1' : 'w-full'} min-h-[30px] touch-manipulation rounded-sm bg-violet-500 px-3 py-2 text-sm text-white transition-colors hover:bg-violet-600 active:bg-violet-700`}
                 onClick={handleNavigate}
               >
                 🧭 Direction

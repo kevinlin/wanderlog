@@ -112,7 +112,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
         </div>
 
         {/* Toggle Button */}
-        <div className="ml-3 flex-shrink-0 sm:ml-4">
+        <div className="ml-3 shrink-0 sm:ml-4">
           <button
             aria-label={isExpanded ? 'Collapse accommodation details' : 'Expand accommodation details'}
             className="min-h-[30px] min-w-[44px] touch-manipulation rounded-lg p-2 transition-colors hover:bg-sky-500/20 active:bg-sky-500/30"
@@ -134,7 +134,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
       {isExpanded && (
         <div className="flex gap-2 border-gray-100 border-t pt-2">
           <a
-            className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
+            className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded-sm border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
             href={accommodation.url}
             rel="noopener noreferrer"
             target="_blank"
@@ -144,7 +144,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
 
           {accommodation.google_place_id && (
             <a
-              className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
+              className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded-sm border border-sky-200 font-medium text-sky-500 text-sm transition-colors hover:border-sky-300 hover:text-sky-600 active:text-sky-700"
               href={generateGoogleMapsPlaceUrl(accommodation.google_place_id, accommodation.name)}
               rel="noopener noreferrer"
               target="_blank"
@@ -154,7 +154,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
           )}
 
           <a
-            className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
+            className="flex min-h-[30px] flex-1 touch-manipulation items-center justify-center rounded-sm bg-sky-500 px-3 py-2 text-sm text-white transition-colors hover:bg-sky-600 active:bg-sky-700"
             href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(accommodation.address)}`}
             rel="noopener noreferrer"
             target="_blank"
