@@ -8,7 +8,8 @@ Navigation map for the Wanderlog specification docs. All specs use the `default`
 | Doc | Description |
 |-----|-------------|
 | [requirements_wanderlog-phase-1.md](requirements_wanderlog-phase-1.md) | Project-level functional requirement specification (the original MVP FRS/PRD). |
-| [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md) | Supabase migration, auth gate, trip library, itinerary editing, offline read, hosting move. Design/plan not yet written. |
+| [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md) | Supabase migration, auth gate, trip library, itinerary editing, offline read, hosting move. |
+| [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md) | Phase 2 architecture: Supabase schema + RLS, TanStack Query data layer, auth, routing, editing UX, offline cache, Vercel hosting, milestones M0-M4. Plan not yet written. |
 | [requirements_travel-journal.md](requirements_travel-journal.md) | Acceptance criteria for map, timeline, activities, accommodation, weather, POI, and responsive design. |
 | [design_travel-journal.md](design_travel-journal.md) | Architecture, components, data models, services, and visual design system. |
 | [plan_travel-journal.md](plan_travel-journal.md) | Implementation task checklist (26 tasks) with requirement references. |
