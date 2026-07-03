@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
 import { LoginForm } from '@/components/Auth/LoginForm';
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
@@ -8,19 +8,23 @@ import { OfflineIndicator } from '@/components/Layout/OfflineIndicator';
 import { Toast, type ToastState } from '@/components/Layout/Toast';
 import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
-import { initializeFirebase } from '@/config/firebase';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useTripData } from '@/hooks/useTripData';
-import { saveUserModifications } from '@/services/storageService';
-import type { Activity } from '@/types';
+import { getLastViewedBase, setLastViewedBase } from '@/services/viewStateStorage';
+import type { UserModifications } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 
+const CURRENT_TRIP_ID = '202512_NZ';
+
+// Export merges nothing extra anymore: status/order are canonical in trip data
+const EMPTY_MODIFICATIONS: UserModifications = { activityStatus: {}, activityOrders: {} };
+
 function App() {
   const { session, isLoading: isAuthLoading } = useAuth();
-  const { tripData, isLoading, error, refetch } = useTripData({ tripId: '202512_NZ' });
+  const { tripData, isLoading, error, refetch } = useTripData({ tripId: CURRENT_TRIP_ID });
   const { state, dispatch } = useAppStateContext();
   const { isMobile } = useScreenSize();
   const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
@@ -31,16 +35,16 @@ function App() {
     setIsActivitiesPanelVisible(!isMobile);
   }, [isMobile]);
 
-  // Initialize Firebase on app mount
+  // Track the current trip in UI state
   useEffect(() => {
-    initializeFirebase();
-  }, []);
+    dispatch({ type: 'SET_CURRENT_TRIP_ID', payload: CURRENT_TRIP_ID });
+  }, [dispatch]);
 
   // Initialize current base when trip data is available
   useEffect(() => {
     if (tripData && !state.currentBase) {
       const currentStop = getCurrentStop(tripData.stops);
-      const lastViewedBase = state.userModifications.lastViewedBase;
+      const lastViewedBase = getLastViewedBase(CURRENT_TRIP_ID);
       const initialBase =
         lastViewedBase && tripData.stops.find((s) => s.stop_id === lastViewedBase)
           ? lastViewedBase
@@ -50,23 +54,21 @@ function App() {
         dispatch({ type: 'SELECT_BASE', payload: initialBase });
       }
     }
-  }, [tripData, state.currentBase, state.userModifications.lastViewedBase, dispatch]);
+  }, [tripData, state.currentBase, dispatch]);
 
-  // Save user modifications whenever they change (async with Firebase + localStorage)
-  useEffect(() => {
-    // Only save if we have a current trip ID
-    if (state.currentTripId) {
-      saveUserModifications(state.currentTripId, state.userModifications).catch((err) => {
-        console.error('Failed to save user modifications:', err);
-        // Don't show error to user - modifications are still saved to localStorage
-      });
+  // Done-status map derived from trip data (status.done is canonical since Supabase)
+  const activityStatus = useMemo(() => {
+    const status: Record<string, boolean> = {};
+    for (const stop of tripData?.stops ?? []) {
+      for (const activity of stop.activities) {
+        status[activity.activity_id] = activity.status?.done ?? false;
+      }
+      for (const waypoint of stop.scenic_waypoints ?? []) {
+        status[waypoint.activity_id] = waypoint.status?.done ?? false;
+      }
     }
-  }, [state.currentTripId, state.userModifications]);
-
-  // Use global state values
-  const loading = isLoading || state.loading;
-  const appError = error || state.error;
-  const appTripData = state.tripData || tripData;
+    return status;
+  }, [tripData]);
 
   if (isAuthLoading) {
     return <LoadingSpinner fullScreen message="Loading your adventure..." size="lg" variant="adventure" />;
@@ -76,16 +78,16 @@ function App() {
     return <LoginForm />;
   }
 
-  if (loading) {
+  if (isLoading) {
     return <LoadingSpinner fullScreen message="Loading your adventure..." size="lg" variant="adventure" />;
   }
 
-  if (appError || !appTripData) {
+  if (error || !tripData) {
     return (
       <ErrorMessage
-        details={appError || undefined}
+        details={error || undefined}
         fullScreen
-        message={appError || 'Failed to load trip data'}
+        message={error || 'Failed to load trip data'}
         onRetry={refetch}
         title="Adventure Data Unavailable"
         type="data"
@@ -93,34 +95,13 @@ function App() {
     );
   }
 
-  const currentStop = appTripData.stops.find((stop) => stop.stop_id === state.currentBase);
+  const currentStop = tripData.stops.find((stop) => stop.stop_id === state.currentBase);
 
-  // Convert array-based order to object-based order for utility function
-  const getCustomOrder = (activities: Activity[], orderArray?: number[]) => {
-    if (!orderArray) return;
+  // The mapper writes `order` onto each activity, so no custom order map is needed
+  const sortedActivities = currentStop ? sortActivitiesByOrder(currentStop.activities) : [];
 
-    const customOrder: { [activityId: string]: number } = {};
-    orderArray.forEach((originalIndex, newIndex) => {
-      if (activities[originalIndex]) {
-        customOrder[activities[originalIndex].activity_id] = newIndex;
-      }
-    });
-    return customOrder;
-  };
-
-  const sortedActivities =
-    currentStop && state.currentBase
-      ? sortActivitiesByOrder(
-          currentStop.activities,
-          getCustomOrder(currentStop.activities, state.userModifications.activityOrders[state.currentBase])
-        )
-      : [];
-
-  const handleActivityToggle = (activityId: string, done: boolean) => {
-    dispatch({
-      type: 'TOGGLE_ACTIVITY_DONE',
-      payload: { activityId, done },
-    });
+  const handleActivityToggle = (_activityId: string, _done: boolean) => {
+    // Wired to the Supabase mutation in the next task
   };
 
   const handleActivitySelect = (activityId: string) => {
@@ -130,6 +111,7 @@ function App() {
 
   const handleStopSelect = (stopId: string) => {
     dispatch({ type: 'SELECT_BASE', payload: stopId });
+    setLastViewedBase(CURRENT_TRIP_ID, stopId);
     // Auto-show activities panel on mobile when stop is selected
     setIsActivitiesPanelVisible(true);
   };
@@ -138,16 +120,8 @@ function App() {
     setIsActivitiesPanelVisible(false);
   };
 
-  const handleActivityReorder = (fromIndex: number, toIndex: number) => {
-    if (!state.currentBase) return;
-    dispatch({
-      type: 'REORDER_ACTIVITIES',
-      payload: {
-        baseId: state.currentBase,
-        fromIndex,
-        toIndex,
-      },
-    });
+  const handleActivityReorder = (_fromIndex: number, _toIndex: number) => {
+    // Wired to the Supabase mutation in the next task
   };
 
   const showToast = (message: string, type: ToastState['type'] = 'info') => {
@@ -168,24 +142,24 @@ function App() {
         {/* Full Screen Map */}
         <div className="h-screen w-full">
           <MapContainer
-            activityStatus={state.userModifications.activityStatus}
+            activityStatus={activityStatus}
             currentBaseId={state.currentBase}
             onActivitySelect={handleActivitySelect}
             onBaseSelect={handleStopSelect}
             selectedActivityId={state.selectedActivity}
-            tripData={appTripData}
+            tripData={tripData}
           />
         </div>
 
         {/* Floating Timeline Strip */}
-        <TimelineStrip currentStopId={state.currentBase} onStopSelect={handleStopSelect} stops={appTripData.stops} />
+        <TimelineStrip currentStopId={state.currentBase} onStopSelect={handleStopSelect} stops={tripData.stops} />
 
         {/* Responsive Activities Panel */}
         {currentStop && state.currentBase && (
           <ActivitiesPanel
             accommodation={currentStop.accommodation}
             activities={sortedActivities}
-            activityStatus={state.userModifications.activityStatus}
+            activityStatus={activityStatus}
             baseId={state.currentBase}
             baseLocation={currentStop.location}
             isVisible={isActivitiesPanelVisible}
@@ -197,8 +171,8 @@ function App() {
             scenicWaypoints={currentStop.scenic_waypoints || []}
             selectedActivityId={state.selectedActivity}
             stopName={currentStop.name}
-            tripData={appTripData}
-            userModifications={state.userModifications}
+            tripData={tripData}
+            userModifications={EMPTY_MODIFICATIONS}
           />
         )}
 

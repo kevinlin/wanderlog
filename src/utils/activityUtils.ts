@@ -1,4 +1,25 @@
-import { type Activity, ActivityType } from '@/types/trip';
+import type { ScenicWaypoint } from '@/types/map';
+import { type Activity, ActivityType, type TripData } from '@/types/trip';
+
+/**
+ * Pure helpers for appending POI-sourced items to a trip (used to patch the
+ * TanStack Query cache; persistence arrives in M4).
+ */
+export function addActivityToStop(trip: TripData, stopId: string, activity: Activity): TripData {
+  return {
+    ...trip,
+    stops: trip.stops.map((stop) => (stop.stop_id === stopId ? { ...stop, activities: [...stop.activities, activity] } : stop)),
+  };
+}
+
+export function addScenicWaypointToStop(trip: TripData, stopId: string, waypoint: ScenicWaypoint): TripData {
+  return {
+    ...trip,
+    stops: trip.stops.map((stop) =>
+      stop.stop_id === stopId ? { ...stop, scenic_waypoints: [...(stop.scenic_waypoints || []), waypoint] } : stop
+    ),
+  };
+}
 
 /**
  * Keywords for inferring activity types from activity names

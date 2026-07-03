@@ -1,9 +1,9 @@
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { MapTypeId, OverlayLayers } from '@/services/storageService';
+import type { MapTypeId, OverlayLayers } from '@/services/viewStateStorage';
 
 // Re-export types for convenience
-export type { MapTypeId, OverlayLayers } from '@/services/storageService';
+export type { MapTypeId, OverlayLayers } from '@/services/viewStateStorage';
 
 interface MapLayerPickerProps {
   currentMapType: MapTypeId;

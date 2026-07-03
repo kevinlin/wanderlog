@@ -1,4 +1,5 @@
 import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useQueryClient } from '@tanstack/react-query';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
@@ -8,12 +9,13 @@ import { WeatherCard } from '@/components/Cards/WeatherCard';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useWeather } from '@/hooks/useWeather';
+import { tripKeys } from '@/lib/queryClient';
 import { ExportService } from '@/services/exportService';
 import { PlacesService } from '@/services/placesService';
 import type { Accommodation, Activity, TripData, UserModifications } from '@/types';
 import type { Coordinates, ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
-import { inferActivityType } from '@/utils/activityUtils';
+import { addActivityToStop, inferActivityType } from '@/utils/activityUtils';
 import { DraggableActivitiesList } from './DraggableActivity';
 
 // Constants for mobile panel resize
@@ -69,6 +71,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const { state, dispatch } = useAppStateContext();
   const { poiSearch } = state;
   const [searchInputValue, setSearchInputValue] = useState('');
+  const queryClient = useQueryClient();
 
   // Screen size detection
   const { isMobile } = useScreenSize();
@@ -155,9 +158,8 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
     [isMobile, mobilePanelHeight, getMaxPanelHeight, clampHeight]
   );
 
-  // Weather data management
-  const { fetchWeather, getWeatherForBase } = useWeather();
-  const weatherData = getWeatherForBase(baseId);
+  // Weather data management (cached and refreshed by TanStack Query)
+  const { weather: weatherData } = useWeather(baseLocation, baseId);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -214,6 +216,11 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   const handleAddActivityFromPOI = useCallback(
     (poi: POIDetails) => {
+      const tripId = tripData?.trip_id;
+      if (!tripId) {
+        return;
+      }
+
       const activityType = inferActivityType(poi.name, undefined, poi.types);
       const activityId = `poi_${poi.place_id}_${Date.now()}`;
 
@@ -233,20 +240,11 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         order: 999,
       };
 
-      dispatch({
-        type: 'ADD_ACTIVITY_FROM_POI',
-        payload: { baseId, activity: newActivity },
-      });
+      // Memory-only cache patch, preserving pre-Supabase behavior (persistence arrives in M4)
+      queryClient.setQueryData<TripData>(tripKeys.detail(tripId), (old) => (old ? addActivityToStop(old, baseId, newActivity) : old));
     },
-    [baseId, dispatch]
+    [baseId, queryClient, tripData?.trip_id]
   );
-
-  // Fetch weather data when component mounts or baseId changes
-  useEffect(() => {
-    fetchWeather(baseLocation, baseId).catch((error) => {
-      console.warn(`Failed to fetch weather for ${baseId}:`, error);
-    });
-  }, [baseId, baseLocation, fetchWeather]);
 
   // Auto-expand and scroll to activity when one is selected from map
   useEffect(() => {

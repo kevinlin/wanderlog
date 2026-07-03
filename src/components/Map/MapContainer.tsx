@@ -1,16 +1,20 @@
 import { DirectionsRenderer, GoogleMap, LoadScript, Marker, Polyline } from '@react-google-maps/api';
+import { useQueryClient } from '@tanstack/react-query';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { MapLayerPicker, type MapTypeId, type OverlayLayers } from '@/components/Map/MapLayerPicker';
 import { PlaceHoverCard } from '@/components/Map/PlaceHoverCard';
 import { POIModal } from '@/components/Map/POIModal';
 import { useAppStateContext } from '@/contexts/AppStateContext';
+import { tripKeys } from '@/lib/queryClient';
 import { PlacesService } from '@/services/placesService';
-import { getMapLayerPreferences, saveMapType, saveOverlayLayers } from '@/services/storageService';
+import { getMapLayerPreferences, saveMapType, saveOverlayLayers } from '@/services/viewStateStorage';
 import type { ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
 import { type Accommodation, type Activity, ActivityType, type TripBase, type TripData } from '@/types/trip';
 import {
+  addActivityToStop,
+  addScenicWaypointToStop,
   enrichActivityWithType,
   getAccommodationSvgPath,
   getActivityTypeColor,
@@ -99,6 +103,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   onBaseSelect,
 }) => {
   const { state, dispatch } = useAppStateContext();
+  const queryClient = useQueryClient();
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
   const [routeFallback, setRouteFallback] = useState<google.maps.LatLng[]>([]);
@@ -824,12 +829,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         google_place_id: poi.place_id,
       };
 
-      dispatch({
-        type: 'ADD_ACTIVITY_FROM_POI',
-        payload: { baseId: currentBaseId, activity: newActivity },
-      });
+      // Memory-only cache patch, preserving pre-Supabase behavior (persistence arrives in M4)
+      queryClient.setQueryData<TripData>(tripKeys.detail(tripData.trip_id ?? ''), (old) =>
+        old ? addActivityToStop(old, currentBaseId, newActivity) : old
+      );
     },
-    [currentBaseId, dispatch]
+    [currentBaseId, queryClient, tripData.trip_id]
   );
 
   // Add scenic waypoint from POI
@@ -855,12 +860,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         google_place_id: poi.place_id,
       };
 
-      dispatch({
-        type: 'ADD_SCENIC_WAYPOINT_FROM_POI',
-        payload: { baseId: currentBaseId, waypoint: newWaypoint },
-      });
+      queryClient.setQueryData<TripData>(tripKeys.detail(tripData.trip_id ?? ''), (old) =>
+        old ? addScenicWaypointToStop(old, currentBaseId, newWaypoint) : old
+      );
     },
-    [currentBaseId, dispatch]
+    [currentBaseId, queryClient, tripData.trip_id]
   );
 
   // Close POI modal

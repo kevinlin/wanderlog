@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { POIDetails } from '../../../types/poi';
-import { ActivityType } from '../../../types/trip';
+import { ActivityType, type TripData } from '../../../types/trip';
+import { addActivityToStop } from '../../../utils/activityUtils';
 
 // This test file verifies the logic for converting POI data to Activity format
 // It validates that handleAddActivityFromPOI creates activities with the correct fields
@@ -241,5 +242,49 @@ describe('handleAddActivityFromPOI logic', () => {
     expect(newActivity.order).toBe(999);
     expect(newActivity.thumbnail_url).toBe('https://maps.googleapis.com/maps/api/place/photo?photoreference=complete123');
     expect(newActivity.google_place_id).toBe('ChIJComplete');
+  });
+});
+
+describe('addActivityToStop', () => {
+  const trip: TripData = {
+    trip_id: 't1',
+    trip_name: 'Trip',
+    timezone: 'UTC',
+    stops: [
+      {
+        stop_id: 's1',
+        name: 'Stop 1',
+        date: { from: '2025-12-13', to: '2025-12-14' },
+        location: { lat: 0, lng: 0 },
+        duration_days: 1,
+        activities: [{ activity_id: 'existing', activity_name: 'Existing' }],
+        scenic_waypoints: [],
+      },
+      {
+        stop_id: 's2',
+        name: 'Stop 2',
+        date: { from: '2025-12-14', to: '2025-12-15' },
+        location: { lat: 1, lng: 1 },
+        duration_days: 1,
+        activities: [],
+        scenic_waypoints: [],
+      },
+    ],
+  };
+
+  it('appends the activity to the targeted stop only', () => {
+    const updated = addActivityToStop(trip, 's1', {
+      activity_id: 'new',
+      activity_name: 'New Activity',
+      order: 999,
+    });
+
+    expect(updated.stops[0].activities.map((a) => a.activity_id)).toEqual(['existing', 'new']);
+    expect(updated.stops[1].activities).toEqual([]);
+  });
+
+  it('does not mutate the original trip', () => {
+    addActivityToStop(trip, 's1', { activity_id: 'new', activity_name: 'New Activity' });
+    expect(trip.stops[0].activities).toHaveLength(1);
   });
 });

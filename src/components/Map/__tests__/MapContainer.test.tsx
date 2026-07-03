@@ -1,9 +1,18 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
 import { AppStateProvider } from '@/contexts/AppStateContext';
 import { ActivityType, type TripData } from '@/types/trip';
 import * as activityUtils from '@/utils/activityUtils';
 import { MapContainer } from '../MapContainer';
+
+const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+
+const Providers = ({ children }: { children: React.ReactNode }) => (
+  <QueryClientProvider client={queryClient}>
+    <AppStateProvider>{children}</AppStateProvider>
+  </QueryClientProvider>
+);
 
 // Mock the Google Maps API
 const mockMarker = {
@@ -196,8 +205,8 @@ const defaultProps = {
   onBaseSelect: vi.fn(),
 };
 
-// Helper function to render with AppStateProvider
-const renderWithProvider = (ui: React.ReactElement) => render(<AppStateProvider>{ui}</AppStateProvider>);
+// Helper function to render with app providers
+const renderWithProvider = (ui: React.ReactElement) => render(<Providers>{ui}</Providers>);
 
 describe('MapContainer', () => {
   beforeEach(() => {
@@ -232,9 +241,9 @@ describe('MapContainer', () => {
 
     // Select an activity
     rerender(
-      <AppStateProvider>
+      <Providers>
         <MapContainer {...defaultProps} selectedActivityId="activity1" />
-      </AppStateProvider>
+      </Providers>
     );
 
     await waitFor(() => {
@@ -252,9 +261,9 @@ describe('MapContainer', () => {
 
     // Select a base
     rerender(
-      <AppStateProvider>
+      <Providers>
         <MapContainer {...defaultProps} currentBaseId="stop1" />
-      </AppStateProvider>
+      </Providers>
     );
 
     await waitFor(() => {
@@ -322,9 +331,9 @@ describe('MapContainer', () => {
 
     // Select an activity
     rerender(
-      <AppStateProvider>
+      <Providers>
         <MapContainer {...defaultProps} selectedActivityId="activity1" />
-      </AppStateProvider>
+      </Providers>
     );
 
     await waitFor(() => {
@@ -336,9 +345,9 @@ describe('MapContainer', () => {
 
     // Select the same activity again (should not animate)
     rerender(
-      <AppStateProvider>
+      <Providers>
         <MapContainer {...defaultProps} selectedActivityId="activity1" />
-      </AppStateProvider>
+      </Providers>
     );
 
     // Should not animate again
