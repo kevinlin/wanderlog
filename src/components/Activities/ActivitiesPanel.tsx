@@ -12,7 +12,7 @@ import { useWeather } from '@/hooks/useWeather';
 import { tripKeys } from '@/lib/queryClient';
 import { ExportService } from '@/services/exportService';
 import { PlacesService } from '@/services/placesService';
-import type { Accommodation, Activity, TripData, UserModifications } from '@/types';
+import type { Accommodation, Activity, TripData } from '@/types';
 import type { Coordinates, ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
 import { addActivityToStop, inferActivityType } from '@/utils/activityUtils';
@@ -40,7 +40,6 @@ interface ActivitiesPanelProps {
   selectedActivityId?: string | null;
   stopName: string;
   tripData?: TripData;
-  userModifications?: UserModifications;
 }
 
 export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
@@ -53,7 +52,6 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   selectedActivityId,
   activityStatus,
   tripData,
-  userModifications,
   isVisible = true,
   onActivitySelect,
   onToggleDone,
@@ -170,13 +168,13 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   };
 
   const handleExport = () => {
-    if (!(tripData && userModifications)) {
-      console.warn('Export failed: Missing trip data or user modifications');
+    if (!tripData) {
+      console.warn('Export failed: Missing trip data');
       return;
     }
 
     try {
-      ExportService.exportAndDownload(tripData, userModifications);
+      ExportService.exportAndDownload(tripData);
       onExportSuccess?.();
     } catch (error) {
       console.error('Export failed:', error);
@@ -460,7 +458,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             </button>
             <button
               className="flex min-h-[36px] touch-manipulation items-center justify-center gap-2 rounded-lg border border-rose-500/30 bg-rose-500/20 px-4 py-2 font-medium text-rose-700 text-sm transition-all duration-200 hover:bg-rose-500/30 hover:shadow-md active:bg-rose-500/40 disabled:cursor-not-allowed disabled:border-gray-500/30 disabled:bg-gray-500/20 disabled:text-gray-500 disabled:hover:bg-gray-500/20"
-              disabled={!(tripData && userModifications)}
+              disabled={!tripData}
               onClick={handleExport}
               title="Download your updated trip data with activity status and custom order"
             >

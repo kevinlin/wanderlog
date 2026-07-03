@@ -1,24 +1,12 @@
-import type { ExportData, TripData, UserModifications } from '@/types';
-import { mergeUserModificationsWithTripData } from '@/utils/exportUtils';
+import type { ExportData, TripData } from '@/types';
 
 /**
- * ExportService - Data export functionality with user modifications
+ * ExportService - Trip data export functionality
  *
- * Provides high-level interface for exporting trip data with user modifications
- * merged back into the original data format.
+ * Since Supabase, status.done and order are canonical in the trip data itself,
+ * so exports serialize the mapped trip directly (no modification merging).
  */
 export class ExportService {
-  /**
-   * Export trip data with user modifications merged in
-   *
-   * @param originalData - Original trip data
-   * @param modifications - User modifications from localStorage
-   * @returns Merged trip data with user modifications applied
-   */
-  static exportTripData(originalData: TripData, modifications: UserModifications): TripData {
-    return mergeUserModificationsWithTripData(originalData, modifications);
-  }
-
   /**
    * Download trip data as JSON file
    *
@@ -50,15 +38,13 @@ export class ExportService {
   }
 
   /**
-   * Export and download trip data with user modifications in one step
+   * Export and download trip data in one step
    *
-   * @param originalData - Original trip data
-   * @param modifications - User modifications from localStorage
+   * @param tripData - Trip data to export
    * @param filename - Optional custom filename (without extension)
    */
-  static exportAndDownload(originalData: TripData, modifications: UserModifications, filename?: string): void {
-    const mergedData = ExportService.exportTripData(originalData, modifications);
-    ExportService.downloadAsJSON(mergedData, filename);
+  static exportAndDownload(tripData: TripData, filename?: string): void {
+    ExportService.downloadAsJSON(tripData, filename);
   }
 
   /**

@@ -1,29 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import type { Activity, TripData, TripStop, UserModifications } from '@/types';
+import type { TripData } from '@/types';
 import { ExportService } from '../exportService';
-
-// Mock the mergeUserModificationsWithTripData function
-vi.mock('@/utils/exportUtils', () => ({
-  mergeUserModificationsWithTripData: vi.fn((tripData, modifications) => {
-    // Simple mock implementation that applies modifications
-    return {
-      ...tripData,
-      stops: tripData.stops.map((stop: TripStop) => ({
-        ...stop,
-        activities: stop.activities.map((activity: Activity) => ({
-          ...activity,
-          status: {
-            done: modifications.activityStatus[activity.activity_id] ?? false,
-          },
-        })),
-      })),
-    };
-  }),
-}));
 
 describe('ExportService', () => {
   let mockTripData: TripData;
-  let mockUserModifications: UserModifications;
 
   beforeEach(() => {
     mockTripData = {
@@ -53,12 +33,6 @@ describe('ExportService', () => {
       ],
     };
 
-    mockUserModifications = {
-      activityStatus: { activity1: true },
-      activityOrders: {},
-      lastViewedBase: 'stop1',
-    };
-
     // Mock DOM methods
     vi.stubGlobal('URL', {
       createObjectURL: vi.fn(() => 'mock-blob-url'),
@@ -78,25 +52,6 @@ describe('ExportService', () => {
 
   afterEach(() => {
     vi.clearAllMocks();
-  });
-
-  describe('exportTripData', () => {
-    it('should merge user modifications with trip data', () => {
-      const result = ExportService.exportTripData(mockTripData, mockUserModifications);
-
-      expect(result).toBeDefined();
-      expect(result.trip_name).toBe('Test Trip');
-      expect(result?.stops[0]?.activities[0]?.status?.done).toBe(true);
-    });
-
-    it('should return merged data with correct structure', () => {
-      const result = ExportService.exportTripData(mockTripData, mockUserModifications);
-
-      expect(result).toHaveProperty('trip_name');
-      expect(result).toHaveProperty('timezone');
-      expect(result).toHaveProperty('stops');
-      expect(Array.isArray(result.stops)).toBe(true);
-    });
   });
 
   describe('downloadAsJSON', () => {
@@ -162,7 +117,7 @@ describe('ExportService', () => {
       };
       document.createElement = vi.fn(() => mockLink as any);
 
-      ExportService.exportAndDownload(mockTripData, mockUserModifications);
+      ExportService.exportAndDownload(mockTripData);
 
       expect(document.createElement).toHaveBeenCalledWith('a');
       expect(mockLink.click).toHaveBeenCalled();
@@ -178,7 +133,7 @@ describe('ExportService', () => {
       };
       document.createElement = vi.fn(() => mockLink as any);
 
-      ExportService.exportAndDownload(mockTripData, mockUserModifications, 'my_export');
+      ExportService.exportAndDownload(mockTripData, 'my_export');
 
       expect(mockLink.download).toBe('my_export.json');
     });

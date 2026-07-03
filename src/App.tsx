@@ -14,14 +14,10 @@ import { useScreenSize } from '@/hooks/useScreenSize';
 import { useTripData } from '@/hooks/useTripData';
 import { useReorderActivities, useToggleActivityDone } from '@/hooks/useTripMutations';
 import { getLastViewedBase, setLastViewedBase } from '@/services/viewStateStorage';
-import type { UserModifications } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 
 const CURRENT_TRIP_ID = '202512_NZ';
-
-// Export merges nothing extra anymore: status/order are canonical in trip data
-const EMPTY_MODIFICATIONS: UserModifications = { activityStatus: {}, activityOrders: {} };
 
 function App() {
   const { session, isLoading: isAuthLoading } = useAuth();
@@ -196,7 +192,6 @@ function App() {
             selectedActivityId={state.selectedActivity}
             stopName={currentStop.name}
             tripData={tripData}
-            userModifications={EMPTY_MODIFICATIONS}
           />
         )}
 
