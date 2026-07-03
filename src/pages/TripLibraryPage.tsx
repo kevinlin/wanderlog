@@ -1,17 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { UserMenu } from '@/components/Auth/UserMenu';
+import { ConfirmDialog } from '@/components/Layout/ConfirmDialog';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { CreateTripModal } from '@/components/TripLibrary/CreateTripModal';
 import { TripLibraryCard } from '@/components/TripLibrary/TripLibraryCard';
+import { useDeleteTrip } from '@/hooks/useTripLibraryMutations';
 import { useTrips } from '@/hooks/useTrips';
+import type { TripSummary } from '@/types/trip';
 import { deriveTripStatus, pickHeroTrip, sortForLibrary } from '@/utils/tripStatusUtils';
 
 export const TripLibraryPage = () => {
   const { trips, isLoading, error, refetch } = useTrips();
   const navigate = useNavigate();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [tripPendingDelete, setTripPendingDelete] = useState<TripSummary | null>(null);
+  const deleteMutation = useDeleteTrip();
 
   if (isLoading) {
     return <LoadingSpinner fullScreen message="Loading your trips..." size="lg" variant="adventure" />;
@@ -46,7 +51,7 @@ export const TripLibraryPage = () => {
             {heroTrip && (
               <TripLibraryCard
                 isHero
-                onDelete={() => undefined}
+                onDelete={() => setTripPendingDelete(heroTrip)}
                 onOpen={() => navigate(`/trips/${heroTrip.trip_id}`)}
                 status={deriveTripStatus(heroTrip)}
                 trip={heroTrip}
@@ -57,7 +62,7 @@ export const TripLibraryPage = () => {
                 <TripLibraryCard
                   isHero={false}
                   key={trip.trip_id}
-                  onDelete={() => undefined}
+                  onDelete={() => setTripPendingDelete(trip)}
                   onOpen={() => navigate(`/trips/${trip.trip_id}`)}
                   status={deriveTripStatus(trip)}
                   trip={trip}
@@ -68,6 +73,18 @@ export const TripLibraryPage = () => {
         )}
       </main>
       <CreateTripModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+      {tripPendingDelete && (
+        <ConfirmDialog
+          confirmLabel="Delete"
+          message={`Delete '${tripPendingDelete.trip_name}'? All stops, activities, accommodations and waypoints go with it. This cannot be undone.`}
+          onCancel={() => setTripPendingDelete(null)}
+          onConfirm={() => {
+            deleteMutation.mutate(tripPendingDelete.trip_id);
+            setTripPendingDelete(null);
+          }}
+          title="Delete trip"
+        />
+      )}
     </div>
   );
 };

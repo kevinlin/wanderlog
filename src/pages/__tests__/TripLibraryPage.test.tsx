@@ -1,7 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const trips = [
   {
@@ -27,6 +28,12 @@ vi.mock('@/hooks/useTrips', () => ({
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({ session: { user: { email: 'kev@example.com' } }, isLoading: false, signOut: vi.fn() }),
 }));
+const mockCreateMutate = vi.fn();
+const mockDeleteMutate = vi.fn();
+vi.mock('@/hooks/useTripLibraryMutations', () => ({
+  useCreateTrip: () => ({ mutate: mockCreateMutate, isPending: false, error: null }),
+  useDeleteTrip: () => ({ mutate: mockDeleteMutate, isPending: false, error: null }),
+}));
 
 import { TripLibraryPage } from '../TripLibraryPage';
 
@@ -40,6 +47,8 @@ const renderPage = () =>
   );
 
 describe('TripLibraryPage', () => {
+  beforeEach(() => vi.clearAllMocks());
+
   it('lists every trip with name, destination, dates and status', () => {
     renderPage();
     expect(screen.getByText('NZ South Island')).toBeInTheDocument();
@@ -51,5 +60,23 @@ describe('TripLibraryPage', () => {
   it('renders the upcoming trip as the hero card', () => {
     renderPage();
     expect(screen.getByTestId('hero-trip')).toHaveTextContent('Japan Spring');
+  });
+
+  it('deletes a trip after confirmation', async () => {
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(screen.getByRole('button', { name: /delete nz south island/i }));
+    expect(screen.getByText(/delete 'nz south island'\?/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: /^delete$/i }));
+    expect(mockDeleteMutate).toHaveBeenCalledWith('nz');
+  });
+
+  it('does not delete when the confirmation is cancelled', async () => {
+    const user = userEvent.setup();
+    renderPage();
+    await user.click(screen.getByRole('button', { name: /delete nz south island/i }));
+    await user.click(screen.getByRole('button', { name: /cancel/i }));
+    expect(mockDeleteMutate).not.toHaveBeenCalled();
+    expect(screen.queryByText(/delete 'nz south island'\?/i)).not.toBeInTheDocument();
   });
 });
