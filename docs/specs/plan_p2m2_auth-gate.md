@@ -255,7 +255,7 @@ git add -A && git commit -m "feat: polish login page"
 **Interfaces:**
 - Produces: `signInWithGoogle(): Promise<void>` on the `useAuth` context value.
 
-- [ ] **Step 1: Provider setup (manual, two dashboards)**
+- [x] **Step 1: Provider setup (manual, two dashboards)**
 
 Google Cloud Console (https://console.cloud.google.com > APIs & Services > Credentials):
 1. Create an OAuth 2.0 Client ID (type: Web application).
@@ -413,7 +413,7 @@ jobs:
           pnpm dlx vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
 ```
 
-- [ ] **Step 2: Point everything at the production domain (manual)**
+- [x] **Step 2: Point everything at the production domain (manual)**
 
 - Vercel: confirm the production domain (default `<project>.vercel.app` or a custom one).
 - Google Maps key referrer restrictions: add the production domain (Req 7).
