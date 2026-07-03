@@ -5,10 +5,10 @@ Specs root: `docs/specs/`
 
 ## Summary
 
-- Files scanned: 14 (3 requirements, 2 design, 8 plan, 1 index) + 1 meta
+- Files scanned: 15 (3 requirements, 2 design, 9 plan, 1 index) + 1 meta
 - Errors: 0
-- Warnings: 5
-- Info: 6
+- Warnings: 6
+- Info: 5
 - Auto-fixed: 0 (no safe auto-fixes applicable)
 
 ## Convention Reference
@@ -21,7 +21,7 @@ Specs root: `docs/specs/`
 
 - Path: `docs/specs/index.md`
 - Status: present
-- Files linked: 14 / 14 spec files (complete; all index links resolve)
+- Files linked: 15 / 15 spec files (complete; all index links resolve)
 
 ## Errors
 
@@ -38,6 +38,7 @@ None.
 - `plan_p2m1_supabase-foundation.md`: same rule, same options.
 - `plan_p2m2_auth-gate.md`: same rule, same options.
 - `plan_p2m3_trip-library.md`: same rule, same options.
+- `plan_p2m4_itinerary-editing.md`: same rule, same options.
 
 ### Structure
 
@@ -58,12 +59,8 @@ None.
 - `plan_firebase-integration.md`: content is a design/spec document (Overview, Architecture, Data Model, security rules) under a `plan_` name. Historical artifact of a shipped feature; consider renaming to `design_firebase-integration.md` in a batched cleanup, or leave as-is.
 - `plan_poi-search.md`: retrospective implementation summary without Goal/Tasks sections (convention §5.6 expects them in plan files). Feature shipped; dismissible.
 
-### Master plan forward reference
-
-- `plan_wanderlog-phase-2.md` references `plan_p2m4_itinerary-editing.md` as "not yet written" (plain text, not a link — so no dead link). Intentional just-in-time planning; the plan is authored when M3 ships.
-
 ## Reverse Consistency
 
 - `design_wanderlog-phase-2.md` ↔ `requirements_wanderlog-phase-2.md`: all 8 requirement groups covered (schema/migration → Req 1, 8; Authentication → Req 2; Trip Library → Req 3; Itinerary Editing → Req 4; Offline → Req 5; Hosting and CI → Req 6; Maps key referrer restrictions + amendment note → Req 7). No gaps.
-- Plans ↔ `design_wanderlog-phase-2.md`: milestones M0–M3 each have a plan covering their design slice (M0 toolchain, M1 schema/data layer/auth bootstrap/migration/hosting previews, M2 auth + cutover, M3 trip library). M4 plan deferred by design (see Info).
+- Plans ↔ `design_wanderlog-phase-2.md`: milestones M0–M4 each have a plan covering their design slice (M0 toolchain, M1 schema/data layer/auth bootstrap/migration/hosting previews, M2 auth + cutover, M3 trip library, M4 itinerary editing in three slices per Req 4).
 - `design_travel-journal.md` ↔ `requirements_travel-journal.md`: section-level spot check passes (map, timeline, activities, accommodation, images, persistence/export, weather, responsive/mobile, error handling, performance, visual design, POI, deployment all have design sections). Phase 1 shipped; no deeper audit performed.
