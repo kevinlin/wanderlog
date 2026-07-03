@@ -299,7 +299,7 @@ Expected: all three commands exit 0; the husky pre-commit hook passes during the
 - Consumes: all previous tasks merged locally.
 - Produces: green GH Pages deploy on Node 24 - the M0 exit gate for CI.
 
-- [ ] **Step 1: Bump the workflow's Node version**
+- [x] **Step 1: Bump the workflow's Node version**
 
 In `.github/workflows/deploy.yml` change:
 
@@ -313,7 +313,7 @@ to:
         node-version: '24'
 ```
 
-- [ ] **Step 2: Commit and push**
+- [x] **Step 2: Commit and push**
 
 ```bash
 git add .github/workflows/deploy.yml
@@ -321,7 +321,7 @@ git commit -m "ci: run on node 24 lts"
 git push
 ```
 
-- [ ] **Step 3: Watch the workflow**
+- [x] **Step 3: Watch the workflow** (push triggers are disabled in `deploy.yml`, so the run was dispatched manually via `gh workflow run`; build, tests, junit report, and GH Pages deploy all succeeded on Node 24)
 
 ```bash
 gh run watch
@@ -340,7 +340,7 @@ Expected: test job passes (218 tests, junit report published), build succeeds, d
 - Consumes: everything above, deployed.
 - Produces: signed-off M0; M1 planning can start.
 
-- [ ] **Step 1: Full local verification**
+- [x] **Step 1: Full local verification**
 
 ```bash
 pnpm test:run && pnpm build && pnpm lint
