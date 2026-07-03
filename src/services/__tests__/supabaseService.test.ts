@@ -10,11 +10,23 @@ const chain = {
 };
 const mockUpdateEq = vi.fn();
 const mockUpdate = vi.fn(() => ({ eq: mockUpdateEq }));
+const mockInsert = vi.fn();
+const mockDeleteEq = vi.fn();
 vi.mock('@/config/supabase', () => ({
-  getSupabase: () => ({ from: vi.fn(() => ({ ...chain, update: mockUpdate })) }),
+  getSupabase: () => ({
+    from: vi.fn(() => ({ ...chain, update: mockUpdate, insert: mockInsert, delete: vi.fn(() => ({ eq: mockDeleteEq })) })),
+  }),
 }));
 
-import { fetchTripById, fetchTripSummaries, reorderActivities, setActivityDone, setWaypointDone } from '../supabaseService';
+import {
+  createTrip,
+  deleteTrip,
+  fetchTripById,
+  fetchTripSummaries,
+  reorderActivities,
+  setActivityDone,
+  setWaypointDone,
+} from '../supabaseService';
 
 describe('supabaseService reads', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -109,5 +121,43 @@ describe('supabaseService writes', () => {
   it('setActivityDone throws on error', async () => {
     mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
     await expect(setActivityDone('act-1', true)).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService trip create/delete', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInsert.mockResolvedValue({ error: null });
+    mockDeleteEq.mockResolvedValue({ error: null });
+  });
+
+  it('createTrip inserts a row with a generated uuid and returns it', async () => {
+    const id = await createTrip({
+      name: 'Japan',
+      startDate: '2026-10-01',
+      endDate: '2026-10-14',
+      destination: 'Japan',
+      timezone: 'Asia/Tokyo',
+    });
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(mockInsert).toHaveBeenCalledWith({
+      id,
+      name: 'Japan',
+      destination: 'Japan',
+      description: null,
+      start_date: '2026-10-01',
+      end_date: '2026-10-14',
+      timezone: 'Asia/Tokyo',
+    });
+  });
+
+  it('deleteTrip deletes by id', async () => {
+    await deleteTrip('t1');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', 't1');
+  });
+
+  it('createTrip throws on error', async () => {
+    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(createTrip({ name: 'X', startDate: 'a', endDate: 'b', timezone: 'UTC' })).rejects.toThrow('denied');
   });
 });

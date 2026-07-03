@@ -32,6 +32,42 @@ export async function fetchTripSummaries(): Promise<TripSummary[]> {
   }));
 }
 
+export interface CreateTripInput {
+  destination?: string;
+  endDate: string; // YYYY-MM-DD
+  name: string;
+  startDate: string; // YYYY-MM-DD
+  timezone: string;
+}
+
+export async function createTrip(input: CreateTripInput): Promise<string> {
+  const id = crypto.randomUUID();
+  const { error } = await getSupabase()
+    .from('trips')
+    .insert({
+      id,
+      name: input.name,
+      destination: input.destination ?? null,
+      description: null,
+      start_date: input.startDate,
+      end_date: input.endDate,
+      timezone: input.timezone,
+    });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return id;
+}
+
+// The DB cascade (M1 schema `on delete cascade`) removes stops, accommodations,
+// activities, and waypoints - no client-side fan-out needed.
+export async function deleteTrip(tripId: string): Promise<void> {
+  const { error } = await getSupabase().from('trips').delete().eq('id', tripId);
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
 async function updateById(table: string, id: string, patch: Record<string, unknown>): Promise<void> {
   const { error } = await getSupabase().from(table).update(patch).eq('id', id);
   if (error) {
