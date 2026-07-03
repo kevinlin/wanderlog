@@ -28,5 +28,4 @@ export interface WeatherApiResponse {
 
 export interface WeatherServiceConfig {
   baseUrl: string;
-  cacheExpirationHours: number;
 }

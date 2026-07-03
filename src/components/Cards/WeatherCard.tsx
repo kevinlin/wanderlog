@@ -10,14 +10,25 @@ import type { WeatherData } from '@/types/weather';
 export interface WeatherCardProps {
   className?: string;
   compact?: boolean;
+  isStale?: boolean;
+  updatedAt?: number | null;
   weatherData: WeatherData | null;
 }
+
+const formatUpdatedAt = (timestamp: number): string => new Date(timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
 /**
  * WeatherCard component with travel journal styling
  */
-export const WeatherCard: React.FC<WeatherCardProps> = ({ weatherData, className = '', compact = false }) => {
+export const WeatherCard: React.FC<WeatherCardProps> = ({
+  weatherData,
+  className = '',
+  compact = false,
+  isStale = false,
+  updatedAt = null,
+}) => {
   const { description, icon, temperature, precipitation } = useWeatherDisplay(weatherData);
+  const showTimestamp = isStale && updatedAt !== null && weatherData !== null;
 
   if (compact) {
     return (
@@ -60,6 +71,8 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ weatherData, className
           </div>
         )}
       </div>
+
+      {showTimestamp && <div className="mt-2 text-gray-500 text-xs">as of {formatUpdatedAt(updatedAt)}</div>}
 
       {!weatherData && <div className="mt-2 text-gray-500 text-xs">Weather information is currently unavailable</div>}
     </div>

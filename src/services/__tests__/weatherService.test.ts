@@ -1,20 +1,12 @@
 /**
  * Tests for WeatherService
- * Covers API integration, caching, and error handling
+ * Covers API integration and error handling (caching moved to TanStack Query)
  */
 
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Coordinates } from '@/types/map';
 import type { WeatherApiResponse, WeatherData } from '@/types/weather';
-import * as storageService from '../storageService';
 import { WeatherService } from '../weatherService';
-
-// Mock the storage service
-vi.mock('../storageService', () => ({
-  getCachedWeather: vi.fn(),
-  updateWeatherForBase: vi.fn(),
-  isWeatherCacheValid: vi.fn(),
-}));
 
 // Mock fetch
 const mockFetch = vi.fn();
@@ -22,7 +14,6 @@ global.fetch = mockFetch;
 
 describe('WeatherService', () => {
   const mockCoordinates: Coordinates = { lat: -45.8788, lng: 170.5028 }; // Dunedin, NZ
-  const baseId = 'test-base-1';
 
   const mockWeatherResponse: WeatherApiResponse = {
     daily: {
@@ -126,74 +117,6 @@ describe('WeatherService', () => {
     });
   });
 
-  describe('getWeatherData', () => {
-    it('should return cached data when available and valid', async () => {
-      const cachedData = expectedWeatherData;
-      vi.mocked(storageService.getCachedWeather).mockReturnValue(cachedData);
-
-      const result = await WeatherService.getWeatherData(mockCoordinates, baseId);
-
-      expect(result).toEqual(cachedData);
-      expect(storageService.getCachedWeather).toHaveBeenCalledWith(baseId);
-      expect(mockFetch).not.toHaveBeenCalled();
-    });
-
-    it('should fetch fresh data when cache is invalid', async () => {
-      vi.mocked(storageService.getCachedWeather).mockReturnValue(null);
-      mockFetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockWeatherResponse,
-      });
-
-      const result = await WeatherService.getWeatherData(mockCoordinates, baseId);
-
-      expect(result).toEqual(expectedWeatherData);
-      expect(storageService.updateWeatherForBase).toHaveBeenCalledWith(
-        baseId,
-        expectedWeatherData,
-        6 // default cache expiration hours
-      );
-    });
-  });
-
-  describe('isCacheValid', () => {
-    it('should return true for valid cache', () => {
-      vi.mocked(storageService.isWeatherCacheValid).mockReturnValue(true);
-
-      const result = WeatherService.isCacheValid(baseId);
-
-      expect(result).toBe(true);
-      expect(storageService.isWeatherCacheValid).toHaveBeenCalledWith(baseId);
-    });
-
-    it('should return false for invalid cache', () => {
-      vi.mocked(storageService.isWeatherCacheValid).mockReturnValue(false);
-
-      const result = WeatherService.isCacheValid(baseId);
-
-      expect(result).toBe(false);
-    });
-  });
-
-  describe('getCachedWeatherData', () => {
-    it('should return cached weather data', () => {
-      vi.mocked(storageService.getCachedWeather).mockReturnValue(expectedWeatherData);
-
-      const result = WeatherService.getCachedWeatherData(baseId);
-
-      expect(result).toEqual(expectedWeatherData);
-      expect(storageService.getCachedWeather).toHaveBeenCalledWith(baseId);
-    });
-
-    it('should return null when no cached data', () => {
-      vi.mocked(storageService.getCachedWeather).mockReturnValue(null);
-
-      const result = WeatherService.getCachedWeatherData(baseId);
-
-      expect(result).toBeNull();
-    });
-  });
-
   describe('getWeatherDescription', () => {
     it('should return correct descriptions for known weather codes', () => {
       expect(WeatherService.getWeatherDescription(0)).toBe('Clear sky');
@@ -227,7 +150,6 @@ describe('WeatherService', () => {
     it('should update service configuration', () => {
       const customConfig = {
         baseUrl: 'https://custom-api.example.com',
-        cacheExpirationHours: 12,
       };
 
       WeatherService.configure(customConfig);

@@ -159,7 +159,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   );
 
   // Weather data management (cached and refreshed by TanStack Query)
-  const { weather: weatherData } = useWeather(baseLocation, baseId);
+  const { weather: weatherData, isStale: isWeatherStale, updatedAt: weatherUpdatedAt } = useWeather(baseLocation, baseId);
 
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -383,7 +383,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
               {/* Weather Card */}
               <div className="px-3 pb-3">
-                <WeatherCard weatherData={weatherData} />
+                <WeatherCard isStale={isWeatherStale} updatedAt={weatherUpdatedAt} weatherData={weatherData} />
               </div>
 
               {/* Activities List */}

@@ -1,16 +1,14 @@
 /**
  * Weather Service for Open-Meteo API integration
- * Handles weather data fetching with caching and error handling
+ * Fetches weather data; caching is handled by TanStack Query (staleTime in useWeather)
  */
 
 import type { Coordinates } from '@/types/map';
 import type { WeatherApiResponse, WeatherData, WeatherServiceConfig } from '@/types/weather';
-import { getCachedWeather, isWeatherCacheValid, updateWeatherForBase } from './storageService';
 
 // Default configuration for Open-Meteo API
 const DEFAULT_CONFIG: WeatherServiceConfig = {
   baseUrl: 'https://api.open-meteo.com/v1/forecast',
-  cacheExpirationHours: 6, // Cache weather data for 6 hours
 };
 
 /**
@@ -78,37 +76,6 @@ export class WeatherService {
   }
 
   /**
-   * Get weather data with caching support
-   */
-  static async getWeatherData(coordinates: Coordinates, baseId: string): Promise<WeatherData> {
-    // Check if we have valid cached data
-    const cachedData = getCachedWeather(baseId);
-    if (cachedData) {
-      return cachedData;
-    }
-
-    // Fetch fresh data and cache it
-    const weatherData = await WeatherService.fetchWeatherData(coordinates);
-    updateWeatherForBase(baseId, weatherData, WeatherService.config.cacheExpirationHours);
-
-    return weatherData;
-  }
-
-  /**
-   * Check if weather data is cached and valid
-   */
-  static isCacheValid(baseId: string): boolean {
-    return isWeatherCacheValid(baseId);
-  }
-
-  /**
-   * Get cached weather data without fetching
-   */
-  static getCachedWeatherData(baseId: string): WeatherData | null {
-    return getCachedWeather(baseId);
-  }
-
-  /**
    * Get weather description from weather code
    * Based on WMO Weather interpretation codes
    */
@@ -166,8 +133,5 @@ export class WeatherService {
 
 // Export convenience functions
 export const fetchWeatherData = WeatherService.fetchWeatherData.bind(WeatherService);
-export const getWeatherData = WeatherService.getWeatherData.bind(WeatherService);
-export const isCacheValid = WeatherService.isCacheValid.bind(WeatherService);
-export const getCachedWeatherData = WeatherService.getCachedWeatherData.bind(WeatherService);
 export const getWeatherDescription = WeatherService.getWeatherDescription.bind(WeatherService);
 export const getWeatherIcon = WeatherService.getWeatherIcon.bind(WeatherService);
