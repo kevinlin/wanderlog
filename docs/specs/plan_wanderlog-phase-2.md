@@ -9,7 +9,7 @@ Detailed plans are written just-in-time: each milestone's plan is authored when 
 | M0 - Toolchain | [plan_p2m0_toolchain-upgrade.md](plan_p2m0_toolchain-upgrade.md) | Shipped (2026-07-03) | Build + 218 tests green; manual smoke (map, routes, timeline, drag-reorder, export); one GH Pages deploy |
 | M1 - Foundation | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Shipped (2026-07-04) | Parity checklist (Req 1.7) passes on a Vercel preview |
 | M2 - Auth gate | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | Shipped (2026-07-04) | Unauthenticated access fully blocked; family members sign in |
-| M3 - Trip library | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Planned, pending M2 | 2+ trips browsable and selectable |
+| M3 - Trip library | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Planned | 2+ trips browsable and selectable |
 | M4 - Itinerary editing | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Planned, pending M3 | Each slice (activities; accommodation + trip metadata; waypoints + stops) edits and persists round-trip |
 
 Infrastructure that lands alongside milestones (see design):
