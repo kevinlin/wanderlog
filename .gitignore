@@ -31,3 +31,6 @@ coverage/
 
 # Local data
 local/
+
+# Supabase
+supabase/.temp
