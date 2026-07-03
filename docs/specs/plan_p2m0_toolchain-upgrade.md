@@ -348,20 +348,20 @@ pnpm test:run && pnpm build && pnpm lint
 
 Expected: 218 passed, both exit 0.
 
-- [ ] **Step 2: Manual smoke checklist (dev server or the deployed site)**
+- [x] **Step 2: Manual smoke checklist (dev server or the deployed site)**
 
 On https://kevinlin.github.io/wanderlog/ after the Task 6 deploy:
 
-- [ ] Map renders with accommodation + activity pins
-- [ ] Route polyline draws through scenic waypoints
-- [ ] Timeline strip navigates between stops
-- [ ] Activity drag-reorder works and survives a refresh
-- [ ] Done-toggle works and survives a refresh
-- [ ] Export downloads the trip JSON
-- [ ] POI search returns results and can add an activity (in-memory)
-- [ ] No new console errors compared to pre-upgrade production
+- [x] Map renders with accommodation + activity pins
+- [x] Route polyline draws through scenic waypoints
+- [x] Timeline strip navigates between stops
+- [x] Activity drag-reorder works and survives a refresh
+- [x] Done-toggle works and survives a refresh
+- [x] Export downloads the trip JSON
+- [x] POI search returns results and can add an activity (in-memory)
+- [x] No new console errors compared to pre-upgrade production
 
-- [ ] **Step 3: Mark M0 shipped**
+- [x] **Step 3: Mark M0 shipped**
 
 In `docs/specs/plan_wanderlog-phase-2.md`, set the M0 row's status to `Shipped (<date>)`.
 
