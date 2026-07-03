@@ -2,6 +2,24 @@
 
 const LAST_VIEWED_BASE_PREFIX = 'wanderlog_last_viewed_base_';
 const MAP_LAYER_PREFERENCES_KEY = 'wanderlog_map_layer_preferences';
+const CURRENT_TRIP_ID_KEY = 'wanderlog_current_trip_id';
+
+export const getCurrentTripId = (): string | null => {
+  try {
+    return localStorage.getItem(CURRENT_TRIP_ID_KEY);
+  } catch (error) {
+    console.warn('Failed to load current trip id from localStorage:', error);
+    return null;
+  }
+};
+
+export const setCurrentTripId = (tripId: string): void => {
+  try {
+    localStorage.setItem(CURRENT_TRIP_ID_KEY, tripId);
+  } catch (error) {
+    console.warn('Failed to save current trip id to localStorage:', error);
+  }
+};
 
 export const getLastViewedBase = (tripId: string): string | null => {
   try {
