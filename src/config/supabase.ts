@@ -12,7 +12,10 @@ let client: SupabaseClient | null = null;
 
 export const getSupabase = (): SupabaseClient => {
   if (!client) {
-    client = createClient(getEnvVar('VITE_SUPABASE_URL'), getEnvVar('VITE_SUPABASE_ANON_KEY'));
+    client = createClient(getEnvVar('VITE_SUPABASE_URL'), getEnvVar('VITE_SUPABASE_ANON_KEY'), {
+      // PKCE + URL detection complete the OAuth round-trip on whatever page the user lands on
+      auth: { flowType: 'pkce', detectSessionInUrl: true },
+    });
   }
   return client;
 };

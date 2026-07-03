@@ -7,6 +7,7 @@ interface AuthContextValue {
   isLoading: boolean;
   session: Session | null;
   signIn: (email: string, password: string) => Promise<void>;
+  signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -33,12 +34,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const signInWithGoogle = async () => {
+    const { error } = await getSupabase().auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + import.meta.env.BASE_URL },
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
   const signOut = async () => {
     await getSupabase().auth.signOut();
     queryClient.clear();
   };
 
-  return <AuthContext.Provider value={{ session, isLoading, signIn, signOut }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ session, isLoading, signIn, signInWithGoogle, signOut }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = (): AuthContextValue => {

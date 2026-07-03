@@ -3,9 +3,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 const mockGetSession = vi.fn().mockResolvedValue({ data: { session: null } });
 const mockOnAuthStateChange = vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } });
+const mockSignInWithOAuth = vi.fn();
 vi.mock('@/config/supabase', () => ({
   getSupabase: () => ({
-    auth: { getSession: mockGetSession, onAuthStateChange: mockOnAuthStateChange },
+    auth: { getSession: mockGetSession, onAuthStateChange: mockOnAuthStateChange, signInWithOAuth: mockSignInWithOAuth },
   }),
 }));
 
@@ -28,5 +29,24 @@ describe('AuthProvider', () => {
     );
     await waitFor(() => expect(screen.getByText('out')).toBeInTheDocument());
     expect(mockOnAuthStateChange).toHaveBeenCalled();
+  });
+
+  it('signInWithGoogle starts the oauth flow with a same-origin redirect', async () => {
+    mockSignInWithOAuth.mockResolvedValue({ error: null });
+    let signInWithGoogle: (() => Promise<void>) | undefined;
+    const OAuthProbe = () => {
+      signInWithGoogle = useAuth().signInWithGoogle;
+      return null;
+    };
+    render(
+      <AuthProvider>
+        <OAuthProbe />
+      </AuthProvider>
+    );
+    await signInWithGoogle?.();
+    expect(mockSignInWithOAuth).toHaveBeenCalledWith({
+      provider: 'google',
+      options: { redirectTo: window.location.origin + import.meta.env.BASE_URL },
+    });
   });
 });
