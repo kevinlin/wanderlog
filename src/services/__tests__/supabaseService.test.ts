@@ -8,11 +8,13 @@ const chain = {
   order: mockOrder,
   maybeSingle: mockMaybeSingle,
 };
+const mockUpdateEq = vi.fn();
+const mockUpdate = vi.fn(() => ({ eq: mockUpdateEq }));
 vi.mock('@/config/supabase', () => ({
-  getSupabase: () => ({ from: vi.fn(() => chain) }),
+  getSupabase: () => ({ from: vi.fn(() => ({ ...chain, update: mockUpdate })) }),
 }));
 
-import { fetchTripById, fetchTripSummaries } from '../supabaseService';
+import { fetchTripById, fetchTripSummaries, reorderActivities, setActivityDone, setWaypointDone } from '../supabaseService';
 
 describe('supabaseService reads', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -55,5 +57,36 @@ describe('supabaseService reads', () => {
     });
     const trips = await fetchTripSummaries();
     expect(trips).toEqual([{ trip_id: 't1', trip_name: 'Trip 1', timezone: 'UTC', created_at: 'c', updated_at: 'u' }]);
+  });
+});
+
+describe('supabaseService writes', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUpdateEq.mockResolvedValue({ error: null });
+  });
+
+  it('setActivityDone updates is_done by id', async () => {
+    await setActivityDone('act-1', true);
+    expect(mockUpdate).toHaveBeenCalledWith({ is_done: true });
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'act-1');
+  });
+
+  it('setWaypointDone updates is_done by id', async () => {
+    await setWaypointDone('wp-1', false);
+    expect(mockUpdate).toHaveBeenCalledWith({ is_done: false });
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'wp-1');
+  });
+
+  it('reorderActivities writes sequential sort_order for each id', async () => {
+    await reorderActivities(['b', 'a', 'c']);
+    expect(mockUpdate).toHaveBeenNthCalledWith(1, { sort_order: 0 });
+    expect(mockUpdateEq).toHaveBeenNthCalledWith(1, 'id', 'b');
+    expect(mockUpdateEq).toHaveBeenNthCalledWith(3, 'id', 'c');
+  });
+
+  it('setActivityDone throws on error', async () => {
+    mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(setActivityDone('act-1', true)).rejects.toThrow('denied');
   });
 });

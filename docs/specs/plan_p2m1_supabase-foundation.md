@@ -36,7 +36,7 @@ At https://supabase.com/dashboard: new project `wanderlog`, region closest to ho
 - [ ] **Step 2: Install CLI + init local dev**
 
 ```bash
-brew install supabase/tap/supabase
+brew install supabase
 supabase init
 supabase start   # requires Docker; prints local URL + keys
 ```
