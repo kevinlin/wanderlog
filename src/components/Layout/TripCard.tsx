@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import type React from 'react';
-import type { TripSummary } from '@/contexts/AppStateContext';
+import type { TripSummary } from '@/types/trip';
 
 interface TripCardProps {
   isSelected: boolean;

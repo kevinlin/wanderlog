@@ -1,6 +1,17 @@
 // Trip data models for Wanderlog Travel Journal
 import type { Coordinates, ScenicWaypoint } from './map';
 
+export interface TripSummary {
+  created_at?: string;
+  destination: string | null;
+  end_date: string; // YYYY-MM-DD
+  start_date: string; // YYYY-MM-DD
+  timezone: string;
+  trip_id: string;
+  trip_name: string;
+  updated_at?: string;
+}
+
 export interface TripData {
   constraints?: TripConstraints;
   created_at?: string;

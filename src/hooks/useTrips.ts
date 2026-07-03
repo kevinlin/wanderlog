@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import type { TripSummary } from '@/contexts/AppStateContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { tripKeys } from '@/lib/queryClient';
 import { fetchTripSummaries } from '@/services/supabaseService';
+import type { TripSummary } from '@/types/trip';
 
 interface UseTripsReturn {
   error: string | null;

@@ -52,11 +52,32 @@ describe('supabaseService reads', () => {
 
   it('fetchTripSummaries maps rows to TripSummary', async () => {
     mockOrder.mockResolvedValue({
-      data: [{ id: 't1', name: 'Trip 1', timezone: 'UTC', created_at: 'c', updated_at: 'u' }],
+      data: [
+        {
+          id: 't1',
+          name: 'Trip 1',
+          destination: 'NZ',
+          start_date: '2025-12-13',
+          end_date: '2025-12-29',
+          timezone: 'UTC',
+          created_at: 'c',
+          updated_at: 'u',
+        },
+      ],
       error: null,
     });
     const trips = await fetchTripSummaries();
-    expect(trips).toEqual([{ trip_id: 't1', trip_name: 'Trip 1', timezone: 'UTC', created_at: 'c', updated_at: 'u' }]);
+    expect(trips[0]).toEqual({
+      trip_id: 't1',
+      trip_name: 'Trip 1',
+      destination: 'NZ',
+      start_date: '2025-12-13',
+      end_date: '2025-12-29',
+      timezone: 'UTC',
+      created_at: 'c',
+      updated_at: 'u',
+    });
+    expect(chain.select).toHaveBeenCalledWith('id, name, destination, start_date, end_date, timezone, created_at, updated_at');
   });
 });
 
