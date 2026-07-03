@@ -75,11 +75,13 @@ Trip data schema is defined in `src/types/trip.ts`.
 
 ## Deployment
 
-This project is configured for GitHub Pages deployment:
+Production is hosted on Vercel:
 
-1. Set up a GitHub repository
-2. Add your Google Maps API key as a repository secret: `GOOGLE_MAPS_API_KEY`
-3. Push to the `main` branch to trigger automatic deployment
+1. Pushes to `main` run the test-gated `Vercel Deploy` workflow, which deploys to the Vercel production domain
+2. Pull requests get an automatic Vercel preview deployment
+3. Requires the `VERCEL_TOKEN`, `VERCEL_ORG_ID`, and `VERCEL_PROJECT_ID` repository secrets
+
+The former GitHub Pages URL (https://kevinlin.github.io/wanderlog/) is retired.
 
 ## Project Structure
 

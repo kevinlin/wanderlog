@@ -5,8 +5,7 @@ import { defineConfig } from 'vite';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  // GH Pages serves from /wanderlog/; Vercel sets VITE_BASE_PATH=/
-  base: process.env.VITE_BASE_PATH ?? '/wanderlog/',
+  base: '/',
   resolve: {
     alias: {
       '@': path.resolve(import.meta.dirname, './src'),
