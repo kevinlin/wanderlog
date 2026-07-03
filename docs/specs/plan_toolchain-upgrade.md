@@ -29,7 +29,7 @@
 - Consumes: current green baseline (218 tests, clean build).
 - Produces: same baseline on latest in-major minors; the reference point for every later task.
 
-- [ ] **Step 1: Record the baseline**
+- [x] **Step 1: Record the baseline**
 
 ```bash
 pnpm install
@@ -39,7 +39,7 @@ pnpm build
 
 Expected: `Tests  218 passed (218)`, build exits 0. If either fails, stop - fix the baseline before upgrading anything.
 
-- [ ] **Step 2: Bump minors/patches (majors and firebase excluded)**
+- [x] **Step 2: Bump minors/patches (majors and firebase excluded)**
 
 ```bash
 pnpm add react@^19.2.7 react-dom@^19.2.7 date-fns@^4.4.0 @react-google-maps/api@^2.20.8
@@ -50,7 +50,7 @@ pnpm add -D @types/react@^19.2.17 @types/react-dom@^19.2.3 \
 
 `@types/node` stays on major 24 deliberately - it matches the Node 24 LTS runtime (Task 6), not the newest types major.
 
-- [ ] **Step 3: Verify**
+- [x] **Step 3: Verify**
 
 ```bash
 pnpm test:run && pnpm build
@@ -58,7 +58,7 @@ pnpm test:run && pnpm build
 
 Expected: 218 passed, build exits 0.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml
@@ -79,21 +79,21 @@ git commit -m "chore: bump minor and patch dependencies"
 
 Vite and Vitest bump together in one commit: Vitest 3 declares a Vite peer range that tops out at 7, so bumping Vite alone leaves a broken peer graph. jsdom and the Vitest companion packages ride along because they version-lock to Vitest.
 
-- [ ] **Step 1: Read the migration guides for breaking changes**
+- [x] **Step 1: Read the migration guides for breaking changes**
 
 Check https://vite.dev/guide/migration and https://vitest.dev/guide/migration for changes affecting this repo's configs (shown in full below - they are small):
 
 - `vite.config.ts`: `plugins: [react()]`, `base: '/wanderlog/'`, `@` alias, one `define` entry.
 - `vitest.config.ts`: jsdom environment, `globals: true`, setup file, include/exclude globs, v8 coverage, junit `outputFile`.
 
-- [ ] **Step 2: Bump the cluster**
+- [x] **Step 2: Bump the cluster**
 
 ```bash
 pnpm add -D vite@^8.1.3 @vitejs/plugin-react@^6.0.3 \
   vitest@^4.1.9 @vitest/coverage-v8@^4.1.9 @vitest/ui@^4.1.9 jsdom@^29.1.1
 ```
 
-- [ ] **Step 3: Apply any config changes the guides require, then verify**
+- [x] **Step 3: Apply any config changes the guides require, then verify** (no config changes needed; two test files updated for Vitest 4 constructor-mock behavior; CI reporter flags unchanged)
 
 ```bash
 pnpm test:run
@@ -103,7 +103,7 @@ pnpm test:run --reporter=verbose --reporter=junit --outputFile.junit=./test-resu
 
 Expected: 218 passed; build exits 0; the third command matches the CI invocation in `.github/workflows/deploy.yml:44` and must produce `test-results.xml` - if Vitest 4 changed reporter flags, update the workflow line to the new syntax in this task.
 
-- [ ] **Step 4: Dev-server smoke**
+- [x] **Step 4: Dev-server smoke**
 
 ```bash
 pnpm dev
@@ -111,7 +111,7 @@ pnpm dev
 
 Open http://localhost:5173/wanderlog/ - map renders with pins, no console errors from the dev server itself.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add package.json pnpm-lock.yaml vite.config.ts vitest.config.ts .github/workflows/deploy.yml
@@ -132,13 +132,13 @@ git commit -m "chore: upgrade to vite 8 and vitest 4"
 - Consumes: Task 2 baseline.
 - Produces: green `tsc -b` on TypeScript 6.
 
-- [ ] **Step 1: Bump**
+- [x] **Step 1: Bump**
 
 ```bash
 pnpm add -D typescript@^6.0.3
 ```
 
-- [ ] **Step 2: Surface breakages**
+- [x] **Step 2: Surface breakages**
 
 ```bash
 pnpm build
@@ -146,11 +146,11 @@ pnpm build
 
 `build` runs `tsc -b` first. If it exits 0, skip to Step 4.
 
-- [ ] **Step 3: Fix surfaced errors minimally**
+- [x] **Step 3: Fix surfaced errors minimally** (removed deprecated `baseUrl`; added `"types": ["node"]` to both tsconfigs since TS 6 defaults `types` to `[]`)
 
 Consult https://www.typescriptlang.org/docs/handbook/release-notes/ for the 6.0 entry. Fix each error with the smallest change that preserves behavior - type annotations and config flags, not refactors. If an error's fix is unclear, prefer the config-level compatibility flag the release notes recommend over rewriting app code.
 
-- [ ] **Step 4: Verify**
+- [x] **Step 4: Verify**
 
 ```bash
 pnpm test:run && pnpm build
@@ -158,7 +158,7 @@ pnpm test:run && pnpm build
 
 Expected: 218 passed, build exits 0.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add -A
