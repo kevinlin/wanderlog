@@ -7,7 +7,7 @@ Detailed plans are written just-in-time: each milestone's plan is authored when 
 | Milestone | Plan | Status | Verification gate |
 |-----------|------|--------|-------------------|
 | M0 - Toolchain | [plan_p2m0_toolchain-upgrade.md](plan_p2m0_toolchain-upgrade.md) | Shipped (2026-07-03) | Build + 218 tests green; manual smoke (map, routes, timeline, drag-reorder, export); one GH Pages deploy |
-| M1 - Foundation | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Planned | Parity checklist (Req 1.7) passes on a Vercel preview |
+| M1 - Foundation | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Shipped (2026-07-04) | Parity checklist (Req 1.7) passes on a Vercel preview |
 | M2 - Auth gate | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | Planned, pending M1 | Unauthenticated access fully blocked; family members sign in |
 | M3 - Trip library | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Planned, pending M2 | 2+ trips browsable and selectable |
 | M4 - Itinerary editing | plan_p2m4_itinerary-editing.md (not yet written) | Pending M3 | Each slice (activities; accommodation + trip metadata; waypoints + stops) edits and persists round-trip |
@@ -25,3 +25,4 @@ Infrastructure that lands alongside milestones (see design):
 - 2026-07-03: M1 plan written ahead of M0 execution on request; task detail targets the post-M0 toolchain. Plan files adopt the `plan_p2m<N>_<topic>.md` scheme.
 - 2026-07-03: M2 plan written (react-router gate, Google sign-in, Vercel production cutover, GH Pages retirement).
 - 2026-07-03: M3 plan written (library page, timezone-aware status, create/delete trips, last-trip restore).
+- 2026-07-04: M1 shipped. Parity checklist passed on the Vercel preview (hosted Supabase, migrated data, CI deploys). Two follow-ups: enable Places API on the Vercel Maps key (POI search returns REQUEST_DENIED); cold offline start needs a service worker (parity with GH Pages holds - neither loads the shell offline).
