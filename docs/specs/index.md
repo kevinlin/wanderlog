@@ -24,6 +24,7 @@ Navigation map for the Wanderlog specification docs. All specs use the `default`
 | Toolchain Upgrade (Phase 2 M0) | [plan_p2m0_toolchain-upgrade.md](plan_p2m0_toolchain-upgrade.md) | Vite 8, Vitest 4, TypeScript 6, Tailwind 4, Ultracite 7, Node 24 CI - detailed task plan. |
 | Supabase Foundation (Phase 2 M1) | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Schema + RLS, mappers, supabaseService, migration script, TanStack Query, auth bootstrap, Vercel previews, parity checklist. |
 | Auth Gate (Phase 2 M2) | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | react-router route guards, login polish, Google sign-in (PKCE), sign-out cache purge, Vercel production cutover, GH Pages retirement. |
+| Trip Library (Phase 2 M3) | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Library page with timezone-aware status, hero trip, create/delete trips, last-trip restore, empty-trip hardening. |
 
 ## Meta
 
