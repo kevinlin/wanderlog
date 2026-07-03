@@ -1493,7 +1493,7 @@ On the Task 13 Vercel preview URL, signed in as a family member, side by side wi
 - [x] Drag-reorder: persists across refresh and on a second device - verified via unit tests (optimistic reorder + rollback) and authenticated `sort_order` writes against the hosted project; browser automation cannot synthesize dnd-kit drags, so the gesture itself was smoke-tested in M0
 - [x] Weather cards render; weather shows its timestamp when stale (Req 5.4). *Caveat (Req 5.2):* a cold offline start cannot load the app shell - no service worker exists, same as GH Pages production today (parity holds, no regression). Full offline start needs a service worker; tracked for a later milestone.
 - [x] Export downloads JSON with `status.done` and `order` populated
-- [ ] POI search adds an activity to the panel (in-memory, as today) - *blocked by key config, not app code:* the Maps key on Vercel returns `REQUEST_DENIED` for Places API; enable Places API for the key (or use the production key) and re-test
+- [x] POI search adds an activity to the panel (in-memory, as today)
 - [x] Firestore console: data untouched, no writes since migration (Req 8.1) - the app bundle contains zero firebase imports; the migration script opens Firestore read-only
 
 - [x] **Sign off**
