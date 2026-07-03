@@ -34,3 +34,7 @@ local/
 
 # Supabase
 supabase/.temp
+
+# Vercel
+.vercel
+.env*.local
