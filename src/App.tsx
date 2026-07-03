@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
+import { LoginForm } from '@/components/Auth/LoginForm';
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
@@ -9,6 +10,7 @@ import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
 import { initializeFirebase } from '@/config/firebase';
 import { useAppStateContext } from '@/contexts/AppStateContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useTripData } from '@/hooks/useTripData';
 import { saveUserModifications } from '@/services/storageService';
@@ -17,6 +19,7 @@ import { getCurrentStop } from '@/utils/dateUtils';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 
 function App() {
+  const { session, isLoading: isAuthLoading } = useAuth();
   const { tripData, isLoading, error, refetch } = useTripData({ tripId: '202512_NZ' });
   const { state, dispatch } = useAppStateContext();
   const { isMobile } = useScreenSize();
@@ -64,6 +67,14 @@ function App() {
   const loading = isLoading || state.loading;
   const appError = error || state.error;
   const appTripData = state.tripData || tripData;
+
+  if (isAuthLoading) {
+    return <LoadingSpinner fullScreen message="Loading your adventure..." size="lg" variant="adventure" />;
+  }
+
+  if (!session) {
+    return <LoginForm />;
+  }
 
   if (loading) {
     return <LoadingSpinner fullScreen message="Loading your adventure..." size="lg" variant="adventure" />;
