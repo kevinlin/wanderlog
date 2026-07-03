@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { describe, expect, it, vi } from 'vitest';
@@ -29,13 +30,18 @@ vi.mock('@/contexts/AuthContext', () => ({
 
 import { TripLibraryPage } from '../TripLibraryPage';
 
-describe('TripLibraryPage', () => {
-  it('lists every trip with name, destination, dates and status', () => {
-    render(
+const renderPage = () =>
+  render(
+    <QueryClientProvider client={new QueryClient()}>
       <MemoryRouter>
         <TripLibraryPage />
       </MemoryRouter>
-    );
+    </QueryClientProvider>
+  );
+
+describe('TripLibraryPage', () => {
+  it('lists every trip with name, destination, dates and status', () => {
+    renderPage();
     expect(screen.getByText('NZ South Island')).toBeInTheDocument();
     expect(screen.getByText(/New Zealand/)).toBeInTheDocument();
     expect(screen.getByText(/past/i)).toBeInTheDocument();
@@ -43,11 +49,7 @@ describe('TripLibraryPage', () => {
   });
 
   it('renders the upcoming trip as the hero card', () => {
-    render(
-      <MemoryRouter>
-        <TripLibraryPage />
-      </MemoryRouter>
-    );
+    renderPage();
     expect(screen.getByTestId('hero-trip')).toHaveTextContent('Japan Spring');
   });
 });

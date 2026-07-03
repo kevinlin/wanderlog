@@ -47,4 +47,17 @@ describe('TripPage', () => {
     expect(screen.getByText(/this trip no longer exists/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /trips/i })).toHaveAttribute('href', '/trips');
   });
+
+  it('renders an empty-trip state instead of crashing when the trip has no stops', () => {
+    mockUseTripData.mockReturnValue({
+      tripData: { trip_id: 'empty', trip_name: 'Japan Spring 2027', timezone: 'Asia/Tokyo', stops: [] },
+      isLoading: false,
+      error: null,
+      refetch: vi.fn(),
+    });
+    renderTripPage();
+    expect(screen.getByText('Japan Spring 2027')).toBeInTheDocument();
+    expect(screen.getByText(/no stops yet/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /trips/i })).toHaveAttribute('href', '/trips');
+  });
 });

@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { UserMenu } from '@/components/Auth/UserMenu';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
+import { CreateTripModal } from '@/components/TripLibrary/CreateTripModal';
 import { TripLibraryCard } from '@/components/TripLibrary/TripLibraryCard';
 import { useTrips } from '@/hooks/useTrips';
 import { deriveTripStatus, pickHeroTrip, sortForLibrary } from '@/utils/tripStatusUtils';
@@ -9,6 +11,7 @@ import { deriveTripStatus, pickHeroTrip, sortForLibrary } from '@/utils/tripStat
 export const TripLibraryPage = () => {
   const { trips, isLoading, error, refetch } = useTrips();
   const navigate = useNavigate();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   if (isLoading) {
     return <LoadingSpinner fullScreen message="Loading your trips..." size="lg" variant="adventure" />;
@@ -29,6 +32,7 @@ export const TripLibraryPage = () => {
           <h1 className="font-bold text-3xl text-gray-900 sm:text-4xl">Our Trips</h1>
           <button
             className="rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white shadow-xs transition-colors hover:bg-alpine-teal/90"
+            onClick={() => setIsCreateModalOpen(true)}
             type="button"
           >
             New trip
@@ -63,6 +67,7 @@ export const TripLibraryPage = () => {
           </div>
         )}
       </main>
+      <CreateTripModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
     </div>
   );
 };
