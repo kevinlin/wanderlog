@@ -305,7 +305,7 @@ const signInWithGoogle = async () => {
 
 `LoginForm` gets a "Continue with Google" button (white, bordered, Google G icon inline SVG) under an "or" divider.
 
-- [ ] **Step 4: Verify and commit**
+- [x] **Step 4: Verify and commit**
 
 Manual: Google sign-in round-trips on localhost and on a Vercel preview; the family Google accounts land signed in.
 
@@ -471,16 +471,16 @@ gh run watch   # only the Vercel workflow runs; it must be green
 
 All checks run against the production URL:
 
-- [ ] Incognito: only the login screen renders; network tab shows zero `*.supabase.co/rest/*` requests before sign-in (Req 2.1)
-- [ ] Every family member's email/password signs in and sees the trip (Req 2.2)
-- [ ] Google sign-in round-trips and lands signed in (Req 2.3)
-- [ ] Sign-up is rejected: in the browser console on the login page, `supabase.auth.signUp({email:'x@y.z',password:'pw12345678'})` returns a signups-disabled error (Req 2.4)
-- [ ] Session survives a full browser quit + reopen without re-login (Req 2.5)
-- [ ] Sign-out returns to login; IndexedDB query cache and `sb-*-auth-token` localStorage entry are gone (Req 2.6)
-- [ ] Server-side enforcement: `curl -s "https://<project-ref>.supabase.co/rest/v1/trips" -H "apikey: <anon-key>"` returns `[]` (Req 2.7)
-- [ ] Old GH Pages URL is retired and documented; production domain serves the app at the root path (Req 6.1, 6.4)
+- [x] Incognito: only the login screen renders; network tab shows zero `*.supabase.co/rest/*` requests before sign-in (Req 2.1)
+- [x] Every family member's email/password signs in and sees the trip (Req 2.2)
+- [x] Google sign-in round-trips and lands signed in (Req 2.3)
+- [x] Sign-up is rejected: in the browser console on the login page, `supabase.auth.signUp({email:'x@y.z',password:'pw12345678'})` returns a signups-disabled error (Req 2.4)
+- [x] Session survives a full browser quit + reopen without re-login (Req 2.5)
+- [x] Sign-out returns to login; IndexedDB query cache and `sb-*-auth-token` localStorage entry are gone (Req 2.6)
+- [x] Server-side enforcement: `curl -s "https://<project-ref>.supabase.co/rest/v1/trips" -H "apikey: <anon-key>"` returns `[]` (Req 2.7)
+- [x] Old GH Pages URL is retired and documented; production domain serves the app at the root path (Req 6.1, 6.4)
 
-- [ ] **Sign off**
+- [x] **Sign off**
 
 Set the M2 row in `plan_wanderlog-phase-2.md` to `Shipped (<date>)`.
 
@@ -502,3 +502,4 @@ git commit -m "docs: mark M2 auth gate shipped"
 
 - 2026-07-03: Initial plan.
 - 2026-07-04: Tasks 1-7 code shipped (react-router, ProtectedRoute, login polish, Google sign-in PKCE, sign-out with cache purge, Vercel deploy workflow, GH Pages retirement). Remaining before Task 8 sign-off: manual dashboard setup (Google OAuth client + Supabase provider/URL config, Vercel domain + env cleanup, Maps key referrers, repo Pages disable), push to main, and production verification.
+- 2026-07-04: Task 8 verification gate passed against production (https://wanderlog-xi.vercel.app). Automated checks: pre-auth zero supabase requests, signup rejected (422 signup_disabled), anonymous REST returns [], sign-out purges token + IndexedDB cache, checkmark toggle persists round-trip, GH Pages URL 404s. Manual confirmations: Google sign-in round-trips, family accounts work, session survives browser restart. M2 signed off.

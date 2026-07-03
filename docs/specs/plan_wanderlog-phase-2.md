@@ -8,7 +8,7 @@ Detailed plans are written just-in-time: each milestone's plan is authored when 
 |-----------|------|--------|-------------------|
 | M0 - Toolchain | [plan_p2m0_toolchain-upgrade.md](plan_p2m0_toolchain-upgrade.md) | Shipped (2026-07-03) | Build + 218 tests green; manual smoke (map, routes, timeline, drag-reorder, export); one GH Pages deploy |
 | M1 - Foundation | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Shipped (2026-07-04) | Parity checklist (Req 1.7) passes on a Vercel preview |
-| M2 - Auth gate | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | Planned | Unauthenticated access fully blocked; family members sign in |
+| M2 - Auth gate | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | Shipped (2026-07-04) | Unauthenticated access fully blocked; family members sign in |
 | M3 - Trip library | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Planned, pending M2 | 2+ trips browsable and selectable |
 | M4 - Itinerary editing | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Planned, pending M3 | Each slice (activities; accommodation + trip metadata; waypoints + stops) edits and persists round-trip |
 
@@ -27,3 +27,4 @@ Infrastructure that lands alongside milestones (see design):
 - 2026-07-03: M3 plan written (library page, timezone-aware status, create/delete trips, last-trip restore).
 - 2026-07-04: M1 shipped. Parity checklist passed on the Vercel preview (hosted Supabase, migrated data, CI deploys). Two follow-ups: enable Places API on the Vercel Maps key (POI search returns REQUEST_DENIED); cold offline start needs a service worker (parity with GH Pages holds - neither loads the shell offline).
 - 2026-07-04: M4 plan written (three slices: activities CRUD with retry/offline plumbing; accommodation + trip metadata incl. additive accommodations migration; waypoints + stop restructuring with date cascade; Firebase decommission tail).
+- 2026-07-04: M2 shipped. Production is https://wanderlog-xi.vercel.app (login-gated, Google + email sign-in, sign-out cache purge); GH Pages retired. Verification gate passed against production.
