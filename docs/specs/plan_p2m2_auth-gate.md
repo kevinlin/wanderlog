@@ -28,13 +28,13 @@
 - Consumes: `useAuth` (M1), `LoginForm` (M1), `getCurrentTripId` from `viewStateStorage` (M1).
 - Produces: route table `/login`, `/`, `/trips/:tripId`, `*` - later tasks hang guards and pages off it. `DEFAULT_TRIP_ID = '202512_NZ'` exported from `src/pages/HomeRedirect.tsx`.
 
-- [ ] **Step 1: Add the dependency**
+- [x] **Step 1: Add the dependency**
 
 ```bash
 pnpm add react-router
 ```
 
-- [ ] **Step 2: Extract the current trip UI into `TripPage`**
+- [x] **Step 2: Extract the current trip UI into `TripPage`**
 
 Move everything `App.tsx` renders for an authenticated user (map, timeline, activities panel, and their handlers) into `src/pages/TripPage.tsx`. The hardcoded `useTripData({ tripId: '202512_NZ' })` (`App.tsx:20`) becomes:
 
@@ -52,7 +52,7 @@ export const TripPage = () => {
 };
 ```
 
-- [ ] **Step 3: Write failing test for the home redirect**
+- [x] **Step 3: Write failing test for the home redirect**
 
 ```tsx
 import { render, screen } from '@testing-library/react';
@@ -82,7 +82,7 @@ describe('HomeRedirect', () => {
 
 Run: `pnpm vitest run src/pages/__tests__/HomeRedirect.test.tsx` - expected FAIL (module not found).
 
-- [ ] **Step 4: Implement `HomeRedirect` and the route table**
+- [x] **Step 4: Implement `HomeRedirect` and the route table**
 
 ```tsx
 // src/pages/HomeRedirect.tsx
@@ -114,7 +114,7 @@ const App = () => (
 
 `LoginPage` for now just renders the M1 `LoginForm` centered; Task 3 polishes it. The M1 conditional gate in `App.tsx` (session ? app : LoginForm) is removed - Task 2 replaces it with `ProtectedRoute`; until then `/trips/:tripId` is reachable without a session, but its queries stay disabled (`enabled: !!session`), so no data leaks in the interim commit.
 
-- [ ] **Step 5: Verify and commit**
+- [x] **Step 5: Verify and commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -134,7 +134,7 @@ git add -A && git commit -m "feat: introduce react-router with login, home and t
 - Consumes: `useAuth` (M1).
 - Produces: `<ProtectedRoute>{children}</ProtectedRoute>` - wraps every authenticated route now and in M3/M4.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```tsx
 import { render, screen } from '@testing-library/react';
@@ -195,7 +195,7 @@ export const ProtectedRoute = ({ children }: { children: ReactNode }) => {
 };
 ```
 
-- [ ] **Step 2: Wire the gate into the route table**
+- [x] **Step 2: Wire the gate into the route table**
 
 Wrap `/` and `/trips/:tripId` elements in `<ProtectedRoute>`. In `LoginPage`, redirect signed-in users back:
 
@@ -205,11 +205,11 @@ const location = useLocation();
 if (session) return <Navigate to={(location.state as { from?: string })?.from ?? '/'} replace />;
 ```
 
-- [ ] **Step 3: Verify no data is fetched pre-auth (Req 2.1)**
+- [x] **Step 3: Verify no data is fetched pre-auth (Req 2.1)**
 
 Add to the ProtectedRoute test file: render `TripPage` route without a session and assert the mocked `fetchTripById` was never called. Manual: incognito `pnpm dev`, network tab shows zero requests to `*.supabase.co/rest/*` before sign-in.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -227,7 +227,7 @@ git add -A && git commit -m "feat: guard authenticated routes behind login"
 - Consumes: `signIn` from `useAuth` (M1).
 - Produces: the final login surface Google sign-in (Task 4) drops its button into.
 
-- [ ] **Step 1: Style the page**
+- [x] **Step 1: Style the page**
 
 Full-viewport centered card matching the app's frosted-glass style (`backdrop-blur`, `bg-white/80`, rounded corners like `POIModal`): Wanderlog title, tagline, email + password fields, `bg-alpine-teal` submit button. Form behavior:
 
@@ -236,7 +236,7 @@ Full-viewport centered card matching the app's frosted-glass style (`backdrop-bl
 - Supabase error message rendered under the form in `text-red-600` (wrong password, rate limit - shown verbatim)
 - Enter submits; the whole flow works on a phone viewport (mobile-first, this is used on the road)
 
-- [ ] **Step 2: Verify and commit**
+- [x] **Step 2: Verify and commit**
 
 Existing `LoginForm` tests keep passing (submit → `signIn`, error rendering). Manual check at `/login` in desktop + mobile widths.
 
@@ -264,7 +264,7 @@ Google Cloud Console (https://console.cloud.google.com > APIs & Services > Crede
 
 Supabase dashboard (Authentication > Providers > Google): enable, paste client ID + secret. Authentication > URL Configuration: Site URL = production domain; Additional Redirect URLs = `http://localhost:5173/**` and the Vercel preview pattern (e.g. `https://*-<team>.vercel.app/**`).
 
-- [ ] **Step 2: Switch the client to PKCE**
+- [x] **Step 2: Switch the client to PKCE**
 
 In `src/config/supabase.ts`:
 
@@ -276,7 +276,7 @@ client = createClient(url, anonKey, {
 
 `detectSessionInUrl` completes the OAuth round-trip on whatever page the user lands on - no `/callback` route (per design).
 
-- [ ] **Step 3: Add the context method + button (test first)**
+- [x] **Step 3: Add the context method + button (test first)**
 
 Test (extend `AuthContext.test.tsx`; add `signInWithOAuth: mockSignInWithOAuth` to the mocked `auth` object):
 
@@ -326,7 +326,7 @@ git add -A && git commit -m "feat: add google sign-in via supabase oauth pkce"
 - Consumes: `persister` key `'wanderlog-query-cache'` (M1 Task 7).
 - Produces: `clearPersistedCache(): Promise<void>` in `lib/queryClient.ts`; `UserMenu` floating control rendered on `TripPage`.
 
-- [ ] **Step 1: Test first - sign-out clears everything**
+- [x] **Step 1: Test first - sign-out clears everything**
 
 Extend `AuthContext.test.tsx` (mock `idb-keyval`):
 
@@ -338,7 +338,7 @@ it('signOut clears supabase session, query cache and persisted cache', async () 
 });
 ```
 
-- [ ] **Step 2: Implement**
+- [x] **Step 2: Implement**
 
 ```typescript
 // lib/queryClient.ts
@@ -359,7 +359,7 @@ const signOut = async () => {
 
 `UserMenu`: fixed top-right floating button (same frosted-glass treatment as the map controls) showing the user's email initial; click opens a small menu with the email address and a "Sign out" item. On sign-out the auth listener nulls the session and `ProtectedRoute` redirects to `/login` - no manual navigation.
 
-- [ ] **Step 3: Verify and commit**
+- [x] **Step 3: Verify and commit**
 
 Manual: sign out → login screen; DevTools > Application: IndexedDB `keyval-store` has no `wanderlog-query-cache`, localStorage has no `sb-*-auth-token` (Req 2.6).
 
@@ -379,7 +379,7 @@ git add -A && git commit -m "feat: add user menu with sign-out and cache purge"
 - Consumes: M1 Task 13 pipeline (test-gated previews).
 - Produces: `main` pushes deploy to Vercel production; PRs keep getting previews (Req 6.2).
 
-- [ ] **Step 1: Split preview vs production in the workflow**
+- [x] **Step 1: Split preview vs production in the workflow**
 
 ```yaml
 name: Vercel Deploy
@@ -439,7 +439,7 @@ On the production URL: login → trip renders → toggle a checkmark → sign ou
 - Delete: `.github/workflows/deploy.yml`
 - Modify: `vite.config.ts`, `README.md`
 
-- [ ] **Step 1: Remove the workflow and the base-path switch**
+- [x] **Step 1: Remove the workflow and the base-path switch**
 
 Delete `.github/workflows/deploy.yml`. In `vite.config.ts` the env-driven base from M1 Task 13 collapses to root:
 
@@ -449,7 +449,7 @@ base: '/',
 
 Remove `VITE_BASE_PATH` from the Vercel project env (manual). The `basename={import.meta.env.BASE_URL}` in `App.tsx` stays - it now resolves to `/` and keeps working.
 
-- [ ] **Step 2: Document the retirement**
+- [x] **Step 2: Document the retirement**
 
 README deployment section: production URL is the Vercel domain; note "The former GitHub Pages URL (https://kevinlin.github.io/wanderlog/) is retired." Repo Settings > Pages: disable (manual). Remove the GH Pages origin from the Maps key referrer list (manual).
 
@@ -501,3 +501,4 @@ git commit -m "docs: mark M2 auth gate shipped"
 ## Changelog
 
 - 2026-07-03: Initial plan.
+- 2026-07-04: Tasks 1-7 code shipped (react-router, ProtectedRoute, login polish, Google sign-in PKCE, sign-out with cache purge, Vercel deploy workflow, GH Pages retirement). Remaining before Task 8 sign-off: manual dashboard setup (Google OAuth client + Supabase provider/URL config, Vercel domain + env cleanup, Maps key referrers, repo Pages disable), push to main, and production verification.
