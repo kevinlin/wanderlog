@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
 import { UserMenu } from '@/components/Auth/UserMenu';
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
@@ -79,16 +79,25 @@ export const TripPage = () => {
     return <LoadingSpinner fullScreen message="Loading your adventure..." size="lg" variant="adventure" />;
   }
 
-  if (error || !tripData) {
+  if (error) {
+    return <ErrorMessage details={error} fullScreen message={error} onRetry={refetch} title="Adventure Data Unavailable" type="data" />;
+  }
+
+  // fetchTripById resolved null: the remembered trip was deleted or never existed
+  if (!tripData) {
     return (
-      <ErrorMessage
-        details={error || undefined}
-        fullScreen
-        message={error || 'Failed to load trip data'}
-        onRetry={refetch}
-        title="Adventure Data Unavailable"
-        type="data"
-      />
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-sandy-beige to-white p-4">
+        <div className="max-w-md rounded-xl border border-gray-200 bg-white p-8 text-center shadow-xs">
+          <h1 className="font-bold text-gray-900 text-xl">This trip no longer exists</h1>
+          <p className="mt-2 text-gray-600 text-sm">It may have been deleted. Head back to the library to pick another one.</p>
+          <Link
+            className="mt-6 inline-block rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90"
+            to="/trips"
+          >
+            Back to trips
+          </Link>
+        </div>
+      </div>
     );
   }
 
