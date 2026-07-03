@@ -4,10 +4,23 @@ import { describe, expect, it, vi } from 'vitest';
 const mockGetSession = vi.fn().mockResolvedValue({ data: { session: null } });
 const mockOnAuthStateChange = vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } });
 const mockSignInWithOAuth = vi.fn();
+const mockAuthSignOut = vi.fn().mockResolvedValue({ error: null });
 vi.mock('@/config/supabase', () => ({
   getSupabase: () => ({
-    auth: { getSession: mockGetSession, onAuthStateChange: mockOnAuthStateChange, signInWithOAuth: mockSignInWithOAuth },
+    auth: {
+      getSession: mockGetSession,
+      onAuthStateChange: mockOnAuthStateChange,
+      signInWithOAuth: mockSignInWithOAuth,
+      signOut: mockAuthSignOut,
+    },
   }),
+}));
+
+const mockIdbDel = vi.fn().mockResolvedValue(undefined);
+vi.mock('idb-keyval', () => ({
+  get: vi.fn(),
+  set: vi.fn(),
+  del: (key: string) => mockIdbDel(key),
 }));
 
 import { AuthProvider, useAuth } from '../AuthContext';
@@ -48,5 +61,21 @@ describe('AuthProvider', () => {
       provider: 'google',
       options: { redirectTo: window.location.origin + import.meta.env.BASE_URL },
     });
+  });
+
+  it('signOut clears supabase session, query cache and persisted cache', async () => {
+    let signOut: (() => Promise<void>) | undefined;
+    const SignOutProbe = () => {
+      signOut = useAuth().signOut;
+      return null;
+    };
+    render(
+      <AuthProvider>
+        <SignOutProbe />
+      </AuthProvider>
+    );
+    await signOut?.();
+    expect(mockAuthSignOut).toHaveBeenCalled();
+    expect(mockIdbDel).toHaveBeenCalledWith('wanderlog-query-cache');
   });
 });

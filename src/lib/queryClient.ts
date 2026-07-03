@@ -15,10 +15,14 @@ export const queryClient = new QueryClient({
   },
 });
 
+const PERSIST_KEY = 'wanderlog-query-cache';
+
 export const persister = createAsyncStoragePersister({
   storage: { getItem: get, setItem: set, removeItem: del },
-  key: 'wanderlog-query-cache',
+  key: PERSIST_KEY,
 });
+
+export const clearPersistedCache = (): Promise<void> => del(PERSIST_KEY);
 
 export const PERSIST_MAX_AGE_MS = THIRTY_DAYS_MS;
 

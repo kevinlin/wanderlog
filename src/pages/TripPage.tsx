@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
+import { UserMenu } from '@/components/Auth/UserMenu';
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
@@ -170,6 +171,9 @@ export const TripPage = () => {
 
         {/* Floating Timeline Strip */}
         <TimelineStrip currentStopId={state.currentBase} onStopSelect={handleStopSelect} stops={tripData.stops} />
+
+        {/* Floating User Menu - shifts left of the activities panel on desktop */}
+        <UserMenu className={isActivitiesPanelVisible && !isMobile ? 'sm:right-[25rem]' : ''} />
 
         {/* Responsive Activities Panel */}
         {currentStop && state.currentBase && (

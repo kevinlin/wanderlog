@@ -1,7 +1,7 @@
 import type { Session } from '@supabase/supabase-js';
 import { createContext, type ReactNode, useContext, useEffect, useState } from 'react';
 import { getSupabase } from '@/config/supabase';
-import { queryClient } from '@/lib/queryClient';
+import { clearPersistedCache, queryClient } from '@/lib/queryClient';
 
 interface AuthContextValue {
   isLoading: boolean;
@@ -10,6 +10,8 @@ interface AuthContextValue {
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
 }
+
+const PERSISTER_FLUSH_MS = 1500;
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -47,6 +49,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const signOut = async () => {
     await getSupabase().auth.signOut();
     queryClient.clear();
+    // The persister re-writes an empty snapshot ~1s after clear() (throttled
+    // subscription), so wait for it to settle before purging the entry.
+    await new Promise((resolve) => setTimeout(resolve, PERSISTER_FLUSH_MS));
+    await clearPersistedCache();
   };
 
   return <AuthContext.Provider value={{ session, isLoading, signIn, signInWithGoogle, signOut }}>{children}</AuthContext.Provider>;
