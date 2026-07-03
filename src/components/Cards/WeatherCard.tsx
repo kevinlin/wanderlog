@@ -8,9 +8,9 @@ import { useWeatherDisplay } from '@/hooks/useWeather';
 import type { WeatherData } from '@/types/weather';
 
 export interface WeatherCardProps {
-  weatherData: WeatherData | null;
   className?: string;
   compact?: boolean;
+  weatherData: WeatherData | null;
 }
 
 /**

@@ -7,12 +7,12 @@ import { generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripU
 import { activityHasLocationIssues } from '@/utils/validationUtils';
 
 interface ScenicWaypointCardProps {
-  waypoint: ScenicWaypoint;
   accommodation?: Accommodation;
-  isSelected: boolean;
   isDone: boolean;
-  onToggleDone: (waypointId: string, done: boolean) => void;
+  isSelected: boolean;
   onSelect: (waypointId: string) => void;
+  onToggleDone: (waypointId: string, done: boolean) => void;
+  waypoint: ScenicWaypoint;
 }
 
 export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({

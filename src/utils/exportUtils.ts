@@ -74,7 +74,7 @@ export const mergeUserModificationsWithTripData = (tripData: TripData, userModif
         return {
           ...activity,
           status: {
-            done: isDone !== undefined ? isDone : (activity.status?.done ?? false),
+            done: isDone === undefined ? (activity.status?.done ?? false) : isDone,
           },
           order: customOrder ? customOrder[index] : (activity.order ?? index),
         };
@@ -102,7 +102,7 @@ export const mergeStopStatusWithTripData = (tripData: TripData, stopStatus: Stop
         return {
           ...activity,
           status: statusOverride || activity.status,
-          order: orderOverride !== undefined ? orderOverride : activity.order,
+          order: orderOverride === undefined ? activity.order : orderOverride,
         };
       })
       .sort((a, b) => {

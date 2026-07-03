@@ -8,31 +8,31 @@ import type { WeatherCache } from '@/types/weather';
 
 // Trip summary interface for trip list
 export interface TripSummary {
+  created_at?: string;
+  timezone: string;
   trip_id: string;
   trip_name: string;
-  timezone: string;
-  created_at?: string;
   updated_at?: string;
 }
 
 // State interface based on design document
 export interface AppState {
+  availableTrips: TripSummary[];
+  currentBase: string | null;
   // Trip management
   currentTripId: string | null;
-  availableTrips: TripSummary[];
-
-  // Current trip data
-  tripData: TripData | null;
-  currentBase: string | null;
-  selectedActivity: string | null;
-  userModifications: UserModifications;
-  weatherData: WeatherCache;
-  poiModal: POIModalState;
-  poiSearch: POISearchState;
+  error: string | null;
 
   // UI state
   loading: boolean;
-  error: string | null;
+  poiModal: POIModalState;
+  poiSearch: POISearchState;
+  selectedActivity: string | null;
+
+  // Current trip data
+  tripData: TripData | null;
+  userModifications: UserModifications;
+  weatherData: WeatherCache;
 }
 
 // Action types from design document

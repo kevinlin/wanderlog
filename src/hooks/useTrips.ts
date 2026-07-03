@@ -4,9 +4,9 @@ import { loadAllTrips } from '@/services/tripService';
 import type { LoadingState } from '@/types';
 
 interface UseTripsReturn extends LoadingState {
-  trips: TripSummary[];
   currentTripId: string | null;
   refetch: () => Promise<void>;
+  trips: TripSummary[];
 }
 
 /**

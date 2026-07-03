@@ -2,9 +2,9 @@ import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 
 interface LocationWarningProps {
-  type: 'activity' | 'accommodation';
-  message?: string;
   className?: string;
+  message?: string;
+  type: 'activity' | 'accommodation';
 }
 
 export const LocationWarning: React.FC<LocationWarningProps> = ({ type, message, className = '' }) => {

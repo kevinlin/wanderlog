@@ -4,13 +4,13 @@ import type React from 'react';
 import type { POIDetails } from '@/types/poi';
 
 interface POIModalProps {
-  poi: POIDetails | null;
+  error: string | null;
   isOpen: boolean;
   loading: boolean;
-  error: string | null;
-  onClose: () => void;
   onAddToActivities: (poi: POIDetails) => void;
   onAddToScenicWaypoints: (poi: POIDetails) => void;
+  onClose: () => void;
+  poi: POIDetails | null;
 }
 
 export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error, onClose, onAddToActivities, onAddToScenicWaypoints }) => {

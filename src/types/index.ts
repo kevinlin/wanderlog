@@ -7,15 +7,15 @@ export * from './weather';
 
 // Common UI types
 export interface LoadingState {
-  isLoading: boolean;
   error: string | null;
+  isLoading: boolean;
 }
 
 export interface WeatherForecast {
+  date: string;
   high_c: number;
   low_c: number;
   precipitation_chance_pct: number;
-  date: string;
 }
 
 // Google Maps types
@@ -27,7 +27,7 @@ export interface GoogleMapsConfig {
 
 // Export status types
 export interface ExportData {
-  tripData: import('./trip').TripData;
   exportDate: string;
+  tripData: import('./trip').TripData;
   version: string;
 }

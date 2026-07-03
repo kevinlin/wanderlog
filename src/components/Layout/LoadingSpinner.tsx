@@ -1,8 +1,8 @@
 import type React from 'react';
 
 interface LoadingSpinnerProps {
-  message?: string;
   fullScreen?: boolean;
+  message?: string;
   size?: 'sm' | 'md' | 'lg';
   variant?: 'default' | 'adventure' | 'minimal';
 }

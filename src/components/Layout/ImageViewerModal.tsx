@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ImageViewerModalProps {
-  imageUrl: string;
   altText: string;
+  imageUrl: string;
   isOpen: boolean;
   onClose: () => void;
 }

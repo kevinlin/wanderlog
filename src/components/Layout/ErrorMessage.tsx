@@ -1,12 +1,12 @@
 import type React from 'react';
 
 interface ErrorMessageProps {
+  details?: string;
+  fullScreen?: boolean;
   message: string;
   onRetry?: () => void;
-  fullScreen?: boolean;
   title?: string;
   type?: 'general' | 'network' | 'data' | 'permission';
-  details?: string;
 }
 
 export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, fullScreen = false, title, type = 'general', details }) => {

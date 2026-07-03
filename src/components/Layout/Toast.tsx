@@ -3,11 +3,11 @@ import type React from 'react';
 import { useEffect, useState } from 'react';
 
 export interface ToastProps {
-  message: string;
-  type?: 'success' | 'error' | 'warning' | 'info';
   duration?: number;
+  message: string;
   onClose?: () => void;
   show?: boolean;
+  type?: 'success' | 'error' | 'warning' | 'info';
 }
 
 export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration = 4000, onClose, show = true }) => {
@@ -63,7 +63,7 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration =
 
   return (
     <div
-      className={`-translate-x-1/2 slide-in-from-top-2 fixed top-16 left-1/2 z-50 flex min-w-[300px] max-w-md transform animate-in items-center gap-3 rounded-lg border px-4 py-3 shadow-lg duration-300 sm:top-4 ${getStyles()}
+      className={`slide-in-from-top-2 fixed top-16 left-1/2 z-50 flex min-w-[300px] max-w-md -translate-x-1/2 transform animate-in items-center gap-3 rounded-lg border px-4 py-3 shadow-lg duration-300 sm:top-4 ${getStyles()}
       `}
     >
       {getIcon()}
@@ -78,6 +78,6 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration =
 // Simple toast state interface for App component integration
 export interface ToastState {
   message: string;
-  type: 'success' | 'error' | 'warning' | 'info';
   show: boolean;
+  type: 'success' | 'error' | 'warning' | 'info';
 }

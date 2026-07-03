@@ -6,8 +6,8 @@ import { LoadingSpinner } from './LoadingSpinner';
 import { TripCard } from './TripCard';
 
 interface TripSelectorModalProps {
-  isOpen: boolean;
   currentTripId: string | null;
+  isOpen: boolean;
   onClose: () => void;
   onSelectTrip: (tripId: string) => void;
 }

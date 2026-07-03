@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
 interface ScreenSize {
-  width: number;
   height: number;
+  isDesktop: boolean;
   isMobile: boolean;
   isTablet: boolean;
-  isDesktop: boolean;
+  width: number;
 }
 
 export const useScreenSize = (): ScreenSize => {

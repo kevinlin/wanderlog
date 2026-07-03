@@ -8,25 +8,25 @@ export interface Coordinates {
 export interface ScenicWaypoint {
   activity_id: string;
   activity_name: string;
+  duration?: string;
+  google_place_id?: string;
   location: {
     lat?: number;
     lng?: number;
     address?: string;
   };
-  duration?: string;
-  url?: string;
   remarks?: string;
-  thumbnail_url?: string | null;
-  google_place_id?: string;
   status?: {
     done: boolean;
   };
+  thumbnail_url?: string | null;
+  url?: string;
 }
 
 export interface MapBounds {
+  east: number;
   north: number;
   south: number;
-  east: number;
   west: number;
 }
 
@@ -47,9 +47,9 @@ export interface PinStyle {
 }
 
 export interface MapPinProps {
-  position: Coordinates;
-  title: string;
-  onClick?: () => void;
-  style?: PinStyle;
   isSelected?: boolean;
+  onClick?: () => void;
+  position: Coordinates;
+  style?: PinStyle;
+  title: string;
 }

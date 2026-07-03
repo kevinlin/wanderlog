@@ -4,8 +4,8 @@ import type React from 'react';
 import type { POIDetails } from '@/types/poi';
 
 interface POISearchResultCardProps {
-  poi: POIDetails;
   onAddToActivities: (poi: POIDetails) => void;
+  poi: POIDetails;
 }
 
 export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, onAddToActivities }) => {

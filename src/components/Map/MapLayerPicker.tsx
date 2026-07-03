@@ -6,23 +6,23 @@ import type { MapTypeId, OverlayLayers } from '@/services/storageService';
 export type { MapTypeId, OverlayLayers } from '@/services/storageService';
 
 interface MapLayerPickerProps {
-  map: google.maps.Map | null;
   currentMapType: MapTypeId;
-  overlayLayers: OverlayLayers;
+  map: google.maps.Map | null;
   onMapTypeChange: (mapType: MapTypeId) => void;
   onOverlayToggle: (layer: keyof OverlayLayers) => void;
+  overlayLayers: OverlayLayers;
 }
 
 interface MapTypeOption {
+  icon: string;
   id: MapTypeId;
   label: string;
-  icon: string;
 }
 
 interface OverlayOption {
+  icon: string;
   id: keyof OverlayLayers;
   label: string;
-  icon: string;
 }
 
 const MAP_TYPE_OPTIONS: MapTypeOption[] = [

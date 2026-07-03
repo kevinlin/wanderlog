@@ -11,13 +11,13 @@ import { generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripU
 import { activityHasLocationIssues } from '@/utils/validationUtils';
 
 interface ActivityCardProps {
-  activity: Activity;
   accommodation?: Accommodation;
-  isSelected: boolean;
+  activity: Activity;
   isDone: boolean;
-  onToggleDone: (activityId: string, done: boolean) => void;
-  onSelect: (activityId: string) => void;
   isDraggable?: boolean;
+  isSelected: boolean;
+  onSelect: (activityId: string) => void;
+  onToggleDone: (activityId: string, done: boolean) => void;
 }
 
 export const ActivityCard: React.FC<ActivityCardProps> = ({
@@ -78,7 +78,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
             <div
               {...listeners}
               aria-label="Drag to reorder activity"
-              className="-translate-y-1/2 absolute top-1/2 left-2 z-10 flex min-h-[32px] min-w-[32px] transform cursor-grab touch-none items-center justify-center rounded-md p-1 transition-all duration-200 hover:bg-sky-500/20 active:cursor-grabbing active:bg-sky-500/30"
+              className="absolute top-1/2 left-2 z-10 flex min-h-[32px] min-w-[32px] -translate-y-1/2 transform cursor-grab touch-none items-center justify-center rounded-md p-1 transition-all duration-200 hover:bg-sky-500/20 active:cursor-grabbing active:bg-sky-500/30"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Drag handle icon */}

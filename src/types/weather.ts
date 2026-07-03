@@ -1,11 +1,11 @@
 // Weather-related types for Wanderlog Travel Journal
 
 export interface WeatherData {
+  precipitation_probability_max: number;
   temperature_2m_max: number;
   temperature_2m_min: number;
-  precipitation_probability_max: number;
-  weather_code: number;
   time: string; // ISO date string
+  weather_code: number;
 }
 
 export interface WeatherCache {

@@ -8,14 +8,14 @@ import { getActivityTypeIcon } from '@/utils/activityUtils';
 type PlaceType = 'accommodation' | 'activity' | 'scenic_waypoint';
 
 interface PlaceHoverCardProps {
-  placeType: PlaceType;
   accommodation?: Accommodation;
   activity?: Activity;
+  isDone?: boolean;
+  isVisible: boolean;
+  placeType: PlaceType;
+  position: { x: number; y: number };
   scenicWaypoint?: ScenicWaypoint;
   stopName?: string;
-  isDone?: boolean;
-  position: { x: number; y: number };
-  isVisible: boolean;
 }
 
 export const PlaceHoverCard: React.FC<PlaceHoverCardProps> = ({

@@ -5,8 +5,8 @@ import { loadTripData } from '@/services/tripService';
 import type { LoadingState, TripData } from '@/types';
 
 interface UseTripDataReturn extends LoadingState {
-  tripData: TripData | null;
   refetch: () => Promise<void>;
+  tripData: TripData | null;
 }
 
 interface UseTripDataOptions {

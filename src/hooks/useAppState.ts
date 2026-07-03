@@ -7,20 +7,20 @@ import { getCurrentStop } from '@/utils/dateUtils';
 interface UseAppStateReturn {
   // Current state
   currentStopId: string | null;
-  selectedActivityId: string | null;
-  tripData: any;
-  userModifications: any;
-  loading: boolean;
   error: string | null;
+  loading: boolean;
+  selectedActivityId: string | null;
+  setCurrentStop: (stopId: string) => void;
+  setSelectedActivity: (activityId: string | null) => void;
 
   // Legacy compatibility - map new structure to old StopStatus format
   stopStatus: any;
+  tripData: any;
+  updateActivityOrder: (stopId: string, activityOrder: { [activityId: string]: number }) => void;
 
   // Actions
   updateActivityStatus: (stopId: string, activityId: string, done: boolean) => void;
-  updateActivityOrder: (stopId: string, activityOrder: { [activityId: string]: number }) => void;
-  setCurrentStop: (stopId: string) => void;
-  setSelectedActivity: (activityId: string | null) => void;
+  userModifications: any;
 }
 
 /**

@@ -5,10 +5,10 @@ import type { TripBase } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
 
 interface TimelineStripProps {
-  stops: TripBase[];
+  className?: string;
   currentStopId: string | null;
   onStopSelect: (stopId: string) => void;
-  className?: string;
+  stops: TripBase[];
 }
 
 export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStopId, onStopSelect, className = '' }) => {
@@ -19,7 +19,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
   // Expand/collapse state with localStorage persistence
   const [isExpanded, setIsExpanded] = useState<boolean>(() => {
     const stored = localStorage.getItem('wanderlog_timeline_expanded');
-    return stored !== null ? JSON.parse(stored) : true; // Default to expanded
+    return stored === null ? true : JSON.parse(stored); // Default to expanded
   });
 
   // Persist expand/collapse state
@@ -134,7 +134,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
         type="button"
       >
         {/* Duration badge at top-right */}
-        <div className="-top-1 -right-1 absolute flex h-5 min-w-[20px] items-center justify-center rounded-full border border-gray-200 bg-white px-1.5 font-bold text-gray-800 text-xs shadow-xs">
+        <div className="absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full border border-gray-200 bg-white px-1.5 font-bold text-gray-800 text-xs shadow-xs">
           {stop.duration_days}
         </div>
 
@@ -150,7 +150,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
         </div>
 
         {isSelected && (
-          <div className="-bottom-2 -translate-x-1/2 absolute left-1/2 transform">
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 transform">
             <div
               className={`h-0 w-0 border-t-4 border-r-4 border-r-transparent border-l-4 border-l-transparent ${colors.ring.replace('ring-', 'border-t-')}`}
             />
@@ -162,7 +162,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
 
   // Get current stop index and color for collapsed state
   const currentStopIndex = stops.findIndex((stop) => stop.stop_id === currentStop?.stop_id);
-  const currentStopColor = currentStopIndex !== -1 ? getStopColor(currentStopIndex) : getStopColor(0);
+  const currentStopColor = currentStopIndex === -1 ? getStopColor(0) : getStopColor(currentStopIndex);
 
   return (
     <div

@@ -388,22 +388,22 @@ const RATE_LIMIT_MS = 200; // 200ms between API calls
 const MAX_RETRIES = 3;
 
 interface PlaceSearchResult {
-  place_id?: string;
-  photo_url?: string;
   name?: string;
+  photo_url?: string;
+  place_id?: string;
   types?: string[];
 }
 
 interface EnrichmentStats {
-  total: number;
-  enriched: number;
-  skipped: number;
-  failed: number;
   details: {
     accommodations: { total: number; enriched: number };
     activities: { total: number; enriched: number; typesEnriched: number };
     waypoints: { total: number; enriched: number };
   };
+  enriched: number;
+  failed: number;
+  skipped: number;
+  total: number;
 }
 
 /**

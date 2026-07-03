@@ -30,8 +30,8 @@
 
 /* For better performance, we'll use a custom CSS class that gets applied to marker icons */
 .map-marker-highlight {
-  animation: dropPin 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
   transform-origin: center bottom;
+  animation: dropPin 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
 /* Bounce effect for enhanced highlighting */
@@ -48,8 +48,8 @@
 }
 
 .pin-bounce-animation {
-  animation: pinBounce 300ms ease-in-out forwards;
   transform-origin: center center;
+  animation: pinBounce 300ms ease-in-out forwards;
 }
 
 /* ============================================

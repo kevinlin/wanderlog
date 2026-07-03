@@ -6,13 +6,13 @@ import type { Accommodation, Activity } from '@/types';
 
 // Main draggable activities list component
 interface DraggableActivitiesListProps {
-  activities: Activity[];
   accommodation?: Accommodation;
-  selectedActivityId?: string | null;
+  activities: Activity[];
   activityStatus: Record<string, boolean>;
   onActivitySelect: (activityId: string) => void;
-  onToggleDone: (activityId: string, done: boolean) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
+  onToggleDone: (activityId: string, done: boolean) => void;
+  selectedActivityId?: string | null;
 }
 
 export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = ({

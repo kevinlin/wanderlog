@@ -63,9 +63,9 @@ body {
 
 /* Prevent text selection on touch UI elements */
 .select-none {
-  -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+  -webkit-user-select: none;
   user-select: none;
 }
 

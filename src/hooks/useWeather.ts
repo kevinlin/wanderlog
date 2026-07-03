@@ -10,11 +10,11 @@ import type { Coordinates } from '@/types/map';
 import type { WeatherData } from '@/types/weather';
 
 export interface UseWeatherReturn {
-  weatherData: Record<string, WeatherData>;
+  error: string | null;
   fetchWeather: (coordinates: Coordinates, baseId: string) => Promise<void>;
   getWeatherForBase: (baseId: string) => WeatherData | null;
   isLoading: boolean;
-  error: string | null;
+  weatherData: Record<string, WeatherData>;
 }
 
 /**

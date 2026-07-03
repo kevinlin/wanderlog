@@ -407,9 +407,9 @@ export type MapTypeId = 'roadmap' | 'satellite' | 'terrain' | 'hybrid';
  * Overlay layers that can be toggled
  */
 export interface OverlayLayers {
+  bicycling: boolean;
   traffic: boolean;
   transit: boolean;
-  bicycling: boolean;
 }
 
 /**

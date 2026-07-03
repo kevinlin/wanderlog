@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@biomejs/biome/configuration_schema.json",
-  "extends": ["ultracite/core", "ultracite/react"],
+  "extends": ["ultracite/biome/core", "ultracite/biome/react"],
   "files": {
     "includes": ["!!src/services/tripDataService.ts"]
   },
@@ -21,6 +21,7 @@
         "noForEach": "off",
         "noStaticOnlyClass": "off",
         "useLiteralKeys": "off",
+        "useMaxParams": "off",
         "useOptionalChain": "off"
       },
       "correctness": {
@@ -31,12 +32,6 @@
         "noUnusedVariables": "off",
         "useExhaustiveDependencies": "off",
         "useImageSize": "off"
-      },
-      "nursery": {
-        "noIncrementDecrement": "off",
-        "noLeakedRender": "off",
-        "noShadow": "off",
-        "useMaxParams": "off"
       },
       "performance": {
         "noBarrelFile": "off",
@@ -52,14 +47,18 @@
         "noEvolvingTypes": "off",
         "noExplicitAny": "off",
         "noGlobalIsNan": "off",
+        "noLeakedRender": "off",
         "noSelfCompare": "off",
+        "noShadow": "off",
         "noUnknownAtRules": "off",
         "noVar": "off",
         "useAwait": "off",
         "useIterableCallbackReturn": "off"
       },
       "style": {
+        "noIncrementDecrement": "off",
         "noNestedTernary": "off",
+        "noSubstr": "off",
         "noNonNullAssertion": "off",
         "useAtIndex": "off",
         "useBlockStatements": "off",

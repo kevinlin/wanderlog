@@ -3,9 +3,9 @@ import type React from 'react';
 import type { TripSummary } from '@/contexts/AppStateContext';
 
 interface TripCardProps {
-  trip: TripSummary;
   isSelected: boolean;
   onSelect: (tripId: string) => void;
+  trip: TripSummary;
 }
 
 /**

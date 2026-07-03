@@ -24,21 +24,21 @@ const MOBILE_DEFAULT_PANEL_RATIO = 0.5; // Default to 50% of available height
 interface ActivitiesPanelProps {
   accommodation?: Accommodation;
   activities: Activity[];
-  scenicWaypoints?: ScenicWaypoint[];
-  stopName: string;
+  activityStatus: Record<string, boolean>;
   baseId: string;
   baseLocation: Coordinates;
-  selectedActivityId?: string | null;
-  activityStatus: Record<string, boolean>;
-  tripData?: TripData;
-  userModifications?: UserModifications;
+  className?: string;
   isVisible?: boolean; // New prop for mobile visibility control
   onActivitySelect: (activityId: string) => void;
-  onToggleDone: (activityId: string, done: boolean) => void;
-  onReorder: (fromIndex: number, toIndex: number) => void;
   onExportSuccess?: () => void;
   onHide?: () => void; // Legacy prop for mobile panel hiding (deprecated, kept for compatibility)
-  className?: string;
+  onReorder: (fromIndex: number, toIndex: number) => void;
+  onToggleDone: (activityId: string, done: boolean) => void;
+  scenicWaypoints?: ScenicWaypoint[];
+  selectedActivityId?: string | null;
+  stopName: string;
+  tripData?: TripData;
+  userModifications?: UserModifications;
 }
 
 export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
@@ -441,7 +441,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               {(searchInputValue || poiSearch.results.length > 0) && (
                 <button
                   aria-label="Clear search"
-                  className="-translate-y-1/2 absolute top-1/2 right-2 rounded-sm p-0.5 text-gray-400 hover:text-gray-600"
+                  className="absolute top-1/2 right-2 -translate-y-1/2 rounded-sm p-0.5 text-gray-400 hover:text-gray-600"
                   onClick={handleClearSearch}
                 >
                   <XMarkIcon className="h-4 w-4" />

@@ -6,8 +6,8 @@ import { getAllTrips as getAllTripsFromFirestore, getTripById as getTripByIdFrom
  * Validation result interface
  */
 export interface ValidationResult {
-  isValid: boolean;
   errors: string[];
+  isValid: boolean;
   warnings: string[];
 }
 

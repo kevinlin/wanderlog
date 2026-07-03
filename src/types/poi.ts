@@ -1,17 +1,28 @@
 // Point of Interest (POI) types for Google Places integration
 
 export interface POIDetails {
-  place_id: string;
-  name: string;
+  business_status?: string;
   formatted_address?: string;
+  formatted_phone_number?: string;
+  geometry?: {
+    location: {
+      lat: number;
+      lng: number;
+    };
+    viewport?: {
+      northeast: { lat: number; lng: number };
+      southwest: { lat: number; lng: number };
+    };
+  };
+  icon?: string;
+  icon_background_color?: string;
+  icon_mask_base_uri?: string;
+  international_phone_number?: string;
   location: {
     lat: number;
     lng: number;
   };
-  types?: string[];
-  rating?: number;
-  user_ratings_total?: number;
-  price_level?: number;
+  name: string;
   opening_hours?: {
     open_now?: boolean;
     periods?: Array<{
@@ -25,36 +36,25 @@ export interface POIDetails {
     height: number;
     width: number;
   }>;
-  website?: string;
-  formatted_phone_number?: string;
-  international_phone_number?: string;
-  business_status?: string;
-  geometry?: {
-    location: {
-      lat: number;
-      lng: number;
-    };
-    viewport?: {
-      northeast: { lat: number; lng: number };
-      southwest: { lat: number; lng: number };
-    };
-  };
+  place_id: string;
+  price_level?: number;
+  rating?: number;
+  types?: string[];
+  user_ratings_total?: number;
   vicinity?: string;
-  icon?: string;
-  icon_background_color?: string;
-  icon_mask_base_uri?: string;
+  website?: string;
 }
 
 export interface POIModalState {
-  isOpen: boolean;
-  poi: POIDetails | null;
-  loading: boolean;
   error: string | null;
+  isOpen: boolean;
+  loading: boolean;
+  poi: POIDetails | null;
 }
 
 export interface POISearchState {
-  results: POIDetails[];
-  query: string;
-  loading: boolean;
   error: string | null;
+  loading: boolean;
+  query: string;
+  results: POIDetails[];
 }

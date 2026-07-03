@@ -23,23 +23,23 @@ import '@/assets/styles/map-animations.css';
 
 // Hover state interface for place hover card
 interface HoverState {
-  type: 'accommodation' | 'activity' | 'scenic_waypoint';
-  id: string;
-  position: { x: number; y: number };
   accommodation?: Accommodation;
   activity?: Activity;
+  id: string;
+  isDone?: boolean;
+  position: { x: number; y: number };
   scenicWaypoint?: ScenicWaypoint;
   stopName?: string;
-  isDone?: boolean;
+  type: 'accommodation' | 'activity' | 'scenic_waypoint';
 }
 
 interface MapContainerProps {
-  tripData: TripData;
-  currentBaseId: string | null;
-  selectedActivityId: string | null;
   activityStatus: Record<string, boolean>; // activityId -> visited status
+  currentBaseId: string | null;
   onActivitySelect: (activityId: string) => void;
   onBaseSelect: (baseId: string) => void;
+  selectedActivityId: string | null;
+  tripData: TripData;
 }
 
 const libraries: 'places'[] = ['places'];
