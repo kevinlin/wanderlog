@@ -21,7 +21,8 @@ Navigation map for the Wanderlog specification docs. All specs use the `default`
 |-------|-----|-------------|
 | POI Search | [plan_poi-search.md](plan_poi-search.md) | Places-API POI search in the Activities Panel with map result pins. |
 | Firebase Integration | [plan_firebase-integration.md](plan_firebase-integration.md) | Firestore cloud storage, dual-write pattern, offline support, and JSON→Firestore migration. |
-| Toolchain Upgrade (Phase 2 M0) | [plan_toolchain-upgrade.md](plan_toolchain-upgrade.md) | Vite 8, Vitest 4, TypeScript 6, Tailwind 4, Ultracite 7, Node 24 CI - detailed task plan. |
+| Toolchain Upgrade (Phase 2 M0) | [plan_p2m0_toolchain-upgrade.md](plan_p2m0_toolchain-upgrade.md) | Vite 8, Vitest 4, TypeScript 6, Tailwind 4, Ultracite 7, Node 24 CI - detailed task plan. |
+| Supabase Foundation (Phase 2 M1) | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Schema + RLS, mappers, supabaseService, migration script, TanStack Query, auth bootstrap, Vercel previews, parity checklist. |
 
 ## Meta
 
