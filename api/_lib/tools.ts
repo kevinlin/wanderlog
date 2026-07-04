@@ -1,6 +1,9 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
+// Relative (not @/ alias) imports: Vercel's function bundler does not rewrite
+// tsconfig path aliases, so aliased specifiers survive into the runtime JS and
+// fail module resolution inside the deployed function.
 import {
   TRIP_SELECT,
   TRIP_SUMMARY_SELECT,
@@ -8,7 +11,7 @@ import {
   type TripSummaryRow,
   toTripData,
   toTripSummary,
-} from '@/services/supabaseMappers';
+} from '../../src/services/supabaseMappers';
 
 export interface AgentTool {
   description: string;
