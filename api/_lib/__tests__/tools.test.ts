@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { type AgentTool, dispatchTool, READ_TOOLS, toAnthropicTools } from '../tools';
+import { AGENT_TOOLS, type AgentTool, dispatchTool, READ_TOOLS, toAnthropicTools } from '../tools';
 
 const tripRowNested = {
   id: 't1',
@@ -131,5 +131,33 @@ describe('dispatchTool change events', () => {
     const listClient = makeClient({ data: [summaryRow], error: null });
     const result = await dispatchTool(READ_TOOLS, listClient, 'list_trips', {});
     expect(result.changes).toEqual([]);
+  });
+});
+
+describe('AGENT_TOOLS registry', () => {
+  it('contains exactly the M2 tool surface', () => {
+    expect(AGENT_TOOLS.map((t) => t.name).sort()).toEqual([
+      'create_activity',
+      'create_stop',
+      'create_waypoint',
+      'delete_activity',
+      'delete_stop',
+      'delete_waypoint',
+      'get_trip',
+      'list_trips',
+      'restructure_stops',
+      'update_activity',
+      'update_stop',
+      'update_trip_metadata',
+      'update_waypoint',
+      'upsert_accommodation',
+    ]);
+  });
+
+  it('defines no tool that can delete a trip', () => {
+    expect(AGENT_TOOLS.some((t) => t.name === 'delete_trip')).toBe(false);
+    for (const tool of AGENT_TOOLS.filter((t) => t.name.startsWith('delete_'))) {
+      expect(['delete_activity', 'delete_stop', 'delete_waypoint']).toContain(tool.name);
+    }
   });
 });
