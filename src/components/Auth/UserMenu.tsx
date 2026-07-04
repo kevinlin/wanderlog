@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface UserMenuProps {
@@ -7,6 +8,7 @@ interface UserMenuProps {
 
 export const UserMenu = ({ className = '' }: UserMenuProps) => {
   const { session, signOut } = useAuth();
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -48,6 +50,31 @@ export const UserMenu = ({ className = '' }: UserMenuProps) => {
           <div className="truncate border-gray-200 border-b px-4 py-3 text-gray-700 text-sm" title={email}>
             {email}
           </div>
+          <button
+            className="flex min-h-[44px] w-full touch-manipulation items-center gap-2 border-gray-200 border-b px-4 py-2 text-left text-gray-700 text-sm transition-colors hover:bg-gray-50 active:bg-gray-100"
+            onClick={() => {
+              setIsOpen(false);
+              navigate('/trips');
+            }}
+            type="button"
+          >
+            <svg
+              aria-hidden="true"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Trips
+          </button>
           <button
             className="flex min-h-[44px] w-full touch-manipulation items-center gap-2 px-4 py-2 text-left text-red-600 text-sm transition-colors hover:bg-red-50 active:bg-red-100 disabled:opacity-50"
             disabled={isSigningOut}

@@ -13,9 +13,13 @@ export const getCurrentTripId = (): string | null => {
   }
 };
 
-export const setCurrentTripId = (tripId: string): void => {
+export const setCurrentTripId = (tripId: string | null): void => {
   try {
-    localStorage.setItem(CURRENT_TRIP_ID_KEY, tripId);
+    if (tripId === null) {
+      localStorage.removeItem(CURRENT_TRIP_ID_KEY);
+    } else {
+      localStorage.setItem(CURRENT_TRIP_ID_KEY, tripId);
+    }
   } catch (error) {
     console.warn('Failed to save current trip id to localStorage:', error);
   }

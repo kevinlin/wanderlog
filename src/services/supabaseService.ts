@@ -1,6 +1,5 @@
 import { getSupabase } from '@/config/supabase';
-import type { TripSummary } from '@/contexts/AppStateContext';
-import type { TripData } from '@/types/trip';
+import type { TripData, TripSummary } from '@/types/trip';
 import { type TripRowNested, toTripData } from './supabaseMappers';
 
 export const TRIP_SELECT = '*, stops(*, accommodations(*), activities(*), scenic_waypoints(*))';
@@ -16,7 +15,7 @@ export async function fetchTripById(tripId: string): Promise<TripData | null> {
 export async function fetchTripSummaries(): Promise<TripSummary[]> {
   const { data, error } = await getSupabase()
     .from('trips')
-    .select('id, name, timezone, created_at, updated_at')
+    .select('id, name, destination, start_date, end_date, timezone, created_at, updated_at')
     .order('start_date', { ascending: false });
   if (error) {
     throw new Error(error.message);
@@ -24,10 +23,49 @@ export async function fetchTripSummaries(): Promise<TripSummary[]> {
   return (data ?? []).map((row) => ({
     trip_id: row.id,
     trip_name: row.name,
+    destination: row.destination,
+    start_date: row.start_date,
+    end_date: row.end_date,
     timezone: row.timezone,
     created_at: row.created_at,
     updated_at: row.updated_at,
   }));
+}
+
+export interface CreateTripInput {
+  destination?: string;
+  endDate: string; // YYYY-MM-DD
+  name: string;
+  startDate: string; // YYYY-MM-DD
+  timezone: string;
+}
+
+export async function createTrip(input: CreateTripInput): Promise<string> {
+  const id = crypto.randomUUID();
+  const { error } = await getSupabase()
+    .from('trips')
+    .insert({
+      id,
+      name: input.name,
+      destination: input.destination ?? null,
+      description: null,
+      start_date: input.startDate,
+      end_date: input.endDate,
+      timezone: input.timezone,
+    });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return id;
+}
+
+// The DB cascade (M1 schema `on delete cascade`) removes stops, accommodations,
+// activities, and waypoints - no client-side fan-out needed.
+export async function deleteTrip(tripId: string): Promise<void> {
+  const { error } = await getSupabase().from('trips').delete().eq('id', tripId);
+  if (error) {
+    throw new Error(error.message);
+  }
 }
 
 async function updateById(table: string, id: string, patch: Record<string, unknown>): Promise<void> {

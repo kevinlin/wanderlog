@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from 'react-router';
 import { ProtectedRoute } from '@/components/Auth/ProtectedRoute';
 import { HomeRedirect } from '@/pages/HomeRedirect';
 import { LoginPage } from '@/pages/LoginPage';
+import { TripLibraryPage } from '@/pages/TripLibraryPage';
 import { TripPage } from '@/pages/TripPage';
 
 const App = () => (
@@ -15,6 +16,14 @@ const App = () => (
           </ProtectedRoute>
         }
         path="/"
+      />
+      <Route
+        element={
+          <ProtectedRoute>
+            <TripLibraryPage />
+          </ProtectedRoute>
+        }
+        path="/trips"
       />
       <Route
         element={

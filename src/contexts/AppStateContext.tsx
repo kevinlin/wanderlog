@@ -2,15 +2,6 @@ import type React from 'react';
 import { createContext, type ReactNode, useContext, useReducer } from 'react';
 import type { POIDetails, POIModalState, POISearchState } from '@/types/poi';
 
-// Trip summary interface for trip list
-export interface TripSummary {
-  created_at?: string;
-  timezone: string;
-  trip_id: string;
-  trip_name: string;
-  updated_at?: string;
-}
-
 // UI-only state; server state (trip data, weather) lives in TanStack Query
 export interface AppState {
   currentBase: string | null;

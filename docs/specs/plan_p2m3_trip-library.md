@@ -40,11 +40,11 @@ export interface TripSummary {
 }
 ```
 
-- [ ] **Step 1: Move the type**
+- [x] **Step 1: Move the type**
 
 Relocate `TripSummary` from `src/contexts/AppStateContext.tsx` to `src/types/trip.ts` with the three new fields (`destination`, `start_date`, `end_date`). Update all importers (`supabaseService.ts`, `useTrips.ts`); leave a re-export in the context file only if the build shows stragglers - prefer fixing the imports.
 
-- [ ] **Step 2: Update the failing service test**
+- [x] **Step 2: Update the failing service test**
 
 In `supabaseService.test.ts`, extend the `fetchTripSummaries` expectation:
 
@@ -68,9 +68,9 @@ it('fetchTripSummaries maps rows to TripSummary', async () => {
 
 Run: `pnpm vitest run src/services/__tests__/supabaseService.test.ts` - expected FAIL.
 
-- [ ] **Step 3: Widen the select and the mapping in `fetchTripSummaries`, re-run to green**
+- [x] **Step 3: Widen the select and the mapping in `fetchTripSummaries`, re-run to green**
 
-- [ ] **Step 4: Full suite, commit**
+- [x] **Step 4: Full suite, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -94,7 +94,7 @@ export function pickHeroTrip(trips: TripSummary[], now?: Date): TripSummary | nu
 export function sortForLibrary(trips: TripSummary[]): TripSummary[];  // start_date descending
 ```
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```typescript
 import { describe, expect, it } from 'vitest';
@@ -151,7 +151,7 @@ describe('sortForLibrary', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify failure, implement**
+- [x] **Step 2: Run to verify failure, implement**
 
 ```typescript
 import type { TripSummary } from '@/types/trip';
@@ -183,7 +183,7 @@ export const sortForLibrary = (trips: TripSummary[]): TripSummary[] =>
   [...trips].sort((a, b) => b.start_date.localeCompare(a.start_date));
 ```
 
-- [ ] **Step 3: Green, full suite, commit**
+- [x] **Step 3: Green, full suite, commit**
 
 ```bash
 pnpm vitest run src/utils/__tests__/tripStatusUtils.test.ts && pnpm test:run
@@ -212,7 +212,7 @@ export function createTrip(input: CreateTripInput): Promise<string>;  // returns
 export function deleteTrip(tripId: string): Promise<void>;
 ```
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```typescript
 const mockInsert = vi.fn().mockResolvedValue({ error: null });
@@ -242,7 +242,7 @@ it('createTrip throws on error', async () => {
 });
 ```
 
-- [ ] **Step 2: Implement**
+- [x] **Step 2: Implement**
 
 ```typescript
 export async function createTrip(input: CreateTripInput): Promise<string> {
@@ -268,7 +268,7 @@ export async function deleteTrip(tripId: string): Promise<void> {
 
 The DB cascade (M1 schema `on delete cascade`) removes stops, accommodations, activities, and waypoints - no client-side fan-out (Req 3.6).
 
-- [ ] **Step 3: Green, full suite, commit**
+- [x] **Step 3: Green, full suite, commit**
 
 ```bash
 pnpm vitest run src/services/__tests__/supabaseService.test.ts && pnpm test:run
@@ -288,11 +288,11 @@ git add -A && git commit -m "feat: add create and delete trip service functions"
 - Consumes: `useTrips` (M1), `deriveTripStatus`/`pickHeroTrip`/`sortForLibrary` (Task 2).
 - Produces: route `/trips` (wrapped in `ProtectedRoute`); `TripLibraryCard` with props `{ trip: TripSummary; status: TripStatus; isHero: boolean; onOpen: () => void; onDelete: () => void }`.
 
-- [ ] **Step 1: Audit the unwired scaffolding**
+- [x] **Step 1: Audit the unwired scaffolding**
 
 `TripCard.tsx` and `TripSelectorModal.tsx` exist but nothing imports them (pre-M1 groundwork). Read `TripCard`; if its markup fits the card spec below, adapt it in place as `TripLibraryCard`. Delete `TripSelectorModal` either way - the library page replaces the modal-picker concept (per design: "reused where it fits, rebuilt small where it does not").
 
-- [ ] **Step 2: Write failing page test**
+- [x] **Step 2: Write failing page test**
 
 ```tsx
 import { render, screen } from '@testing-library/react';
@@ -330,7 +330,7 @@ describe('TripLibraryPage', () => {
 });
 ```
 
-- [ ] **Step 3: Implement the page**
+- [x] **Step 3: Implement the page**
 
 - Layout: full-page scroll view on the theme background (`bg-sandy-beige/30`), heading "Our Trips", `UserMenu` top-right, "New trip" primary button (wired in Task 6; render disabled-with-tooltip until then is NOT needed - just render the button and have Task 6 fill the handler; until then it opens nothing).
 - Hero card (`data-testid="hero-trip"`): `pickHeroTrip` result, full-width, larger type, status badge.
@@ -340,7 +340,7 @@ describe('TripLibraryPage', () => {
 - Loading state: existing `LoadingSpinner`; error state: existing `ErrorMessage` with retry via query `refetch`.
 - Register `/trips` in `App.tsx` inside `ProtectedRoute`; add a "Trips" item to `UserMenu` navigating to `/trips` (gives `TripPage` a way back to the library).
 
-- [ ] **Step 4: Green, full suite, commit**
+- [x] **Step 4: Green, full suite, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -357,11 +357,11 @@ git add -A && git commit -m "feat: add trip library page"
 **Interfaces:**
 - Consumes: `getCurrentTripId` (M1 viewStateStorage), `fetchTripById` returning `null` for missing trips (M1).
 
-- [ ] **Step 1: Update the failing test**
+- [x] **Step 1: Update the failing test**
 
 `HomeRedirect` test gains a case: `getCurrentTripId` returns `null` → lands on the library route. Update the mock to be settable per-test and assert `/trips` renders a probe element.
 
-- [ ] **Step 2: Implement**
+- [x] **Step 2: Implement**
 
 ```tsx
 export const HomeRedirect = () => {
@@ -372,11 +372,11 @@ export const HomeRedirect = () => {
 
 Remove the `DEFAULT_TRIP_ID` constant (M2 Task 1) - the library is now the fallback. `TripPage` already stores each visited trip via `setCurrentTripId` (M2 Task 1), which satisfies "reopening restores the last selected trip".
 
-- [ ] **Step 3: Handle a stale last-trip id**
+- [x] **Step 3: Handle a stale last-trip id**
 
 If the remembered trip was deleted, `fetchTripById` resolves `null`. In `TripPage`, render a not-found state: "This trip no longer exists" + a link to `/trips`. Test: mock the trip query returning `null`, assert the link renders.
 
-- [ ] **Step 4: Green, commit**
+- [x] **Step 4: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -395,7 +395,7 @@ git add -A && git commit -m "feat: restore last trip on open, fall back to libra
 - Consumes: `createTrip` (Task 3), `tripKeys` (M1).
 - Produces: `useCreateTrip(): UseMutationResult<string, Error, CreateTripInput>` - navigates to the new trip on success.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```tsx
 // CreateTripModal.test.tsx (mock useCreateTrip, render, fill, submit)
@@ -412,7 +412,7 @@ it('submits with the browser timezone', async () => {
 });
 ```
 
-- [ ] **Step 2: Implement the mutation hook**
+- [x] **Step 2: Implement the mutation hook**
 
 ```typescript
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -433,15 +433,15 @@ export function useCreateTrip() {
 }
 ```
 
-- [ ] **Step 3: Implement the modal**
+- [x] **Step 3: Implement the modal**
 
 shadcn-style Dialog matching `POIModal`: name (required), destination (optional), start/end date (`<input type="date">`, both required, `endDate >= startDate` validated on submit), timezone auto-filled from `Intl.DateTimeFormat().resolvedOptions().timeZone` (shown as read-only helper text, not an input - YAGNI). Submit pending state; error from the mutation rendered inline. Wire to the Task 4 "New trip" button.
 
-- [ ] **Step 4: Empty-trip hardening**
+- [x] **Step 4: Empty-trip hardening**
 
 A new trip has zero stops, and the existing UI assumes `stops[0]` exists (base-select init, map centering, timeline). In `TripPage`, when `tripData.stops.length === 0`, render the map background with an overlay card: "No stops yet - itinerary editing arrives with the next milestone", plus the trip name and a link back to `/trips`. Skip the `SELECT_BASE` init effect and route calculation for empty trips. Test: mock an empty trip, assert no crash and the message renders.
 
-- [ ] **Step 5: Green, full suite, manual round-trip, commit**
+- [x] **Step 5: Green, full suite, manual round-trip, commit**
 
 Manual: create "Japan Spring 2027" → lands on the empty trip page → library lists it as upcoming.
 
@@ -462,13 +462,13 @@ git add -A && git commit -m "feat: create trips from the library"
 - Consumes: `deleteTrip` (Task 3), `clearPersistedCache` pattern (M2), `getCurrentTripId`/`setCurrentTripId` (M1).
 - Produces: `useDeleteTrip(): UseMutationResult<void, Error, string>`; reusable `ConfirmDialog` (`{ title, message, confirmLabel, onConfirm, onCancel }`) - M4 reuses it for item deletes.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Page test: click the card's delete action → dialog appears with a warning naming the trip → confirm → `deleteTrip` mutation called; cancel → not called.
 
 Hook test: on success, `['trips']` is invalidated, `['trip', id]` is removed from the cache, and a matching `getCurrentTripId()` is cleared.
 
-- [ ] **Step 2: Implement**
+- [x] **Step 2: Implement**
 
 ```typescript
 export function useDeleteTrip() {
@@ -486,7 +486,7 @@ export function useDeleteTrip() {
 
 `setCurrentTripId(null)` clears the stored id (extend `viewStateStorage` if the M1 signature only accepts strings). `ConfirmDialog`: small centered modal, message like "Delete 'Japan Spring 2027'? All stops, activities, accommodations and waypoints go with it. This cannot be undone.", destructive `bg-red-600` confirm button. Delete affordance on the card: a small trash icon button visible on hover/long-press, `stopPropagation` so it doesn't open the trip.
 
-- [ ] **Step 3: Green, manual cascade check, commit**
+- [x] **Step 3: Green, manual cascade check, commit**
 
 Manual: delete a throwaway trip; in the Supabase Table Editor confirm its stops/activities rows are gone (cascade, Req 3.6).
 
