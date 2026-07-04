@@ -36,7 +36,7 @@ vi.mock('@react-google-maps/api', () => ({
     }, [onLoad]);
     return <div data-testid="google-map">{children}</div>;
   },
-  LoadScript: ({ children }: any) => <div data-testid="load-script">{children}</div>,
+  useJsApiLoader: () => ({ isLoaded: true, loadError: undefined }),
   Marker: ({ onLoad, onUnmount, onClick, title }: any) => {
     React.useEffect(() => {
       if (onLoad) {
@@ -218,7 +218,6 @@ describe('MapContainer', () => {
   it('renders the map container', async () => {
     renderWithProvider(<MapContainer {...defaultProps} />);
 
-    expect(screen.getByTestId('load-script')).toBeInTheDocument();
     expect(screen.getByTestId('google-map')).toBeInTheDocument();
   });
 

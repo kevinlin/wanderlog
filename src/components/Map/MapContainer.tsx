@@ -1,10 +1,12 @@
-import { DirectionsRenderer, GoogleMap, LoadScript, Marker, Polyline } from '@react-google-maps/api';
+import { DirectionsRenderer, GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
 import { useQueryClient } from '@tanstack/react-query';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { MapLayerPicker, type MapTypeId, type OverlayLayers } from '@/components/Map/MapLayerPicker';
 import { PlaceHoverCard } from '@/components/Map/PlaceHoverCard';
 import { POIModal } from '@/components/Map/POIModal';
+import { MAPS_LOADER_OPTIONS } from '@/config/mapsLoader';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { tripKeys } from '@/lib/queryClient';
 import { PlacesService } from '@/services/placesService';
@@ -45,8 +47,6 @@ interface MapContainerProps {
   selectedActivityId: string | null;
   tripData: TripData;
 }
-
-const libraries: 'places'[] = ['places'];
 
 const mapContainerStyle = {
   width: '100%',
@@ -104,6 +104,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 }) => {
   const { state, dispatch } = useAppStateContext();
   const queryClient = useQueryClient();
+  const { isLoaded: isMapsLoaded } = useJsApiLoader(MAPS_LOADER_OPTIONS);
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
   const [routeFallback, setRouteFallback] = useState<google.maps.LatLng[]>([]);
@@ -887,211 +888,213 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     );
   }
 
+  if (!isMapsLoaded) {
+    return <LoadingSpinner />;
+  }
+
   return (
-    <LoadScript googleMapsApiKey={apiKey} libraries={libraries}>
-      <GoogleMap
-        center={center}
-        mapContainerStyle={mapContainerStyle}
-        onClick={(e) => {
-          // Handle POI clicks
-          const event = e as google.maps.MapMouseEvent & { placeId?: string };
-          if (event.placeId) {
-            event.stop?.(); // Prevent default info window
-            handlePOIClick(event.placeId);
-          }
-        }}
-        onLoad={onLoad}
-        onUnmount={onUnmount}
-        options={{
-          styles: mapType === 'roadmap' ? customMapStyle : undefined, // Only apply custom styles to roadmap
-          mapTypeId: mapType,
-          disableDefaultUI: false,
-          zoomControl: true,
-          streetViewControl: false,
-          mapTypeControl: false, // We use our custom MapLayerPicker
-          fullscreenControl: false,
-          scaleControl: true, // Show distance scale ruler at bottom right
-          // Mobile touch optimizations
-          gestureHandling: 'greedy', // Allow single-finger panning
-          zoomControlOptions: {
-            position: window.google?.maps?.ControlPosition?.RIGHT_BOTTOM,
-          },
-          // Enhanced touch interactions
-          clickableIcons: true, // Enable POI clicks
-          keyboardShortcuts: false, // Disable keyboard shortcuts on mobile
-        }}
-        zoom={7}
-      >
-        {/* Only render markers after map is loaded */}
-        {isMapLoaded && tripData?.stops && (
-          <>
-            {/* Accommodation markers (lodge-style pins) */}
-            {tripData.stops.map((base) => {
-              const isHovered = hoverState?.type === 'accommodation' && hoverState?.id === base.stop_id;
-              const position = base.accommodation?.location || base.location;
-              const title = base.accommodation ? `${base.name} - ${base.accommodation.name}` : base.name;
+    <GoogleMap
+      center={center}
+      mapContainerStyle={mapContainerStyle}
+      onClick={(e) => {
+        // Handle POI clicks
+        const event = e as google.maps.MapMouseEvent & { placeId?: string };
+        if (event.placeId) {
+          event.stop?.(); // Prevent default info window
+          handlePOIClick(event.placeId);
+        }
+      }}
+      onLoad={onLoad}
+      onUnmount={onUnmount}
+      options={{
+        styles: mapType === 'roadmap' ? customMapStyle : undefined, // Only apply custom styles to roadmap
+        mapTypeId: mapType,
+        disableDefaultUI: false,
+        zoomControl: true,
+        streetViewControl: false,
+        mapTypeControl: false, // We use our custom MapLayerPicker
+        fullscreenControl: false,
+        scaleControl: true, // Show distance scale ruler at bottom right
+        // Mobile touch optimizations
+        gestureHandling: 'greedy', // Allow single-finger panning
+        zoomControlOptions: {
+          position: window.google?.maps?.ControlPosition?.RIGHT_BOTTOM,
+        },
+        // Enhanced touch interactions
+        clickableIcons: true, // Enable POI clicks
+        keyboardShortcuts: false, // Disable keyboard shortcuts on mobile
+      }}
+      zoom={7}
+    >
+      {/* Only render markers after map is loaded */}
+      {isMapLoaded && tripData?.stops && (
+        <>
+          {/* Accommodation markers (lodge-style pins) */}
+          {tripData.stops.map((base) => {
+            const isHovered = hoverState?.type === 'accommodation' && hoverState?.id === base.stop_id;
+            const position = base.accommodation?.location || base.location;
+            const title = base.accommodation ? `${base.name} - ${base.accommodation.name}` : base.name;
+            return (
+              <Marker
+                icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId, isHovered)}
+                key={`accommodation-${base.stop_id}`}
+                onClick={() => onBaseSelect(base.stop_id)}
+                onLoad={(marker) => {
+                  accommodationMarkersRef.current.set(base.stop_id, marker);
+                }}
+                onMouseOut={() => handleAccommodationHover(base, false)}
+                onMouseOver={() => handleAccommodationHover(base, true)}
+                onUnmount={() => {
+                  accommodationMarkersRef.current.delete(base.stop_id);
+                }}
+                position={position}
+                title={title}
+              />
+            );
+          })}
+
+          {/* Activity markers for current base with standardized visited/unvisited colors */}
+          {currentBase?.activities
+            .filter((activity) => activity.location?.lat && activity.location?.lng)
+            .map((activity) => {
+              // TypeScript safety: we know location exists due to filter above
+              const location = activity.location!;
+              const enrichedActivity = enrichActivityWithType(activity);
+              const activityType = enrichedActivity.activity_type || ActivityType.OTHER;
+              const isVisited = activityStatus[activity.activity_id];
+              const isHovered = hoverState?.type === 'activity' && hoverState?.id === activity.activity_id;
+
               return (
                 <Marker
-                  icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId, isHovered)}
-                  key={`accommodation-${base.stop_id}`}
-                  onClick={() => onBaseSelect(base.stop_id)}
+                  icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId, isVisited, isHovered)}
+                  key={`activity-${activity.activity_id}`}
+                  onClick={() => onActivitySelect(activity.activity_id)}
                   onLoad={(marker) => {
-                    accommodationMarkersRef.current.set(base.stop_id, marker);
+                    activityMarkersRef.current.set(activity.activity_id, marker);
                   }}
-                  onMouseOut={() => handleAccommodationHover(base, false)}
-                  onMouseOver={() => handleAccommodationHover(base, true)}
+                  onMouseOut={() => handleActivityHover(activity, false)}
+                  onMouseOver={() => handleActivityHover(activity, true)}
                   onUnmount={() => {
-                    accommodationMarkersRef.current.delete(base.stop_id);
+                    activityMarkersRef.current.delete(activity.activity_id);
                   }}
-                  position={position}
-                  title={title}
+                  position={{ lat: location.lat!, lng: location.lng! }}
+                  title={activity.activity_name}
                 />
               );
             })}
 
-            {/* Activity markers for current base with standardized visited/unvisited colors */}
-            {currentBase?.activities
-              .filter((activity) => activity.location?.lat && activity.location?.lng)
-              .map((activity) => {
-                // TypeScript safety: we know location exists due to filter above
-                const location = activity.location!;
-                const enrichedActivity = enrichActivityWithType(activity);
-                const activityType = enrichedActivity.activity_type || ActivityType.OTHER;
-                const isVisited = activityStatus[activity.activity_id];
-                const isHovered = hoverState?.type === 'activity' && hoverState?.id === activity.activity_id;
+          {/* Scenic waypoint markers for current base with violet styling */}
+          {currentBase?.scenic_waypoints
+            ?.filter((waypoint) => waypoint.location?.lat && waypoint.location?.lng)
+            .map((waypoint) => {
+              // TypeScript safety: we know location exists due to filter above
+              const location = waypoint.location!;
+              const isVisited = activityStatus[waypoint.activity_id] || waypoint.status?.done;
+              const isHovered = hoverState?.type === 'scenic_waypoint' && hoverState?.id === waypoint.activity_id;
 
-                return (
-                  <Marker
-                    icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId, isVisited, isHovered)}
-                    key={`activity-${activity.activity_id}`}
-                    onClick={() => onActivitySelect(activity.activity_id)}
-                    onLoad={(marker) => {
-                      activityMarkersRef.current.set(activity.activity_id, marker);
-                    }}
-                    onMouseOut={() => handleActivityHover(activity, false)}
-                    onMouseOver={() => handleActivityHover(activity, true)}
-                    onUnmount={() => {
-                      activityMarkersRef.current.delete(activity.activity_id);
-                    }}
-                    position={{ lat: location.lat!, lng: location.lng! }}
-                    title={activity.activity_name}
-                  />
-                );
-              })}
+              return (
+                <Marker
+                  icon={getScenicWaypointPinIconFn(waypoint.activity_id === selectedActivityId, isVisited, isHovered)}
+                  key={`scenic-waypoint-${waypoint.activity_id}`}
+                  onClick={() => onActivitySelect(waypoint.activity_id)}
+                  onLoad={(marker) => {
+                    scenicWaypointMarkersRef.current.set(waypoint.activity_id, marker);
+                  }}
+                  onMouseOut={() => handleScenicWaypointHover(waypoint, false)}
+                  onMouseOver={() => handleScenicWaypointHover(waypoint, true)}
+                  onUnmount={() => {
+                    scenicWaypointMarkersRef.current.delete(waypoint.activity_id);
+                  }}
+                  position={{ lat: location.lat!, lng: location.lng! }}
+                  title={waypoint.activity_name}
+                />
+              );
+            })}
 
-            {/* Scenic waypoint markers for current base with violet styling */}
-            {currentBase?.scenic_waypoints
-              ?.filter((waypoint) => waypoint.location?.lat && waypoint.location?.lng)
-              .map((waypoint) => {
-                // TypeScript safety: we know location exists due to filter above
-                const location = waypoint.location!;
-                const isVisited = activityStatus[waypoint.activity_id] || waypoint.status?.done;
-                const isHovered = hoverState?.type === 'scenic_waypoint' && hoverState?.id === waypoint.activity_id;
+          {/* POI Search Result markers with rose styling */}
+          {state.poiSearch.results.map((poi) => (
+            <Marker
+              icon={getSearchResultPinIcon()}
+              key={`search-result-${poi.place_id}`}
+              onClick={() => {
+                handlePOIClick(poi.place_id);
+                centerAndZoomOnLocation(poi.location.lat, poi.location.lng);
+              }}
+              position={{ lat: poi.location.lat, lng: poi.location.lng }}
+              title={poi.name}
+            />
+          ))}
+        </>
+      )}
 
-                return (
-                  <Marker
-                    icon={getScenicWaypointPinIconFn(waypoint.activity_id === selectedActivityId, isVisited, isHovered)}
-                    key={`scenic-waypoint-${waypoint.activity_id}`}
-                    onClick={() => onActivitySelect(waypoint.activity_id)}
-                    onLoad={(marker) => {
-                      scenicWaypointMarkersRef.current.set(waypoint.activity_id, marker);
-                    }}
-                    onMouseOut={() => handleScenicWaypointHover(waypoint, false)}
-                    onMouseOver={() => handleScenicWaypointHover(waypoint, true)}
-                    onUnmount={() => {
-                      scenicWaypointMarkersRef.current.delete(waypoint.activity_id);
-                    }}
-                    position={{ lat: location.lat!, lng: location.lng! }}
-                    title={waypoint.activity_name}
-                  />
-                );
-              })}
-
-            {/* POI Search Result markers with rose styling */}
-            {state.poiSearch.results.map((poi) => (
-              <Marker
-                icon={getSearchResultPinIcon()}
-                key={`search-result-${poi.place_id}`}
-                onClick={() => {
-                  handlePOIClick(poi.place_id);
-                  centerAndZoomOnLocation(poi.location.lat, poi.location.lng);
-                }}
-                position={{ lat: poi.location.lat, lng: poi.location.lng }}
-                title={poi.name}
-              />
-            ))}
-          </>
-        )}
-
-        {/* Directions renderer for routes between stops */}
-        {directionsResponse && (
-          <DirectionsRenderer
-            directions={directionsResponse}
-            options={{
-              suppressMarkers: true,
-              polylineOptions: {
-                strokeColor: '#4A9E9E',
-                strokeOpacity: 0.8,
-                strokeWeight: 4,
-              },
-            }}
-          />
-        )}
-
-        {/* Fallback polyline when Directions API fails */}
-        {!directionsResponse && routeFallback.length > 0 && (
-          <Polyline
-            options={{
+      {/* Directions renderer for routes between stops */}
+      {directionsResponse && (
+        <DirectionsRenderer
+          directions={directionsResponse}
+          options={{
+            suppressMarkers: true,
+            polylineOptions: {
               strokeColor: '#4A9E9E',
-              strokeOpacity: 0.6,
-              strokeWeight: 3,
-              // Note: strokePattern not supported, using solid line for fallback
-            }}
-            path={routeFallback}
-          />
-        )}
-
-        {/* Route error indicator */}
-        {routeError && (
-          <div className="absolute top-4 left-4 rounded-md border border-yellow-400 bg-yellow-100 px-3 py-2 text-sm text-yellow-700">
-            ⚠️ {routeError}
-          </div>
-        )}
-
-        {/* POI Modal */}
-        <POIModal
-          error={state.poiModal.error}
-          isOpen={state.poiModal.isOpen}
-          loading={state.poiModal.loading}
-          onAddToActivities={handleAddActivityFromPOI}
-          onAddToScenicWaypoints={handleAddScenicWaypointFromPOI}
-          onClose={handleClosePOIModal}
-          poi={state.poiModal.poi}
+              strokeOpacity: 0.8,
+              strokeWeight: 4,
+            },
+          }}
         />
+      )}
 
-        {/* Place Hover Card */}
-        {hoverState && (
-          <PlaceHoverCard
-            accommodation={hoverState.accommodation}
-            activity={hoverState.activity}
-            isDone={hoverState.isDone}
-            isVisible={true}
-            placeType={hoverState.type}
-            position={hoverState.position}
-            scenicWaypoint={hoverState.scenicWaypoint}
-            stopName={hoverState.stopName}
-          />
-        )}
-
-        {/* Map Layer Picker */}
-        <MapLayerPicker
-          currentMapType={mapType}
-          map={mapInstance}
-          onMapTypeChange={handleMapTypeChange}
-          onOverlayToggle={handleOverlayToggle}
-          overlayLayers={overlayLayers}
+      {/* Fallback polyline when Directions API fails */}
+      {!directionsResponse && routeFallback.length > 0 && (
+        <Polyline
+          options={{
+            strokeColor: '#4A9E9E',
+            strokeOpacity: 0.6,
+            strokeWeight: 3,
+            // Note: strokePattern not supported, using solid line for fallback
+          }}
+          path={routeFallback}
         />
-      </GoogleMap>
-    </LoadScript>
+      )}
+
+      {/* Route error indicator */}
+      {routeError && (
+        <div className="absolute top-4 left-4 rounded-md border border-yellow-400 bg-yellow-100 px-3 py-2 text-sm text-yellow-700">
+          ⚠️ {routeError}
+        </div>
+      )}
+
+      {/* POI Modal */}
+      <POIModal
+        error={state.poiModal.error}
+        isOpen={state.poiModal.isOpen}
+        loading={state.poiModal.loading}
+        onAddToActivities={handleAddActivityFromPOI}
+        onAddToScenicWaypoints={handleAddScenicWaypointFromPOI}
+        onClose={handleClosePOIModal}
+        poi={state.poiModal.poi}
+      />
+
+      {/* Place Hover Card */}
+      {hoverState && (
+        <PlaceHoverCard
+          accommodation={hoverState.accommodation}
+          activity={hoverState.activity}
+          isDone={hoverState.isDone}
+          isVisible={true}
+          placeType={hoverState.type}
+          position={hoverState.position}
+          scenicWaypoint={hoverState.scenicWaypoint}
+          stopName={hoverState.stopName}
+        />
+      )}
+
+      {/* Map Layer Picker */}
+      <MapLayerPicker
+        currentMapType={mapType}
+        map={mapInstance}
+        onMapTypeChange={handleMapTypeChange}
+        onOverlayToggle={handleOverlayToggle}
+        overlayLayers={overlayLayers}
+      />
+    </GoogleMap>
   );
 };
