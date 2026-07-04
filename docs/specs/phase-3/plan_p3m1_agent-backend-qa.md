@@ -1278,7 +1278,7 @@ curl -s -X POST "$PREVIEW/api/agent" -H "Authorization: Bearer $TOKEN" \
 - DevTools offline: agent button disabled.
 - Prompt over 4000 chars: friendly error shown.
 
-- [ ] **Step 4: Ship**
+- [x] **Step 4: Ship**
 
 - Merge to `main` (test-gated production deploy), re-run Step 2's curl checks against production.
 - Update the M1 row in `plan_phase-3.md`: `Shipped (<date>)`.
