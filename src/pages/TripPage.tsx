@@ -139,16 +139,10 @@ export const TripPage = () => {
   // The mapper writes `order` onto each activity, so no custom order map is needed
   const sortedActivities = currentStop ? sortActivitiesByOrder(currentStop.activities) : [];
 
+  // Write failures surface through the shared mutation helper's retry toast
   const handleActivityToggle = (activityId: string, done: boolean) => {
     const isWaypoint = tripData.stops.some((stop) => (stop.scenic_waypoints ?? []).some((waypoint) => waypoint.activity_id === activityId));
-    toggleDoneMutation.mutate(
-      { activityId, isDone: done, isWaypoint },
-      {
-        onError: (mutationError) => {
-          showToast(`Failed to save: ${mutationError.message}`, 'error');
-        },
-      }
-    );
+    toggleDoneMutation.mutate({ activityId, isDone: done, isWaypoint });
   };
 
   const handleActivitySelect = (activityId: string) => {
@@ -174,14 +168,7 @@ export const TripPage = () => {
     const orderedIds = sortedActivities.map((activity) => activity.activity_id);
     const [moved] = orderedIds.splice(fromIndex, 1);
     orderedIds.splice(toIndex, 0, moved);
-    reorderMutation.mutate(
-      { stopId: state.currentBase, orderedActivityIds: orderedIds },
-      {
-        onError: (mutationError) => {
-          showToast(`Failed to save order: ${mutationError.message}`, 'error');
-        },
-      }
-    );
+    reorderMutation.mutate({ stopId: state.currentBase, orderedActivityIds: orderedIds });
   };
 
   const showToast = (message: string, type: ToastState['type'] = 'info') => {

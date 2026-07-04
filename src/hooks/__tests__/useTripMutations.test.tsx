@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderHook, waitFor } from '@testing-library/react';
+import { fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -11,6 +11,7 @@ vi.mock('@/services/supabaseService', () => ({
   reorderActivities: (...args: unknown[]) => mockReorderActivities(...args),
 }));
 
+import { ToastProvider } from '@/components/Layout/Toast';
 import { tripKeys } from '@/lib/queryClient';
 import type { TripData } from '@/types/trip';
 import { useReorderActivities, useToggleActivityDone } from '../useTripMutations';
@@ -40,7 +41,11 @@ function setup() {
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
   client.setQueryData(tripKeys.detail('t1'), structuredClone(seedTrip));
-  const wrapper = ({ children }: { children: ReactNode }) => <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={client}>
+      <ToastProvider>{children}</ToastProvider>
+    </QueryClientProvider>
+  );
   return { client, wrapper };
 }
 
@@ -68,6 +73,23 @@ describe('useToggleActivityDone', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
     const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
     expect(trip?.stops[0].activities[0].status?.done).toBe(false);
+  });
+
+  it('shows an error toast with a working Retry action on failure', async () => {
+    mockSetActivityDone.mockReset();
+    mockSetActivityDone.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(undefined);
+    const { wrapper } = setup();
+    const { result } = renderHook(() => useToggleActivityDone('t1'), { wrapper });
+
+    result.current.mutate({ activityId: 'act-1', isDone: true, isWaypoint: false });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(screen.getByText('Could not save the change')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+
+    await waitFor(() => expect(mockSetActivityDone).toHaveBeenCalledTimes(2));
+    expect(mockSetActivityDone).toHaveBeenLastCalledWith('act-1', true);
   });
 });
 
