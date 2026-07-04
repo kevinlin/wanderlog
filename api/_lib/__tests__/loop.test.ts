@@ -1,9 +1,10 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { z } from 'zod';
 import type { AgentEvent } from '@/types/agent';
-import { type LoopDeps, MAX_ITERATIONS, runAgentLoop } from '../loop';
-import { READ_TOOLS } from '../tools';
+import { type LoopDeps, MAX_ITERATIONS, progressLabel, runAgentLoop } from '../loop';
+import { type AgentTool, READ_TOOLS } from '../tools';
 
 const createMock = vi.fn();
 
@@ -91,5 +92,28 @@ describe('runAgentLoop', () => {
     const { hitIterationCap } = await runAgentLoop(deps, 'sys', 'p');
     expect(hitIterationCap).toBe(true);
     expect(createMock).toHaveBeenCalledTimes(MAX_ITERATIONS);
+  });
+
+  it('emits change events from tool executions', async () => {
+    const changeTool: AgentTool = {
+      name: 'create_thing',
+      description: 'test tool',
+      schema: z.object({ name: z.string() }),
+      execute: async () => ({ id: 'row-1' }),
+      toChanges: (input, output) => [{ op: 'created', entity: 'activity', id: (output as { id: string }).id, name: input.name as string }],
+    };
+    createMock
+      .mockResolvedValueOnce(toolResponse({ id: 'c1', name: 'create_thing', input: { name: 'Ramen' } }))
+      .mockResolvedValueOnce(textResponse('Added.'));
+    await runAgentLoop({ ...deps, tools: [changeTool] }, 'sys', 'add ramen');
+    expect(emitted).toContainEqual({ type: 'change', op: 'created', entity: 'activity', id: 'row-1', name: 'Ramen' });
+  });
+});
+
+describe('progressLabel', () => {
+  it('labels progress with the item name from the input', () => {
+    expect(progressLabel('create_activity', { name: 'Ramen dinner' })).toBe('Adding activity "Ramen dinner"…');
+    expect(progressLabel('delete_stop', { stop_id: 's1' })).toBe('Deleting stop…');
+    expect(progressLabel('unknown_tool', {})).toBe('Running unknown_tool…');
   });
 });

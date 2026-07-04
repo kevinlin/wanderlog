@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { describe, expect, it } from 'vitest';
-import { dispatchTool, READ_TOOLS, toAnthropicTools } from '../tools';
+import { z } from 'zod';
+import { type AgentTool, dispatchTool, READ_TOOLS, toAnthropicTools } from '../tools';
 
 const tripRowNested = {
   id: 't1',
@@ -97,5 +98,38 @@ describe('dispatchTool', () => {
     const result = await dispatchTool(READ_TOOLS, errorClient, 'list_trips', {});
     expect(result.isError).toBe(true);
     expect(result.content).toContain('boom');
+  });
+});
+
+const changeTool: AgentTool = {
+  name: 'create_thing',
+  description: 'test tool',
+  schema: z.object({ name: z.string() }),
+  execute: async () => ({ id: 'row-1' }),
+  toChanges: (input, output) => [{ op: 'created', entity: 'activity', id: (output as { id: string }).id, name: input.name as string }],
+};
+
+describe('dispatchTool change events', () => {
+  it('stamps toChanges output as change events on success', async () => {
+    const result = await dispatchTool([changeTool], fakeClient, 'create_thing', { name: 'Ramen' });
+    expect(result.changes).toEqual([{ type: 'change', op: 'created', entity: 'activity', id: 'row-1', name: 'Ramen' }]);
+  });
+
+  it('returns empty changes for unknown tool, invalid input, and execution errors', async () => {
+    expect((await dispatchTool([changeTool], fakeClient, 'nope', {})).changes).toEqual([]);
+    expect((await dispatchTool([changeTool], fakeClient, 'create_thing', { name: 5 })).changes).toEqual([]);
+    const throwing = {
+      ...changeTool,
+      execute: async () => {
+        throw new Error('boom');
+      },
+    };
+    expect((await dispatchTool([throwing], fakeClient, 'create_thing', { name: 'x' })).changes).toEqual([]);
+  });
+
+  it('read tools produce no change events', async () => {
+    const listClient = makeClient({ data: [summaryRow], error: null });
+    const result = await dispatchTool(READ_TOOLS, listClient, 'list_trips', {});
+    expect(result.changes).toEqual([]);
   });
 });
