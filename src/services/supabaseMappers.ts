@@ -86,14 +86,17 @@ export interface RowBundle {
   trip: TripRow;
 }
 
+// Loose == null checks: rows fetched before a schema migration is applied can
+// lack columns entirely (undefined, not null). Emitting { lat: undefined }
+// crashes Google Maps ("not a LatLng or LatLngLiteral").
 const toLocation = (row: { lat: number | null; lng: number | null; address: string | null }) => {
-  if (row.lat === null && row.lng === null && row.address === null) {
+  if (row.lat == null && row.lng == null && row.address == null) {
     return;
   }
   return {
-    ...(row.lat === null ? {} : { lat: row.lat }),
-    ...(row.lng === null ? {} : { lng: row.lng }),
-    ...(row.address === null ? {} : { address: row.address }),
+    ...(row.lat == null ? {} : { lat: row.lat }),
+    ...(row.lng == null ? {} : { lng: row.lng }),
+    ...(row.address == null ? {} : { address: row.address }),
   };
 };
 
@@ -134,7 +137,7 @@ const toAccommodation = (row: AccommodationRow): Accommodation => ({
   confirmation: orNothing(row.confirmation),
   url: orNothing(row.url),
   remarks: orNothing(row.remarks),
-  location: row.lat !== null && row.lng !== null ? { lat: row.lat, lng: row.lng } : undefined,
+  location: row.lat != null && row.lng != null ? { lat: row.lat, lng: row.lng } : undefined,
   thumbnail_url: orNothing(row.thumbnail_url),
   google_place_id: orNothing(row.google_place_id),
 });

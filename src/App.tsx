@@ -1,4 +1,4 @@
-import { Analytics } from '@vercel/analytics/next';
+import { Analytics } from '@vercel/analytics/react';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ProtectedRoute } from '@/components/Auth/ProtectedRoute';
 import { ToastProvider } from '@/components/Layout/Toast';

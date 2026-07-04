@@ -136,6 +136,31 @@ describe('toTripData', () => {
     const trip = toTripData({ ...tripRow, stops: [{ ...tripRow.stops[0], activities: [bare] }] });
     expect(trip.stops[0].activities[0].location).toBeUndefined();
   });
+
+  // Regression: when the client is deployed before a schema migration, rows
+  // come back without the new columns (undefined, not null). The mapper must
+  // not emit location objects with undefined coordinates - Google Maps throws
+  // "not a LatLng or LatLngLiteral" on { lat: undefined }.
+  describe('rows from an older schema missing lat/lng columns', () => {
+    const stripCoords = <T extends object>(row: T): T => {
+      const { lat: _lat, lng: _lng, ...rest } = row as T & { lat: unknown; lng: unknown };
+      return rest as unknown as T;
+    };
+
+    it('omits accommodation location when lat/lng columns are absent', () => {
+      const accommodations = tripRow.stops[0].accommodations;
+      const first = Array.isArray(accommodations) ? accommodations[0] : accommodations;
+      const legacy = { ...tripRow.stops[0], accommodations: [stripCoords(first as object)] };
+      const accommodation = toTripData({ ...tripRow, stops: [legacy as (typeof tripRow.stops)[0]] }).stops[0].accommodation;
+      expect(accommodation?.location).toBeUndefined();
+    });
+
+    it('omits activity coordinates when lat/lng columns are absent', () => {
+      const legacy = stripCoords({ ...tripRow.stops[0].activities[0], address: null });
+      const trip = toTripData({ ...tripRow, stops: [{ ...tripRow.stops[0], activities: [legacy] }] });
+      expect(trip.stops[0].activities[0].location).toBeUndefined();
+    });
+  });
 });
 
 describe('buildRows', () => {
