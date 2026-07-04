@@ -1,4 +1,4 @@
-import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, ChevronUpIcon, PencilIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
@@ -9,10 +9,11 @@ import { accommodationHasLocationIssues } from '@/utils/validationUtils';
 
 interface AccommodationCardProps {
   accommodation: Accommodation;
+  onEdit?: () => void;
   stopName: string;
 }
 
-export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodation, stopName }) => {
+export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodation, onEdit, stopName }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
   const showLocationWarning = accommodationHasLocationIssues(accommodation);
@@ -98,6 +99,13 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
                 </div>
               )}
 
+              {accommodation.remarks && (
+                <div className="mb-2">
+                  <p className="font-medium text-gray-500 text-xs">Remarks</p>
+                  <p className="text-gray-700 text-sm italic">💡 {accommodation.remarks}</p>
+                </div>
+              )}
+
               {/* Location warning */}
               {showLocationWarning && (
                 <div className="mb-2">
@@ -113,6 +121,16 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
 
         {/* Toggle Button */}
         <div className="ml-3 shrink-0 sm:ml-4">
+          {onEdit && (
+            <button
+              aria-label="Edit accommodation"
+              className="min-h-[30px] touch-manipulation rounded-lg p-2 text-gray-400 transition-colors hover:bg-sky-500/20 hover:text-gray-600 active:bg-sky-500/30"
+              onClick={onEdit}
+              type="button"
+            >
+              <PencilIcon className="h-4 w-4" />
+            </button>
+          )}
           <button
             aria-label={isExpanded ? 'Collapse accommodation details' : 'Expand accommodation details'}
             className="min-h-[30px] min-w-[44px] touch-manipulation rounded-lg p-2 transition-colors hover:bg-sky-500/20 active:bg-sky-500/30"

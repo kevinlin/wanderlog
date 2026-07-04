@@ -5,6 +5,7 @@ import { AccommodationCard } from '@/components/Cards/AccommodationCard';
 import { POISearchResultCard } from '@/components/Cards/POISearchResultCard';
 import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
 import { WeatherCard } from '@/components/Cards/WeatherCard';
+import { AccommodationFormModal } from '@/components/Editing/AccommodationFormModal';
 import { ActivityFormModal } from '@/components/Editing/ActivityFormModal';
 import { ConfirmDialog } from '@/components/Layout/ConfirmDialog';
 import { useAppStateContext } from '@/contexts/AppStateContext';
@@ -79,6 +80,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const deleteActivityMutation = useDeleteActivity(tripId);
   const [activityModal, setActivityModal] = useState<{ mode: 'create' } | { mode: 'edit'; activity: Activity } | null>(null);
   const [deletingActivity, setDeletingActivity] = useState<Activity | null>(null);
+  const [isAccommodationModalOpen, setIsAccommodationModalOpen] = useState(false);
 
   // Screen size detection
   const { isMobile } = useScreenSize();
@@ -317,10 +319,27 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         {/* Scrollable Content Area */}
         <div className="flex-1 overflow-y-auto overscroll-contain" ref={scrollContainerRef}>
           {/* Accommodation Card - Visible when accommodation exists */}
-          {accommodation && (
+          {accommodation ? (
             <div className="px-3 py-3">
-              <AccommodationCard accommodation={accommodation} stopName={stopName} />
+              <AccommodationCard
+                accommodation={accommodation}
+                onEdit={isOnline ? () => setIsAccommodationModalOpen(true) : undefined}
+                stopName={stopName}
+              />
             </div>
+          ) : (
+            isOnline && (
+              <div className="px-3 py-3">
+                <button
+                  className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-sky-500/30 border-dashed bg-sky-500/10 px-4 py-2 font-medium text-sky-700 text-sm transition-all duration-200 hover:bg-sky-500/20"
+                  onClick={() => setIsAccommodationModalOpen(true)}
+                  type="button"
+                >
+                  <PlusIcon className="h-4 w-4" />
+                  Add accommodation
+                </button>
+              </div>
+            )
           )}
 
           {/* Scenic Waypoints Section */}
@@ -496,6 +515,18 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           onClose={() => setActivityModal(null)}
           searchLocation={baseLocation}
           sortOrder={activities.length}
+          stopId={baseId}
+          tripId={tripId}
+        />
+      )}
+
+      {/* Accommodation add/edit modal - remounted per open so fields reset */}
+      {isAccommodationModalOpen && (
+        <AccommodationFormModal
+          accommodation={accommodation}
+          isOpen
+          onClose={() => setIsAccommodationModalOpen(false)}
+          searchLocation={baseLocation}
           stopId={baseId}
           tripId={tripId}
         />

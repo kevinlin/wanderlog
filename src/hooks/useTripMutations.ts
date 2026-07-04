@@ -1,4 +1,5 @@
 import {
+  type AccommodationInput,
   type ActivityInput,
   createActivity,
   deleteActivity,
@@ -6,8 +7,9 @@ import {
   setActivityDone,
   setWaypointDone,
   updateActivity,
+  upsertAccommodation,
 } from '@/services/supabaseService';
-import type { Activity } from '@/types/trip';
+import type { Accommodation, Activity } from '@/types/trip';
 import { useTripCacheMutation } from './useTripCacheMutation';
 
 // Domain-shape equivalent of the row written by the service (absent input
@@ -110,6 +112,41 @@ export function useDeleteActivity(tripId: string) {
       return trip;
     },
     errorMessage: 'Could not delete the activity',
+  });
+}
+
+// Domain-shape equivalent of the row upserted by the service. The service
+// doesn't write thumbnail_url, so the existing one is carried over.
+const accommodationInputToDomain = (input: AccommodationInput, existing: Accommodation | undefined): Accommodation => ({
+  name: input.name,
+  address: input.address ?? '',
+  check_in: input.checkIn ?? '',
+  check_out: input.checkOut ?? '',
+  confirmation: input.confirmation,
+  url: input.url,
+  remarks: input.remarks,
+  location: input.lat !== undefined && input.lng !== undefined ? { lat: input.lat, lng: input.lng } : undefined,
+  google_place_id: input.googlePlaceId,
+  thumbnail_url: existing?.thumbnail_url,
+});
+
+interface UpsertAccommodationVariables {
+  input: AccommodationInput;
+  stopId: string;
+}
+
+export function useUpsertAccommodation(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ stopId, input }: UpsertAccommodationVariables) => upsertAccommodation(stopId, input),
+    patch: (trip, { stopId, input }) => {
+      const stop = trip.stops.find((s) => s.stop_id === stopId);
+      if (stop) {
+        stop.accommodation = accommodationInputToDomain(input, stop.accommodation);
+      }
+      return trip;
+    },
+    errorMessage: 'Could not save the accommodation',
   });
 }
 

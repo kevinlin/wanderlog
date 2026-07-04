@@ -8,6 +8,7 @@ const mockReorderActivities = vi.fn();
 const mockCreateActivity = vi.fn();
 const mockUpdateActivity = vi.fn();
 const mockDeleteActivity = vi.fn();
+const mockUpsertAccommodation = vi.fn();
 vi.mock('@/services/supabaseService', () => ({
   setActivityDone: (...args: unknown[]) => mockSetActivityDone(...args),
   setWaypointDone: vi.fn(),
@@ -15,12 +16,20 @@ vi.mock('@/services/supabaseService', () => ({
   createActivity: (...args: unknown[]) => mockCreateActivity(...args),
   updateActivity: (...args: unknown[]) => mockUpdateActivity(...args),
   deleteActivity: (...args: unknown[]) => mockDeleteActivity(...args),
+  upsertAccommodation: (...args: unknown[]) => mockUpsertAccommodation(...args),
 }));
 
 import { ToastProvider } from '@/components/Layout/Toast';
 import { tripKeys } from '@/lib/queryClient';
 import type { TripData } from '@/types/trip';
-import { useCreateActivity, useDeleteActivity, useReorderActivities, useToggleActivityDone, useUpdateActivity } from '../useTripMutations';
+import {
+  useCreateActivity,
+  useDeleteActivity,
+  useReorderActivities,
+  useToggleActivityDone,
+  useUpdateActivity,
+  useUpsertAccommodation,
+} from '../useTripMutations';
 
 const seedTrip: TripData = {
   trip_id: 't1',
@@ -193,6 +202,73 @@ describe('useDeleteActivity', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
     const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
     expect(trip?.stops[0].activities.map((a) => a.activity_id)).toEqual(['act-1', 'act-2']);
+  });
+});
+
+describe('useUpsertAccommodation', () => {
+  it('optimistically replaces the stop accommodation with the mapped input', async () => {
+    mockUpsertAccommodation.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useUpsertAccommodation('t1'), { wrapper });
+
+    result.current.mutate({
+      stopId: 's1',
+      input: {
+        name: 'Lakeview Motel',
+        address: '1 Lake Rd',
+        checkIn: '2025-12-13 15:00',
+        checkOut: '2025-12-14 10:00',
+        remarks: 'Lake-facing room',
+        lat: -45.03,
+        lng: 168.66,
+      },
+    });
+
+    await waitFor(() => {
+      const accommodation = client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops[0].accommodation;
+      expect(accommodation?.name).toBe('Lakeview Motel');
+      expect(accommodation?.address).toBe('1 Lake Rd');
+      expect(accommodation?.check_in).toBe('2025-12-13 15:00');
+      expect(accommodation?.check_out).toBe('2025-12-14 10:00');
+      expect(accommodation?.remarks).toBe('Lake-facing room');
+      expect(accommodation?.location).toEqual({ lat: -45.03, lng: 168.66 });
+    });
+    expect(mockUpsertAccommodation).toHaveBeenCalledWith('s1', expect.objectContaining({ name: 'Lakeview Motel' }));
+  });
+
+  it('preserves the existing thumbnail when editing', async () => {
+    mockUpsertAccommodation.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const seeded = structuredClone(seedTrip);
+    seeded.stops[0].accommodation = {
+      name: 'Old Motel',
+      address: '',
+      check_in: '',
+      check_out: '',
+      thumbnail_url: 'https://img.example/thumb.jpg',
+    };
+    client.setQueryData(tripKeys.detail('t1'), seeded);
+    const { result } = renderHook(() => useUpsertAccommodation('t1'), { wrapper });
+
+    result.current.mutate({ stopId: 's1', input: { name: 'New Motel' } });
+
+    await waitFor(() => {
+      const accommodation = client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops[0].accommodation;
+      expect(accommodation?.name).toBe('New Motel');
+      expect(accommodation?.thumbnail_url).toBe('https://img.example/thumb.jpg');
+    });
+  });
+
+  it('rolls back the accommodation when the write fails', async () => {
+    mockUpsertAccommodation.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useUpsertAccommodation('t1'), { wrapper });
+
+    result.current.mutate({ stopId: 's1', input: { name: 'Lakeview Motel' } });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
+    expect(trip?.stops[0].accommodation).toBeUndefined();
   });
 });
 
