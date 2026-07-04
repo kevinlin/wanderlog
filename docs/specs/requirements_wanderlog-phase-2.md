@@ -19,7 +19,7 @@ These decisions were settled before drafting and size everything below. Changing
 | Hosting | Move off GitHub Pages to Vercel (Netlify or Cloudflare Pages are acceptable substitutes) | SPA rewrites, clean auth callback URLs, root path instead of `/wanderlog/` subpath. GitHub Pages is not broken; the alternatives are better at the same cost. |
 | Server-side code | None | Weather API (Open-Meteo) is keyless, so there is no key to proxy. No hosted server, no API layer between UI and database. Revisit Edge Functions if a keyed third-party API is added. |
 | Write conflicts | Last-write-wins with `updated_at` timestamp | Family scale needs no locking or merge logic. |
-| Sequencing | Five milestones, toolchain first | See Milestones section. Frameworks are upgraded before migration work starts; editing is built once, on the final schema. |
+| Sequencing | Six milestones, toolchain first | See Milestones section. Frameworks are upgraded before migration work starts; editing is built once, on the final schema. |
 
 ## Requirements
 
@@ -58,8 +58,11 @@ These decisions were settled before drafting and size everything below. Changing
 2. WHEN the trip list is displayed, THEN trips SHALL be ordered by start date with the active or next upcoming trip most prominent.
 3. WHEN a trip is selected, THEN the existing map, timeline, and activities UI SHALL load that trip's data.
 4. WHEN the app is reopened, THEN it SHALL restore the last selected trip.
-5. WHEN a user creates a new trip, THEN they SHALL provide at minimum a name and date range, and the trip SHALL appear in the library ready for itinerary editing.
+5. WHEN a user creates a new trip, THEN they SHALL provide a trip data file (JSON) via drag-and-drop or file picker - either a Wanderlog trip export or a TripIt export - and the app SHALL NOT save a trip without a file that passes validation. The saved trip SHALL appear in the library ready to open.
 6. WHEN a trip is deleted, THEN the user SHALL confirm the action, and all dependent rows (stops, activities, accommodations, waypoints) SHALL be removed with it.
+7. WHEN an imported file fails validation, THEN the app SHALL display every validation failure (field path and message) and SHALL NOT write anything to the database.
+8. WHEN a TripIt export is imported, THEN it SHALL be converted to the native trip shape: stops derived from lodging entries with coordinates resolved by geocoding their addresses, flights mapped to transport activities. A geocoding failure SHALL block the import as a validation error.
+9. WHEN the same file is imported more than once, THEN each import SHALL create an independent trip with fresh ids; existing trips SHALL never be overwritten.
 
 ### 4. Itinerary Editing
 
@@ -131,7 +134,8 @@ Each milestone is independently shippable and verifiable.
 1. **M1 - Foundation:** Supabase schema, data migration, app reads from Supabase with full feature parity (Requirements 1, 8). Firestore untouched. *Verification: parity checklist passes.*
 2. **M2 - Auth gate:** Login screen, Supabase Auth, RLS enforcement (Requirement 2). *Verification: unauthenticated access is fully blocked; family members can sign in.*
 3. **M3 - Trip library:** Multi-trip browsing, selection, creation (Requirement 3). *Verification: two or more trips browsable and selectable.*
-4. **M4 - Itinerary editing:** Delivered in slices — activities CRUD first, then accommodation and trip metadata, then scenic waypoints and stop restructuring (Requirement 4). *Verification: each slice edits and persists round-trip.*
+4. **M3.5 - Trip import:** Trip creation becomes file import: drag-and-drop JSON (Wanderlog or TripIt export), schema validation with error display, TripIt conversion with geocoding (Requirements 3.5, 3.7-3.9). *Verification: each supported sample file imports and renders fully; invalid files rejected with visible errors.*
+5. **M4 - Itinerary editing:** Delivered in slices — activities CRUD first, then accommodation and trip metadata, then scenic waypoints and stop restructuring (Requirement 4). *Verification: each slice edits and persists round-trip.*
 
 Hosting (Requirement 6) and the Maps key referrer restrictions (Requirement 7) land alongside M1/M2 as infrastructure tasks.
 
@@ -144,7 +148,10 @@ Hosting (Requirement 6) and the Maps key referrer restrictions (Requirement 7) l
 - **Realtime collaboration.** Last-write-wins is sufficient.
 - **Native mobile app.** Responsive web only.
 - **Weather key proxying via Edge Functions.** Open-Meteo is keyless; there is no key to protect. Revisit if a keyed third-party API is adopted.
+- **TripIt API integration.** Import consumes exported JSON files only; no TripIt OAuth, no live sync.
+- **Blank-trip creation.** Shipped in M3, removed by the Req 3.5 amendment: an empty trip offers nothing the M4 editors cannot add to an imported one.
 
 ## Changelog
 
 - 2026-07-03: Amended alongside [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md): user modifications become canonical columns (Req 1.4); weather cache moves client-side (Req 1.5); Edge Function weather proxy dropped (Req 7, Scope Decisions); Milestone 0 (toolchain upgrades) added.
+- 2026-07-04: Trip creation reworked to file import (Req 3.5 amended; Req 3.7-3.9 added): drag-and-drop JSON (Wanderlog or TripIt export), validation failures displayed with nothing written on failure, TripIt conversion via geocoding, fresh ids per import. Milestone M3.5 added. TripIt API integration and blank-trip creation moved out of scope.

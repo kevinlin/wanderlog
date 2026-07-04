@@ -17,6 +17,10 @@ Settled during design review, in addition to the Scope Decisions in the requirem
 | Primary keys | Text PKs preserving existing JSON ids; client-generated UUIDs for new rows | Migration becomes a natural-key upsert, idempotent by construction (Req 1.2). |
 | Rollback (Req 8.2) | Redeploy previous deployment | Spec allows config or deployment rollback. A runtime backend flag would double the data-layer surface for a one-week window. |
 | Toolchain | New Milestone 0 upgrades frameworks/toolchain before any Phase 2 code | Avoids doing major upgrades mid-migration. Firebase SDK excluded; it is decommissioned within this phase. |
+| Trip creation (M3.5) | File import only: drag-n-drop JSON (Wanderlog or TripIt export) into the create modal | The family's real flow starts from an existing plan file; an empty trip offers nothing the M4 editors cannot add to an imported one. Req 3.5 amended. |
+| Import validation | zod schemas at the import boundary | Structured field-path errors for the UI without hand-rolled type narrowing; one schema is the source of truth for "valid trip file". `validationUtils.ts` untouched (serves other callers). |
+| Import ids | Fresh UUIDs minted for every imported row | Text PKs are global; natural ids from files collide on re-import. Re-import creates an independent copy, never overwrites. |
+| TripIt coordinates | Geocode lodging addresses at import via Maps Geocoder | TripIt exports carry no lat/lng; `stops.lat/lng` are NOT NULL. Geocode failure blocks the import as a validation error. |
 
 ## Architecture
 
@@ -186,10 +190,59 @@ Query keys:
 
 - Lists all trips: name, destination, date range, derived status - `past` / `active` / `upcoming` vs today in the trip's timezone (Req 3.1).
 - Ordered by `start_date`; active or next upcoming trip rendered most prominent (Req 3.2).
-- Create trip: modal with name + date range minimum, then navigate to the (empty) trip (Req 3.5).
+- Create trip: file-import modal - see Trip Import (M3.5). Blank-trip creation (the original M3 form) is removed per the Req 3.5 amendment.
 - Delete trip: confirm dialog; DB cascade removes stops, activities, accommodations, waypoints (Req 3.6).
 - Last selected trip id in localStorage; `/` redirects there, else to `/trips` (Req 3.4).
 - Existing unwired scaffolding (`useTrips`, `TripCard`, `TripSelectorModal`) reused where it fits, rebuilt small where it does not.
+
+## Trip Import (M3.5)
+
+Trip creation is file import: the create modal accepts a JSON trip data file (drag-and-drop or file picker) and nothing is saved without a file that passes validation (Req 3.5, 3.7-3.9).
+
+**Pipeline** (all client-side):
+
+```
+file → JSON.parse → detectFormat → zod validate → convert (TripIt: + geocode) → withFreshIds → buildRows → importTrip
+```
+
+New modules:
+
+- `src/schemas/tripFileSchemas.ts` - zod schemas: native trip file (bare `TripData` or the `{exportDate, tripData}` export wrapper) and the TripIt export envelope (only the fields consumed).
+- `src/services/tripImportService.ts` - format detection, validation orchestration, TripIt conversion, id regeneration.
+- `src/services/geocodingService.ts` - thin wrapper over `google.maps.Geocoder`, injectable for tests. Maps JS is not loaded on `/trips`; the modal lazy-loads it only when a TripIt file needs geocoding.
+
+Format detection: `trip_name` + `stops` (optionally under `tripData`) → native; top-level `trips[]` with `startDate`/`lodging` → TripIt; neither → "Unrecognized file format" error. The TripIt path converts to `TripData` first and then runs the same native zod validation - one gate guards the DB regardless of source.
+
+`withFreshIds` mints UUIDs for the trip and every stop, accommodation, activity, and waypoint, preserving parent-child wiring. Re-importing a file creates an independent copy; no collisions with global text PKs (Req 3.9).
+
+**TripIt → TripData mapping:**
+
+| TripIt | TripData |
+|--------|----------|
+| `trips[0]` name / startDate / endDate / primaryLocation | Trip name, dates, destination |
+| Each `lodging` | One stop: name ← title, dates ← check-in/check-out, coords ← geocode(address); full accommodation (address, parsed check-in/out times, confirmation, booking URL, phone) |
+| Each flight | Activity `type: transport` on the stop whose date range contains the flight date, else the nearest stop; name like "SQ346: SIN → ZRH", remarks from departure/arrival text |
+| `activities` / `restaurants` / `transport` / `rail` items | Activities with mapped types (defensive; empty in current samples) |
+
+- Timezone: TripIt carries no IANA zone → browser timezone, flagged in the preview; editable once M4 trip-metadata editing lands.
+- Zero lodging in the file → validation error "No lodging found" (stops need dates + coords).
+- Multiple trips in one file → the first is imported, warning shown in the preview.
+
+**Modal states:** drop zone (rejects non-JSON and files > 5 MB) → processing ("Resolving locations…" while geocoding) → preview (trip name, date range, timezone, destination, stop/activity counts, format badge; Create enabled) or error list (one `path: message` line per issue, scrollable; Create disabled). Dropping another file resets the state.
+
+**Persistence:** `importTrip(tripData)` in `supabaseService` reuses `buildRows`, inserting in FK order: trips → stops → accommodations → activities → scenic_waypoints. Plain inserts, not upserts - ids are fresh by construction. Mid-flight failure triggers a compensation delete of the trip row (cascade removes any inserted children), then rethrows - no half-imported trips. `useImportTrip` invalidates `['trips']` and navigates to the new trip on success; no optimistic update (navigation needs the committed row).
+
+**Error surfaces:**
+
+| Failure | Surface |
+|---------|---------|
+| Non-JSON, oversized, unparseable | Single error line in the modal |
+| Unrecognized format | Error plus supported-formats hint |
+| zod validation failures | Full list, `path: message` per issue |
+| Geocode failure (TripIt) | Blocking error naming the stop and address |
+| Insert failure | Mutation error inline; compensation delete ran |
+
+**Testing:** the sample files (`202606_DaNang` native, both TripIt exports) become trimmed fixtures - schema accept/reject cases, converter pure-function tests with a stubbed geocoder (including Zurich's pre-check-in flight landing on the first stop), `withFreshIds` referential integrity, `importTrip` insert order and compensation delete, modal state tests.
 
 ## Itinerary Editing (M4)
 
@@ -234,7 +287,7 @@ Query keys:
 
 ## Milestones
 
-M0 is new; M1-M4 match the requirements doc.
+M0 and M3.5 were added by amendment; M1-M4 match the original requirements doc.
 
 **M0 - Toolchain.** Upgrade frameworks and toolchain to latest stable before Phase 2 code. Each major bump is its own commit so regressions bisect.
 
@@ -256,6 +309,8 @@ Excluded: `firebase` stays at 12.6 (decommissioned within this phase). Verificat
 
 **M3 - Trip library.** `/trips` page, derived status, create/delete trip, last-trip restore. Second trip seeded via migration script for verification. *Verify: 2+ trips browsable and selectable.*
 
+**M3.5 - Trip import.** Create-trip modal becomes file import: drag-n-drop JSON, zod validation with error-list UI, TripIt conversion with geocoding, fresh-id import, compensation delete on partial insert failure. *Verify: the DaNang native file and both TripIt samples import and render; invalid files rejected with listed errors.*
+
 **M4 - Itinerary editing.** Three slices: activities CRUD; accommodation + trip metadata; scenic waypoints + stop restructuring. Offline edit-disable lands with the first slice. *Verify: each slice edits and persists round-trip.*
 
 **Post-cutover.** Final Firestore export archived, Firebase deps removed from `package.json`, Firestore decommissioned.
@@ -268,7 +323,9 @@ Applied to [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md
 2. Req 1.5 - weather cache is client-side (persisted query cache, 6h staleness); no Supabase table.
 3. Req 7 - Edge Function weather proxy dropped (Open-Meteo is keyless); Maps key clause kept. Scope Decision "Server-side code" now "None".
 4. Milestones - M0 (toolchain) added; five milestones total.
+5. Req 3.5 - trip creation is file import (drag-n-drop JSON, Wanderlog or TripIt export); blank-trip creation removed. New Req 3.7-3.9: validation-failure display, TripIt conversion via geocoding, fresh-id imports. Milestone M3.5 added; six milestones total.
 
 ## Changelog
 
 - 2026-07-03: Initial design (brainstormed and approved).
+- 2026-07-04: Trip Import (M3.5) added: file-only create modal, zod validation pipeline, TripIt conversion with geocoding, fresh-id imports, compensation delete (brainstormed and approved).
