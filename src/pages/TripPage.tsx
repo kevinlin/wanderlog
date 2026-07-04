@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
 import { UserMenu } from '@/components/Auth/UserMenu';
+import { StopsEditor } from '@/components/Editing/StopsEditor';
 import { TripMetadataFormModal } from '@/components/Editing/TripMetadataFormModal';
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
@@ -33,6 +34,7 @@ export const TripPage = () => {
   const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
   const [isActivitiesPanelVisible, setIsActivitiesPanelVisible] = useState(false);
   const [isEditTripModalOpen, setIsEditTripModalOpen] = useState(false);
+  const [isStopsEditorOpen, setIsStopsEditorOpen] = useState(false);
 
   // TripData doesn't carry description/dates at the top level; the library
   // summary does, and the trips query is cached from the library visit.
@@ -130,15 +132,27 @@ export const TripPage = () => {
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
             <div className="pointer-events-auto max-w-md rounded-xl border border-gray-200 bg-white/95 p-8 text-center shadow-lg backdrop-blur-xs">
               <h1 className="font-bold text-gray-900 text-xl">{tripData.trip_name}</h1>
-              <p className="mt-2 text-gray-600 text-sm">No stops yet - itinerary editing arrives with the next milestone.</p>
-              <Link
-                className="mt-6 inline-block rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90"
-                to="/trips"
-              >
-                Back to trips
-              </Link>
+              <p className="mt-2 text-gray-600 text-sm">No stops yet. Add your first stop to start the itinerary.</p>
+              <div className="mt-6 flex justify-center gap-3">
+                <Link
+                  className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50"
+                  to="/trips"
+                >
+                  Back to trips
+                </Link>
+                {isOnline && (
+                  <button
+                    className="rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90"
+                    onClick={() => setIsStopsEditorOpen(true)}
+                    type="button"
+                  >
+                    Add stops
+                  </button>
+                )}
+              </div>
             </div>
           </div>
+          {isStopsEditorOpen && <StopsEditor onClose={() => setIsStopsEditorOpen(false)} tripData={tripData} />}
         </div>
       </ErrorBoundary>
     );
@@ -214,12 +228,15 @@ export const TripPage = () => {
         {/* Floating User Menu - shifts left of the activities panel on desktop */}
         <UserMenu
           className={isActivitiesPanelVisible && !isMobile ? 'sm:right-[25rem]' : ''}
+          onEditStops={isOnline ? () => setIsStopsEditorOpen(true) : undefined}
           onEditTrip={isOnline && tripSummary ? () => setIsEditTripModalOpen(true) : undefined}
         />
 
         {isEditTripModalOpen && tripSummary && (
           <TripMetadataFormModal isOpen onClose={() => setIsEditTripModalOpen(false)} trip={tripSummary} />
         )}
+
+        {isStopsEditorOpen && <StopsEditor onClose={() => setIsStopsEditorOpen(false)} tripData={tripData} />}
 
         {/* Responsive Activities Panel */}
         {currentStop && state.currentBase && (

@@ -1,20 +1,25 @@
 import {
   type AccommodationInput,
   type ActivityInput,
+  applyStopStructure,
   createActivity,
+  createStop,
   createWaypoint,
   deleteActivity,
+  deleteStop,
   deleteWaypoint,
   reorderActivities,
+  type StopInput,
   setActivityDone,
   setWaypointDone,
   updateActivity,
+  updateStop,
   updateWaypoint,
   upsertAccommodation,
   type WaypointInput,
 } from '@/services/supabaseService';
 import type { ScenicWaypoint } from '@/types/map';
-import type { Accommodation, Activity } from '@/types/trip';
+import type { Accommodation, Activity, TripBase } from '@/types/trip';
 import { useTripCacheMutation } from './useTripCacheMutation';
 
 // Domain-shape equivalent of the row written by the service (absent input
@@ -223,6 +228,108 @@ export function useDeleteWaypoint(tripId: string) {
       return trip;
     },
     errorMessage: 'Could not delete the waypoint',
+  });
+}
+
+const NIGHT_MS = 24 * 60 * 60 * 1000;
+
+interface CreateStopVariables {
+  input: StopInput;
+  sortOrder: number;
+  tempId: string;
+}
+
+export function useCreateStop(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ sortOrder, input }: CreateStopVariables) => createStop(tripId, sortOrder, input),
+    patch: (trip, { input, tempId }) => {
+      trip.stops.push({
+        stop_id: tempId,
+        name: input.name,
+        location: { lat: input.lat, lng: input.lng },
+        date: { from: input.dateFrom, to: input.dateTo },
+        duration_days: Math.round((new Date(input.dateTo).getTime() - new Date(input.dateFrom).getTime()) / NIGHT_MS),
+        activities: [],
+        scenic_waypoints: [],
+      });
+      return trip;
+    },
+    errorMessage: 'Could not add the stop',
+  });
+}
+
+interface UpdateStopVariables {
+  patch: Partial<StopInput>;
+  stopId: string;
+}
+
+export function useUpdateStop(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ stopId, patch }: UpdateStopVariables) => updateStop(stopId, patch),
+    patch: (trip, { stopId, patch }) => {
+      trip.stops = trip.stops.map((stop) => {
+        if (stop.stop_id !== stopId) {
+          return stop;
+        }
+        return {
+          ...stop,
+          name: patch.name ?? stop.name,
+          location: {
+            lat: patch.lat ?? stop.location.lat,
+            lng: patch.lng ?? stop.location.lng,
+          },
+          date: {
+            from: patch.dateFrom ?? stop.date.from,
+            to: patch.dateTo ?? stop.date.to,
+          },
+        };
+      });
+      return trip;
+    },
+    errorMessage: 'Could not save the stop',
+  });
+}
+
+export function useDeleteStop(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ stopId }: { stopId: string }) => deleteStop(stopId),
+    patch: (trip, { stopId }) => {
+      trip.stops = trip.stops.filter((stop) => stop.stop_id !== stopId);
+      return trip;
+    },
+    errorMessage: 'Could not delete the stop',
+  });
+}
+
+interface ApplyStopStructureVariables {
+  stops: TripBase[]; // reordered and re-dated (recalculateStopDates output)
+  tripEndDate: string;
+  tripStartDate: string;
+}
+
+export function useApplyStopStructure(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ stops, tripStartDate, tripEndDate }: ApplyStopStructureVariables) =>
+      applyStopStructure(
+        tripId,
+        stops.map((stop, index) => ({
+          id: stop.stop_id,
+          sort_order: index,
+          date_from: stop.date.from,
+          date_to: stop.date.to,
+        })),
+        tripStartDate,
+        tripEndDate
+      ),
+    patch: (trip, { stops }) => {
+      trip.stops = stops;
+      return trip;
+    },
+    errorMessage: 'Could not save the stop changes',
   });
 }
 

@@ -213,6 +213,91 @@ export async function upsertAccommodation(stopId: string, input: AccommodationIn
   }
 }
 
+export interface StopInput {
+  dateFrom: string; // YYYY-MM-DD
+  dateTo: string;
+  lat: number;
+  lng: number;
+  name: string;
+}
+
+const nightsBetween = (from: string, to: string): number =>
+  Math.round((new Date(to).getTime() - new Date(from).getTime()) / (24 * 60 * 60 * 1000));
+
+export async function createStop(tripId: string, sortOrder: number, input: StopInput): Promise<string> {
+  const id = crypto.randomUUID();
+  const { error } = await getSupabase()
+    .from('stops')
+    .insert({
+      id,
+      trip_id: tripId,
+      sort_order: sortOrder,
+      name: input.name,
+      lat: input.lat,
+      lng: input.lng,
+      date_from: input.dateFrom,
+      date_to: input.dateTo,
+      duration_days: nightsBetween(input.dateFrom, input.dateTo),
+    });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return id;
+}
+
+export async function updateStop(stopId: string, patch: Partial<StopInput>): Promise<void> {
+  const row: Record<string, unknown> = {};
+  if (patch.name !== undefined) {
+    row.name = patch.name;
+  }
+  if (patch.lat !== undefined) {
+    row.lat = patch.lat;
+  }
+  if (patch.lng !== undefined) {
+    row.lng = patch.lng;
+  }
+  if (patch.dateFrom !== undefined) {
+    row.date_from = patch.dateFrom;
+  }
+  if (patch.dateTo !== undefined) {
+    row.date_to = patch.dateTo;
+  }
+  await updateById('stops', stopId, row);
+}
+
+// DB cascade removes the stop's accommodation, activities and waypoints.
+export const deleteStop = (stopId: string): Promise<void> => deleteById('stops', stopId);
+
+export interface StopStructureRow {
+  date_from: string;
+  date_to: string;
+  id: string;
+  sort_order: number;
+}
+
+// Batches a restructure: per-row order/date updates, then the trip's date
+// span. When stops exist, restructuring recomputes the trip span; direct
+// metadata date edits set the trip dates but never move stops. Last write
+// wins between the two, by design.
+export async function applyStopStructure(
+  tripId: string,
+  rows: StopStructureRow[],
+  tripStartDate: string,
+  tripEndDate: string
+): Promise<void> {
+  await Promise.all(
+    rows.map((row) =>
+      updateById('stops', row.id, {
+        sort_order: row.sort_order,
+        date_from: row.date_from,
+        date_to: row.date_to,
+        duration_days: nightsBetween(row.date_from, row.date_to),
+      })
+    )
+  );
+  await updateById('trips', tripId, { start_date: tripStartDate, end_date: tripEndDate });
+}
+
 export interface TripMetadataPatch {
   description?: string | null;
   endDate?: string;

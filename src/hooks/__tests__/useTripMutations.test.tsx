@@ -12,6 +12,10 @@ const mockUpsertAccommodation = vi.fn();
 const mockCreateWaypoint = vi.fn();
 const mockUpdateWaypoint = vi.fn();
 const mockDeleteWaypoint = vi.fn();
+const mockCreateStop = vi.fn();
+const mockUpdateStop = vi.fn();
+const mockDeleteStop = vi.fn();
+const mockApplyStopStructure = vi.fn();
 vi.mock('@/services/supabaseService', () => ({
   setActivityDone: (...args: unknown[]) => mockSetActivityDone(...args),
   setWaypointDone: vi.fn(),
@@ -23,19 +27,27 @@ vi.mock('@/services/supabaseService', () => ({
   createWaypoint: (...args: unknown[]) => mockCreateWaypoint(...args),
   updateWaypoint: (...args: unknown[]) => mockUpdateWaypoint(...args),
   deleteWaypoint: (...args: unknown[]) => mockDeleteWaypoint(...args),
+  createStop: (...args: unknown[]) => mockCreateStop(...args),
+  updateStop: (...args: unknown[]) => mockUpdateStop(...args),
+  deleteStop: (...args: unknown[]) => mockDeleteStop(...args),
+  applyStopStructure: (...args: unknown[]) => mockApplyStopStructure(...args),
 }));
 
 import { ToastProvider } from '@/components/Layout/Toast';
 import { tripKeys } from '@/lib/queryClient';
 import type { TripData } from '@/types/trip';
 import {
+  useApplyStopStructure,
   useCreateActivity,
+  useCreateStop,
   useCreateWaypoint,
   useDeleteActivity,
+  useDeleteStop,
   useDeleteWaypoint,
   useReorderActivities,
   useToggleActivityDone,
   useUpdateActivity,
+  useUpdateStop,
   useUpdateWaypoint,
   useUpsertAccommodation,
 } from '../useTripMutations';
@@ -373,6 +385,165 @@ describe('useDeleteWaypoint', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
     const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
     expect(trip?.stops[0].scenic_waypoints?.map((w) => w.activity_id)).toEqual(['wp-1']);
+  });
+});
+
+describe('useCreateStop', () => {
+  it('optimistically appends the stop with the temp id', async () => {
+    mockCreateStop.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useCreateStop('t1'), { wrapper });
+
+    result.current.mutate({
+      sortOrder: 1,
+      tempId: 'temp-stop',
+      input: { name: 'Fairlie', lat: -44.1, lng: 170.8, dateFrom: '2025-12-14', dateTo: '2025-12-15' },
+    });
+
+    await waitFor(() => {
+      const stops = client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops;
+      const added = stops?.at(-1);
+      expect(added?.stop_id).toBe('temp-stop');
+      expect(added?.name).toBe('Fairlie');
+      expect(added?.location).toEqual({ lat: -44.1, lng: 170.8 });
+      expect(added?.date).toEqual({ from: '2025-12-14', to: '2025-12-15' });
+      expect(added?.activities).toEqual([]);
+    });
+    expect(mockCreateStop).toHaveBeenCalledWith('t1', 1, expect.objectContaining({ name: 'Fairlie' }));
+  });
+
+  it('rolls back the append when the write fails', async () => {
+    mockCreateStop.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useCreateStop('t1'), { wrapper });
+
+    result.current.mutate({
+      sortOrder: 1,
+      tempId: 'temp-stop',
+      input: { name: 'Fairlie', lat: -44.1, lng: 170.8, dateFrom: '2025-12-14', dateTo: '2025-12-15' },
+    });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops).toHaveLength(1);
+  });
+});
+
+describe('useUpdateStop', () => {
+  it('optimistically patches the matching stop in place', async () => {
+    mockUpdateStop.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useUpdateStop('t1'), { wrapper });
+
+    result.current.mutate({ stopId: 's1', patch: { name: 'Renamed stop', lat: -44.5, lng: 170.1 } });
+
+    await waitFor(() => {
+      const stop = client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops[0];
+      expect(stop?.name).toBe('Renamed stop');
+      expect(stop?.location).toEqual({ lat: -44.5, lng: 170.1 });
+      expect(stop?.activities).toHaveLength(2); // untouched fields preserved
+    });
+    expect(mockUpdateStop).toHaveBeenCalledWith('s1', expect.objectContaining({ name: 'Renamed stop' }));
+  });
+
+  it('rolls back the patch when the write fails', async () => {
+    mockUpdateStop.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useUpdateStop('t1'), { wrapper });
+
+    result.current.mutate({ stopId: 's1', patch: { name: 'Renamed stop' } });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops[0].name).toBe('Stop');
+  });
+});
+
+describe('useDeleteStop', () => {
+  it('optimistically removes the stop', async () => {
+    mockDeleteStop.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useDeleteStop('t1'), { wrapper });
+
+    result.current.mutate({ stopId: 's1' });
+
+    await waitFor(() => {
+      expect(client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops).toHaveLength(0);
+    });
+    expect(mockDeleteStop).toHaveBeenCalledWith('s1');
+  });
+
+  it('restores the stop when the delete fails', async () => {
+    mockDeleteStop.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useDeleteStop('t1'), { wrapper });
+
+    result.current.mutate({ stopId: 's1' });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops).toHaveLength(1);
+  });
+});
+
+describe('useApplyStopStructure', () => {
+  const secondStop = {
+    stop_id: 's2',
+    name: 'Second',
+    date: { from: '2025-12-14', to: '2025-12-16' },
+    location: { lat: 1, lng: 1 },
+    duration_days: 2,
+    activities: [],
+    scenic_waypoints: [],
+  };
+
+  it('optimistically replaces the stops array and sends structure rows', async () => {
+    mockApplyStopStructure.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const seeded = structuredClone(seedTrip);
+    seeded.stops.push(structuredClone(secondStop));
+    client.setQueryData(tripKeys.detail('t1'), seeded);
+    const { result } = renderHook(() => useApplyStopStructure('t1'), { wrapper });
+
+    const reordered = [
+      { ...structuredClone(secondStop), date: { from: '2025-12-13', to: '2025-12-15' }, duration_days: 2 },
+      {
+        ...structuredClone(seeded.stops[0]),
+        date: { from: '2025-12-15', to: '2025-12-16' },
+        duration_days: 1,
+      },
+    ];
+    result.current.mutate({ stops: reordered, tripStartDate: '2025-12-13', tripEndDate: '2025-12-16' });
+
+    await waitFor(() => {
+      const stops = client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops;
+      expect(stops?.map((s) => s.stop_id)).toEqual(['s2', 's1']);
+      expect(stops?.[0].date).toEqual({ from: '2025-12-13', to: '2025-12-15' });
+    });
+    expect(mockApplyStopStructure).toHaveBeenCalledWith(
+      't1',
+      [
+        { id: 's2', sort_order: 0, date_from: '2025-12-13', date_to: '2025-12-15' },
+        { id: 's1', sort_order: 1, date_from: '2025-12-15', date_to: '2025-12-16' },
+      ],
+      '2025-12-13',
+      '2025-12-16'
+    );
+  });
+
+  it('rolls back the stops array when the write fails', async () => {
+    mockApplyStopStructure.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const seeded = structuredClone(seedTrip);
+    seeded.stops.push(structuredClone(secondStop));
+    client.setQueryData(tripKeys.detail('t1'), seeded);
+    const { result } = renderHook(() => useApplyStopStructure('t1'), { wrapper });
+
+    result.current.mutate({
+      stops: [seeded.stops[1], seeded.stops[0]],
+      tripStartDate: '2025-12-13',
+      tripEndDate: '2025-12-16',
+    });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    expect(client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops.map((s) => s.stop_id)).toEqual(['s1', 's2']);
   });
 });
 

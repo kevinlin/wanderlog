@@ -533,7 +533,7 @@ export interface StopStructureRow { id: string; sort_order: number; date_from: s
 export function applyStopStructure(tripId: string, rows: StopStructureRow[], tripStartDate: string, tripEndDate: string): Promise<void>;
 ```
 
-- [ ] **Step 1: TDD the date cascade**
+- [x] **Step 1: TDD the date cascade**
 
 Rule (design: "date shifts cascade to subsequent stops client-side"): each stop keeps its duration (`date_to - date_from` in days); the chain re-anchors so stop 0 starts at `tripStartDate` and each subsequent stop starts the day its predecessor ends (matching the current data's pattern where checkout day = next check-in day). Tests:
 
@@ -551,17 +551,19 @@ it('re-anchors the chain preserving each stop duration', () => {
 
 Implement with date-fns (`differenceInCalendarDays`, `addDays`, `format`).
 
-- [ ] **Step 2: Service functions (test first)**
+- [x] **Step 2: Service functions (test first)**
 
 `createStop`/`updateStop`/`deleteStop` follow the Task 1 shapes against `stops`. `applyStopStructure` batches the cascade result: per-row `update` of `sort_order`/`date_from`/`date_to` via `Promise.all`, then updates the trip row's `start_date`/`end_date` to the new span. Rule stated in the UI copy and here: **when stops exist, stop restructuring recomputes the trip's date span; direct metadata date edits (Task 8) set the trip dates but never move stops.** Last write wins between the two, by design.
 
-- [ ] **Step 3: StopsEditor**
+- [x] **Step 3: StopsEditor**
 
 Entry: "Edit stops" item in the trip page (UserMenu or a pencil on the timeline header). A modal listing stops as dnd-kit sortable rows (reuse the `DraggableActivity` pattern): drag to reorder, per-row pencil (opens `StopFormModal`: name, dates, location via place search - same flow as Task 4), per-row trash (M3 `ConfirmDialog`, warns that the stop's activities/accommodation/waypoints go with it - DB cascade), "Add stop" appends via `StopFormModal` in create mode. Every structural change runs `recalculateStopDates` and shows the resulting date chain before "Save" commits it through one `useApplyStopStructure` mutation (optimistic via the Task 3 helper; patch = reordered/re-dated stops array).
 
-- [ ] **Step 4: Consistency verification (Req 4.7), commit**
+- [x] **Step 4: Consistency verification (Req 4.7), commit**
 
 Manual: reorder two stops - timeline re-orders, dates cascade, route polyline redraws in the new sequence, weather cards refetch per re-dated base; refresh - persisted; library shows the updated trip date span.
+
+> Verified locally 2026-07-04: moved Queenstown before Lake Tekapo via the editor - preview cascaded (Queenstown 14-19 Dec, Tekapo 19-21 Dec), Save committed, timeline re-ordered with new dates, refresh persisted, DB `sort_order`/dates/`duration_days` and trip span (13-29 Dec) all correct, library showed 13-29 Dec. Reverted through the editor afterwards. Route polyline redraw not observable in this environment (Routes API unreachable locally, pre-existing "Unable to load route details"); weather refetch follows the re-dated base keys by construction.
 
 ```bash
 pnpm test:run && pnpm build
