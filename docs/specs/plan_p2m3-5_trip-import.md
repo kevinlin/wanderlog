@@ -1,6 +1,6 @@
 # Trip Import (Phase 2, M3.5) Implementation Plan
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
 
 **Goal:** Trip creation becomes file import: drag-and-drop a trip data JSON (Wanderlog export or TripIt export) into the create modal, validate it with zod, convert TripIt files (geocoding lodging addresses), and save the trip to Supabase with fresh ids - nothing is saved without a file that passes validation (Req 3.5, 3.7-3.9).
 
@@ -36,7 +36,7 @@ export type WanderlogTrip = z.infer<typeof wanderlogTripSchema>;
 export const toTripData: (parsed: WanderlogTrip) => TripData;  // fills duration_days / defaults
 ```
 
-- [ ] **Step 1: Install zod**
+- [x] **Step 1: Install zod**
 
 ```bash
 pnpm add zod
@@ -44,7 +44,7 @@ pnpm add zod
 
 Expect `zod` (^4.x) under `dependencies` in `package.json`.
 
-- [ ] **Step 2: Create shared fixtures**
+- [x] **Step 2: Create shared fixtures**
 
 `src/testing/fixtures/tripFiles.ts` - trimmed, type-loose (plain objects, `as const` not needed) versions of the real sample files. Keep them small; they are shared by schema, converter, and modal tests.
 
@@ -183,7 +183,7 @@ export const klTripitFile = {
 };
 ```
 
-- [ ] **Step 3: Write failing schema tests**
+- [x] **Step 3: Write failing schema tests**
 
 `src/schemas/__tests__/tripFileSchemas.test.ts`:
 
@@ -251,12 +251,12 @@ describe('toTripData', () => {
 });
 ```
 
-- [ ] **Step 4: Run to verify failure**
+- [x] **Step 4: Run to verify failure**
 
 Run: `pnpm vitest run src/schemas/__tests__/tripFileSchemas.test.ts`
 Expected: FAIL - cannot resolve `../tripFileSchemas`.
 
-- [ ] **Step 5: Implement the schema**
+- [x] **Step 5: Implement the schema**
 
 `src/schemas/tripFileSchemas.ts`:
 
@@ -378,7 +378,7 @@ export const toTripData = (parsed: WanderlogTrip): TripData => ({
 
 Note: unknown keys (`constraints`, `travellers`, `vehicle`, `exportDate` siblings) are stripped by zod's default object behavior - deliberate; the DB has no columns for them.
 
-- [ ] **Step 6: Run to green, full suite, commit**
+- [x] **Step 6: Run to green, full suite, commit**
 
 ```bash
 pnpm vitest run src/schemas/__tests__/tripFileSchemas.test.ts && pnpm test:run && pnpm build
@@ -413,7 +413,7 @@ export function withFreshIds(trip: TripData): TripData;
 export function parseTripFile(text: string, geocode: GeocodeFn): Promise<ParseResult>;
 ```
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 `src/services/__tests__/tripImportService.test.ts` (TripIt path lands in Task 3; a stub geocode fn is enough here):
 
@@ -493,12 +493,12 @@ describe('parseTripFile - wanderlog path', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify failure**
+- [x] **Step 2: Run to verify failure**
 
 Run: `pnpm vitest run src/services/__tests__/tripImportService.test.ts`
 Expected: FAIL - cannot resolve `../tripImportService`.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 `src/services/tripImportService.ts`:
 
@@ -611,7 +611,7 @@ async function parseTripitFile(_raw: unknown, _geocode: GeocodeFn): Promise<Pars
 }
 ```
 
-- [ ] **Step 4: Run to green, full suite, commit**
+- [x] **Step 4: Run to green, full suite, commit**
 
 ```bash
 pnpm vitest run src/services/__tests__/tripImportService.test.ts && pnpm test:run && pnpm build
@@ -641,7 +641,7 @@ export function tripitToTripData(file: TripitFile, geocode: GeocodeFn):
   Promise<{ tripData: TripData | null; warnings: string[]; errors: ImportIssue[] }>;
 ```
 
-- [ ] **Step 1: Write the TripIt schema**
+- [x] **Step 1: Write the TripIt schema**
 
 `src/schemas/tripitSchemas.ts` - validate only the fields consumed; everything else passes through untyped:
 
@@ -696,7 +696,7 @@ export type TripitLodging = TripitTrip['lodging'][number];
 export type TripitFlight = TripitTrip['flights'][number];
 ```
 
-- [ ] **Step 2: Write failing converter tests**
+- [x] **Step 2: Write failing converter tests**
 
 `src/services/__tests__/tripitConverter.test.ts`:
 
@@ -788,12 +788,12 @@ describe('parseTripFile - tripit path end to end', () => {
 });
 ```
 
-- [ ] **Step 3: Run to verify failure**
+- [x] **Step 3: Run to verify failure**
 
 Run: `pnpm vitest run src/services/__tests__/tripitConverter.test.ts`
 Expected: FAIL - `parseTripitDateTime`/`tripitToTripData` not exported.
 
-- [ ] **Step 4: Implement the converter**
+- [x] **Step 4: Implement the converter**
 
 Replace the Task 2 `parseTripitFile` stub in `tripImportService.ts` and add:
 
@@ -994,7 +994,7 @@ async function parseTripitFile(raw: unknown, geocode: GeocodeFn): Promise<ParseR
 }
 ```
 
-- [ ] **Step 5: Run to green, full suite, commit**
+- [x] **Step 5: Run to green, full suite, commit**
 
 ```bash
 pnpm vitest run src/services/__tests__/tripitConverter.test.ts src/services/__tests__/tripImportService.test.ts && pnpm test:run && pnpm build
@@ -1022,7 +1022,7 @@ export const geocodeAddress: GeocodeFn;   // GeocodeFn from tripImportService
 
 **Why:** `MapContainer` loads Maps via the `<LoadScript>` component, which owns the script tag and removes it on unmount. A second loader on `/trips` (where no map renders) would double-inject the API. `useJsApiLoader` with a shared `id` loads once app-wide and is safe to call from both the map and the import modal.
 
-- [ ] **Step 1: Create the shared loader options**
+- [x] **Step 1: Create the shared loader options**
 
 ```typescript
 // src/config/mapsLoader.ts
@@ -1033,7 +1033,7 @@ export const MAPS_LOADER_OPTIONS = {
 };
 ```
 
-- [ ] **Step 2: Switch MapContainer to useJsApiLoader**
+- [x] **Step 2: Switch MapContainer to useJsApiLoader**
 
 In `MapContainer.tsx`:
 - Replace the `LoadScript` import with `useJsApiLoader` (keep the other imports) and add `import { MAPS_LOADER_OPTIONS } from '@/config/mapsLoader';`.
@@ -1061,7 +1061,7 @@ return (
 
 Keep the existing missing-API-key branch above it unchanged.
 
-- [ ] **Step 3: Update the MapContainer test mock**
+- [x] **Step 3: Update the MapContainer test mock**
 
 In `MapContainer.test.tsx`, replace the `LoadScript` mock entry with:
 
@@ -1072,7 +1072,7 @@ useJsApiLoader: () => ({ isLoaded: true, loadError: undefined }),
 Run: `pnpm vitest run src/components/Map/__tests__/MapContainer.test.tsx`
 Expected: PASS.
 
-- [ ] **Step 4: Write failing geocoding tests, implement**
+- [x] **Step 4: Write failing geocoding tests, implement**
 
 `src/services/__tests__/geocodingService.test.ts`:
 
@@ -1126,7 +1126,7 @@ export const geocodeAddress: GeocodeFn = async (address) => {
 };
 ```
 
-- [ ] **Step 5: Run to green, full suite + manual map smoke, commit**
+- [x] **Step 5: Run to green, full suite + manual map smoke, commit**
 
 ```bash
 pnpm vitest run src/services/__tests__/geocodingService.test.ts && pnpm test:run && pnpm build
@@ -1149,7 +1149,7 @@ git add -A && git commit -m "feat: shared maps loader and geocoding service"
 - Consumes: `buildRows` (supabaseMappers, unchanged), `getSupabase`.
 - Produces (consumed by Task 6): `importTrip(tripData: TripData): Promise<string>` - returns the new trip id.
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 Extend `supabaseService.test.ts`. The existing mock returns one shared `chain`; give `insert`/`delete` per-table tracking:
 
@@ -1204,12 +1204,12 @@ const fromSpy = vi.fn(() => ({ ...chain, update: mockUpdate, insert: mockInsert,
 vi.mock('@/config/supabase', () => ({ getSupabase: () => ({ from: fromSpy }) }));
 ```
 
-- [ ] **Step 2: Run to verify failure**
+- [x] **Step 2: Run to verify failure**
 
 Run: `pnpm vitest run src/services/__tests__/supabaseService.test.ts`
 Expected: FAIL - `importTrip` not exported.
 
-- [ ] **Step 3: Implement**
+- [x] **Step 3: Implement**
 
 In `supabaseService.ts` (import `buildRows` from `./supabaseMappers`):
 
@@ -1241,7 +1241,7 @@ export async function importTrip(tripData: TripData): Promise<string> {
 }
 ```
 
-- [ ] **Step 4: Run to green, full suite, commit**
+- [x] **Step 4: Run to green, full suite, commit**
 
 ```bash
 pnpm vitest run src/services/__tests__/supabaseService.test.ts && pnpm test:run && pnpm build
@@ -1261,7 +1261,7 @@ git add -A && git commit -m "feat: import full trip bundle with compensation del
 - Consumes: `parseTripFile`, `ImportPreview`, `ImportIssue` (Tasks 2-3), `geocodeAddress` (Task 4), `importTrip` (Task 5), `MAPS_LOADER_OPTIONS` (Task 4), `tripKeys` (M1).
 - Produces: `useImportTrip(): UseMutationResult<string, Error, TripData>`; `ImportTripModal({ isOpen, onClose })`.
 
-- [ ] **Step 1: Write failing modal tests**
+- [x] **Step 1: Write failing modal tests**
 
 `ImportTripModal.test.tsx`:
 
@@ -1327,12 +1327,12 @@ describe('ImportTripModal', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify failure**
+- [x] **Step 2: Run to verify failure**
 
 Run: `pnpm vitest run src/components/TripLibrary/__tests__/ImportTripModal.test.tsx`
 Expected: FAIL - module not found.
 
-- [ ] **Step 3: Swap the mutation hook**
+- [x] **Step 3: Swap the mutation hook**
 
 In `useTripLibraryMutations.ts`, replace `useCreateTrip` with:
 
@@ -1355,7 +1355,7 @@ export function useImportTrip() {
 
 Delete `useCreateTrip`; update its hook test (`src/hooks/__tests__/`) to cover `useImportTrip` the same way (success → invalidate + navigate). Delete `createTrip` and `CreateTripInput` from `supabaseService.ts` and their test cases.
 
-- [ ] **Step 4: Implement the modal**
+- [x] **Step 4: Implement the modal**
 
 `ImportTripModal.tsx` - same shell as the old `CreateTripModal` (backdrop, header, close button, Tailwind classes). Internal state machine:
 
@@ -1400,7 +1400,7 @@ const MapsGate = ({ onReady }: { onReady: () => void }) => {
 
 In `TripLibraryPage.tsx`: replace the `CreateTripModal` import/usage with `ImportTripModal` (same `isOpen`/`onClose` props; "New trip" button unchanged). Delete `CreateTripModal.tsx` and its test file.
 
-- [ ] **Step 5: Run to green, full suite, commit**
+- [x] **Step 5: Run to green, full suite, commit**
 
 ```bash
 pnpm vitest run src/components/TripLibrary/__tests__/ImportTripModal.test.tsx && pnpm test:run && pnpm build
@@ -1416,14 +1416,14 @@ git add -A && git commit -m "feat: import trips from JSON files in the create mo
 
 On a Vercel preview or production, signed in:
 
-- [ ] Import `local/trip-data/202606_DaNang_trip-plan.json` - preview shows name/dates/stops, Create lands on the trip page with map, timeline, and activities rendering (Req 3.5, 3.3)
-- [ ] Import `local/trip-data/202505_tripit-zurich-switzerland.json` - two geocoded stops (Zurich, Leimen), accommodations with check-in/out and confirmation, two transport activities on the right stops, device-timezone warning shown (Req 3.8)
-- [ ] Import `local/trip-data/202702_tripit-kuala-lumpur.json` - one stop with dates from `checkInText` fallback (Req 3.8)
-- [ ] Drop a `.txt` file, a broken-JSON file, and a valid-JSON-wrong-shape file - each shows errors, Create stays disabled, nothing appears in the library (Req 3.7)
-- [ ] Import the DaNang file twice - two independent trips in the library; delete one, the other still opens (Req 3.9)
-- [ ] Supabase Table Editor: imported rows all carry UUID ids; no orphan child rows after the delete
+- [x] Import `local/trip-data/202606_DaNang_trip-plan.json` - preview shows name/dates/stops, Create lands on the trip page with map, timeline, and activities rendering (Req 3.5, 3.3)
+- [x] Import `local/trip-data/202505_tripit-zurich-switzerland.json` - two geocoded stops (Zurich, Leimen), accommodations with check-in/out and confirmation, two transport activities on the right stops, device-timezone warning shown (Req 3.8)
+- [x] Import `local/trip-data/202702_tripit-kuala-lumpur.json` - one stop with dates from `checkInText` fallback (Req 3.8)
+- [x] Drop a `.txt` file, a broken-JSON file, and a valid-JSON-wrong-shape file - each shows errors, Create stays disabled, nothing appears in the library (Req 3.7)
+- [x] Import the DaNang file twice - two independent trips in the library; delete one, the other still opens (Req 3.9)
+- [x] Supabase Table Editor: imported rows all carry UUID ids; no orphan child rows after the delete
 
-- [ ] **Sign off**
+- [x] **Sign off**
 
 Set the M3.5 row in `plan_wanderlog-phase-2.md` to `Shipped (<date>)`.
 

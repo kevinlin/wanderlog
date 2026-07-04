@@ -10,7 +10,7 @@ Detailed plans are written just-in-time: each milestone's plan is authored when 
 | M1 - Foundation | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Shipped (2026-07-04) | Parity checklist (Req 1.7) passes on a Vercel preview |
 | M2 - Auth gate | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | Shipped (2026-07-04) | Unauthenticated access fully blocked; family members sign in |
 | M3 - Trip library | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Shipped (2026-07-04) | 2+ trips browsable and selectable |
-| M3.5 - Trip import | [plan_p2m3-5_trip-import.md](plan_p2m3-5_trip-import.md) | Planned | Each sample file (native + 2 TripIt) imports and renders; invalid files rejected with listed errors; re-import creates an independent copy |
+| M3.5 - Trip import | [plan_p2m3-5_trip-import.md](plan_p2m3-5_trip-import.md) | Shipped (2026-07-04) | Each sample file (native + 2 TripIt) imports and renders; invalid files rejected with listed errors; re-import creates an independent copy |
 | M4 - Itinerary editing | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Planned | Each slice (activities; accommodation + trip metadata; waypoints + stops) edits and persists round-trip |
 
 Infrastructure that lands alongside milestones (see design):
