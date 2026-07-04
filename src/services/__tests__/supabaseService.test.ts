@@ -24,6 +24,8 @@ vi.mock('@/config/supabase', () => ({
 
 import type { TripData } from '@/types/trip';
 import {
+  createActivity,
+  deleteActivity,
   deleteTrip,
   fetchTripById,
   fetchTripSummaries,
@@ -31,6 +33,7 @@ import {
   reorderActivities,
   setActivityDone,
   setWaypointDone,
+  updateActivity,
 } from '../supabaseService';
 
 const importableTrip: TripData = {
@@ -144,6 +147,53 @@ describe('supabaseService writes', () => {
   it('setActivityDone throws on error', async () => {
     mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
     await expect(setActivityDone('act-1', true)).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService activity crud', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+    mockDeleteEq.mockResolvedValue({ error: null });
+  });
+
+  it('createActivity inserts with generated uuid, stop_id and sort_order', async () => {
+    const id = await createActivity('stop-1', 5, { name: 'Kayaking', type: 'outdoor', lat: -45, lng: 168 });
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(mockInsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id,
+        stop_id: 'stop-1',
+        sort_order: 5,
+        name: 'Kayaking',
+        type: 'outdoor',
+        lat: -45,
+        lng: 168,
+        is_done: false,
+      })
+    );
+  });
+
+  it('createActivity throws on error', async () => {
+    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(createActivity('stop-1', 0, { name: 'Kayaking' })).rejects.toThrow('denied');
+  });
+
+  it('updateActivity patches the row by id, mapping undefined to null', async () => {
+    await updateActivity('act-1', { name: 'Renamed', remarks: undefined });
+    expect(mockUpdate).toHaveBeenCalledWith(expect.objectContaining({ name: 'Renamed', remarks: null }));
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'act-1');
+  });
+
+  it('deleteActivity deletes by id', async () => {
+    await deleteActivity('act-1');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', 'act-1');
+  });
+
+  it('deleteActivity throws on error', async () => {
+    mockDeleteEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(deleteActivity('act-1')).rejects.toThrow('denied');
   });
 });
 

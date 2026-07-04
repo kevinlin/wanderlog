@@ -60,15 +60,17 @@ export async function importTrip(tripData: TripData): Promise<string> {
 
 // The DB cascade (M1 schema `on delete cascade`) removes stops, accommodations,
 // activities, and waypoints - no client-side fan-out needed.
-export async function deleteTrip(tripId: string): Promise<void> {
-  const { error } = await getSupabase().from('trips').delete().eq('id', tripId);
+export const deleteTrip = (tripId: string): Promise<void> => deleteById('trips', tripId);
+
+async function updateById(table: string, id: string, patch: Record<string, unknown>): Promise<void> {
+  const { error } = await getSupabase().from(table).update(patch).eq('id', id);
   if (error) {
     throw new Error(error.message);
   }
 }
 
-async function updateById(table: string, id: string, patch: Record<string, unknown>): Promise<void> {
-  const { error } = await getSupabase().from(table).update(patch).eq('id', id);
+async function deleteById(table: string, id: string): Promise<void> {
+  const { error } = await getSupabase().from(table).delete().eq('id', id);
   if (error) {
     throw new Error(error.message);
   }
@@ -85,3 +87,45 @@ export const setWaypointDone = (waypointId: string, isDone: boolean): Promise<vo
 export async function reorderActivities(orderedActivityIds: string[]): Promise<void> {
   await Promise.all(orderedActivityIds.map((id, index) => updateById('activities', id, { sort_order: index })));
 }
+
+export interface ActivityInput {
+  address?: string;
+  duration?: string;
+  googlePlaceId?: string;
+  lat?: number;
+  lng?: number;
+  name: string;
+  remarks?: string;
+  thumbnailUrl?: string;
+  type?: string;
+  url?: string;
+}
+
+const activityInputToRow = (input: ActivityInput) => ({
+  name: input.name,
+  type: input.type ?? null,
+  lat: input.lat ?? null,
+  lng: input.lng ?? null,
+  address: input.address ?? null,
+  duration: input.duration ?? null,
+  url: input.url ?? null,
+  remarks: input.remarks ?? null,
+  thumbnail_url: input.thumbnailUrl ?? null,
+  google_place_id: input.googlePlaceId ?? null,
+});
+
+export async function createActivity(stopId: string, sortOrder: number, input: ActivityInput): Promise<string> {
+  const id = crypto.randomUUID();
+  const { error } = await getSupabase()
+    .from('activities')
+    .insert({ id, stop_id: stopId, sort_order: sortOrder, is_done: false, ...activityInputToRow(input) });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return id;
+}
+
+export const updateActivity = (activityId: string, input: ActivityInput): Promise<void> =>
+  updateById('activities', activityId, activityInputToRow(input));
+
+export const deleteActivity = (activityId: string): Promise<void> => deleteById('activities', activityId);
