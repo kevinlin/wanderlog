@@ -11,11 +11,13 @@ const chain = {
 const mockUpdateEq = vi.fn();
 const mockUpdate = vi.fn(() => ({ eq: mockUpdateEq }));
 const mockInsert = vi.fn();
+const mockUpsert = vi.fn();
 const mockDeleteEq = vi.fn();
 const fromSpy = vi.fn(() => ({
   ...chain,
   update: mockUpdate,
   insert: mockInsert,
+  upsert: mockUpsert,
   delete: vi.fn(() => ({ eq: mockDeleteEq })),
 }));
 vi.mock('@/config/supabase', () => ({
@@ -24,13 +26,25 @@ vi.mock('@/config/supabase', () => ({
 
 import type { TripData } from '@/types/trip';
 import {
+  applyStopStructure,
+  createActivity,
+  createStop,
+  createWaypoint,
+  deleteActivity,
+  deleteStop,
   deleteTrip,
+  deleteWaypoint,
   fetchTripById,
   fetchTripSummaries,
   importTrip,
   reorderActivities,
   setActivityDone,
   setWaypointDone,
+  updateActivity,
+  updateStop,
+  updateTripMetadata,
+  updateWaypoint,
+  upsertAccommodation,
 } from '../supabaseService';
 
 const importableTrip: TripData = {
@@ -91,6 +105,7 @@ describe('supabaseService reads', () => {
         {
           id: 't1',
           name: 'Trip 1',
+          description: 'Family holiday',
           destination: 'NZ',
           start_date: '2025-12-13',
           end_date: '2025-12-29',
@@ -105,6 +120,7 @@ describe('supabaseService reads', () => {
     expect(trips[0]).toEqual({
       trip_id: 't1',
       trip_name: 'Trip 1',
+      description: 'Family holiday',
       destination: 'NZ',
       start_date: '2025-12-13',
       end_date: '2025-12-29',
@@ -112,7 +128,7 @@ describe('supabaseService reads', () => {
       created_at: 'c',
       updated_at: 'u',
     });
-    expect(chain.select).toHaveBeenCalledWith('id, name, destination, start_date, end_date, timezone, created_at, updated_at');
+    expect(chain.select).toHaveBeenCalledWith('id, name, description, destination, start_date, end_date, timezone, created_at, updated_at');
   });
 });
 
@@ -144,6 +160,231 @@ describe('supabaseService writes', () => {
   it('setActivityDone throws on error', async () => {
     mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
     await expect(setActivityDone('act-1', true)).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService activity crud', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+    mockDeleteEq.mockResolvedValue({ error: null });
+  });
+
+  it('createActivity inserts with generated uuid, stop_id and sort_order', async () => {
+    const id = await createActivity('stop-1', 5, { name: 'Kayaking', type: 'outdoor', lat: -45, lng: 168 });
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(mockInsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id,
+        stop_id: 'stop-1',
+        sort_order: 5,
+        name: 'Kayaking',
+        type: 'outdoor',
+        lat: -45,
+        lng: 168,
+        is_done: false,
+      })
+    );
+  });
+
+  it('createActivity throws on error', async () => {
+    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(createActivity('stop-1', 0, { name: 'Kayaking' })).rejects.toThrow('denied');
+  });
+
+  it('updateActivity patches the row by id, mapping undefined to null', async () => {
+    await updateActivity('act-1', { name: 'Renamed', remarks: undefined });
+    expect(mockUpdate).toHaveBeenCalledWith(expect.objectContaining({ name: 'Renamed', remarks: null }));
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'act-1');
+  });
+
+  it('deleteActivity deletes by id', async () => {
+    await deleteActivity('act-1');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', 'act-1');
+  });
+
+  it('deleteActivity throws on error', async () => {
+    mockDeleteEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(deleteActivity('act-1')).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService waypoint crud', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+    mockDeleteEq.mockResolvedValue({ error: null });
+  });
+
+  it('createWaypoint inserts with generated uuid, stop_id and sort_order', async () => {
+    const id = await createWaypoint('stop-1', 2, { name: 'Devils Punchbowl', lat: -42.94, lng: 171.56 });
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(fromSpy).toHaveBeenCalledWith('scenic_waypoints');
+    expect(mockInsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id,
+        stop_id: 'stop-1',
+        sort_order: 2,
+        name: 'Devils Punchbowl',
+        lat: -42.94,
+        lng: 171.56,
+        is_done: false,
+      })
+    );
+    expect(mockInsert.mock.calls[0][0]).not.toHaveProperty('type');
+  });
+
+  it('createWaypoint throws on error', async () => {
+    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(createWaypoint('stop-1', 0, { name: 'Falls' })).rejects.toThrow('denied');
+  });
+
+  it('updateWaypoint patches the row by id, mapping undefined to null', async () => {
+    await updateWaypoint('wp-1', { name: 'Renamed Falls', remarks: undefined });
+    expect(fromSpy).toHaveBeenCalledWith('scenic_waypoints');
+    expect(mockUpdate).toHaveBeenCalledWith(expect.objectContaining({ name: 'Renamed Falls', remarks: null }));
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'wp-1');
+  });
+
+  it('deleteWaypoint deletes by id', async () => {
+    await deleteWaypoint('wp-1');
+    expect(fromSpy).toHaveBeenCalledWith('scenic_waypoints');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', 'wp-1');
+  });
+
+  it('deleteWaypoint throws on error', async () => {
+    mockDeleteEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(deleteWaypoint('wp-1')).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService accommodation + trip metadata', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUpsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+  });
+
+  it('upsertAccommodation writes a deterministic id and null-safe columns', async () => {
+    await upsertAccommodation('queenstown', {
+      name: 'Lakeview Motel',
+      address: '1 Lake Rd',
+      checkIn: '2025-12-13 15:00',
+      lat: -45.03,
+      lng: 168.66,
+    });
+    expect(fromSpy).toHaveBeenCalledWith('accommodations');
+    expect(mockUpsert).toHaveBeenCalledWith(
+      {
+        id: 'queenstown_accommodation',
+        stop_id: 'queenstown',
+        name: 'Lakeview Motel',
+        address: '1 Lake Rd',
+        check_in: '2025-12-13 15:00',
+        check_out: null,
+        remarks: null,
+        url: null,
+        confirmation: null,
+        lat: -45.03,
+        lng: 168.66,
+        google_place_id: null,
+      },
+      { onConflict: 'id' }
+    );
+  });
+
+  it('upsertAccommodation throws on error', async () => {
+    mockUpsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(upsertAccommodation('s1', { name: 'X' })).rejects.toThrow('denied');
+  });
+
+  it('updateTripMetadata patches only the provided fields', async () => {
+    await updateTripMetadata('t1', { name: 'Renamed', endDate: '2026-01-05' });
+    expect(fromSpy).toHaveBeenCalledWith('trips');
+    expect(mockUpdate).toHaveBeenCalledWith({ name: 'Renamed', end_date: '2026-01-05' });
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 't1');
+  });
+
+  it('updateTripMetadata maps description and startDate columns', async () => {
+    await updateTripMetadata('t1', { description: 'Family trip', startDate: '2026-01-01' });
+    expect(mockUpdate).toHaveBeenCalledWith({ description: 'Family trip', start_date: '2026-01-01' });
+  });
+
+  it('updateTripMetadata throws on error', async () => {
+    mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(updateTripMetadata('t1', { name: 'X' })).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService stop crud + structure', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+    mockDeleteEq.mockResolvedValue({ error: null });
+  });
+
+  it('createStop inserts with generated uuid, trip_id and sort_order', async () => {
+    const id = await createStop('t1', 3, { name: 'Fairlie', lat: -44.1, lng: 170.8, dateFrom: '2026-01-01', dateTo: '2026-01-02' });
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(fromSpy).toHaveBeenCalledWith('stops');
+    expect(mockInsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id,
+        trip_id: 't1',
+        sort_order: 3,
+        name: 'Fairlie',
+        lat: -44.1,
+        lng: 170.8,
+        date_from: '2026-01-01',
+        date_to: '2026-01-02',
+        duration_days: 1,
+      })
+    );
+  });
+
+  it('createStop throws on error', async () => {
+    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(createStop('t1', 0, { name: 'X', lat: 0, lng: 0, dateFrom: '2026-01-01', dateTo: '2026-01-02' })).rejects.toThrow(
+      'denied'
+    );
+  });
+
+  it('updateStop patches only the provided fields, mapping to columns', async () => {
+    await updateStop('s1', { name: 'Renamed', dateTo: '2026-01-05' });
+    expect(mockUpdate).toHaveBeenCalledWith({ name: 'Renamed', date_to: '2026-01-05' });
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 's1');
+  });
+
+  it('deleteStop deletes by id', async () => {
+    await deleteStop('s1');
+    expect(fromSpy).toHaveBeenCalledWith('stops');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', 's1');
+  });
+
+  it('applyStopStructure updates each stop row then the trip date span', async () => {
+    await applyStopStructure(
+      't1',
+      [
+        { id: 'b', sort_order: 0, date_from: '2025-12-13', date_to: '2025-12-15' },
+        { id: 'a', sort_order: 1, date_from: '2025-12-15', date_to: '2025-12-18' },
+      ],
+      '2025-12-13',
+      '2025-12-18'
+    );
+    expect(mockUpdate).toHaveBeenCalledWith({ sort_order: 0, date_from: '2025-12-13', date_to: '2025-12-15', duration_days: 2 });
+    expect(mockUpdate).toHaveBeenCalledWith({ sort_order: 1, date_from: '2025-12-15', date_to: '2025-12-18', duration_days: 3 });
+    expect(mockUpdate).toHaveBeenCalledWith({ start_date: '2025-12-13', end_date: '2025-12-18' });
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 't1');
+  });
+
+  it('applyStopStructure throws when a row update fails', async () => {
+    mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(
+      applyStopStructure('t1', [{ id: 'a', sort_order: 0, date_from: '2025-12-13', date_to: '2025-12-15' }], '2025-12-13', '2025-12-15')
+    ).rejects.toThrow('denied');
   });
 });
 

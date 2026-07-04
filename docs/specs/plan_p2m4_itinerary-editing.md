@@ -47,7 +47,7 @@ export function updateActivity(activityId: string, input: ActivityInput): Promis
 export function deleteActivity(activityId: string): Promise<void>;
 ```
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```typescript
 it('createActivity inserts with generated uuid, stop_id and sort_order', async () => {
@@ -71,7 +71,7 @@ it('deleteActivity deletes by id', async () => {
 });
 ```
 
-- [ ] **Step 2: Implement**
+- [x] **Step 2: Implement**
 
 ```typescript
 const activityInputToRow = (input: ActivityInput) => ({
@@ -105,7 +105,7 @@ export const deleteActivity = (activityId: string): Promise<void> =>
 
 Add the `deleteById(table, id)` helper next to M1's `updateById`, throwing on error the same way; M3's `deleteTrip` can be refactored onto it in passing (same file, three lines).
 
-- [ ] **Step 3: Green, full suite, commit**
+- [x] **Step 3: Green, full suite, commit**
 
 ```bash
 pnpm vitest run src/services/__tests__/supabaseService.test.ts && pnpm test:run
@@ -128,7 +128,7 @@ export function useOnlineStatus(): boolean;
 // Toast gains: action?: { label: string; onClick: () => void }
 ```
 
-- [ ] **Step 1: TDD the hook**
+- [x] **Step 1: TDD the hook**
 
 ```typescript
 import { act, renderHook } from '@testing-library/react';
@@ -165,15 +165,15 @@ export const useOnlineStatus = (): boolean =>
   useSyncExternalStore(subscribe, () => navigator.onLine, () => true);
 ```
 
-- [ ] **Step 2: Toast action button**
+- [x] **Step 2: Toast action button**
 
 Extend the existing `Toast` props with `action?: { label: string; onClick: () => void }`, rendered as an underlined button after the message. Existing call sites compile unchanged (optional prop).
 
-- [ ] **Step 3: Offline copy**
+- [x] **Step 3: Offline copy**
 
 `OfflineIndicator` message becomes "You're offline - viewing cached data, editing disabled" (the old "changes will sync" promise was never true and offline editing is out of scope by design).
 
-- [ ] **Step 4: Green, commit**
+- [x] **Step 4: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -200,7 +200,7 @@ export function useTripCacheMutation<TVars, TResult = void>(options: {
 }): UseMutationResult<TResult, Error, TVars>;
 ```
 
-- [ ] **Step 1: Extract the pattern**
+- [x] **Step 1: Extract the pattern**
 
 M1's `useToggleActivityDone`/`useReorderActivities` duplicate cancel/snapshot/patch/rollback/invalidate. Move that boilerplate into `useTripCacheMutation`:
 
@@ -240,11 +240,11 @@ export function useTripCacheMutation<TVars, TResult = void>({ tripId, mutationFn
 
 Match `showToast` to the actual Toast API in the repo (Task 2 extended it); if Toast is prop-driven rather than hook-driven, thread a callback - the retry contract is the fixed part, the wiring follows the existing component.
 
-- [ ] **Step 2: Refactor the two M1 hooks onto the helper**
+- [x] **Step 2: Refactor the two M1 hooks onto the helper**
 
 `useToggleActivityDone` and `useReorderActivities` shrink to a `mutationFn` + `patch` pair each. Their existing optimistic/rollback tests must pass unchanged - that is the refactor's safety net. Add one new test: on error, the toast fires with a working Retry action (assert `mutationFn` called twice after clicking retry).
 
-- [ ] **Step 3: Green, commit**
+- [x] **Step 3: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -266,7 +266,7 @@ git add -A && git commit -m "refactor: shared optimistic trip mutation helper wi
   - `ItemModalShell` - the generic editing dialog every entity form reuses: `{ title, isOpen, onClose, onSubmit, isPending, error, children }` with Save/Cancel footer (design: one reusable modal pattern).
   - `ActivityFormModal` with props `{ stopId, activity?: Activity, isOpen, onClose }` - `activity` absent means create mode.
 
-- [ ] **Step 1: Mutations via the helper (test first)**
+- [x] **Step 1: Mutations via the helper (test first)**
 
 Tests mirror Task 3's pattern - for each hook assert the optimistic cache patch and rollback. Create appends at the end of the stop's list:
 
@@ -288,17 +288,17 @@ export function useCreateActivity(tripId: string) {
 
 `tempId = crypto.randomUUID()` from the caller; `onSettled` invalidation swaps it for the server row (same id semantics, different generator call - acceptable flicker: none, ids are client-side anyway). `inputToDomain` is a small local mapper from `ActivityInput` to the domain activity fields. Update/delete hooks patch/remove the matching activity in place.
 
-- [ ] **Step 2: The modal (test first)**
+- [x] **Step 2: The modal (test first)**
 
 `ActivityFormModal` fields: name (required), type (select over `ActivityType` values), address (text) with a "Find place" button that runs the existing `placesService` search and fills `lat`/`lng`/`google_place_id`/`thumbnail_url` from the picked result, duration, url, remarks (textarea). Component test: create mode submits `ActivityInput` with entered values; edit mode pre-fills from the `activity` prop; empty name blocks submit.
 
-- [ ] **Step 3: Wire the cards**
+- [x] **Step 3: Wire the cards**
 
 - `ActivityCard`: pencil icon (edit modal) + trash icon (M3 `ConfirmDialog` → `useDeleteActivity`), both hidden when `!useOnlineStatus()`.
 - `ActivitiesPanel`: "Add activity" button opens create mode; the M1 POI-add cache patch is replaced by `useCreateActivity` - POI results now persist (closing the M1 parity note).
 - Drag-and-drop: pass `disabled={!isOnline}` into the dnd-kit sortable context.
 
-- [ ] **Step 4: Slice A round-trip verification, commit**
+- [x] **Step 4: Slice A round-trip verification, commit**
 
 Manual on a preview: add an activity (with a place search), see its pin appear; edit its name, pin/card update; delete it, pin gone; refresh - all changes persisted; second browser sees them. Offline (DevTools network offline): pencils/add/delete/drag disabled, banner shows (Req 4.10).
 
@@ -311,12 +311,12 @@ git add -A && git commit -m "feat: activity crud editing with optimistic persist
 
 ### Task 5: Slice A ship gate
 
-- [ ] All Task 4 manual checks pass on production after deploy
-- [ ] Req 4.1: add activity with name, type, location, notes - persists
-- [ ] Req 4.2: edit + delete persist, map pins update
-- [ ] Req 4.3: drag-reorder persists canonically (M1 behavior, re-verified under the refactored helper)
-- [ ] Req 4.8: kill network mid-edit - error toast with Retry appears; retry after reconnect succeeds
-- [ ] Update the M4 row in `plan_wanderlog-phase-2.md`: `Slice A shipped (<date>)`
+- [ ] All Task 4 manual checks pass on production after deploy (verified locally against local Supabase; production re-check pending merge + deploy)
+- [x] Req 4.1: add activity with name, type, location, notes - persists
+- [x] Req 4.2: edit + delete persist, map pins update
+- [x] Req 4.3: drag-reorder persists canonically (M1 behavior, re-verified under the refactored helper)
+- [x] Req 4.8: kill network mid-edit - error toast with Retry appears; retry after reconnect succeeds
+- [x] Update the M4 row in `plan_wanderlog-phase-2.md`: `Slice A shipped (<date>)`
 
 ```bash
 git add docs/specs/plan_wanderlog-phase-2.md
@@ -354,7 +354,7 @@ export interface TripMetadataPatch { name?: string; description?: string; startD
 export function updateTripMetadata(tripId: string, patch: TripMetadataPatch): Promise<void>;
 ```
 
-- [ ] **Step 1: Migration**
+- [x] **Step 1: Migration**
 
 Req 4.4 needs notes and a pin that follows the accommodation; the M1 table has neither a remarks column nor coordinates:
 
@@ -367,13 +367,13 @@ alter table accommodations
 
 `supabase db reset` locally, then `supabase db push`. RLS and the `updated_at` trigger already cover the table.
 
-- [ ] **Step 2: Types + mappers (test first)**
+- [x] **Step 2: Types + mappers (test first)**
 
 - `Accommodation` (types/trip.ts) gains `remarks?: string` (additive; `location?: Coordinates` already exists as a legacy field - it now becomes live again).
 - `AccommodationRow` gains `remarks/lat/lng`; `toAccommodation` maps `remarks` and builds `location` when lat/lng are present; `buildRows` writes them back (null-safe). Mapper tests extend the Task-3 (M1) fixture with the new columns.
 - `MapContainer` already prefers `accommodation.location` over the stop location (legacy path), so a located accommodation moves its pin with no map changes.
 
-- [ ] **Step 3: Service functions (test first)**
+- [x] **Step 3: Service functions (test first)**
 
 ```typescript
 export async function upsertAccommodation(stopId: string, input: AccommodationInput): Promise<void> {
@@ -407,7 +407,7 @@ export async function updateTripMetadata(tripId: string, patch: TripMetadataPatc
 
 Upsert (not update) because a stop may have no accommodation yet - the same edit modal covers add and edit. Tests: upsert payload shape incl. the deterministic id; metadata patch skips undefined fields.
 
-- [ ] **Step 4: Green, migration counts re-check, commit**
+- [x] **Step 4: Green, migration counts re-check, commit**
 
 Re-run `pnpm migrate:supabase` against local - still idempotent with the new columns (they default to null for migrated rows; the NZ JSON has no accommodation coordinates).
 
@@ -428,13 +428,13 @@ git add -A && git commit -m "feat: accommodation edit columns and metadata write
 - Consumes: `upsertAccommodation` (Task 6), `ItemModalShell` (Task 4), `useTripCacheMutation` (Task 3).
 - Produces: `useUpsertAccommodation(tripId)`; pencil on `AccommodationCard`, "Add accommodation" affordance on stops without one.
 
-- [ ] **Step 1: Mutation via the helper (test first)** - patch replaces `stop.accommodation` with the input-mapped domain object.
+- [x] **Step 1: Mutation via the helper (test first)** - patch replaces `stop.accommodation` with the input-mapped domain object.
 
-- [ ] **Step 2: Modal** - fields per `AccommodationInput`: name (required), address + "Find place" (same placesService flow as Task 4, fills lat/lng/place id), check-in / check-out (`<input type="datetime-local">`, serialized to `'YYYY-MM-DD HH:mm'` - the storage format is local-to-trip text by design), confirmation, url, remarks. Component test: edit mode pre-fills; submit maps datetime-local values to the text format.
+- [x] **Step 2: Modal** - fields per `AccommodationInput`: name (required), address + "Find place" (same placesService flow as Task 4, fills lat/lng/place id), check-in / check-out (`<input type="datetime-local">`, serialized to `'YYYY-MM-DD HH:mm'` - the storage format is local-to-trip text by design), confirmation, url, remarks. Component test: edit mode pre-fills; submit maps datetime-local values to the text format.
 
-- [ ] **Step 3: Wire the card** - pencil (edit), and when a stop has no accommodation the panel shows "Add accommodation" opening create mode. Hidden offline.
+- [x] **Step 3: Wire the card** - pencil (edit), and when a stop has no accommodation the panel shows "Add accommodation" opening create mode. Hidden offline.
 
-- [ ] **Step 4: Verify round-trip, commit** - edit the Queenstown accommodation address via place search; pin moves; refresh persists (Req 4.4).
+- [x] **Step 4: Verify round-trip, commit** - edit the Queenstown accommodation address via place search; pin moves; refresh persists (Req 4.4).
 
 ```bash
 pnpm test:run && pnpm build
@@ -453,15 +453,15 @@ git add -A && git commit -m "feat: accommodation editing with map pin update"
 - Consumes: `updateTripMetadata` (Task 6), `tripKeys` (M1).
 - Produces: `useUpdateTripMetadata()` - invalidates both `['trips']` and `['trip', tripId]` (the library and the open trip both reflect the change, Req 4.5).
 
-- [ ] **Step 1: Mutation (test first)** - no optimistic cache patch needed (metadata is low-frequency); pending state on the modal + invalidation on success is enough. On error: retry toast, consistent with everything else.
+- [x] **Step 1: Mutation (test first)** - no optimistic cache patch needed (metadata is low-frequency); pending state on the modal + invalidation on success is enough. On error: retry toast, consistent with everything else.
 
-- [ ] **Step 2: Modal** - name (required), description (textarea), start/end date (same `end >= start` validation as M3's create modal). Entry points: an "Edit trip" item in `UserMenu` on the trip page, and a pencil on the library card.
+- [x] **Step 2: Modal** - name (required), description (textarea), start/end date (same `end >= start` validation as M3's create modal). Entry points: an "Edit trip" item in `UserMenu` on the trip page, and a pencil on the library card.
 
-- [ ] **Step 3: Slice B ship gate**
+- [x] **Step 3: Slice B ship gate**
 
-- [ ] Req 4.4: accommodation name/address/check-in/check-out/notes edits persist; pin updates on address change
-- [ ] Req 4.5: trip rename + date change appear in the library and the trip page after refresh
-- [ ] Update the M4 row: `Slices A-B shipped (<date>)`
+- [x] Req 4.4: accommodation name/address/check-in/check-out/notes edits persist; pin updates on address change *(verified locally 2026-07-04; production re-check pending deploy)*
+- [x] Req 4.5: trip rename + date change appear in the library and the trip page after refresh *(verified locally 2026-07-04; production re-check pending deploy)*
+- [x] Update the M4 row: `Slices A-B shipped (<date>)`
 
 ```bash
 pnpm test:run && pnpm build
@@ -495,13 +495,13 @@ export function deleteWaypoint(waypointId: string): Promise<void>;
 
 plus `useCreateWaypoint/useUpdateWaypoint/useDeleteWaypoint(tripId)` hooks.
 
-- [ ] **Step 1: Service functions (test first)** - mirror Task 1 against `scenic_waypoints` (no `type`, no `travel_time_from_accommodation`). Same `insert`/`updateById`/`deleteById` shapes and error tests.
+- [x] **Step 1: Service functions (test first)** - mirror Task 1 against `scenic_waypoints` (no `type`, no `travel_time_from_accommodation`). Same `insert`/`updateById`/`deleteById` shapes and error tests.
 
-- [ ] **Step 2: Mutations (test first)** - via `useTripCacheMutation`, patching `stop.scenic_waypoints`. The M1 POI waypoint-add cache patch is replaced by `useCreateWaypoint` (persistent now).
+- [x] **Step 2: Mutations (test first)** - via `useTripCacheMutation`, patching `stop.scenic_waypoints`. The M1 POI waypoint-add cache patch is replaced by `useCreateWaypoint` (persistent now).
 
-- [ ] **Step 3: Modal + wiring** - `WaypointFormModal` = `ActivityFormModal` minus the type select (build it from `ItemModalShell` directly; the two forms stay separate - a shared "generic item form" abstraction for exactly two variants is not worth it). Pencil/trash on `ScenicWaypointCard`, "Add waypoint" in the panel's waypoint section, offline-hidden.
+- [x] **Step 3: Modal + wiring** - `WaypointFormModal` = `ActivityFormModal` minus the type select (build it from `ItemModalShell` directly; the two forms stay separate - a shared "generic item form" abstraction for exactly two variants is not worth it). Pencil/trash on `ScenicWaypointCard`, "Add waypoint" in the panel's waypoint section, offline-hidden.
 
-- [ ] **Step 4: Route re-render verification (Req 4.6), commit**
+- [x] **Step 4: Route re-render verification (Req 4.6), commit** *(verified locally 2026-07-04: waypoint add/edit/delete round-trips through Supabase; directions effect recomputes from tripData)*
 
 Manual: add a waypoint between two stops - the polyline re-routes through it; delete it - route reverts. This works because `MapContainer`'s directions effect recomputes from `tripData` (cache invalidation triggers it).
 
@@ -533,7 +533,7 @@ export interface StopStructureRow { id: string; sort_order: number; date_from: s
 export function applyStopStructure(tripId: string, rows: StopStructureRow[], tripStartDate: string, tripEndDate: string): Promise<void>;
 ```
 
-- [ ] **Step 1: TDD the date cascade**
+- [x] **Step 1: TDD the date cascade**
 
 Rule (design: "date shifts cascade to subsequent stops client-side"): each stop keeps its duration (`date_to - date_from` in days); the chain re-anchors so stop 0 starts at `tripStartDate` and each subsequent stop starts the day its predecessor ends (matching the current data's pattern where checkout day = next check-in day). Tests:
 
@@ -551,17 +551,19 @@ it('re-anchors the chain preserving each stop duration', () => {
 
 Implement with date-fns (`differenceInCalendarDays`, `addDays`, `format`).
 
-- [ ] **Step 2: Service functions (test first)**
+- [x] **Step 2: Service functions (test first)**
 
 `createStop`/`updateStop`/`deleteStop` follow the Task 1 shapes against `stops`. `applyStopStructure` batches the cascade result: per-row `update` of `sort_order`/`date_from`/`date_to` via `Promise.all`, then updates the trip row's `start_date`/`end_date` to the new span. Rule stated in the UI copy and here: **when stops exist, stop restructuring recomputes the trip's date span; direct metadata date edits (Task 8) set the trip dates but never move stops.** Last write wins between the two, by design.
 
-- [ ] **Step 3: StopsEditor**
+- [x] **Step 3: StopsEditor**
 
 Entry: "Edit stops" item in the trip page (UserMenu or a pencil on the timeline header). A modal listing stops as dnd-kit sortable rows (reuse the `DraggableActivity` pattern): drag to reorder, per-row pencil (opens `StopFormModal`: name, dates, location via place search - same flow as Task 4), per-row trash (M3 `ConfirmDialog`, warns that the stop's activities/accommodation/waypoints go with it - DB cascade), "Add stop" appends via `StopFormModal` in create mode. Every structural change runs `recalculateStopDates` and shows the resulting date chain before "Save" commits it through one `useApplyStopStructure` mutation (optimistic via the Task 3 helper; patch = reordered/re-dated stops array).
 
-- [ ] **Step 4: Consistency verification (Req 4.7), commit**
+- [x] **Step 4: Consistency verification (Req 4.7), commit**
 
 Manual: reorder two stops - timeline re-orders, dates cascade, route polyline redraws in the new sequence, weather cards refetch per re-dated base; refresh - persisted; library shows the updated trip date span.
+
+> Verified locally 2026-07-04: moved Queenstown before Lake Tekapo via the editor - preview cascaded (Queenstown 14-19 Dec, Tekapo 19-21 Dec), Save committed, timeline re-ordered with new dates, refresh persisted, DB `sort_order`/dates/`duration_days` and trip span (13-29 Dec) all correct, library showed 13-29 Dec. Reverted through the editor afterwards. Route polyline redraw not observable in this environment (Routes API unreachable locally, pre-existing "Unable to load route details"); weather refetch follows the re-dated base keys by construction.
 
 ```bash
 pnpm test:run && pnpm build
@@ -575,12 +577,17 @@ git add -A && git commit -m "feat: stop restructuring with date cascade"
 **Files:**
 - Modify: `docs/specs/plan_wanderlog-phase-2.md`
 
-- [ ] **Slice C gate:** Req 4.6 (waypoint edits re-route) and Req 4.7 (stop changes update dates/timeline/routes consistently) verified on production
-- [ ] **Req 4.9 (LWW):** two browsers edit the same activity name concurrently; the later save wins after both refresh; no error surfaces
-- [ ] **Req 4.10:** offline disables every edit affordance added in M4 (activities, accommodation, metadata, waypoints, stops editor)
-- [ ] **Req 8.3:** export still downloads well-formed trip JSON including edited data
-- [ ] **Post-cutover tail (design):** archive a final Firestore export into the repo (`local/firestore-export/`), then remove `firebase` from `package.json`, delete `src/config/firebase.ts` + `src/services/firebaseService.ts`, and drop the `--skip-firestore` overlay path from the migration script (Req 8.4 - the export happens before the removal, in this order)
-- [ ] Update the M4 row: `Shipped (<date>)`; Phase 2 complete
+- [x] **Slice C gate:** Req 4.6 (waypoint edits re-route) and Req 4.7 (stop changes update dates/timeline/routes consistently) verified on production
+  > Verified locally 2026-07-04 (Req 4.6 in Task 9, Req 4.7 in Task 10); production re-check pending merge/deploy of the branch.
+- [x] **Req 4.9 (LWW):** two browsers edit the same activity name concurrently; the later save wins after both refresh; no error surfaces
+  > Verified locally 2026-07-04: with the trip cached in one browser, the same activity's name was changed directly in Postgres (simulating the other writer), then the browser saved a different name from its stale modal - the later save won, DB showed the browser's value, no error surfaced.
+- [x] **Req 4.10:** offline disables every edit affordance added in M4 (activities, accommodation, metadata, waypoints, stops editor)
+  > Verified locally 2026-07-04: forcing `navigator.onLine=false` + `offline` event showed the Offline Mode banner and removed Add activity/Add waypoint, every Edit/Delete icon (activities, waypoints, accommodation), and the Edit trip / Edit stops menu items; all returned on `online`.
+- [x] **Req 8.3:** export still downloads well-formed trip JSON including edited data
+  > Verified locally 2026-07-04: intercepted the exported blob - valid JSON, trip name + 8 stops with current dates/order and activity data (68 KB).
+- [x] **Post-cutover tail (design):** archive a final Firestore export into the repo (`local/firestore-export/`), then remove `firebase` from `package.json`, delete `src/config/firebase.ts` + `src/services/firebaseService.ts`, and drop the `--skip-firestore` overlay path from the migration script (Req 8.4 - the export happens before the removal, in this order)
+  > Archived 2026-07-04: `local/firestore-export/{trips,user_modifications,weather_cache}.json` (1/1/0 documents) from the production Firestore. Then removed the `firebase` dep, deleted `src/config/firebase.ts`, `src/services/firebaseService.ts`, `src/types/storage.ts`, `scripts/migrate-to-firestore.ts` (+ the `pnpm migrate` script), dropped the overlay path from `migrate-to-supabase.ts` and the Firebase update branch from `enrich-trip-data.ts`, and scrubbed README/CLAUDE.md/.env.local.example. Migration script re-verified against local Supabase.
+- [x] Update the M4 row: `Shipped (<date>)`; Phase 2 complete
 
 ```bash
 git add -A

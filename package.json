@@ -13,7 +13,6 @@
     "test:ui": "vitest --ui",
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
-    "migrate": "tsx scripts/migrate-to-firestore.ts",
     "migrate:supabase": "tsx scripts/migrate-to-supabase.ts"
   },
   "dependencies": {
@@ -27,7 +26,6 @@
     "@tanstack/react-query": "^5.101.2",
     "@tanstack/react-query-persist-client": "^5.101.2",
     "date-fns": "^4.4.0",
-    "firebase": "^12.6.0",
     "idb-keyval": "^6.2.6",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",

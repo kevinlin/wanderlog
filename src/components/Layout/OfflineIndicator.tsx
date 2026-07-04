@@ -53,7 +53,7 @@ export const OfflineIndicator: React.FC = () => {
           <SignalSlashIcon className="h-5 w-5 text-yellow-600" />
           <div className="flex flex-col">
             <span className="font-medium text-sm text-yellow-900">Offline Mode</span>
-            <span className="text-xs text-yellow-700">Changes will sync when you're back online</span>
+            <span className="text-xs text-yellow-700">You're offline - viewing cached data, editing disabled</span>
           </div>
         </>
       )}

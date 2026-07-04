@@ -1,5 +1,4 @@
 import { DirectionsRenderer, GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
-import { useQueryClient } from '@tanstack/react-query';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
@@ -8,15 +7,13 @@ import { PlaceHoverCard } from '@/components/Map/PlaceHoverCard';
 import { POIModal } from '@/components/Map/POIModal';
 import { MAPS_LOADER_OPTIONS } from '@/config/mapsLoader';
 import { useAppStateContext } from '@/contexts/AppStateContext';
-import { tripKeys } from '@/lib/queryClient';
+import { useCreateActivity, useCreateWaypoint } from '@/hooks/useTripMutations';
 import { PlacesService } from '@/services/placesService';
 import { getMapLayerPreferences, saveMapType, saveOverlayLayers } from '@/services/viewStateStorage';
 import type { ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
 import { type Accommodation, type Activity, ActivityType, type TripBase, type TripData } from '@/types/trip';
 import {
-  addActivityToStop,
-  addScenicWaypointToStop,
   enrichActivityWithType,
   getAccommodationSvgPath,
   getActivityTypeColor,
@@ -103,7 +100,8 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   onBaseSelect,
 }) => {
   const { state, dispatch } = useAppStateContext();
-  const queryClient = useQueryClient();
+  const createActivityMutation = useCreateActivity(tripData.trip_id ?? '');
+  const createWaypointMutation = useCreateWaypoint(tripData.trip_id ?? '');
   const { isLoaded: isMapsLoaded } = useJsApiLoader(MAPS_LOADER_OPTIONS);
   const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [directionsResponse, setDirectionsResponse] = useState<google.maps.DirectionsResult | null>(null);
@@ -803,69 +801,57 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     [currentBaseId, dispatch]
   );
 
-  // Add activity from POI
+  // Add activity from POI (persists via the optimistic create mutation)
   const handleAddActivityFromPOI = useCallback(
     (poi: POIDetails) => {
       if (!currentBaseId) return;
 
-      const activityType = inferActivityType(poi.name, undefined, poi.types);
-
-      // Generate a unique activity ID
-      const activityId = `poi_${poi.place_id}_${Date.now()}`;
-
-      const newActivity: Activity = {
-        activity_id: activityId,
-        activity_name: poi.name,
-        activity_type: activityType,
-        location: {
+      const stop = tripData.stops.find((s) => s.stop_id === currentBaseId);
+      createActivityMutation.mutate({
+        stopId: currentBaseId,
+        sortOrder: stop?.activities.length ?? 0,
+        tempId: crypto.randomUUID(),
+        input: {
+          name: poi.name,
+          type: inferActivityType(poi.name, undefined, poi.types),
           lat: poi.location.lat,
           lng: poi.location.lng,
           address: poi.formatted_address,
+          duration: '1-2 hours',
+          url: poi.website,
+          remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
+          thumbnailUrl: poi.photos?.[0]?.photo_reference,
+          googlePlaceId: poi.place_id,
         },
-        duration: '1-2 hours', // Default duration
-        url: poi.website,
-        remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
-        order: 999, // Add at the end
-        thumbnail_url: poi.photos?.[0]?.photo_reference,
-        google_place_id: poi.place_id,
-      };
-
-      // Memory-only cache patch, preserving pre-Supabase behavior (persistence arrives in M4)
-      queryClient.setQueryData<TripData>(tripKeys.detail(tripData.trip_id ?? ''), (old) =>
-        old ? addActivityToStop(old, currentBaseId, newActivity) : old
-      );
+      });
     },
-    [currentBaseId, queryClient, tripData.trip_id]
+    [currentBaseId, tripData.stops, createActivityMutation]
   );
 
-  // Add scenic waypoint from POI
+  // Add scenic waypoint from POI (persists via the optimistic create mutation)
   const handleAddScenicWaypointFromPOI = useCallback(
     (poi: POIDetails) => {
       if (!currentBaseId) return;
 
-      // Generate a unique waypoint ID with scenic prefix
-      const waypointId = `poi_scenic_${poi.place_id}_${Date.now()}`;
-
-      const newWaypoint: ScenicWaypoint = {
-        activity_id: waypointId,
-        activity_name: poi.name,
-        location: {
+      const stop = tripData.stops.find((s) => s.stop_id === currentBaseId);
+      createWaypointMutation.mutate({
+        stopId: currentBaseId,
+        sortOrder: stop?.scenic_waypoints?.length ?? 0,
+        tempId: crypto.randomUUID(),
+        input: {
+          name: poi.name,
           lat: poi.location.lat,
           lng: poi.location.lng,
           address: poi.formatted_address,
+          duration: '30 mins - 1 hour', // Default for scenic stops
+          url: poi.website,
+          remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
+          thumbnailUrl: poi.photos?.[0]?.photo_reference,
+          googlePlaceId: poi.place_id,
         },
-        duration: '30 mins - 1 hour', // Default for scenic stops
-        url: poi.website,
-        remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
-        thumbnail_url: poi.photos?.[0]?.photo_reference,
-        google_place_id: poi.place_id,
-      };
-
-      queryClient.setQueryData<TripData>(tripKeys.detail(tripData.trip_id ?? ''), (old) =>
-        old ? addScenicWaypointToStop(old, currentBaseId, newWaypoint) : old
-      );
+      });
     },
-    [currentBaseId, queryClient, tripData.trip_id]
+    [currentBaseId, tripData.stops, createWaypointMutation]
   );
 
   // Close POI modal

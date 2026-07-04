@@ -1,12 +1,15 @@
+import { PencilIcon, QueueListIcon } from '@heroicons/react/24/outline';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface UserMenuProps {
   className?: string;
+  onEditStops?: () => void;
+  onEditTrip?: () => void;
 }
 
-export const UserMenu = ({ className = '' }: UserMenuProps) => {
+export const UserMenu = ({ className = '', onEditTrip, onEditStops }: UserMenuProps) => {
   const { session, signOut } = useAuth();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
@@ -75,6 +78,32 @@ export const UserMenu = ({ className = '' }: UserMenuProps) => {
             </svg>
             Trips
           </button>
+          {onEditTrip && (
+            <button
+              className="flex min-h-[44px] w-full touch-manipulation items-center gap-2 border-gray-200 border-b px-4 py-2 text-left text-gray-700 text-sm transition-colors hover:bg-gray-50 active:bg-gray-100"
+              onClick={() => {
+                setIsOpen(false);
+                onEditTrip();
+              }}
+              type="button"
+            >
+              <PencilIcon aria-hidden="true" className="h-4 w-4" />
+              Edit trip
+            </button>
+          )}
+          {onEditStops && (
+            <button
+              className="flex min-h-[44px] w-full touch-manipulation items-center gap-2 border-gray-200 border-b px-4 py-2 text-left text-gray-700 text-sm transition-colors hover:bg-gray-50 active:bg-gray-100"
+              onClick={() => {
+                setIsOpen(false);
+                onEditStops();
+              }}
+              type="button"
+            >
+              <QueueListIcon aria-hidden="true" className="h-4 w-4" />
+              Edit stops
+            </button>
+          )}
           <button
             className="flex min-h-[44px] w-full touch-manipulation items-center gap-2 px-4 py-2 text-left text-red-600 text-sm transition-colors hover:bg-red-50 active:bg-red-100 disabled:opacity-50"
             disabled={isSigningOut}

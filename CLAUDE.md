@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Wanderlog is an interactive map-based travel journal built with React 19, TypeScript, Vite, and Google Maps. It allows users to plan and track trips with timeline navigation, activity tracking, and drag-and-drop reordering.
 
-The app is mid-Phase-2: the backend has moved from Firebase Firestore to **Supabase** (Postgres + Auth + RLS), with **TanStack Query** as the data layer, an auth gate, multi-trip library, and react-router. Firebase is legacy and being decommissioned (Phase 2 M4). When touching the data layer, work against Supabase/TanStack Query, not Firebase. See [docs/specs/design_wanderlog-phase-2.md](docs/specs/design_wanderlog-phase-2.md).
+The backend is **Supabase** (Postgres + Auth + RLS), with **TanStack Query** as the data layer, an auth gate, multi-trip library, and react-router. Firebase/Firestore was decommissioned at the end of Phase 2 (a final export is archived in `local/firestore-export/`). See [docs/specs/design_wanderlog-phase-2.md](docs/specs/design_wanderlog-phase-2.md).
 
 GitHub Project (https://github.com/kevinlin/wanderlog)
   - Name: wanderlog
@@ -22,8 +22,7 @@ pnpm test:run         # Run tests once (CI mode)
 pnpm test:ui          # Run tests with interactive UI
 pnpm test:coverage    # Run tests with coverage report
 pnpm lint             # Run Ultracite (Biome formatter/linter)
-pnpm migrate:supabase # Migrate trip JSON files to Supabase (current)
-pnpm migrate          # Legacy: migrate trip JSON files to Firestore
+pnpm migrate:supabase # Migrate trip JSON files to Supabase
 ```
 
 Husky pre-commit auto-formats staged files with Ultracite (`.husky/pre-commit`).
@@ -79,8 +78,6 @@ Provider order (`main.tsx`): `PersistQueryClientProvider` → `AuthProvider` →
 - **placesService** - Google Places POI search.
 - **exportService** - downloads trip data with progress.
 - **viewStateStorage** - persists small UI view state.
-- **firebaseService** - legacy Firestore; being decommissioned, do not extend.
-
 ### Component Structure
 
 ```
@@ -170,12 +167,4 @@ VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key   # script-only (migration); never in the client bundle
-
-# Firebase (legacy, decommissioning)
-VITE_FIREBASE_API_KEY=your_firebase_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-VITE_FIREBASE_PROJECT_ID=your_project_id
-VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-VITE_FIREBASE_APP_ID=your_app_id
 ```

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { UserMenu } from '@/components/Auth/UserMenu';
+import { TripMetadataFormModal } from '@/components/Editing/TripMetadataFormModal';
 import { ConfirmDialog } from '@/components/Layout/ConfirmDialog';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { ImportTripModal } from '@/components/TripLibrary/ImportTripModal';
 import { TripLibraryCard } from '@/components/TripLibrary/TripLibraryCard';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useDeleteTrip } from '@/hooks/useTripLibraryMutations';
 import { useTrips } from '@/hooks/useTrips';
 import type { TripSummary } from '@/types/trip';
@@ -14,8 +16,10 @@ import { deriveTripStatus, pickHeroTrip, sortForLibrary } from '@/utils/tripStat
 export const TripLibraryPage = () => {
   const { trips, isLoading, error, refetch } = useTrips();
   const navigate = useNavigate();
+  const isOnline = useOnlineStatus();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [tripPendingDelete, setTripPendingDelete] = useState<TripSummary | null>(null);
+  const [tripPendingEdit, setTripPendingEdit] = useState<TripSummary | null>(null);
   const deleteMutation = useDeleteTrip();
 
   if (isLoading) {
@@ -52,6 +56,7 @@ export const TripLibraryPage = () => {
               <TripLibraryCard
                 isHero
                 onDelete={() => setTripPendingDelete(heroTrip)}
+                onEdit={isOnline ? () => setTripPendingEdit(heroTrip) : undefined}
                 onOpen={() => navigate(`/trips/${heroTrip.trip_id}`)}
                 status={deriveTripStatus(heroTrip)}
                 trip={heroTrip}
@@ -63,6 +68,7 @@ export const TripLibraryPage = () => {
                   isHero={false}
                   key={trip.trip_id}
                   onDelete={() => setTripPendingDelete(trip)}
+                  onEdit={isOnline ? () => setTripPendingEdit(trip) : undefined}
                   onOpen={() => navigate(`/trips/${trip.trip_id}`)}
                   status={deriveTripStatus(trip)}
                   trip={trip}
@@ -73,6 +79,9 @@ export const TripLibraryPage = () => {
         )}
       </main>
       <ImportTripModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+      {tripPendingEdit && (
+        <TripMetadataFormModal isOpen key={tripPendingEdit.trip_id} onClose={() => setTripPendingEdit(null)} trip={tripPendingEdit} />
+      )}
       {tripPendingDelete && (
         <ConfirmDialog
           confirmLabel="Delete"

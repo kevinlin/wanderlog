@@ -6,6 +6,9 @@ const mockUseTripData = vi.fn();
 vi.mock('@/hooks/useTripData', () => ({
   useTripData: () => mockUseTripData(),
 }));
+vi.mock('@/hooks/useTrips', () => ({
+  useTrips: () => ({ trips: [], isLoading: false, error: null, refetch: vi.fn() }),
+}));
 vi.mock('@/hooks/useTripMutations', () => ({
   useToggleActivityDone: () => ({ mutate: vi.fn() }),
   useReorderActivities: () => ({ mutate: vi.fn() }),

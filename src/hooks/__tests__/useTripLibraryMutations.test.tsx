@@ -1,14 +1,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { renderHook, waitFor } from '@testing-library/react';
+import { fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { MemoryRouter } from 'react-router';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockDeleteTrip = vi.fn();
 const mockImportTrip = vi.fn();
+const mockUpdateTripMetadata = vi.fn();
 vi.mock('@/services/supabaseService', () => ({
   importTrip: (tripData: unknown) => mockImportTrip(tripData),
   deleteTrip: (tripId: string) => mockDeleteTrip(tripId),
+  updateTripMetadata: (...args: unknown[]) => mockUpdateTripMetadata(...args),
 }));
 
 const mockNavigate = vi.fn();
@@ -24,8 +26,9 @@ vi.mock('@/services/viewStateStorage', () => ({
   setCurrentTripId: (tripId: string | null) => mockSetCurrentTripId(tripId),
 }));
 
+import { ToastProvider } from '@/components/Layout/Toast';
 import type { TripData } from '@/types/trip';
-import { useDeleteTrip, useImportTrip } from '../useTripLibraryMutations';
+import { useDeleteTrip, useImportTrip, useUpdateTripMetadata } from '../useTripLibraryMutations';
 
 describe('useImportTrip', () => {
   let queryClient: QueryClient;
@@ -109,5 +112,49 @@ describe('useDeleteTrip', () => {
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
     expect(mockSetCurrentTripId).not.toHaveBeenCalled();
+  });
+});
+
+describe('useUpdateTripMetadata', () => {
+  let queryClient: QueryClient;
+
+  const wrapper = ({ children }: { children: ReactNode }) => (
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <ToastProvider>{children}</ToastProvider>
+      </MemoryRouter>
+    </QueryClientProvider>
+  );
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    queryClient = new QueryClient({ defaultOptions: { queries: { retry: false }, mutations: { retry: false } } });
+    queryClient.setQueryData(['trips'], [{ trip_id: 't1' }]);
+    queryClient.setQueryData(['trip', 't1'], { trip_id: 't1' });
+  });
+
+  it('updates metadata and invalidates both the list and the trip detail', async () => {
+    mockUpdateTripMetadata.mockResolvedValue(undefined);
+    const { result } = renderHook(() => useUpdateTripMetadata(), { wrapper });
+    result.current.mutate({ tripId: 't1', patch: { name: 'Renamed', startDate: '2026-01-01' } });
+    await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+    expect(mockUpdateTripMetadata).toHaveBeenCalledWith('t1', { name: 'Renamed', startDate: '2026-01-01' });
+    expect(queryClient.getQueryState(['trips'])?.isInvalidated).toBe(true);
+    expect(queryClient.getQueryState(['trip', 't1'])?.isInvalidated).toBe(true);
+  });
+
+  it('shows an error toast with a working Retry action on failure', async () => {
+    mockUpdateTripMetadata.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(undefined);
+    const { result } = renderHook(() => useUpdateTripMetadata(), { wrapper });
+    result.current.mutate({ tripId: 't1', patch: { name: 'Renamed' } });
+    await waitFor(() => expect(result.current.isError).toBe(true));
+
+    expect(screen.getByText('Could not save the trip details')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+
+    await waitFor(() => expect(mockUpdateTripMetadata).toHaveBeenCalledTimes(2));
+    expect(mockUpdateTripMetadata).toHaveBeenLastCalledWith('t1', { name: 'Renamed' });
   });
 });

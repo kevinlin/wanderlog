@@ -1,8 +1,14 @@
 import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
-import { useEffect, useState } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
 
 export interface ToastProps {
+  action?: ToastAction;
   duration?: number;
   message: string;
   onClose?: () => void;
@@ -10,7 +16,7 @@ export interface ToastProps {
   type?: 'success' | 'error' | 'warning' | 'info';
 }
 
-export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration = 4000, onClose, show = true }) => {
+export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration = 4000, onClose, show = true, action }) => {
   const [isVisible, setIsVisible] = useState(show);
 
   useEffect(() => {
@@ -31,6 +37,11 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration =
   const handleClose = () => {
     setIsVisible(false);
     onClose?.();
+  };
+
+  const handleAction = () => {
+    action?.onClick();
+    handleClose();
   };
 
   if (!isVisible) return null;
@@ -68,6 +79,15 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration =
     >
       {getIcon()}
       <p className="flex-1 font-medium text-sm">{message}</p>
+      {action && (
+        <button
+          className="shrink-0 font-semibold text-sm underline underline-offset-2 hover:opacity-75"
+          onClick={handleAction}
+          type="button"
+        >
+          {action.label}
+        </button>
+      )}
       <button aria-label="Close notification" className="rounded-full p-1 transition-colors hover:bg-black/10" onClick={handleClose}>
         <XMarkIcon className="h-4 w-4" />
       </button>
@@ -80,4 +100,53 @@ export interface ToastState {
   message: string;
   show: boolean;
   type: 'success' | 'error' | 'warning' | 'info';
+}
+
+export interface ShowToastOptions {
+  action?: ToastAction;
+  duration?: number;
+  message: string;
+  type?: ToastProps['type'];
+}
+
+interface ToastContextValue {
+  showToast: (options: ShowToastOptions) => void;
+}
+
+const ToastContext = createContext<ToastContextValue | null>(null);
+
+interface ActiveToast extends ShowToastOptions {
+  id: number;
+}
+
+export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [toast, setToast] = useState<ActiveToast | null>(null);
+
+  const showToast = useCallback((options: ShowToastOptions) => {
+    setToast((previous) => ({ ...options, id: (previous?.id ?? 0) + 1 }));
+  }, []);
+
+  return (
+    <ToastContext.Provider value={{ showToast }}>
+      {children}
+      {toast && (
+        <Toast
+          action={toast.action}
+          duration={toast.duration}
+          key={toast.id}
+          message={toast.message}
+          onClose={() => setToast(null)}
+          type={toast.type ?? 'error'}
+        />
+      )}
+    </ToastContext.Provider>
+  );
+};
+
+export function useToast(): ToastContextValue {
+  const context = useContext(ToastContext);
+  if (!context) {
+    throw new Error('useToast must be used within a ToastProvider');
+  }
+  return context;
 }
