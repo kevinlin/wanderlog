@@ -1,6 +1,6 @@
 # Wanderlog Phase 2 - Design Document
 
-Design for [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md): Supabase backend, auth gate, trip library, itinerary editing, offline read, Vercel hosting. Existing UI behavior carries over per [design_travel-journal.md](design_travel-journal.md) except where amended here.
+Design for [requirements_phase-2.md](requirements_phase-2.md): Supabase backend, auth gate, trip library, itinerary editing, offline read, Vercel hosting. Existing UI behavior carries over per [design_phase-1.md](../phase-1/design_phase-1.md) except where amended here.
 
 ## Design Decisions
 
@@ -330,7 +330,7 @@ Excluded: `firebase` stays at 12.6 (decommissioned within this phase). Verificat
 
 ## Requirement Amendments
 
-Applied to [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md) together with this design:
+Applied to [requirements_phase-2.md](requirements_phase-2.md) together with this design:
 
 1. Req 1.4 - user modifications become canonical columns (`is_done`, `sort_order`); device view state stays in localStorage.
 2. Req 1.5 - weather cache is client-side (persisted query cache, 6h staleness); no Supabase table.

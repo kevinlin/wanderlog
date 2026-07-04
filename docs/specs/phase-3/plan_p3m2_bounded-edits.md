@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Prerequisites: Phase 2 M4 shipped ([plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) - the interactive write path, `recalculateStopDates` in `src/utils/stopDateUtils.ts`, and the `accommodations.remarks/lat/lng` columns) and Phase 3 M1 shipped ([plan_p3m1_agent-backend-qa.md](plan_p3m1_agent-backend-qa.md) - `api/agent.ts`, `api/_lib/{tools,loop,supabase,env,systemPrompt}.ts`, `src/types/agent.ts`, AgentModal). Symbol names below assume those plans as written; verify against the shipped code at execution time and follow the code where a name drifted, keeping row shapes identical to what `supabaseService` writes.
+- Prerequisites: Phase 2 M4 shipped ([plan_p2m4_itinerary-editing.md](../phase-2/plan_p2m4_itinerary-editing.md) - the interactive write path, `recalculateStopDates` in `src/utils/stopDateUtils.ts`, and the `accommodations.remarks/lat/lng` columns) and Phase 3 M1 shipped ([plan_p3m1_agent-backend-qa.md](plan_p3m1_agent-backend-qa.md) - `api/agent.ts`, `api/_lib/{tools,loop,supabase,env,systemPrompt}.ts`, `src/types/agent.ts`, AgentModal). Symbol names below assume those plans as written; verify against the shipped code at execution time and follow the code where a name drifted, keeping row shapes identical to what `supabaseService` writes.
 - Tool input field names are snake_case, matching the trip JSON the model reads (`stop_id`, `activity_id`, `date_from`).
 - Update tools are partial: only fields present in the input change; zod enforces at least one editable field. This deliberately refines M4's full-replace modal semantics - the model supplies deltas, and unsupplied fields must never be nulled.
 - Delete tools take only the item id; their descriptions and the system prompt restrict them to explicit user requests (Req 2.3). No tool named `delete_trip` exists (Req 2.4); Task 4 adds a structural test for this.
@@ -1433,7 +1433,7 @@ git add -A && git commit -m "feat: agent modal structured change list"
 ### Task 7: M2 verification gate
 
 **Files:**
-- Modify: `docs/specs/plan_wanderlog-phase-3.md` (status row)
+- Modify: `docs/specs/phase-3/plan_phase-3.md` (status row)
 
 - [ ] **Step 1: Scripted edit prompts on a Vercel preview** (real model, signed in as a family member, using a seeded trip)
 
@@ -1457,10 +1457,10 @@ git add -A && git commit -m "feat: agent modal structured change list"
 - [ ] **Step 4: Ship**
 
 - Merge to `main`; re-run one edit prompt against production.
-- Update the M2 row in `plan_wanderlog-phase-3.md`: `Shipped (<date>)`.
+- Update the M2 row in `plan_phase-3.md`: `Shipped (<date>)`.
 
 ```bash
-git add docs/specs/plan_wanderlog-phase-3.md
+git add docs/specs/phase-3/plan_phase-3.md
 git commit -m "docs: mark phase 3 m2 (bounded edits) shipped"
 ```
 

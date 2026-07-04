@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Wanderlog is an interactive map-based travel journal built with React 19, TypeScript, Vite, and Google Maps. It allows users to plan and track trips with timeline navigation, activity tracking, and drag-and-drop reordering.
 
-The backend is **Supabase** (Postgres + Auth + RLS), with **TanStack Query** as the data layer, an auth gate, multi-trip library, and react-router. Firebase/Firestore was decommissioned at the end of Phase 2 (a final export is archived in `local/firestore-export/`). See [docs/specs/design_wanderlog-phase-2.md](docs/specs/design_wanderlog-phase-2.md).
+The backend is **Supabase** (Postgres + Auth + RLS), with **TanStack Query** as the data layer, an auth gate, multi-trip library, and react-router. Firebase/Firestore was decommissioned at the end of Phase 2 (a final export is archived in `local/firestore-export/`). See [docs/specs/phase-2/design_phase-2.md](docs/specs/phase-2/design_phase-2.md).
 
 GitHub Project (https://github.com/kevinlin/wanderlog)
   - Name: wanderlog
@@ -153,7 +153,7 @@ Hosted on Vercel (see `vercel.json`, `.github/workflows/`):
 
 ## Specs
 
-Spec-driven docs live in `docs/specs/` (`<artifact>_<topic>.md`: requirements / design / plan). Start at [docs/specs/index.md](docs/specs/index.md) for the navigation map; [docs/specs/meta/convention.md](docs/specs/meta/convention.md) is the naming/structure source of truth. Phase 2 milestones are tracked in `plan_wanderlog-phase-2.md` (M0–M4).
+Spec-driven docs live in `docs/specs/` (`<artifact>_<topic>.md`: requirements / design / plan). Start at [docs/specs/index.md](docs/specs/index.md) for the navigation map; [docs/specs/meta/convention.md](docs/specs/meta/convention.md) is the naming/structure source of truth. Phase 2 milestones are tracked in `phase-2/plan_phase-2.md` (M0–M4).
 
 ## Environment Variables
 

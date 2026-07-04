@@ -1,6 +1,6 @@
 # Wanderlog Phase 2 - Master Plan
 
-Milestone tracker for [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md) / [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md).
+Milestone tracker for [design_phase-2.md](design_phase-2.md) / [requirements_phase-2.md](requirements_phase-2.md).
 
 Detailed plans are written just-in-time: each milestone's plan is authored when the previous milestone ships, so task detail reflects the real code shape rather than speculation. Each milestone is independently shippable.
 

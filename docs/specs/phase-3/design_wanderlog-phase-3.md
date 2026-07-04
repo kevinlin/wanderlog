@@ -1,6 +1,6 @@
 # Wanderlog Phase 3 - Design Document
 
-Design for [requirements_wanderlog-phase-3.md](requirements_wanderlog-phase-3.md): agent mode - natural-language Q&A, itinerary edits, and generative trip creation through a server-side LLM tool-use loop. Phase 2 architecture ([design_wanderlog-phase-2.md](design_wanderlog-phase-2.md)) carries over unchanged; this document adds to it.
+Design for [requirements_phase-3.md](requirements_phase-3.md): agent mode - natural-language Q&A, itinerary edits, and generative trip creation through a server-side LLM tool-use loop. Phase 2 architecture ([design_phase-2.md](../phase-2/design_phase-2.md)) carries over unchanged; this document adds to it.
 
 ## Design Decisions
 

@@ -1,8 +1,19 @@
-# Wanderlog Travel Journal - Requirements Document
+# Wanderlog Phase 1 Requirements
 
 ## Introduction
 
 The Wanderlog Travel Journal is a comprehensive interactive web application designed to provide travelers with an immersive, map-based interface for planning, tracking, and managing their travel itineraries. The application combines Google Maps integration with detailed activity management, timeline navigation, and data persistence to create a digital travel companion that enhances the travel experience through visual organization and real-time information.
+
+## Overview
+
+**Project Name:** Wanderlog  
+**Type:** Mobile-friendly Single Page Application (SPA)  
+**Framework:** React + Vite + TypeScript  
+**Deployment Target:** GitHub Pages (`https://kevinlin.github.io/wanderlog/`)  
+**Map Provider:** Google Maps (via `@react-google-maps/api`)  
+**Data Source:** Static JSON file (`/trip-data/202512_NZ_trip-plan.json`) with support for user-uploaded JSON in future.
+
+The application will display an **interactive map-based travel journal** with day-based progression, activity cards, and route polylines.
 
 ## Requirements
 
@@ -327,3 +338,78 @@ The Wanderlog Travel Journal is a comprehensive interactive web application desi
 11. WHEN POI search fails, THEN an error message SHALL be displayed in the panel
 12. WHEN the Download button is displayed, THEN it SHALL be labeled "💾 Download" and positioned in the panel footer alongside the search bar
 13. WHEN no search results are found, THEN the system SHALL display an empty results state without error
+
+## Data Schema
+
+```json
+{
+  "trip_name": "string",
+  "timezone": "Pacific/Auckland",
+  "stops": [
+    {
+      "stop_id": "string",
+      "name": "string",
+      "date": {"from": "YYYY-MM-DD", "to": "YYYY-MM-DD"},
+      "location": {"lat": number, "lng": number},
+      "duration_days": number,
+      "travel_time_from_previous": "string",
+      "scenic_waypoints": [
+        {"lat": number, "lng": number, "label": "string"}
+      ],
+      "accommodation": {
+        "name": "string",
+        "address": "string",
+        "check_in": "YYYY-MM-DD hh:mm",
+        "check_out": "YYYY-MM-DD hh:mm",
+        "confirmation": "string",
+        "url": "string",
+        "thumbnail_url": "string|null"
+      },
+      "activities": [
+        {
+          "activity_id": "string",
+          "activity_name": "string",
+          "location": {"lat"?: number, "lng"?: number, "address"?: "string"},
+          "duration": "string",
+          "travel_time_from_accommodation": "string",
+          "url": "string",
+          "remarks": "string",
+          "thumbnail_url": "string|null",
+          "order": number,
+          "status": {"done": boolean}
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Testing Plan
+
+### Unit Tests
+- JSON schema validation
+- LocalStorage persistence utilities
+- Activity reordering logic
+- Date progression logic (always NZ time)
+
+### Integration Tests
+- Map renders with base + activities
+- Route polyline displays correctly with scenic waypoints
+- Activity list ↔ pin sync works both directions
+- Weather fetch populates forecast correctly
+
+### Manual QA Checklist
+- Deploy build loads correctly at `/wanderlog/`
+- Today's base auto-focused (NZT)
+- Drag-drop reordering persists across refresh
+- "Download Trip JSON" includes updated state
+- "Mark Done" toggles persist
+- Offline test: disable network → JSON still loads, no map/route
+
+## Future Enhancements
+- User-uploaded trip JSON
+- Photo thumbnails from Google Places API
+- Offline-first full map caching
+- Multi-user sync with backend
+- Trip summary dashboard
+- More family-specific flags with icons

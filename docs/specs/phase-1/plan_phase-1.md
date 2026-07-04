@@ -4,8 +4,8 @@
 
 This document is the worklist for building the Wanderlog Travel Journal application. Each task built incrementally on previous steps, following test-driven development for core business logic. Design rationale and acceptance criteria live in the sibling specs:
 
-- Design: [design_travel-journal.md](design_travel-journal.md)
-- Requirements: [requirements_travel-journal.md](requirements_travel-journal.md)
+- Design: [design_phase-1.md](design_phase-1.md)
+- Requirements: [requirements_phase-1.md](requirements_phase-1.md)
 - Cloud storage was added later — see [plan_firebase-integration.md](plan_firebase-integration.md).
 
 ### Task Checklist

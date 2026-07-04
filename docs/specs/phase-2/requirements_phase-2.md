@@ -4,7 +4,7 @@
 
 Phase 2 turns Wanderlog from a read-mostly viewer of a single trip into an editable, login-protected travel journal that manages multiple trips. The backend moves from Firebase Firestore to Supabase (Postgres), authenticated family members can browse past and future trips, and itinerary details become editable in the UI with changes persisted to the backend.
 
-The application remains a React 19 + TypeScript + Vite single-page app with Google Maps integration. Existing UI behavior defined in `requirements_travel-journal.md` carries over unchanged except where this document amends it.
+The application remains a React 19 + TypeScript + Vite single-page app with Google Maps integration. Existing UI behavior defined in `requirements_phase-1.md` carries over unchanged except where this document amends it.
 
 ## Scope Decisions
 
@@ -155,7 +155,7 @@ Hosting (Requirement 6) and the Maps key referrer restrictions (Requirement 7) l
 
 ## Changelog
 
-- 2026-07-03: Amended alongside [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md): user modifications become canonical columns (Req 1.4); weather cache moves client-side (Req 1.5); Edge Function weather proxy dropped (Req 7, Scope Decisions); Milestone 0 (toolchain upgrades) added.
+- 2026-07-03: Amended alongside [design_phase-2.md](design_phase-2.md): user modifications become canonical columns (Req 1.4); weather cache moves client-side (Req 1.5); Edge Function weather proxy dropped (Req 7, Scope Decisions); Milestone 0 (toolchain upgrades) added.
 - 2026-07-04: Trip creation reworked to file import (Req 3.5 amended; Req 3.7-3.9 added): drag-and-drop JSON (Wanderlog or TripIt export), validation failures displayed with nothing written on failure, TripIt conversion via geocoding, fresh ids per import. Milestone M3.5 added. TripIt API integration and blank-trip creation moved out of scope.
-- 2026-07-04: Scope Decision "Server-side code: None" superseded by [requirements_wanderlog-phase-3.md](requirements_wanderlog-phase-3.md) (agent mode requires a serverless endpoint holding the model API key). Phase 2 itself is unchanged.
+- 2026-07-04: Scope Decision "Server-side code: None" superseded by [requirements_phase-3.md](../phase-3/requirements_phase-3.md) (agent mode requires a serverless endpoint holding the model API key). Phase 2 itself is unchanged.
 - 2026-07-04: Req 2.8 (password reset via recovery email) and Req 2.9 (invitation acceptance sets initial password) added — the manual-provisioning path in Req 2.4 had no in-app way for invitees or locked-out members to set a password. Design and M2 plan updated alongside.

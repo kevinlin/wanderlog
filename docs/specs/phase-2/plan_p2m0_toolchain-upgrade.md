@@ -6,7 +6,7 @@
 
 **Tech Stack:** pnpm, Vite 8, Vitest 4, React 19.2, TypeScript 6, Tailwind CSS 4, Ultracite 7 / Biome 2.5, Node 24 LTS (CI).
 
-Context: [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md), [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md); milestone tracker: [plan_wanderlog-phase-2.md](plan_wanderlog-phase-2.md).
+Context: [design_phase-2.md](design_phase-2.md), [requirements_phase-2.md](requirements_phase-2.md); milestone tracker: [plan_phase-2.md](plan_phase-2.md).
 
 ## Global Constraints
 
@@ -45,7 +45,7 @@ Bumped the deploy workflow's Node version from 22 to 24. Push triggers are disab
 
 ### Task 7: Final M0 verification gate
 
-Full local verification plus the manual smoke checklist on the deployed site (map pins, route polyline, timeline navigation, drag-reorder and done-toggle surviving refresh, export, POI search, no new console errors). Marked M0 shipped in [plan_wanderlog-phase-2.md](plan_wanderlog-phase-2.md).
+Full local verification plus the manual smoke checklist on the deployed site (map pins, route polyline, timeline navigation, drag-reorder and done-toggle surviving refresh, export, POI search, no new console errors). Marked M0 shipped in [plan_phase-2.md](plan_phase-2.md).
 
 ---
 

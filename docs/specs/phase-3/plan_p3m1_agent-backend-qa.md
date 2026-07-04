@@ -10,7 +10,7 @@
 
 ## Global Constraints
 
-- Prerequisite: Phase 2 M4 shipped ([plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md)) - `useOnlineStatus` exists at `src/hooks/useOnlineStatus.ts`.
+- Prerequisite: Phase 2 M4 shipped ([plan_p2m4_itinerary-editing.md](../phase-2/plan_p2m4_itinerary-editing.md)) - `useOnlineStatus` exists at `src/hooks/useOnlineStatus.ts`.
 - M1 is read-only: the tool registry contains exactly `list_trips` and `get_trip`. No write tool of any kind ships in this milestone (Phase 3 Req 3.4 verification depends on it).
 - Plain Messages API only: no beta namespaces, no `thinking`, no `output_config` - the endpoint must work against any Anthropic-compatible provider (`ANTHROPIC_BASE_URL`, e.g. DeepSeek).
 - Model, key, and base URL come only from env (`ANTHROPIC_MODEL`, `ANTHROPIC_API_KEY`, `ANTHROPIC_BASE_URL`); never hardcode a model id, never expose these to the client bundle (no `VITE_` prefix).
@@ -1240,7 +1240,7 @@ git add -A && git commit -m "feat: agent button and modal with streamed progress
 ### Task 9: M1 verification gate
 
 **Files:**
-- Modify: `docs/specs/plan_wanderlog-phase-3.md` (status row)
+- Modify: `docs/specs/phase-3/plan_phase-3.md` (status row)
 
 - [ ] **Step 1: Configure Vercel env vars**
 
@@ -1281,10 +1281,10 @@ curl -s -X POST "$PREVIEW/api/agent" -H "Authorization: Bearer $TOKEN" \
 - [ ] **Step 4: Ship**
 
 - Merge to `main` (test-gated production deploy), re-run Step 2's curl checks against production.
-- Update the M1 row in `plan_wanderlog-phase-3.md`: `Shipped (<date>)`.
+- Update the M1 row in `plan_phase-3.md`: `Shipped (<date>)`.
 
 ```bash
-git add docs/specs/plan_wanderlog-phase-3.md
+git add docs/specs/phase-3/plan_phase-3.md
 git commit -m "docs: mark phase 3 m1 (agent backend + qa) shipped"
 ```
 

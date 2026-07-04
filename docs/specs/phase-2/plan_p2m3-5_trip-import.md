@@ -2,7 +2,7 @@
 
 **Goal:** Trip creation becomes file import: drag-and-drop a trip data JSON (Wanderlog export or TripIt export) into the create modal, validate it with zod, convert TripIt files (geocoding lodging addresses), and save the trip to Supabase with fresh ids - nothing is saved without a file that passes validation (Req 3.5, 3.7-3.9).
 
-**Architecture:** A client-side pipeline - `file → JSON.parse → detectFormat → zod validate → convert (TripIt: + geocode) → withFreshIds → buildRows → importTrip`. New modules: `src/schemas/tripFileSchemas.ts` (zod schemas), `src/services/tripImportService.ts` (detection, orchestration, TripIt conversion), `src/services/geocodingService.ts` (Maps Geocoder wrapper). `CreateTripModal` is replaced by `ImportTripModal` with drop-zone / processing / preview / error-list states. See [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md) § Trip Import (M3.5).
+**Architecture:** A client-side pipeline - `file → JSON.parse → detectFormat → zod validate → convert (TripIt: + geocode) → withFreshIds → buildRows → importTrip`. New modules: `src/schemas/tripFileSchemas.ts` (zod schemas), `src/services/tripImportService.ts` (detection, orchestration, TripIt conversion), `src/services/geocodingService.ts` (Maps Geocoder wrapper). `CreateTripModal` is replaced by `ImportTripModal` with drop-zone / processing / preview / error-list states. See [design_phase-2.md](design_phase-2.md) § Trip Import (M3.5).
 
 **Tech Stack:** zod 4 (new dependency), TanStack Query v5, @supabase/supabase-js v2, @react-google-maps/api (`useJsApiLoader`), date-fns, Tailwind 4, Vitest 4.
 

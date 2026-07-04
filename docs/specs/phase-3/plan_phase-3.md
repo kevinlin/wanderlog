@@ -1,6 +1,6 @@
 # Wanderlog Phase 3 - Master Plan
 
-Milestone tracker for [design_wanderlog-phase-3.md](design_wanderlog-phase-3.md) / [requirements_wanderlog-phase-3.md](requirements_wanderlog-phase-3.md).
+Milestone tracker for [design_wanderlog-phase-3.md](design_wanderlog-phase-3.md) / [requirements_phase-3.md](requirements_phase-3.md).
 
 Detailed plans are written just-in-time, following the Phase 2 convention: each milestone's plan is authored when the previous milestone ships. Each milestone is independently shippable.
 

@@ -785,7 +785,7 @@ git add -A && git commit -m "feat: open created trip from the agent modal"
 ### Task 7: Contract finalization + M3 verification gate
 
 **Files:**
-- Modify: `docs/specs/design_wanderlog-phase-3.md` (changelog), `docs/specs/plan_wanderlog-phase-3.md` (status rows)
+- Modify: `docs/specs/phase-3/design_wanderlog-phase-3.md` (changelog), `docs/specs/phase-3/plan_phase-3.md` (status rows)
 
 - [ ] **Step 1: Configure Vercel + provision Hermes**
 
@@ -824,10 +824,10 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST "$PREVIEW/api/agent" \
 - [ ] **Step 5: Ship**
 
 - Merge to `main`; re-run Step 3's buffered call against production with the Hermes account.
-- Update `plan_wanderlog-phase-3.md`: M3 row `Shipped (<date>)`; note Phase 3 complete.
+- Update `plan_phase-3.md`: M3 row `Shipped (<date>)`; note Phase 3 complete.
 
 ```bash
-git add docs/specs/plan_wanderlog-phase-3.md docs/specs/design_wanderlog-phase-3.md
+git add docs/specs/phase-3/plan_phase-3.md docs/specs/phase-3/design_wanderlog-phase-3.md
 git commit -m "docs: mark phase 3 m3 shipped - agent mode complete"
 ```
 

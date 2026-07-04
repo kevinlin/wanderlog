@@ -6,7 +6,7 @@
 
 **Tech Stack:** Supabase (Postgres, Auth, CLI), @supabase/supabase-js v2, TanStack Query v5 (+ persist-client, async-storage-persister), idb-keyval, React 19, Vitest.
 
-Context: [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md), [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md); milestone tracker: [plan_wanderlog-phase-2.md](plan_wanderlog-phase-2.md).
+Context: [design_phase-2.md](design_phase-2.md), [requirements_phase-2.md](requirements_phase-2.md); milestone tracker: [plan_phase-2.md](plan_phase-2.md).
 
 ## Global Constraints
 
@@ -94,7 +94,7 @@ On the Task 13 Vercel preview URL, signed in as a family member, side by side wi
 - [x] Export downloads JSON with `status.done` and `order` populated
 - [x] POI search adds an activity to the panel (in-memory, as today)
 - [x] Firestore console: data untouched, no writes since migration (Req 8.1) - the app bundle contains zero firebase imports; the migration script opens Firestore read-only
-- [x] Sign off: M1 row set to `Shipped` in [plan_wanderlog-phase-2.md](plan_wanderlog-phase-2.md)
+- [x] Sign off: M1 row set to `Shipped` in [plan_phase-2.md](plan_phase-2.md)
 
 ---
 
