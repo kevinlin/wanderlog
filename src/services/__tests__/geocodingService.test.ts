@@ -30,4 +30,16 @@ describe('geocodeAddress', () => {
     mockGeocode.mockRejectedValue(new Error('ZERO_RESULTS'));
     expect(await geocodeAddress('nowhere')).toBeNull();
   });
+
+  it('returns null when the results list is empty', async () => {
+    stubGoogle();
+    mockGeocode.mockResolvedValue({ results: [] });
+    expect(await geocodeAddress('nowhere')).toBeNull();
+  });
+
+  it('rethrows service-level failures (REQUEST_DENIED) instead of masking them as misses', async () => {
+    stubGoogle();
+    mockGeocode.mockRejectedValue(new Error('REQUEST_DENIED'));
+    await expect(geocodeAddress('Vulkanstrasse 108b, Zurich')).rejects.toThrow('REQUEST_DENIED');
+  });
 });

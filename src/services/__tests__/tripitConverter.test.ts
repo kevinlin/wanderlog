@@ -59,6 +59,35 @@ describe('tripitToTripData', () => {
     expect(errors[0].message).toContain('St. Giles Gardens Residences Kuala Lumpur');
   });
 
+  it('falls back to a coarser query with a warning when the exact address is unlocatable', async () => {
+    // Street-level lookups miss; town/name-level queries hit.
+    const fallbackGeocode = vi.fn(async (query: string) =>
+      query.includes('Vulkanstrasse') || query.includes('Hauptstrasse') ? null : { lat: 47.4, lng: 8.5 }
+    );
+    const file = tripitFileSchema.parse(zurichTripitFile);
+    const { tripData, warnings, errors } = await tripitToTripData(file, fallbackGeocode);
+    expect(errors).toEqual([]);
+    expect(tripData?.stops).toHaveLength(2);
+    expect(tripData?.stops[0].location).toEqual({ lat: 47.4, lng: 8.5 });
+    // First fallback after the raw + normalized address: hotel name + town segments.
+    expect(fallbackGeocode).toHaveBeenCalledWith('Mercure Zurich City, 8048 ZURICH, Switzerland');
+    const approximations = warnings.filter((w) => w.includes('approximate location'));
+    expect(approximations).toHaveLength(2);
+    expect(approximations[0]).toContain('Mercure Zurich City');
+    expect(approximations[0]).toContain('Vulkanstrasse 108b - 8048 ZURICH - Switzerland');
+  });
+
+  it('surfaces geocoding service failures distinctly instead of "could not locate"', async () => {
+    const deniedGeocode = vi.fn(async () => {
+      throw new Error('REQUEST_DENIED');
+    });
+    const file = tripitFileSchema.parse(klTripitFile);
+    const { tripData, errors } = await tripitToTripData(file, deniedGeocode);
+    expect(tripData).toBeNull();
+    expect(errors[0].message).toMatch(/geocoding failed/i);
+    expect(errors[0].message).toContain('REQUEST_DENIED');
+  });
+
   it('errors on a file with no lodging', async () => {
     const file = tripitFileSchema.parse({
       trips: [{ name: 'X', startDate: '2027-01-01', endDate: '2027-01-05', lodging: [], flights: [] }],

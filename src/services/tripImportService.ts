@@ -196,6 +196,60 @@ const nearestStopIndex = (stops: TripBase[], date: string): number => {
   return best;
 };
 
+// TripIt addresses separate segments with " - " or commas; split into trimmed segments
+// (spaces around the dash keep street numbers like "4-10" intact).
+const addressSegments = (address: string): string[] =>
+  address
+    .split(/\s+-\s+|,/)
+    .map((segment) => segment.trim())
+    .filter(Boolean);
+
+// Geocode queries from most to least precise: exact address, comma-normalized address,
+// lodging name + town, town/city segments alone, then the trip's primary location.
+const geocodeQueries = (lodging: TripitLodging, trip: TripitTrip): string[] => {
+  const queries: string[] = [];
+  if (lodging.address) {
+    const segments = addressSegments(lodging.address);
+    queries.push(lodging.address, segments.join(', '));
+    if (segments.length > 1) {
+      const locality = segments.slice(1).join(', ');
+      queries.push(`${lodging.title}, ${locality}`, locality);
+    }
+  }
+  if (trip.primaryLocation) {
+    queries.push(`${lodging.title}, ${trip.primaryLocation}`, trip.primaryLocation);
+  }
+  if (queries.length === 0) {
+    queries.push(lodging.title);
+  }
+  return [...new Set(queries)];
+};
+
+interface GeocodeAttempt {
+  coords: { lat: number; lng: number } | null;
+  serviceError: string | null;
+  usedQuery: string | null;
+}
+
+const geocodeWithFallback = async (queries: string[], geocode: GeocodeFn): Promise<GeocodeAttempt> => {
+  for (const query of queries) {
+    try {
+      const coords = await geocode(query);
+      if (coords) {
+        return { coords, usedQuery: query, serviceError: null };
+      }
+    } catch (error) {
+      // Service-level failure (denied key, quota, network): retrying coarser queries won't help.
+      return {
+        coords: null,
+        usedQuery: null,
+        serviceError: error instanceof Error ? error.message : String(error),
+      };
+    }
+  }
+  return { coords: null, usedQuery: null, serviceError: null };
+};
+
 const lodgingToStop = async (
   lodging: TripitLodging,
   trip: TripitTrip,
@@ -203,14 +257,16 @@ const lodgingToStop = async (
   warnings: string[]
 ): Promise<{ stop: TripBase | null; error: string | null }> => {
   const address = lodging.address ?? lodging.title;
-  let coords: { lat: number; lng: number } | null = null;
-  try {
-    coords = await geocode(address);
-  } catch {
-    coords = null;
+  const queries = geocodeQueries(lodging, trip);
+  const { coords, usedQuery, serviceError } = await geocodeWithFallback(queries, geocode);
+  if (serviceError) {
+    return { stop: null, error: `Geocoding failed for "${lodging.title}": ${serviceError}` };
   }
   if (!coords) {
     return { stop: null, error: `Could not locate "${address}" for stop "${lodging.title}"` };
+  }
+  if (usedQuery !== queries[0]) {
+    warnings.push(`Could not pinpoint "${queries[0]}"; using approximate location "${usedQuery}" for "${lodging.title}".`);
   }
   const { checkIn, checkOut } = lodgingCheckTimes(lodging);
   const parsedIn = checkIn ? parseTripitDateTime(checkIn) : null;
