@@ -12,21 +12,45 @@ const mockUpdateEq = vi.fn();
 const mockUpdate = vi.fn(() => ({ eq: mockUpdateEq }));
 const mockInsert = vi.fn();
 const mockDeleteEq = vi.fn();
+const fromSpy = vi.fn(() => ({
+  ...chain,
+  update: mockUpdate,
+  insert: mockInsert,
+  delete: vi.fn(() => ({ eq: mockDeleteEq })),
+}));
 vi.mock('@/config/supabase', () => ({
-  getSupabase: () => ({
-    from: vi.fn(() => ({ ...chain, update: mockUpdate, insert: mockInsert, delete: vi.fn(() => ({ eq: mockDeleteEq })) })),
-  }),
+  getSupabase: () => ({ from: fromSpy }),
 }));
 
+import type { TripData } from '@/types/trip';
 import {
   createTrip,
   deleteTrip,
   fetchTripById,
   fetchTripSummaries,
+  importTrip,
   reorderActivities,
   setActivityDone,
   setWaypointDone,
 } from '../supabaseService';
+
+const importableTrip: TripData = {
+  trip_id: 'fresh-uuid',
+  trip_name: 'Imported',
+  timezone: 'UTC',
+  stops: [
+    {
+      stop_id: 's1',
+      name: 'Stop 1',
+      date: { from: '2027-01-01', to: '2027-01-02' },
+      location: { lat: 1, lng: 2 },
+      duration_days: 1,
+      accommodation: { name: 'Hotel', address: '', check_in: '', check_out: '' },
+      activities: [{ activity_id: 'a1', activity_name: 'Thing', status: { done: false } }],
+      scenic_waypoints: [],
+    },
+  ],
+};
 
 describe('supabaseService reads', () => {
   beforeEach(() => vi.clearAllMocks());
@@ -159,5 +183,27 @@ describe('supabaseService trip create/delete', () => {
   it('createTrip throws on error', async () => {
     mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
     await expect(createTrip({ name: 'X', startDate: 'a', endDate: 'b', timezone: 'UTC' })).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService importTrip', () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it('importTrip inserts the full bundle in FK order', async () => {
+    mockInsert.mockResolvedValue({ error: null });
+    const tripId = await importTrip(importableTrip);
+    expect(tripId).toBe(importableTrip.trip_id);
+    const tables = fromSpy.mock.calls.map(([table]) => table);
+    expect(tables).toEqual(['trips', 'stops', 'accommodations', 'activities']);
+    // scenic_waypoints empty → no insert call for it
+  });
+
+  it('importTrip deletes the trip row and rethrows when a child insert fails', async () => {
+    mockInsert
+      .mockResolvedValueOnce({ error: null }) // trips
+      .mockResolvedValueOnce({ error: { message: 'stops boom' } }); // stops
+    mockDeleteEq.mockResolvedValue({ error: null });
+    await expect(importTrip(importableTrip)).rejects.toThrow('stops boom');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', importableTrip.trip_id);
   });
 });
