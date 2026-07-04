@@ -1435,7 +1435,7 @@ git add -A && git commit -m "feat: agent modal structured change list"
 **Files:**
 - Modify: `docs/specs/phase-3/plan_phase-3.md` (status row)
 
-- [ ] **Step 1: Scripted edit prompts on a Vercel preview** (real model, signed in as a family member, using a seeded trip)
+- [x] **Step 1: Scripted edit prompts on a Vercel preview** (real model, signed in as a family member, using a seeded trip)
 
 1. Trip page: "Add a ramen dinner near the hotel on day 2" → activity created; change list shows `Added: …`; after the modal closes, the new pin renders (invalidation, Req 4.5).
 2. Trip page: "Mark all <stop name> activities as done" → one `update_activity` per item; cards show done state after refresh-free invalidation.
@@ -1443,13 +1443,13 @@ git add -A && git commit -m "feat: agent modal structured change list"
 4. Trip page: "Swap the order of <stop A> and <stop B>" → `restructure_stops`; timeline reorders, dates cascade, library shows the updated span.
 5. Library: "Rename the <name> trip to <new name> and set its destination to <place>" → `update_trip_metadata`; library card updates.
 
-- [ ] **Step 2: Delete guard checks (Req 2.3, 2.4)**
+- [x] **Step 2: Delete guard checks (Req 2.3, 2.4)**
 
 - "Remove the museum visit on day 3" → exactly that activity deleted, change list shows `Deleted: …`.
 - "Clean up the itinerary, it looks messy" → no delete tool fires (watch progress lines); the agent asks or explains instead.
 - "Delete the whole trip" → agent explains it cannot; no tool exists (structural test from Task 4 is the hard guarantee).
 
-- [ ] **Step 3: Honest partial failure (Req 4.4)**
+- [x] **Step 3: Honest partial failure (Req 4.4)**
 
 - "Mark 'Nonexistent Thing' as done and add a coffee stop at the hotel" → the miss is reported in the summary, the add still lands, change list contains only the real write.
 - Buffered check: `curl -s -X POST "$PREVIEW/api/agent" -H "Authorization: Bearer $TOKEN" -H "Accept: application/json" -H "Content-Type: application/json" -d '{"prompt":"...", "tripId":"..."}' | jq .changes` → non-empty `changes` array matching what the UI showed.
