@@ -48,7 +48,7 @@ export function buildGeocodeTool(apiKey: string): AgentTool;
 export function buildAgentTools(geocodingApiKey: string): AgentTool[];  // = [...AGENT_TOOLS, geocode] (+ create_trip in Task 3)
 ```
 
-- [ ] **Step 1: Extend the env module (test first)**
+- [x] **Step 1: Extend the env module (test first)**
 
 In `api/_lib/__tests__/env.test.ts`: add `GOOGLE_GEOCODING_API_KEY: 'geo-key'` to `FULL_ENV`, add `googleGeocodingApiKey: 'geo-key'` to the expected object, and extend the missing-vars regex to `/ANTHROPIC_API_KEY.*ANTHROPIC_MODEL.*GOOGLE_GEOCODING_API_KEY.*VITE_SUPABASE_URL.*VITE_SUPABASE_ANON_KEY/s` (the `REQUIRED` list stays alphabetically grouped as written). Run - FAIL. Then in `api/_lib/env.ts` add `'GOOGLE_GEOCODING_API_KEY'` to `REQUIRED` and `googleGeocodingApiKey: env.GOOGLE_GEOCODING_API_KEY as string` to the returned object. Append to `.env.local.example`:
 
@@ -56,7 +56,7 @@ In `api/_lib/__tests__/env.test.ts`: add `GOOGLE_GEOCODING_API_KEY: 'geo-key'` t
 GOOGLE_GEOCODING_API_KEY=xxx   # server-side Geocoding API key; NOT the referrer-restricted browser Maps key
 ```
 
-- [ ] **Step 2: Write failing geocode-tool tests**
+- [x] **Step 2: Write failing geocode-tool tests**
 
 `api/_lib/__tests__/geocode.test.ts` - stub the global `fetch`; the supabase client is unused by this tool, so pass any fake:
 
@@ -120,7 +120,7 @@ describe('geocode', () => {
 
 Run: expect FAIL. (The service-error-throws / no-match-returns-miss split mirrors `geocodingService.ts` on the client: retrying a coarser query helps with a miss, never with a denied key.)
 
-- [ ] **Step 3: Implement `api/_lib/tools/geocode.ts`**
+- [x] **Step 3: Implement `api/_lib/tools/geocode.ts`**
 
 ```typescript
 import { z } from 'zod';
@@ -187,7 +187,7 @@ const name = typeof raw === 'string' && raw ? ` "${raw}"` : '';
 
 and add the template `geocode: 'Looking up{name}…'` (the `trip_name` case is used by Task 3's `create_trip: 'Creating trip{name}…'` - add both templates now, with a `progressLabel('geocode', { address: 'Tokyo' })` assertion in the loop test).
 
-- [ ] **Step 4: Green, commit**
+- [x] **Step 4: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -215,7 +215,7 @@ export async function insertTripBundle(
 ): Promise<string>;   // returns the trip id; compensation-deletes the trip row on any child insert failure
 ```
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 `src/services/__tests__/tripBundleInsert.test.ts` - a minimal local fake capturing `from().insert()` / `from().delete().eq()` calls (same pattern as `api/_lib/__tests__/fakeSupabaseClient.ts`, but this module lives in `src/`, so keep the fake local to the test file):
 
@@ -292,7 +292,7 @@ describe('insertTripBundle', () => {
 
 Run: expect FAIL.
 
-- [ ] **Step 2: Implement by moving the body of `importTrip`**
+- [x] **Step 2: Implement by moving the body of `importTrip`**
 
 `src/services/tripBundleInsert.ts`:
 
@@ -342,7 +342,7 @@ export const importTrip = (tripData: TripData): Promise<string> => insertTripBun
 
 The existing `importTrip` tests in `supabaseService.test.ts` must pass unchanged - they are the refactor's safety net.
 
-- [ ] **Step 3: Green, commit**
+- [x] **Step 3: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -366,11 +366,11 @@ git add -A && git commit -m "refactor: extract shared trip bundle insert with co
 export const CREATE_TRIP_TOOL: AgentTool;   // name: 'create_trip'
 ```
 
-- [ ] **Step 1: Export the leaf schemas**
+- [x] **Step 1: Export the leaf schemas**
 
 In `src/schemas/tripFileSchemas.ts`, add `export` to the existing `dateString`, `activitySchema`, `waypointSchema`, and `accommodationSchema` declarations. No other change; existing schema tests stay untouched.
 
-- [ ] **Step 2: Write failing tests**
+- [x] **Step 2: Write failing tests**
 
 `api/_lib/__tests__/createTrip.test.ts`:
 
@@ -468,7 +468,7 @@ describe('create_trip', () => {
 
 Run: expect FAIL.
 
-- [ ] **Step 3: Implement `api/_lib/tools/createTrip.ts`**
+- [x] **Step 3: Implement `api/_lib/tools/createTrip.ts`**
 
 The input schema mirrors the trip JSON the model already reads (nested `date`/`location`), reusing the exported leaf schemas; the accommodation preprocess wrapper from the file-import path is deliberately not reused (its transform has no stable JSON Schema form). Canonical validation still runs `wanderlogTripSchema` inside the executor - the same gate as file import:
 
@@ -562,7 +562,7 @@ export function buildAgentTools(geocodingApiKey: string): AgentTool[] {
 
 Update the registry completeness test in `api/_lib/__tests__/tools.test.ts` to assert `buildAgentTools('k')` contains the M2 fourteen plus `create_trip` and `geocode` (sixteen total), and still no `delete_trip`.
 
-- [ ] **Step 4: Green, commit**
+- [x] **Step 4: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -580,7 +580,7 @@ git add -A && git commit -m "feat: create_trip tool over the shared import pipel
 - Consumes: `runAgentLoop`, the handler's `runToEvents` closure (M1), `AgentChangeEvent`.
 - Produces: `MAX_TOKENS_PER_CALL = 8192`; a `max_tokens` stop emits an `error` event; the `result` event's `tripId` carries the id from a trip-created `change` event.
 
-- [ ] **Step 1: Write failing loop test**
+- [x] **Step 1: Write failing loop test**
 
 ```typescript
 it('surfaces a max_tokens truncation as an error event and stops', async () => {
@@ -596,7 +596,7 @@ it('surfaces a max_tokens truncation as an error event and stops', async () => {
 });
 ```
 
-- [ ] **Step 2: Implement in `loop.ts`**
+- [x] **Step 2: Implement in `loop.ts`**
 
 Set `MAX_TOKENS_PER_CALL = 8192`. After extracting `lastText` and before the `stop_reason !== 'tool_use'` return, add:
 
@@ -613,7 +613,7 @@ if (response.stop_reason === 'max_tokens') {
 
 (A truncated response can carry a mangled or incomplete `tool_use` block; executing it would be worse than stopping and telling the user.)
 
-- [ ] **Step 3: Write failing handler tests**
+- [x] **Step 3: Write failing handler tests**
 
 ```typescript
 it('sets result.tripId from a trip-created change event (buffered)', async () => {
@@ -638,7 +638,7 @@ it('sets result.tripId in the streamed result event', async () => {
 });
 ```
 
-- [ ] **Step 4: Implement in `api/agent.ts`**
+- [x] **Step 4: Implement in `api/agent.ts`**
 
 Inside `runToEvents`, watch changes while forwarding events:
 
@@ -663,7 +663,7 @@ const runToEvents = async (emit: (event: AgentEvent) => void): Promise<void> => 
 };
 ```
 
-- [ ] **Step 5: Green, commit**
+- [x] **Step 5: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -677,7 +677,7 @@ git add -A && git commit -m "feat: creation-sized token cap, truncation error, r
 **Files:**
 - Modify: `api/_lib/systemPrompt.ts`, `api/_lib/__tests__/systemPrompt.test.ts`
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```typescript
 it('states the trip creation rules', () => {
@@ -688,7 +688,7 @@ it('states the trip creation rules', () => {
 });
 ```
 
-- [ ] **Step 2: Append to `CORE_RULES`**
+- [x] **Step 2: Append to `CORE_RULES`**
 
 Add these bullets to the rules list (all M2 rules stay; the M2 stop-coordinates bullet is superseded by the first bullet below - replace it):
 
@@ -700,7 +700,7 @@ Add these bullets to the rules list (all M2 rules stay; the M2 stop-coordinates 
 
 The M2 tests (delete guard, honest reporting) must keep passing.
 
-- [ ] **Step 3: Green, commit**
+- [x] **Step 3: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -720,7 +720,7 @@ git add -A && git commit -m "feat: agent system prompt trip creation rules"
 
 The M1 plan sketched this button in its render outline; this task makes it a tested guarantee - implement whatever the M1 build left out.
 
-- [ ] **Step 1: Write failing test**
+- [x] **Step 1: Write failing test**
 
 Mock `useNavigate` (keep the rest of react-router real):
 
@@ -752,7 +752,7 @@ it('shows no Open trip button when tripId is null', async () => {
 });
 ```
 
-- [ ] **Step 2: Implement**
+- [x] **Step 2: Implement**
 
 In the result view:
 
@@ -773,7 +773,7 @@ In the result view:
 
 Match the classes to the modal's existing primary button. The `['trips']` invalidation on run completion (M1) already makes the new trip appear in the library without this button being pressed.
 
-- [ ] **Step 3: Green, commit**
+- [x] **Step 3: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -792,7 +792,7 @@ git add -A && git commit -m "feat: open created trip from the agent modal"
 - Vercel env settings: add `GOOGLE_GEOCODING_API_KEY` (all environments). Restrict the key to the Geocoding API in the Google Cloud console (API restriction; no referrer restriction - this is a server key).
 - Supabase Auth dashboard: manually provision the dedicated Hermes family-member account (email + password), so its actions are attributable (Req 7.1).
 
-- [ ] **Step 2: Contract cross-check**
+- [x] **Step 2: Contract cross-check**
 
 Read the "API Contract" section of [design_wanderlog-phase-3.md](design_wanderlog-phase-3.md) line by line against the implementation: request body, all four event shapes, buffered shape, status codes (200/400/401/502), `result.tripId` semantics. Fix any drift in the design doc (it is the Hermes integration doc, Req 7.3) and append a changelog line: `M3 shipped - contract verified as the stable Hermes integration surface`.
 

@@ -102,7 +102,7 @@ NDJSON stream - one event per line:
 
 Buffered mode (`Accept: application/json`): `{ "summary": string, "answer": string | null, "changes": Change[], "errors": Error[], "tripId": string | null }` - the same data, collected.
 
-Status codes: 200 (loop ran; tool-level failures live in events/`errors`), 400 (invalid body, before any model call), 401 (missing/invalid token), 502 (model provider unreachable or misconfigured). A severed stream (platform timeout) means: changes already streamed are committed.
+Status codes: 200 (loop ran; tool-level failures live in events/`errors`), 400 (invalid body, before any model call), 401 (missing/invalid token), 405 (non-POST method), 502 (model provider unreachable or misconfigured). A severed stream (platform timeout) means: changes already streamed are committed.
 
 ## Agent UI
 
@@ -163,3 +163,4 @@ Risk-ordered; each independently shippable. Detailed plans written just-in-time 
 - 2026-07-04: Initial design (brainstormed and approved): Vercel-hosted tool-use loop, mirrored CRUD tool surface, immediate writes with delete guard, one-shot prompts, NDJSON/buffered dual rendering, Hermes programmatic access.
 - 2026-07-04: Code-sharing rationale corrected during M1 planning: `src/config/supabase.ts` already runs under Node (migration script); the function's own client exists for the per-request caller token (RLS), not env incompatibility.
 - 2026-07-04: Agent UI layout note added: on `TripPage` the AgentButton and UserMenu are corner-pinned (top-right); the activities panel drops below them (`sm:top-16`) rather than the controls shifting left to dodge it. Tracked in [plan_p3m2_bounded-edits.md](plan_p3m2_bounded-edits.md) changelog.
+- 2026-07-04: M3 shipped - contract verified as the stable Hermes integration surface. Contract cross-check added the 405 (non-POST) status code, previously implemented but undocumented.
