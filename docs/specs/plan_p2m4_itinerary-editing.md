@@ -416,6 +416,14 @@ pnpm test:run && pnpm build
 git add -A && git commit -m "feat: accommodation edit columns and metadata write path"
 ```
 
+> **Post-ship fix (2026-07-04): production outage from unpushed migration.** The frontend shipped to Vercel while this task's migration (`20260704080000_accommodation_edit_fields.sql`) was only applied locally - production Postgres had no `accommodations.lat/lng/remarks` columns. PostgREST `select *` returned accommodation rows without those fields, so `row.lat` was `undefined` (not `null`); the mapper guard `row.lat !== null` passed and produced `location: { lat: undefined, lng: undefined }`, which is truthy, so `MapContainer`'s `accommodation?.location || base.location` fallback never fired and Google Maps threw "not a LatLng or LatLngLiteral with finite coordinates" - error boundary on every trip page.
+>
+> Remediation:
+> 1. Applied the pending migration with `supabase db push --linked`; verified via `supabase migration list --linked` and a live reload of the trip page.
+> 2. Hardened the mappers (`toLocation`, `toAccommodation` in `supabaseMappers.ts`) to use loose `== null` coordinate guards so absent columns behave like null ones - the accommodation pin falls back to the stop location instead of crashing. Regression tests added for rows missing the lat/lng columns entirely.
+>
+> Lesson encoded in the design doc (Schema notes): push migrations to production before or with the frontend deploy that depends on them; consider a `supabase db push` step in the deploy workflow.
+
 ---
 
 ### Task 7: Accommodation edit modal
@@ -609,3 +617,4 @@ git commit -m "docs: mark M4 itinerary editing shipped - phase 2 complete"
 ## Changelog
 
 - 2026-07-04: Initial plan.
+- 2026-07-04: Task 6 post-ship fix documented - production outage from the accommodation migration not being pushed before deploy; migration applied, mapper coordinate guards hardened to `== null` with regression tests.

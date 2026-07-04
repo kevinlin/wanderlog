@@ -92,6 +92,9 @@ create table accommodations (
   check_out   text,
   confirmation text,
   url         text,
+  remarks     text,               -- added by M4 migration (Req 4.4)
+  lat         double precision,   -- added by M4 migration (Req 4.4)
+  lng         double precision,   -- added by M4 migration (Req 4.4)
   thumbnail_url text,
   google_place_id text,
   created_at  timestamptz not null default now(),
@@ -146,6 +149,7 @@ Schema notes:
 - `updated_at` maintained by a `moddatetime` trigger on every table - the last-write-wins timestamp (Req 4.9).
 - **RLS** (Req 1.6): enabled on every table. `authenticated` role gets full CRUD (`using (true) with check (true)`); `anon` has no policies, so all access is denied. No per-user policies - single family.
 - No `user_modifications` and no `weather_cache` table. Device view state (last viewed stop/date, map layer preferences, last selected trip) stays in localStorage.
+- **Migration-before-deploy ordering:** every schema migration must be pushed to production (`supabase db push --linked`) before or with the frontend deploy that reads the new columns. PostgREST `select *` silently omits columns that don't exist, so rows come back with those fields `undefined` (not `null`). As defense in depth, the row-to-domain mappers use loose `== null` coordinate guards so a client deployed ahead of its migration degrades gracefully (no location) instead of feeding `{ lat: undefined }` to Google Maps, which throws and takes down the trip page (2026-07-04 production incident).
 
 ## Data Layer
 
@@ -329,3 +333,4 @@ Applied to [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md
 
 - 2026-07-03: Initial design (brainstormed and approved).
 - 2026-07-04: Trip Import (M3.5) added: file-only create modal, zod validation pipeline, TripIt conversion with geocoding, fresh-id imports, compensation delete (brainstormed and approved).
+- 2026-07-04: Schema doc updated with the M4 `accommodations` columns (`remarks`, `lat`, `lng`); migration-before-deploy ordering rule and schema-drift-tolerant mapper guards added after a production incident (see plan_p2m4 Task 6 post-ship fix).
