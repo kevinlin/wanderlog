@@ -504,15 +504,15 @@ git add -A && git commit -m "feat: delete trips with confirmation and cascade"
 
 On production, signed in, with at least the migrated NZ trip plus one created trip:
 
-- [ ] Library lists every trip with name, destination, date range, and status badge (Req 3.1)
-- [ ] Active-or-next-upcoming trip renders as the hero; the rest ordered by start date (Req 3.2)
-- [ ] Opening a trip lands on the full map/timeline/activities UI (Req 3.3)
-- [ ] Quit the browser, reopen the app at `/` - it restores the last opened trip (Req 3.4)
-- [ ] Create a trip with just a name and dates - it appears in the library and opens without crashing (Req 3.5)
-- [ ] Delete the created trip - confirmation required; Supabase Table Editor shows no orphan child rows (Req 3.6)
-- [ ] Two or more trips browsable and selectable (milestone gate)
+- [x] Library lists every trip with name, destination, date range, and status badge (Req 3.1)
+- [x] Active-or-next-upcoming trip renders as the hero; the rest ordered by start date (Req 3.2)
+- [x] Opening a trip lands on the full map/timeline/activities UI (Req 3.3)
+- [x] Quit the browser, reopen the app at `/` - it restores the last opened trip (Req 3.4)
+- [x] Create a trip with just a name and dates - it appears in the library and opens without crashing (Req 3.5)
+- [x] Delete the created trip - confirmation required; Supabase Table Editor shows no orphan child rows (Req 3.6)
+- [x] Two or more trips browsable and selectable (milestone gate)
 
-- [ ] **Sign off**
+- [x] **Sign off**
 
 Set the M3 row in `plan_wanderlog-phase-2.md` to `Shipped (<date>)`.
 
