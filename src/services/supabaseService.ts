@@ -1,14 +1,7 @@
 import { getSupabase } from '@/config/supabase';
 import type { TripData, TripSummary } from '@/types/trip';
-import {
-  buildRows,
-  TRIP_SELECT,
-  TRIP_SUMMARY_SELECT,
-  type TripRowNested,
-  type TripSummaryRow,
-  toTripData,
-  toTripSummary,
-} from './supabaseMappers';
+import { TRIP_SELECT, TRIP_SUMMARY_SELECT, type TripRowNested, type TripSummaryRow, toTripData, toTripSummary } from './supabaseMappers';
+import { insertTripBundle } from './tripBundleInsert';
 
 export { TRIP_SELECT } from './supabaseMappers';
 
@@ -28,31 +21,7 @@ export async function fetchTripSummaries(): Promise<TripSummary[]> {
   return (data ?? []).map((row) => toTripSummary(row as TripSummaryRow));
 }
 
-export async function importTrip(tripData: TripData): Promise<string> {
-  const tripId = tripData.trip_id ?? crypto.randomUUID();
-  const bundle = buildRows(tripData, tripId);
-  const insert = async (table: string, rows: object[]): Promise<void> => {
-    if (rows.length === 0) {
-      return;
-    }
-    const { error } = await getSupabase().from(table).insert(rows);
-    if (error) {
-      throw new Error(`${table}: ${error.message}`);
-    }
-  };
-  await insert('trips', [bundle.trip]);
-  try {
-    await insert('stops', bundle.stops);
-    await insert('accommodations', bundle.accommodations);
-    await insert('activities', bundle.activities);
-    await insert('scenic_waypoints', bundle.scenicWaypoints);
-  } catch (error) {
-    // Compensation: removing the trip row cascades to any children already inserted.
-    await getSupabase().from('trips').delete().eq('id', tripId);
-    throw error;
-  }
-  return tripId;
-}
+export const importTrip = (tripData: TripData): Promise<string> => insertTripBundle(getSupabase(), tripData);
 
 // The DB cascade (M1 schema `on delete cascade`) removes stops, accommodations,
 // activities, and waypoints - no client-side fan-out needed.
