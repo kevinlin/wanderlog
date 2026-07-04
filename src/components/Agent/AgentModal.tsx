@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { useAuth } from '@/contexts/AuthContext';
 import { tripKeys } from '@/lib/queryClient';
 import { runAgent } from '@/services/agentService';
-import type { AgentErrorEvent, AgentResultEvent } from '@/types/agent';
+import type { AgentChangeEvent, AgentErrorEvent, AgentResultEvent } from '@/types/agent';
 
 interface AgentModalProps {
   isOpen: boolean;
@@ -15,6 +15,20 @@ interface AgentModalProps {
 
 const EXAMPLE_PROMPTS = ['Which trips do we have coming up?', 'Which activities are not done yet?'];
 
+const ENTITY_ORDER = ['trip', 'stop', 'accommodation', 'activity', 'waypoint'] as const;
+const ENTITY_LABELS: Record<AgentChangeEvent['entity'], string> = {
+  trip: 'Trip',
+  stop: 'Stops',
+  accommodation: 'Accommodation',
+  activity: 'Activities',
+  waypoint: 'Scenic waypoints',
+};
+const OP_LABELS: Record<AgentChangeEvent['op'], string> = {
+  created: 'Added',
+  updated: 'Updated',
+  deleted: 'Deleted',
+};
+
 export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactElement | null {
   const { session } = useAuth();
   const queryClient = useQueryClient();
@@ -22,6 +36,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
   const [prompt, setPrompt] = useState('');
   const [phase, setPhase] = useState<'done' | 'input' | 'running'>('input');
   const [lines, setLines] = useState<string[]>([]);
+  const [changes, setChanges] = useState<AgentChangeEvent[]>([]);
   const [result, setResult] = useState<AgentResultEvent | null>(null);
   const [errors, setErrors] = useState<AgentErrorEvent[]>([]);
   const [requestError, setRequestError] = useState<string | null>(null);
@@ -35,6 +50,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
     setPrompt('');
     setPhase('input');
     setLines([]);
+    setChanges([]);
     setResult(null);
     setErrors([]);
     setRequestError(null);
@@ -58,6 +74,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
     }
     setPhase('running');
     setLines([]);
+    setChanges([]);
     setErrors([]);
     setRequestError(null);
     const controller = new AbortController();
@@ -74,6 +91,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
           } else if (event.type === 'error') {
             setErrors((prev) => [...prev, event]);
           } else if (event.type === 'change') {
+            setChanges((prev) => [...prev, event]);
             setLines((prev) => [...prev, `${event.op}: ${event.name}`]);
           } else {
             setResult(event);
@@ -168,6 +186,29 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
                 </ul>
               )}
               {result?.answer && <p className="whitespace-pre-wrap text-gray-800 text-sm">{result.answer}</p>}
+              {changes.length > 0 && (
+                <div>
+                  <h3 className="font-medium text-gray-700 text-sm">Changes</h3>
+                  {ENTITY_ORDER.map((entity) => {
+                    const group = changes.filter((change) => change.entity === entity);
+                    if (group.length === 0) {
+                      return null;
+                    }
+                    return (
+                      <div className="mt-2" key={entity}>
+                        <h4 className="text-gray-500 text-xs uppercase">{ENTITY_LABELS[entity]}</h4>
+                        <ul className="mt-1 space-y-1 text-gray-800 text-sm">
+                          {group.map((change, index) => (
+                            <li key={`${change.id}-${index}`}>
+                              {OP_LABELS[change.op]}: {change.name}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
               {errors.map((error) => (
                 <p className="text-red-600 text-sm" key={error.message}>
                   {error.message}

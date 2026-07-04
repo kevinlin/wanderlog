@@ -97,4 +97,43 @@ describe('AgentModal', () => {
     renderModal({ isOpen: true, onClose: vi.fn() });
     expect(screen.getByRole('button', { name: /ask agent/i })).toBeDisabled();
   });
+
+  it('renders a structured change list grouped by entity', async () => {
+    runAgentMock.mockImplementation(async ({ onEvent }: RunAgentParams) => {
+      onEvent({ type: 'change', op: 'created', entity: 'activity', id: 'a1', name: 'Ramen dinner' });
+      onEvent({ type: 'change', op: 'deleted', entity: 'waypoint', id: 'w1', name: 'Lookout' });
+      onEvent({ type: 'result', summary: 'Done.', answer: null, tripId: null });
+    });
+    renderModal({ isOpen: true, onClose: vi.fn(), tripId: 't1' });
+    await submitPrompt('add ramen, remove lookout');
+    expect(await screen.findByText('Activities')).toBeInTheDocument();
+    expect(screen.getByText('Added: Ramen dinner')).toBeInTheDocument();
+    expect(screen.getByText('Scenic waypoints')).toBeInTheDocument();
+    expect(screen.getByText('Deleted: Lookout')).toBeInTheDocument();
+  });
+
+  it('shows no change section for a pure Q&A run', async () => {
+    runAgentMock.mockImplementation(async ({ onEvent }: RunAgentParams) => {
+      onEvent({ type: 'result', summary: 'Two trips.', answer: 'Two trips.', tripId: null });
+    });
+    renderModal({ isOpen: true, onClose: vi.fn() });
+    await submitPrompt('how many trips?');
+    expect(await screen.findByText('Two trips.')).toBeInTheDocument();
+    expect(screen.queryByText('Changes')).not.toBeInTheDocument();
+  });
+
+  it('clears collected changes on Ask another', async () => {
+    runAgentMock.mockImplementation(async ({ onEvent }: RunAgentParams) => {
+      onEvent({ type: 'change', op: 'created', entity: 'activity', id: 'a1', name: 'Ramen dinner' });
+      onEvent({ type: 'result', summary: 'Done.', answer: null, tripId: null });
+    });
+    renderModal({ isOpen: true, onClose: vi.fn(), tripId: 't1' });
+    await submitPrompt('add ramen');
+    expect(await screen.findByText('Added: Ramen dinner')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: /ask another/i }));
+    expect(screen.queryByText('Added: Ramen dinner')).not.toBeInTheDocument();
+    expect(screen.queryByText('Changes')).not.toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toHaveValue('');
+  });
 });
