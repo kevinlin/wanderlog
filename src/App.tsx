@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/next';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import { ProtectedRoute } from '@/components/Auth/ProtectedRoute';
 import { ToastProvider } from '@/components/Layout/Toast';
@@ -7,45 +8,48 @@ import { TripLibraryPage } from '@/pages/TripLibraryPage';
 import { TripPage } from '@/pages/TripPage';
 
 const App = () => (
-  <BrowserRouter basename={import.meta.env.BASE_URL}>
-    <ToastProvider>
-      <Routes>
-        <Route element={<LoginPage />} path="/login" />
-        <Route
-          element={
-            <ProtectedRoute>
-              <HomeRedirect />
-            </ProtectedRoute>
-          }
-          path="/"
-        />
-        <Route
-          element={
-            <ProtectedRoute>
-              <TripLibraryPage />
-            </ProtectedRoute>
-          }
-          path="/trips"
-        />
-        <Route
-          element={
-            <ProtectedRoute>
-              <TripPage />
-            </ProtectedRoute>
-          }
-          path="/trips/:tripId"
-        />
-        <Route
-          element={
-            <ProtectedRoute>
-              <HomeRedirect />
-            </ProtectedRoute>
-          }
-          path="*"
-        />
-      </Routes>
-    </ToastProvider>
-  </BrowserRouter>
+  <>
+    <BrowserRouter basename={import.meta.env.BASE_URL}>
+      <ToastProvider>
+        <Routes>
+          <Route element={<LoginPage />} path="/login" />
+          <Route
+            element={
+              <ProtectedRoute>
+                <HomeRedirect />
+              </ProtectedRoute>
+            }
+            path="/"
+          />
+          <Route
+            element={
+              <ProtectedRoute>
+                <TripLibraryPage />
+              </ProtectedRoute>
+            }
+            path="/trips"
+          />
+          <Route
+            element={
+              <ProtectedRoute>
+                <TripPage />
+              </ProtectedRoute>
+            }
+            path="/trips/:tripId"
+          />
+          <Route
+            element={
+              <ProtectedRoute>
+                <HomeRedirect />
+              </ProtectedRoute>
+            }
+            path="*"
+          />
+        </Routes>
+      </ToastProvider>
+    </BrowserRouter>
+    <Analytics />
+  </>
 );
 
 export default App;
