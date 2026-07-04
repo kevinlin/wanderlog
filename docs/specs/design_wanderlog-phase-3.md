@@ -10,7 +10,7 @@ In addition to the Scope Decisions in the requirements doc.
 |----------|--------|-----------|
 | Endpoint | One Vercel function, `api/agent.ts`, `maxDuration` 300s (fluid compute) | Generative creation loops run long; a single endpoint keeps the contract small. |
 | DB access from the function | supabase-js with the anon key + caller's JWT | RLS applies to every tool call; the agent is exactly as powerful as the signed-in member. No service-role key in the function. |
-| Code sharing with `src/` | Function imports pure modules only (zod schemas, `withFreshIds`, `buildRows`, mappers, date cascade); DB calls go through its own thin executors | `supabaseService` reads `import.meta.env` (Vite-only) and cannot run under Node. Where M4 logic isn't pure yet, extracting it is in scope. |
+| Code sharing with `src/` | Function imports pure modules only (zod schemas, `withFreshIds`, `buildRows`, mappers, date cascade); DB calls go through its own thin executors | `supabaseService` rides a browser singleton client with no caller token; the function needs a per-request client bound to the caller's JWT for RLS. Where shared logic isn't pure yet, extracting it is in scope. |
 | Context injection | Trip-scoped requests get the trip pre-fetched into the system context; library-scoped requests get trip summaries | Saves a read round-trip for the common case; read tools still exist for anything else. |
 | Streaming | NDJSON events over a streamed response; `Accept: application/json` switches to one buffered result | Browsers show live progress; machine clients (Hermes) get a single object. One endpoint, two renderings. |
 | Delete guard | System-prompt directive; `delete_trip` not defined as a tool | Prompt-level rule suffices for items (family scale); trip deletion is structurally impossible regardless of prompt. |
@@ -161,3 +161,4 @@ Risk-ordered; each independently shippable. Detailed plans written just-in-time 
 ## Changelog
 
 - 2026-07-04: Initial design (brainstormed and approved): Vercel-hosted tool-use loop, mirrored CRUD tool surface, immediate writes with delete guard, one-shot prompts, NDJSON/buffered dual rendering, Hermes programmatic access.
+- 2026-07-04: Code-sharing rationale corrected during M1 planning: `src/config/supabase.ts` already runs under Node (migration script); the function's own client exists for the per-request caller token (RLS), not env incompatibility.

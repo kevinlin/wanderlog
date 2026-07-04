@@ -13,6 +13,7 @@ Navigation map for the Wanderlog specification docs. All specs use the `default`
 | [plan_wanderlog-phase-2.md](plan_wanderlog-phase-2.md) | Phase 2 master plan: milestone tracker linking per-milestone plans (written just-in-time). |
 | [requirements_wanderlog-phase-3.md](requirements_wanderlog-phase-3.md) | Agent mode: natural-language Q&A, bounded itinerary edits, generative trip creation; first server-side code. |
 | [design_wanderlog-phase-3.md](design_wanderlog-phase-3.md) | Phase 3 architecture: Vercel agent endpoint, LLM tool-use loop, mirrored CRUD tool surface, NDJSON/buffered API contract, milestones M1-M3. |
+| [plan_wanderlog-phase-3.md](plan_wanderlog-phase-3.md) | Phase 3 master plan: milestone tracker linking per-milestone plans (written just-in-time). |
 | [requirements_travel-journal.md](requirements_travel-journal.md) | Acceptance criteria for map, timeline, activities, accommodation, weather, POI, and responsive design. |
 | [design_travel-journal.md](design_travel-journal.md) | Architecture, components, data models, services, and visual design system. |
 | [plan_travel-journal.md](plan_travel-journal.md) | Implementation task checklist (26 tasks) with requirement references. |
@@ -29,6 +30,7 @@ Navigation map for the Wanderlog specification docs. All specs use the `default`
 | Trip Library (Phase 2 M3) | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Library page with timezone-aware status, hero trip, create/delete trips, last-trip restore, empty-trip hardening. |
 | Trip Import (Phase 2 M3.5) | [plan_p2m3-5_trip-import.md](plan_p2m3-5_trip-import.md) | File-import trip creation: drag-n-drop JSON, zod validation with error list, TripIt conversion with geocoding, fresh-id inserts with compensation delete. |
 | Itinerary Editing (Phase 2 M4) | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Three slices: activities CRUD + retry/offline, accommodation + trip metadata, waypoints + stop restructuring with date cascade; Firebase decommission. |
+| Agent Backend + Q&A (Phase 3 M1) | [plan_p3m1_agent-backend-qa.md](plan_p3m1_agent-backend-qa.md) | Vercel /api/agent endpoint: JWT auth + RLS client, read-tool loop (@anthropic-ai/sdk), NDJSON/buffered responses, agent button + modal. |
 
 ## Meta
 
