@@ -6,6 +6,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Wanderlog is an interactive map-based travel journal built with React 19, TypeScript, Vite, and Google Maps. It allows users to plan and track trips with timeline navigation, activity tracking, and drag-and-drop reordering.
 
+The app is mid-Phase-2: the backend has moved from Firebase Firestore to **Supabase** (Postgres + Auth + RLS), with **TanStack Query** as the data layer, an auth gate, multi-trip library, and react-router. Firebase is legacy and being decommissioned (Phase 2 M4). When touching the data layer, work against Supabase/TanStack Query, not Firebase. See [docs/specs/design_wanderlog-phase-2.md](docs/specs/design_wanderlog-phase-2.md).
+
 GitHub Project (https://github.com/kevinlin/wanderlog)
   - Name: wanderlog
 
@@ -20,8 +22,11 @@ pnpm test:run         # Run tests once (CI mode)
 pnpm test:ui          # Run tests with interactive UI
 pnpm test:coverage    # Run tests with coverage report
 pnpm lint             # Run Ultracite (Biome formatter/linter)
-pnpm migrate          # Migrate trip JSON files to Firestore
+pnpm migrate:supabase # Migrate trip JSON files to Supabase (current)
+pnpm migrate          # Legacy: migrate trip JSON files to Firestore
 ```
+
+Husky pre-commit auto-formats staged files with Ultracite (`.husky/pre-commit`).
 
 Run a single test file:
 ```bash
@@ -36,47 +41,68 @@ npx ultracite check   # Check for issues without fixing
 
 ## Architecture
 
-### State Management
+State is split in two: **server state** lives in TanStack Query, **UI state** lives in a Context reducer.
 
-Uses React Context with useReducer pattern (`src/contexts/AppStateContext.tsx`):
-- `AppState` holds trip data, current selection, user modifications, weather cache
-- Actions: `SET_TRIP_DATA`, `SELECT_BASE`, `SELECT_ACTIVITY`, `TOGGLE_ACTIVITY_DONE`, `REORDER_ACTIVITIES`, etc.
-- User modifications (activity completion, reorder) persist to localStorage via `storageService`
+**Server state — TanStack Query** (`src/lib/queryClient.ts`):
+- Query keys are centralized: `tripKeys.all` (trip list), `tripKeys.detail(tripId)`, `weatherKeys.base(baseId)`.
+- Read hooks: `useTrips` (library list), `useTripData` (one trip), `useWeather`. All gated on an auth `session`.
+- Mutations are optimistic with rollback (`useTripMutations`, `useTripLibraryMutations`): `onMutate` snapshots + patches the cache, `onError` restores the snapshot, `onSettled` invalidates. Follow this pattern for new writes.
+- The cache is persisted to IndexedDB via an `idb-keyval` async persister (`PersistQueryClientProvider` in `main.tsx`), giving offline reads. `gcTime` must stay ≥ `PERSIST_MAX_AGE_MS` (30 days) or the cache is dropped on restore. Bump the `buster` string in `main.tsx` on breaking cache-shape changes.
+
+**UI state — AppStateContext** (`src/contexts/AppStateContext.tsx`): reducer holds only `currentBase`, `currentTripId`, `selectedActivity`, `poiModal`, `poiSearch`. No trip/weather/done-status data here — those moved to the query cache.
+
+**Auth — AuthContext** (`src/contexts/AuthContext.tsx`): session from `supabase.auth`; `ProtectedRoute` guards routes; sign-out purges the persisted query cache.
+
+Provider order (`main.tsx`): `PersistQueryClientProvider` → `AuthProvider` → `AppStateProvider` → `App`.
 
 ### Data Flow
 
-1. **Trip data** loads from Firebase Firestore via `firebaseService`
-   - Legacy: JSON files in `local/trip-data/` can be migrated with `pnpm migrate`
-   - Format: `YYYYMM_LOCATION_trip-plan.json`
-2. **useTripData hook** fetches and validates trip data via `tripDataService`
-3. **AppStateContext** manages global state; components dispatch actions
-4. **User modifications** sync to Firestore (with localStorage fallback) via `storageService`
-5. **Offline support**: Firebase IndexedDB persistence enables full offline functionality with automatic sync
+1. **Backend** is Supabase Postgres + Auth (RLS). `supabaseService` is the **only** module importing `supabase-js`; it holds all fetch/mutate functions. `supabaseMappers` converts DB rows ↔ domain types.
+2. **Read**: route → `useTripData`/`useTrips` → TanStack Query → `supabaseService` → Supabase. Data is validated/mapped into the domain shapes.
+3. **Write**: components call mutation hooks → optimistic cache patch → `supabaseService` → Supabase → invalidate on settle.
+4. **Done-status** is a canonical `is_done` column shared by all users (no per-user `user_modifications` concept anymore).
+5. **Offline**: persisted query cache serves reads; mutations retry.
+6. **Migration**: legacy trip JSON (`local/trip-data/`, `YYYYMM_LOCATION_trip-plan.json`) imports via `pnpm migrate:supabase`. Schema + RLS live in `supabase/migrations/*.sql` (Supabase CLI).
 
 ### Key Domain Types (src/types/trip.ts)
 
 - `TripData` → contains `stops: TripBase[]`
 - `TripBase` → a location/stop with `accommodation`, `activities[]`, `scenic_waypoints[]`
-- `Activity` → individual activity with location, type, status
-- `UserModifications` → user's completion status and custom activity ordering
+- `Activity` → individual activity with location, type, `status.done`
+- `TripSummary` → lightweight row for the trip library list
 
-### Key Services
+### Key Services (src/services/)
 
-- **firebaseService** (`src/services/firebaseService.ts`) - Firebase Firestore integration for trips, user modifications, and weather cache
-- **storageService** (`src/services/storageService.ts`) - Syncs user modifications to Firestore with localStorage fallback
-- **tripDataService** - Fetches and validates trip data
-- **weatherService** - Fetches weather data with Firestore caching
+- **supabaseService** - the only module importing `supabase-js`; trip/list/mutation fetchers.
+- **supabaseMappers** - DB row ↔ domain type conversion.
+- **weatherService** - fetches from Open-Meteo (keyless); caching handled by TanStack Query `staleTime`.
+- **placesService** - Google Places POI search.
+- **exportService** - downloads trip data with progress.
+- **viewStateStorage** - persists small UI view state.
+- **firebaseService** - legacy Firestore; being decommissioned, do not extend.
 
 ### Component Structure
 
 ```
 src/components/
+├── Auth/           # LoginForm, ProtectedRoute, UserMenu
 ├── Map/            # Google Maps integration (MapContainer, POIModal)
 ├── Cards/          # Activity, Accommodation, Weather, ScenicWaypoint cards
 ├── Timeline/       # TimelineStrip for date navigation
 ├── Activities/     # ActivitiesPanel with drag-and-drop (dnd-kit)
+├── TripLibrary/    # Multi-trip library UI
 └── Layout/         # ErrorBoundary, LoadingSpinner, Toast, ErrorMessage
 ```
+
+### Routing
+
+react-router (`src/App.tsx`), pages in `src/pages/`. All routes except `/login` wrapped in `ProtectedRoute`:
+- `/login` → `LoginPage`
+- `/` → `HomeRedirect` (restores last trip / sends to library)
+- `/trips` → `TripLibraryPage`
+- `/trips/:tripId` → `TripPage` (map, timeline, activities)
+
+Vercel SPA rewrites (`vercel.json`) route all paths to `index.html`.
 
 ### Path Aliases
 
@@ -121,15 +147,31 @@ Configured in both `tsconfig.app.json` and `vitest.config.ts`:
 - Keep functions focused with low cognitive complexity
 - Use early returns to reduce nesting
 
+## Deployment
+
+Hosted on Vercel (see `vercel.json`, `.github/workflows/`):
+- Push to `main` → test-gated deploy to Vercel production.
+- Pull requests → automatic Vercel preview.
+- Requires `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` repo secrets. The former GitHub Pages URL is retired.
+
+## Specs
+
+Spec-driven docs live in `docs/specs/` (`<artifact>_<topic>.md`: requirements / design / plan). Start at [docs/specs/index.md](docs/specs/index.md) for the navigation map; [docs/specs/meta/convention.md](docs/specs/meta/convention.md) is the naming/structure source of truth. Phase 2 milestones are tracked in `plan_wanderlog-phase-2.md` (M0–M4).
+
 ## Environment Variables
 
-Create `.env.local` for local development with:
+Create `.env.local` for local development (see `.env.local.example`):
 
 ```bash
 # Google Maps
 VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 
-# Firebase Configuration
+# Supabase (current backend)
+VITE_SUPABASE_URL=your_supabase_project_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key   # script-only (migration); never in the client bundle
+
+# Firebase (legacy, decommissioning)
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 VITE_FIREBASE_PROJECT_ID=your_project_id
@@ -137,5 +179,3 @@ VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
 VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
 VITE_FIREBASE_APP_ID=your_app_id
 ```
-
-**Important**: Firebase must be configured with Firestore enabled. See [docs/specs/plan_firebase-integration.md](docs/specs/plan_firebase-integration.md) for security rules and detailed architecture.
