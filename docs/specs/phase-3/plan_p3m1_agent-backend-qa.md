@@ -1242,11 +1242,11 @@ git add -A && git commit -m "feat: agent button and modal with streamed progress
 **Files:**
 - Modify: `docs/specs/phase-3/plan_phase-3.md` (status row)
 
-- [ ] **Step 1: Configure Vercel env vars**
+- [x] **Step 1: Configure Vercel env vars**
 
 In the Vercel project settings add `ANTHROPIC_BASE_URL`, `ANTHROPIC_MODEL`, `ANTHROPIC_API_KEY` (all environments). `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` already exist. Push the branch; CI creates a preview deploy.
 
-- [ ] **Step 2: curl verification against the preview**
+- [x] **Step 2: curl verification against the preview**
 
 ```bash
 PREVIEW=https://<preview-url>
@@ -1269,7 +1269,7 @@ curl -s -X POST "$PREVIEW/api/agent" -H "Authorization: Bearer $TOKEN" \
 # expect { summary, answer, changes: [], errors: [], tripId: null }
 ```
 
-- [ ] **Step 3: Modal verification on the preview**
+- [x] **Step 3: Modal verification on the preview**
 
 - Library page: agent button opens the modal; ask a cross-trip question; progress lines stream; answer is correct.
 - Trip page: ask a question about the open trip (context injection - the model should answer without a `get_trip` round-trip); answer correct.
