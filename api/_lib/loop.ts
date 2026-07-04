@@ -1,7 +1,7 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import type { AgentEvent } from '../../src/types/agent';
-import { type AgentTool, dispatchTool, toAnthropicTools } from './tools';
+import type { AgentEvent } from '../../src/types/agent.js';
+import { type AgentTool, dispatchTool, toAnthropicTools } from './tools.js';
 
 export const MAX_ITERATIONS = 16;
 export const MAX_TOKENS_PER_CALL = 4096;

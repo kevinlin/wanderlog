@@ -1,4 +1,4 @@
-import type { TripData, TripSummary } from '../../src/types/trip';
+import type { TripData, TripSummary } from '../../src/types/trip.js';
 
 export interface AgentContext {
   trip?: TripData;

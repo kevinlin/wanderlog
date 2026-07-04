@@ -1,8 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { z } from 'zod';
-// Relative (not @/ alias) imports: Vercel's function bundler does not rewrite
-// tsconfig path aliases, so aliased specifiers survive into the runtime JS and
-// fail module resolution inside the deployed function.
+// Relative imports with explicit .js extensions: the Vercel function runtime
+// is Node ESM, which neither rewrites tsconfig path aliases nor resolves
+// extensionless relative specifiers.
 import {
   TRIP_SELECT,
   TRIP_SUMMARY_SELECT,
@@ -10,13 +10,13 @@ import {
   type TripSummaryRow,
   toTripData,
   toTripSummary,
-} from '../src/services/supabaseMappers';
-import type { AgentBufferedResult, AgentChangeEvent, AgentErrorEvent, AgentEvent } from '../src/types/agent';
-import { loadAgentEnv } from './_lib/env';
-import { MAX_ITERATIONS, runAgentLoop } from './_lib/loop';
-import { createUserClient, extractBearerToken, getAuthenticatedUserId } from './_lib/supabase';
-import { buildSystemPrompt } from './_lib/systemPrompt';
-import { READ_TOOLS } from './_lib/tools';
+} from '../src/services/supabaseMappers.js';
+import type { AgentBufferedResult, AgentChangeEvent, AgentErrorEvent, AgentEvent } from '../src/types/agent.js';
+import { loadAgentEnv } from './_lib/env.js';
+import { MAX_ITERATIONS, runAgentLoop } from './_lib/loop.js';
+import { createUserClient, extractBearerToken, getAuthenticatedUserId } from './_lib/supabase.js';
+import { buildSystemPrompt } from './_lib/systemPrompt.js';
+import { READ_TOOLS } from './_lib/tools.js';
 
 export const MAX_PROMPT_CHARS = 4000;
 

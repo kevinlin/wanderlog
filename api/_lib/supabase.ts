@@ -1,5 +1,5 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
-import type { AgentEnv } from './env';
+import type { AgentEnv } from './env.js';
 
 export function createUserClient(env: AgentEnv, accessToken: string): SupabaseClient {
   return createClient(env.supabaseUrl, env.supabaseAnonKey, {
