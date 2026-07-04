@@ -1454,7 +1454,7 @@ git add -A && git commit -m "feat: agent modal structured change list"
 - "Mark 'Nonexistent Thing' as done and add a coffee stop at the hotel" → the miss is reported in the summary, the add still lands, change list contains only the real write.
 - Buffered check: `curl -s -X POST "$PREVIEW/api/agent" -H "Authorization: Bearer $TOKEN" -H "Accept: application/json" -H "Content-Type: application/json" -d '{"prompt":"...", "tripId":"..."}' | jq .changes` → non-empty `changes` array matching what the UI showed.
 
-- [ ] **Step 4: Ship**
+- [x] **Step 4: Ship**
 
 - Merge to `main`; re-run one edit prompt against production.
 - Update the M2 row in `plan_phase-3.md`: `Shipped (<date>)`.
