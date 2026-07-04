@@ -1,70 +1,47 @@
-pnpm test
-
-#!/bin/sh
-# Exit on any error
+# Exit on any error: a red test suite or a failed format blocks the commit.
 set -e
 
-# Check if there are any staged files
-if [ -z "$(git diff --cached --name-only)" ]; then
+pnpm test
+
+# --- Auto-format staged files with Ultracite ---
+#
+# No stashing. The previous stash push/pop dance merged stale pre-format file
+# contents back over the freshly formatted ones whenever the formatter changed
+# a staged file, leaving conflict markers in the working tree and an orphaned
+# stash. Instead:
+#   - fully staged files are formatted in place and re-staged (working tree
+#     and index stay identical for them, so there is nothing to restore);
+#   - partially staged files are skipped with a warning, because re-adding
+#     them would sweep their unstaged hunks into the commit.
+
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR)
+if [ -z "$STAGED" ]; then
   echo "No staged files to format"
   exit 0
 fi
 
-# Store the hash of staged changes to detect modifications
-STAGED_HASH=$(git diff --cached | sha256sum | cut -d' ' -f1)
+UNSTAGED=$(git diff --name-only)
+BEFORE=$(git diff --cached | git hash-object --stdin)
 
-# Save list of staged files (handling all file states)
-STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR)
-PARTIALLY_STAGED=$(git diff --name-only)
-
-# Stash unstaged changes to preserve working directory
-# --keep-index keeps staged changes in working tree
-git stash push --quiet --keep-index --message "pre-commit-stash" || true
-STASHED=$?
-
-# Run formatter on the staged files
-pnpm dlx ultracite fix
-FORMAT_EXIT_CODE=$?
-
-# Restore working directory state
-if [ $STASHED -eq 0 ]; then
-  # Re-stage the formatted files
-  if [ -n "$STAGED_FILES" ]; then
-    echo "$STAGED_FILES" | while IFS= read -r file; do
-      if [ -f "$file" ]; then
-        git add "$file"
-      fi
-    done
+# Collect fully staged files as positional parameters (space-safe in POSIX sh).
+set --
+while IFS= read -r file; do
+  [ -f "$file" ] || continue
+  if printf '%s\n' "$UNSTAGED" | grep -qxF "$file"; then
+    echo "⚠️  $file is partially staged - not auto-formatted (run 'npx ultracite fix' yourself)"
+    continue
   fi
-  
-  # Restore unstaged changes
-  git stash pop --quiet || true
-  
-  # Restore partial staging if files were partially staged
-  if [ -n "$PARTIALLY_STAGED" ]; then
-    for file in $PARTIALLY_STAGED; do
-      if [ -f "$file" ] && echo "$STAGED_FILES" | grep -q "^$file$"; then
-        # File was partially staged - need to unstage the unstaged parts
-        git restore --staged "$file" 2>/dev/null || true
-        git add -p "$file" < /dev/null 2>/dev/null || git add "$file"
-      fi
-    done
-  fi
-else
-  # No stash was created, just re-add the formatted files
-  if [ -n "$STAGED_FILES" ]; then
-    echo "$STAGED_FILES" | while IFS= read -r file; do
-      if [ -f "$file" ]; then
-        git add "$file"
-      fi
-    done
-  fi
+  set -- "$@" "$file"
+done <<EOF
+$STAGED
+EOF
+
+if [ $# -gt 0 ]; then
+  pnpm exec ultracite fix "$@"
+  git add "$@"
 fi
 
-# Check if staged files actually changed
-NEW_STAGED_HASH=$(git diff --cached | sha256sum | cut -d' ' -f1)
-if [ "$STAGED_HASH" != "$NEW_STAGED_HASH" ]; then
+AFTER=$(git diff --cached | git hash-object --stdin)
+if [ "$BEFORE" != "$AFTER" ]; then
   echo "✨ Files formatted by Ultracite"
 fi
-
-exit $FORMAT_EXIT_CODE
