@@ -4,7 +4,7 @@ import { UserMenu } from '@/components/Auth/UserMenu';
 import { ConfirmDialog } from '@/components/Layout/ConfirmDialog';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
-import { CreateTripModal } from '@/components/TripLibrary/CreateTripModal';
+import { ImportTripModal } from '@/components/TripLibrary/ImportTripModal';
 import { TripLibraryCard } from '@/components/TripLibrary/TripLibraryCard';
 import { useDeleteTrip } from '@/hooks/useTripLibraryMutations';
 import { useTrips } from '@/hooks/useTrips';
@@ -72,7 +72,7 @@ export const TripLibraryPage = () => {
           </div>
         )}
       </main>
-      <CreateTripModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
+      <ImportTripModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
       {tripPendingDelete && (
         <ConfirmDialog
           confirmLabel="Delete"

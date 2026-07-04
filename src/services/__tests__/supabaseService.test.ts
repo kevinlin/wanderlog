@@ -24,7 +24,6 @@ vi.mock('@/config/supabase', () => ({
 
 import type { TripData } from '@/types/trip';
 import {
-  createTrip,
   deleteTrip,
   fetchTripById,
   fetchTripSummaries,
@@ -148,41 +147,15 @@ describe('supabaseService writes', () => {
   });
 });
 
-describe('supabaseService trip create/delete', () => {
+describe('supabaseService trip delete', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockInsert.mockResolvedValue({ error: null });
     mockDeleteEq.mockResolvedValue({ error: null });
-  });
-
-  it('createTrip inserts a row with a generated uuid and returns it', async () => {
-    const id = await createTrip({
-      name: 'Japan',
-      startDate: '2026-10-01',
-      endDate: '2026-10-14',
-      destination: 'Japan',
-      timezone: 'Asia/Tokyo',
-    });
-    expect(id).toMatch(/^[0-9a-f-]{36}$/);
-    expect(mockInsert).toHaveBeenCalledWith({
-      id,
-      name: 'Japan',
-      destination: 'Japan',
-      description: null,
-      start_date: '2026-10-01',
-      end_date: '2026-10-14',
-      timezone: 'Asia/Tokyo',
-    });
   });
 
   it('deleteTrip deletes by id', async () => {
     await deleteTrip('t1');
     expect(mockDeleteEq).toHaveBeenCalledWith('id', 't1');
-  });
-
-  it('createTrip throws on error', async () => {
-    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
-    await expect(createTrip({ name: 'X', startDate: 'a', endDate: 'b', timezone: 'UTC' })).rejects.toThrow('denied');
   });
 });
 

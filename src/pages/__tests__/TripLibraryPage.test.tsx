@@ -28,10 +28,10 @@ vi.mock('@/hooks/useTrips', () => ({
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({ session: { user: { email: 'kev@example.com' } }, isLoading: false, signOut: vi.fn() }),
 }));
-const mockCreateMutate = vi.fn();
+const mockImportMutate = vi.fn();
 const mockDeleteMutate = vi.fn();
 vi.mock('@/hooks/useTripLibraryMutations', () => ({
-  useCreateTrip: () => ({ mutate: mockCreateMutate, isPending: false, error: null }),
+  useImportTrip: () => ({ mutate: mockImportMutate, isPending: false, error: null }),
   useDeleteTrip: () => ({ mutate: mockDeleteMutate, isPending: false, error: null }),
 }));
 

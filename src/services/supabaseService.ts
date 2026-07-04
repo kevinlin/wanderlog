@@ -32,33 +32,6 @@ export async function fetchTripSummaries(): Promise<TripSummary[]> {
   }));
 }
 
-export interface CreateTripInput {
-  destination?: string;
-  endDate: string; // YYYY-MM-DD
-  name: string;
-  startDate: string; // YYYY-MM-DD
-  timezone: string;
-}
-
-export async function createTrip(input: CreateTripInput): Promise<string> {
-  const id = crypto.randomUUID();
-  const { error } = await getSupabase()
-    .from('trips')
-    .insert({
-      id,
-      name: input.name,
-      destination: input.destination ?? null,
-      description: null,
-      start_date: input.startDate,
-      end_date: input.endDate,
-      timezone: input.timezone,
-    });
-  if (error) {
-    throw new Error(error.message);
-  }
-  return id;
-}
-
 export async function importTrip(tripData: TripData): Promise<string> {
   const tripId = tripData.trip_id ?? crypto.randomUUID();
   const bundle = buildRows(tripData, tripId);

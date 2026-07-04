@@ -1,14 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router';
 import { tripKeys } from '@/lib/queryClient';
-import { type CreateTripInput, createTrip, deleteTrip } from '@/services/supabaseService';
+import { deleteTrip, importTrip } from '@/services/supabaseService';
 import { getCurrentTripId, setCurrentTripId } from '@/services/viewStateStorage';
+import type { TripData } from '@/types/trip';
 
-export function useCreateTrip() {
+export function useImportTrip() {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
   return useMutation({
-    mutationFn: (input: CreateTripInput) => createTrip(input),
+    mutationFn: (tripData: TripData) => importTrip(tripData),
     onSuccess: (newTripId) => {
       queryClient.invalidateQueries({ queryKey: tripKeys.all });
       navigate(`/trips/${newTripId}`);
