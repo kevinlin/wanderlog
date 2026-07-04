@@ -1,8 +1,16 @@
 import { getSupabase } from '@/config/supabase';
 import type { TripData, TripSummary } from '@/types/trip';
-import { buildRows, type TripRowNested, toTripData } from './supabaseMappers';
+import {
+  buildRows,
+  TRIP_SELECT,
+  TRIP_SUMMARY_SELECT,
+  type TripRowNested,
+  type TripSummaryRow,
+  toTripData,
+  toTripSummary,
+} from './supabaseMappers';
 
-export const TRIP_SELECT = '*, stops(*, accommodations(*), activities(*), scenic_waypoints(*))';
+export { TRIP_SELECT } from './supabaseMappers';
 
 export async function fetchTripById(tripId: string): Promise<TripData | null> {
   const { data, error } = await getSupabase().from('trips').select(TRIP_SELECT).eq('id', tripId).maybeSingle();
@@ -13,24 +21,11 @@ export async function fetchTripById(tripId: string): Promise<TripData | null> {
 }
 
 export async function fetchTripSummaries(): Promise<TripSummary[]> {
-  const { data, error } = await getSupabase()
-    .from('trips')
-    .select('id, name, description, destination, start_date, end_date, timezone, created_at, updated_at')
-    .order('start_date', { ascending: false });
+  const { data, error } = await getSupabase().from('trips').select(TRIP_SUMMARY_SELECT).order('start_date', { ascending: false });
   if (error) {
     throw new Error(error.message);
   }
-  return (data ?? []).map((row) => ({
-    trip_id: row.id,
-    trip_name: row.name,
-    description: row.description,
-    destination: row.destination,
-    start_date: row.start_date,
-    end_date: row.end_date,
-    timezone: row.timezone,
-    created_at: row.created_at,
-    updated_at: row.updated_at,
-  }));
+  return (data ?? []).map((row) => toTripSummary(row as TripSummaryRow));
 }
 
 export async function importTrip(tripData: TripData): Promise<string> {

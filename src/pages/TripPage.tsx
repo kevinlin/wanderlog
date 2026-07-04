@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
+import { AgentButton } from '@/components/Agent';
 import { UserMenu } from '@/components/Auth/UserMenu';
 import { StopsEditor } from '@/components/Editing/StopsEditor';
 import { TripMetadataFormModal } from '@/components/Editing/TripMetadataFormModal';
@@ -231,6 +232,11 @@ export const TripPage = () => {
           onEditStops={isOnline ? () => setIsStopsEditorOpen(true) : undefined}
           onEditTrip={isOnline && tripSummary ? () => setIsEditTripModalOpen(true) : undefined}
         />
+
+        {/* Floating agent button - sits left of the user menu */}
+        <div className={`fixed top-2 right-14 z-30 sm:top-4 ${isActivitiesPanelVisible && !isMobile ? 'sm:right-[28rem]' : ''}`}>
+          <AgentButton tripId={tripId} />
+        </div>
 
         {isEditTripModalOpen && tripSummary && (
           <TripMetadataFormModal isOpen onClose={() => setIsEditTripModalOpen(false)} trip={tripSummary} />

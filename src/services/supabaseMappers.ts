@@ -1,5 +1,9 @@
 import type { ScenicWaypoint } from '@/types/map';
-import type { Accommodation, Activity, TripBase, TripData } from '@/types/trip';
+import type { Accommodation, Activity, TripBase, TripData, TripSummary } from '@/types/trip';
+
+export const TRIP_SELECT = '*, stops(*, accommodations(*), activities(*), scenic_waypoints(*))';
+
+export const TRIP_SUMMARY_SELECT = 'id, name, description, destination, start_date, end_date, timezone, created_at, updated_at';
 
 export interface TripRow {
   created_at: string;
@@ -76,6 +80,32 @@ export interface StopRowNested extends StopRow {
 
 export interface TripRowNested extends TripRow {
   stops: StopRowNested[];
+}
+
+export interface TripSummaryRow {
+  created_at: string;
+  description: string | null;
+  destination: string | null;
+  end_date: string;
+  id: string;
+  name: string;
+  start_date: string;
+  timezone: string;
+  updated_at: string;
+}
+
+export function toTripSummary(row: TripSummaryRow): TripSummary {
+  return {
+    trip_id: row.id,
+    trip_name: row.name,
+    description: row.description,
+    destination: row.destination,
+    start_date: row.start_date,
+    end_date: row.end_date,
+    timezone: row.timezone,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  };
 }
 
 export interface RowBundle {
