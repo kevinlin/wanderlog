@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { ActivitiesPanel } from '@/components/Activities/ActivitiesPanel';
 import { UserMenu } from '@/components/Auth/UserMenu';
+import { TripMetadataFormModal } from '@/components/Editing/TripMetadataFormModal';
 import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
@@ -10,9 +11,11 @@ import { Toast, type ToastState } from '@/components/Layout/Toast';
 import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
 import { useAppStateContext } from '@/contexts/AppStateContext';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useTripData } from '@/hooks/useTripData';
 import { useReorderActivities, useToggleActivityDone } from '@/hooks/useTripMutations';
+import { useTrips } from '@/hooks/useTrips';
 import { getLastViewedBase, setCurrentTripId, setLastViewedBase } from '@/services/viewStateStorage';
 import { getCurrentStop } from '@/utils/dateUtils';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
@@ -21,12 +24,19 @@ export const TripPage = () => {
   const { tripId: tripIdParam } = useParams<{ tripId: string }>();
   const tripId = tripIdParam ?? '';
   const { tripData, isLoading, error, refetch } = useTripData({ tripId });
+  const { trips } = useTrips();
   const { state, dispatch } = useAppStateContext();
   const { isMobile } = useScreenSize();
+  const isOnline = useOnlineStatus();
   const toggleDoneMutation = useToggleActivityDone(tripId);
   const reorderMutation = useReorderActivities(tripId);
   const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
   const [isActivitiesPanelVisible, setIsActivitiesPanelVisible] = useState(false);
+  const [isEditTripModalOpen, setIsEditTripModalOpen] = useState(false);
+
+  // TripData doesn't carry description/dates at the top level; the library
+  // summary does, and the trips query is cached from the library visit.
+  const tripSummary = trips?.find((trip) => trip.trip_id === tripId);
 
   // Set initial panel visibility based on screen size
   useEffect(() => {
@@ -202,7 +212,14 @@ export const TripPage = () => {
         <TimelineStrip currentStopId={state.currentBase} onStopSelect={handleStopSelect} stops={tripData.stops} />
 
         {/* Floating User Menu - shifts left of the activities panel on desktop */}
-        <UserMenu className={isActivitiesPanelVisible && !isMobile ? 'sm:right-[25rem]' : ''} />
+        <UserMenu
+          className={isActivitiesPanelVisible && !isMobile ? 'sm:right-[25rem]' : ''}
+          onEditTrip={isOnline && tripSummary ? () => setIsEditTripModalOpen(true) : undefined}
+        />
+
+        {isEditTripModalOpen && tripSummary && (
+          <TripMetadataFormModal isOpen onClose={() => setIsEditTripModalOpen(false)} trip={tripSummary} />
+        )}
 
         {/* Responsive Activities Panel */}
         {currentStop && state.currentBase && (

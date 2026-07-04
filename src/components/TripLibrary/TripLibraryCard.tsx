@@ -1,3 +1,4 @@
+import { PencilIcon } from '@heroicons/react/24/outline';
 import { format, parseISO } from 'date-fns';
 import type { TripSummary } from '@/types/trip';
 import type { TripStatus } from '@/utils/tripStatusUtils';
@@ -5,6 +6,7 @@ import type { TripStatus } from '@/utils/tripStatusUtils';
 interface TripLibraryCardProps {
   isHero: boolean;
   onDelete: () => void;
+  onEdit?: () => void;
   onOpen: () => void;
   status: TripStatus;
   trip: TripSummary;
@@ -28,7 +30,7 @@ const formatDateRange = (startDate: string, endDate: string): string => {
   return `${format(start, 'd')} - ${format(end, 'd MMM yyyy')}`;
 };
 
-export const TripLibraryCard = ({ trip, status, isHero, onOpen, onDelete }: TripLibraryCardProps) => (
+export const TripLibraryCard = ({ trip, status, isHero, onOpen, onDelete, onEdit }: TripLibraryCardProps) => (
   <div
     className="group relative rounded-xl border border-gray-200 bg-white shadow-xs transition-all hover:border-alpine-teal hover:shadow-md"
     data-testid={isHero ? 'hero-trip' : undefined}
@@ -45,6 +47,19 @@ export const TripLibraryCard = ({ trip, status, isHero, onOpen, onDelete }: Trip
         <span>{formatDateRange(trip.start_date, trip.end_date)}</span>
       </div>
     </button>
+    {onEdit && (
+      <button
+        aria-label={`Edit ${trip.trip_name}`}
+        className="absolute right-12 bottom-3 rounded-lg p-2 text-gray-400 opacity-0 transition-opacity hover:bg-alpine-teal/10 hover:text-alpine-teal focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100"
+        onClick={(event) => {
+          event.stopPropagation();
+          onEdit();
+        }}
+        type="button"
+      >
+        <PencilIcon className="h-4 w-4" />
+      </button>
+    )}
     <button
       aria-label={`Delete ${trip.trip_name}`}
       className="absolute right-3 bottom-3 rounded-lg p-2 text-gray-400 opacity-0 transition-opacity hover:bg-red-50 hover:text-red-600 focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100"

@@ -3,6 +3,7 @@ import type { Coordinates, ScenicWaypoint } from './map';
 
 export interface TripSummary {
   created_at?: string;
+  description: string | null;
   destination: string | null;
   end_date: string; // YYYY-MM-DD
   start_date: string; // YYYY-MM-DD

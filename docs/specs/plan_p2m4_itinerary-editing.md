@@ -354,7 +354,7 @@ export interface TripMetadataPatch { name?: string; description?: string; startD
 export function updateTripMetadata(tripId: string, patch: TripMetadataPatch): Promise<void>;
 ```
 
-- [ ] **Step 1: Migration**
+- [x] **Step 1: Migration**
 
 Req 4.4 needs notes and a pin that follows the accommodation; the M1 table has neither a remarks column nor coordinates:
 
@@ -367,13 +367,13 @@ alter table accommodations
 
 `supabase db reset` locally, then `supabase db push`. RLS and the `updated_at` trigger already cover the table.
 
-- [ ] **Step 2: Types + mappers (test first)**
+- [x] **Step 2: Types + mappers (test first)**
 
 - `Accommodation` (types/trip.ts) gains `remarks?: string` (additive; `location?: Coordinates` already exists as a legacy field - it now becomes live again).
 - `AccommodationRow` gains `remarks/lat/lng`; `toAccommodation` maps `remarks` and builds `location` when lat/lng are present; `buildRows` writes them back (null-safe). Mapper tests extend the Task-3 (M1) fixture with the new columns.
 - `MapContainer` already prefers `accommodation.location` over the stop location (legacy path), so a located accommodation moves its pin with no map changes.
 
-- [ ] **Step 3: Service functions (test first)**
+- [x] **Step 3: Service functions (test first)**
 
 ```typescript
 export async function upsertAccommodation(stopId: string, input: AccommodationInput): Promise<void> {
@@ -407,7 +407,7 @@ export async function updateTripMetadata(tripId: string, patch: TripMetadataPatc
 
 Upsert (not update) because a stop may have no accommodation yet - the same edit modal covers add and edit. Tests: upsert payload shape incl. the deterministic id; metadata patch skips undefined fields.
 
-- [ ] **Step 4: Green, migration counts re-check, commit**
+- [x] **Step 4: Green, migration counts re-check, commit**
 
 Re-run `pnpm migrate:supabase` against local - still idempotent with the new columns (they default to null for migrated rows; the NZ JSON has no accommodation coordinates).
 
@@ -428,13 +428,13 @@ git add -A && git commit -m "feat: accommodation edit columns and metadata write
 - Consumes: `upsertAccommodation` (Task 6), `ItemModalShell` (Task 4), `useTripCacheMutation` (Task 3).
 - Produces: `useUpsertAccommodation(tripId)`; pencil on `AccommodationCard`, "Add accommodation" affordance on stops without one.
 
-- [ ] **Step 1: Mutation via the helper (test first)** - patch replaces `stop.accommodation` with the input-mapped domain object.
+- [x] **Step 1: Mutation via the helper (test first)** - patch replaces `stop.accommodation` with the input-mapped domain object.
 
-- [ ] **Step 2: Modal** - fields per `AccommodationInput`: name (required), address + "Find place" (same placesService flow as Task 4, fills lat/lng/place id), check-in / check-out (`<input type="datetime-local">`, serialized to `'YYYY-MM-DD HH:mm'` - the storage format is local-to-trip text by design), confirmation, url, remarks. Component test: edit mode pre-fills; submit maps datetime-local values to the text format.
+- [x] **Step 2: Modal** - fields per `AccommodationInput`: name (required), address + "Find place" (same placesService flow as Task 4, fills lat/lng/place id), check-in / check-out (`<input type="datetime-local">`, serialized to `'YYYY-MM-DD HH:mm'` - the storage format is local-to-trip text by design), confirmation, url, remarks. Component test: edit mode pre-fills; submit maps datetime-local values to the text format.
 
-- [ ] **Step 3: Wire the card** - pencil (edit), and when a stop has no accommodation the panel shows "Add accommodation" opening create mode. Hidden offline.
+- [x] **Step 3: Wire the card** - pencil (edit), and when a stop has no accommodation the panel shows "Add accommodation" opening create mode. Hidden offline.
 
-- [ ] **Step 4: Verify round-trip, commit** - edit the Queenstown accommodation address via place search; pin moves; refresh persists (Req 4.4).
+- [x] **Step 4: Verify round-trip, commit** - edit the Queenstown accommodation address via place search; pin moves; refresh persists (Req 4.4).
 
 ```bash
 pnpm test:run && pnpm build
@@ -453,15 +453,15 @@ git add -A && git commit -m "feat: accommodation editing with map pin update"
 - Consumes: `updateTripMetadata` (Task 6), `tripKeys` (M1).
 - Produces: `useUpdateTripMetadata()` - invalidates both `['trips']` and `['trip', tripId]` (the library and the open trip both reflect the change, Req 4.5).
 
-- [ ] **Step 1: Mutation (test first)** - no optimistic cache patch needed (metadata is low-frequency); pending state on the modal + invalidation on success is enough. On error: retry toast, consistent with everything else.
+- [x] **Step 1: Mutation (test first)** - no optimistic cache patch needed (metadata is low-frequency); pending state on the modal + invalidation on success is enough. On error: retry toast, consistent with everything else.
 
-- [ ] **Step 2: Modal** - name (required), description (textarea), start/end date (same `end >= start` validation as M3's create modal). Entry points: an "Edit trip" item in `UserMenu` on the trip page, and a pencil on the library card.
+- [x] **Step 2: Modal** - name (required), description (textarea), start/end date (same `end >= start` validation as M3's create modal). Entry points: an "Edit trip" item in `UserMenu` on the trip page, and a pencil on the library card.
 
-- [ ] **Step 3: Slice B ship gate**
+- [x] **Step 3: Slice B ship gate**
 
-- [ ] Req 4.4: accommodation name/address/check-in/check-out/notes edits persist; pin updates on address change
-- [ ] Req 4.5: trip rename + date change appear in the library and the trip page after refresh
-- [ ] Update the M4 row: `Slices A-B shipped (<date>)`
+- [x] Req 4.4: accommodation name/address/check-in/check-out/notes edits persist; pin updates on address change *(verified locally 2026-07-04; production re-check pending deploy)*
+- [x] Req 4.5: trip rename + date change appear in the library and the trip page after refresh *(verified locally 2026-07-04; production re-check pending deploy)*
+- [x] Update the M4 row: `Slices A-B shipped (<date>)`
 
 ```bash
 pnpm test:run && pnpm build

@@ -15,7 +15,7 @@ export async function fetchTripById(tripId: string): Promise<TripData | null> {
 export async function fetchTripSummaries(): Promise<TripSummary[]> {
   const { data, error } = await getSupabase()
     .from('trips')
-    .select('id, name, destination, start_date, end_date, timezone, created_at, updated_at')
+    .select('id, name, description, destination, start_date, end_date, timezone, created_at, updated_at')
     .order('start_date', { ascending: false });
   if (error) {
     throw new Error(error.message);
@@ -23,6 +23,7 @@ export async function fetchTripSummaries(): Promise<TripSummary[]> {
   return (data ?? []).map((row) => ({
     trip_id: row.id,
     trip_name: row.name,
+    description: row.description,
     destination: row.destination,
     start_date: row.start_date,
     end_date: row.end_date,
@@ -172,7 +173,7 @@ export async function upsertAccommodation(stopId: string, input: AccommodationIn
 }
 
 export interface TripMetadataPatch {
-  description?: string;
+  description?: string | null;
   endDate?: string;
   name?: string;
   startDate?: string;

@@ -98,6 +98,7 @@ describe('supabaseService reads', () => {
         {
           id: 't1',
           name: 'Trip 1',
+          description: 'Family holiday',
           destination: 'NZ',
           start_date: '2025-12-13',
           end_date: '2025-12-29',
@@ -112,6 +113,7 @@ describe('supabaseService reads', () => {
     expect(trips[0]).toEqual({
       trip_id: 't1',
       trip_name: 'Trip 1',
+      description: 'Family holiday',
       destination: 'NZ',
       start_date: '2025-12-13',
       end_date: '2025-12-29',
@@ -119,7 +121,7 @@ describe('supabaseService reads', () => {
       created_at: 'c',
       updated_at: 'u',
     });
-    expect(chain.select).toHaveBeenCalledWith('id, name, destination, start_date, end_date, timezone, created_at, updated_at');
+    expect(chain.select).toHaveBeenCalledWith('id, name, description, destination, start_date, end_date, timezone, created_at, updated_at');
   });
 });
 
