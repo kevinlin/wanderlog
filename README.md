@@ -8,8 +8,8 @@ An interactive map-based travel journal for planning and tracking your adventure
 - 📅 **Timeline Navigation** - Swipe through your trip timeline with visual progression
 - ✅ **Activity Tracking** - Mark activities as complete and track your progress
 - 📱 **Mobile-Friendly** - Responsive design optimized for mobile devices
-- ☁️ **Cloud Sync** - Trip data and progress synced to Firebase Firestore
-- 💾 **Offline Support** - Works fully offline with automatic sync when online
+- ☁️ **Cloud Sync** - Trip data and progress stored in Supabase (Postgres + Auth + RLS)
+- 💾 **Offline Support** - Persisted query cache serves reads offline; edits require a connection
 - 🔄 **Multi-Trip Management** - Create and manage multiple trips
 - 🧭 **Navigation** - Direct links to Google Maps for navigation
 - 📊 **Export Data** - Download your updated trip data with progress
@@ -21,7 +21,7 @@ An interactive map-based travel journal for planning and tracking your adventure
 - Node.js 18+
 - pnpm (recommended) or npm
 - Google Maps API key
-- Firebase project with Firestore enabled
+- Supabase project (or the local Supabase CLI stack)
 
 ### Installation
 
@@ -36,25 +36,21 @@ An interactive map-based travel journal for planning and tracking your adventure
    pnpm install
    ```
 
-3. Create a `.env.local` file with your API keys:
+3. Create a `.env.local` file with your API keys (see `.env.local.example`):
    ```bash
    # Google Maps
    VITE_GOOGLE_MAPS_API_KEY=your_google_maps_api_key
 
-   # Firebase Configuration
-   VITE_FIREBASE_API_KEY=your_firebase_api_key
-   VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
-   VITE_FIREBASE_PROJECT_ID=your_project_id
-   VITE_FIREBASE_STORAGE_BUCKET=your_project.appspot.com
-   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
-   VITE_FIREBASE_APP_ID=your_app_id
+   # Supabase
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   SUPABASE_SERVICE_ROLE_KEY=your_service_role_key # script-only (migration)
    ```
 
-4. Set up Firebase:
-   - Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
-   - Enable Firestore Database
-   - Copy your Firebase config to `.env.local`
-   - Deploy Firestore security rules (see [Firebase Configuration](#firebase-configuration))
+4. Set up Supabase:
+   - Create a project at [supabase.com](https://supabase.com) (or run `supabase start` for a local stack)
+   - Apply the schema and RLS policies: `supabase db push` (migrations live in `supabase/migrations/`)
+   - Create a user in Supabase Auth to sign in with
 
 5. Start the development server:
    ```bash
@@ -65,13 +61,12 @@ An interactive map-based travel journal for planning and tracking your adventure
 
 ### Trip Data
 
-Trip data is stored in Firebase Firestore. You can:
+Trip data is stored in Supabase Postgres. You can:
 
-1. **Migrate from JSON**: Place JSON files in `local/trip-data/` and run `pnpm migrate`
-2. **Create directly**: Use the Firestore Console to create trip documents
-3. **API**: Use the `firebaseService` to programmatically create trips
+1. **Create in the app**: Use the trip library and the in-app itinerary editing (stops, activities, accommodation, waypoints)
+2. **Migrate from JSON**: Place JSON files in `local/trip-data/` and run `pnpm migrate:supabase`
 
-Trip data schema is defined in `src/types/trip.ts`.
+Trip data schema is defined in `src/types/trip.ts`; the database schema lives in `supabase/migrations/`.
 
 ## Deployment
 
@@ -101,50 +96,17 @@ src/
 
 ## Configuration
 
-### Firebase
+### Supabase
 
-#### Firestore Security Rules
-
-For single-user mode (development):
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if true;
-    }
-  }
-}
-```
-
-For production with authentication:
-```javascript
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /trips/{tripId} {
-      allow read: if true;
-      allow write: if request.auth != null;
-    }
-    match /user_modifications/{tripId} {
-      allow read, write: if request.auth != null;
-    }
-    match /weather_cache/{cacheId} {
-      allow read, write: if true;
-    }
-  }
-}
-```
+- Authentication and row-level security are managed by Supabase; policies live in `supabase/migrations/`
+- The `SUPABASE_SERVICE_ROLE_KEY` is used only by the migration script and must never reach the client bundle
 
 #### Offline Support
 
-The app uses Firebase's IndexedDB persistence for offline functionality:
-- Data is cached locally when online
-- App works fully offline
-- Changes sync automatically when back online
+The app persists the TanStack Query cache to IndexedDB:
+- Trip and weather reads are served from the cache while offline
+- Edit affordances are disabled offline; failed writes surface a retry toast
 - Offline indicator shows connection status
-
-See [docs/specs/plan_firebase-integration.md](docs/specs/plan_firebase-integration.md) for detailed Firebase architecture and API documentation.
 
 ### Google Maps
 
@@ -167,7 +129,8 @@ The project uses a custom color palette for the travel theme:
 - **TypeScript** - Type safety
 - **Vite** - Build tool and dev server
 - **Tailwind CSS** - Styling
-- **Firebase Firestore** - Cloud database and offline sync
+- **Supabase** - Postgres database, auth, and row-level security
+- **TanStack Query** - Server state, optimistic mutations, offline cache
 - **Google Maps API** - Maps and directions
 - **@react-google-maps/api** - React Google Maps integration
 - **@dnd-kit** - Drag and drop for activity reordering

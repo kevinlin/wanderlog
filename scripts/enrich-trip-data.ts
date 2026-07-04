@@ -447,12 +447,6 @@ function validateEnvConfig(): void {
     console.warn('⚠️  No Google Maps API key found. Will use og:image and Wikipedia fallbacks only.');
     console.warn('   For Google Places photos, set GOOGLE_PLACES_API_KEY with IP restrictions.\n');
   }
-
-  const requiredFirebaseVars = ['VITE_FIREBASE_API_KEY', 'VITE_FIREBASE_PROJECT_ID'];
-  const missingFirebase = requiredFirebaseVars.filter((v) => !process.env[v]);
-  if (missingFirebase.length > 0) {
-    console.warn('⚠️  Missing Firebase config, will only update local file:', missingFirebase.join(', '));
-  }
 }
 
 /**
@@ -956,25 +950,8 @@ async function enrichTripData(filename: string): Promise<EnrichmentStats> {
     }
   }
 
-  // Write updated data to JSON file
+  // Write updated data to JSON file; re-import with `pnpm migrate:supabase`
   await writeTripDataFile(filename, rawData, tripData);
-
-  // Update Firebase if configured
-  const hasFirebaseConfig = process.env.VITE_FIREBASE_API_KEY && process.env.VITE_FIREBASE_PROJECT_ID;
-  if (hasFirebaseConfig) {
-    try {
-      const firebaseConfig = await import('../src/config/firebase.js');
-      const firebaseService = await import('../src/services/firebaseService.js');
-
-      firebaseConfig.initializeFirebase();
-      await firebaseService.updateTrip(tripId, { stops: tripData.stops });
-      console.log(`✅ Updated Firebase: ${tripId}`);
-    } catch (error) {
-      console.error('⚠️  Failed to update Firebase:', error);
-    }
-  } else {
-    console.log('⚠️  Firebase not configured, skipping cloud update');
-  }
 
   return stats;
 }

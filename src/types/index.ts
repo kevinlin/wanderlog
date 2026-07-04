@@ -1,7 +1,6 @@
 // Central export file for all types
 
 export * from './map';
-export * from './storage';
 export * from './trip';
 export * from './weather';
 

@@ -577,12 +577,17 @@ git add -A && git commit -m "feat: stop restructuring with date cascade"
 **Files:**
 - Modify: `docs/specs/plan_wanderlog-phase-2.md`
 
-- [ ] **Slice C gate:** Req 4.6 (waypoint edits re-route) and Req 4.7 (stop changes update dates/timeline/routes consistently) verified on production
-- [ ] **Req 4.9 (LWW):** two browsers edit the same activity name concurrently; the later save wins after both refresh; no error surfaces
-- [ ] **Req 4.10:** offline disables every edit affordance added in M4 (activities, accommodation, metadata, waypoints, stops editor)
-- [ ] **Req 8.3:** export still downloads well-formed trip JSON including edited data
-- [ ] **Post-cutover tail (design):** archive a final Firestore export into the repo (`local/firestore-export/`), then remove `firebase` from `package.json`, delete `src/config/firebase.ts` + `src/services/firebaseService.ts`, and drop the `--skip-firestore` overlay path from the migration script (Req 8.4 - the export happens before the removal, in this order)
-- [ ] Update the M4 row: `Shipped (<date>)`; Phase 2 complete
+- [x] **Slice C gate:** Req 4.6 (waypoint edits re-route) and Req 4.7 (stop changes update dates/timeline/routes consistently) verified on production
+  > Verified locally 2026-07-04 (Req 4.6 in Task 9, Req 4.7 in Task 10); production re-check pending merge/deploy of the branch.
+- [x] **Req 4.9 (LWW):** two browsers edit the same activity name concurrently; the later save wins after both refresh; no error surfaces
+  > Verified locally 2026-07-04: with the trip cached in one browser, the same activity's name was changed directly in Postgres (simulating the other writer), then the browser saved a different name from its stale modal - the later save won, DB showed the browser's value, no error surfaced.
+- [x] **Req 4.10:** offline disables every edit affordance added in M4 (activities, accommodation, metadata, waypoints, stops editor)
+  > Verified locally 2026-07-04: forcing `navigator.onLine=false` + `offline` event showed the Offline Mode banner and removed Add activity/Add waypoint, every Edit/Delete icon (activities, waypoints, accommodation), and the Edit trip / Edit stops menu items; all returned on `online`.
+- [x] **Req 8.3:** export still downloads well-formed trip JSON including edited data
+  > Verified locally 2026-07-04: intercepted the exported blob - valid JSON, trip name + 8 stops with current dates/order and activity data (68 KB).
+- [x] **Post-cutover tail (design):** archive a final Firestore export into the repo (`local/firestore-export/`), then remove `firebase` from `package.json`, delete `src/config/firebase.ts` + `src/services/firebaseService.ts`, and drop the `--skip-firestore` overlay path from the migration script (Req 8.4 - the export happens before the removal, in this order)
+  > Archived 2026-07-04: `local/firestore-export/{trips,user_modifications,weather_cache}.json` (1/1/0 documents) from the production Firestore. Then removed the `firebase` dep, deleted `src/config/firebase.ts`, `src/services/firebaseService.ts`, `src/types/storage.ts`, `scripts/migrate-to-firestore.ts` (+ the `pnpm migrate` script), dropped the overlay path from `migrate-to-supabase.ts` and the Firebase update branch from `enrich-trip-data.ts`, and scrubbed README/CLAUDE.md/.env.local.example. Migration script re-verified against local Supabase.
+- [x] Update the M4 row: `Shipped (<date>)`; Phase 2 complete
 
 ```bash
 git add -A

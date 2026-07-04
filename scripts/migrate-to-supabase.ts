@@ -1,15 +1,15 @@
 #!/usr/bin/env tsx
 
 /**
- * Migration script to upload trip data from JSON files (+ Firestore user
- * modifications overlay) into Supabase Postgres tables.
+ * Migration script to upload trip data from JSON files into Supabase
+ * Postgres tables.
  *
  * Usage:
  *   pnpm migrate:supabase                             # Migrate all trips
  *   pnpm migrate:supabase 202512_NZ_trip-plan.json    # Migrate specific trip
- *   pnpm migrate:supabase --skip-firestore            # Skip Firestore overlay (re-runs)
  *
- * Firestore is read-only here (Req 8.1); upserts make the script idempotent (Req 1.2).
+ * Upserts make the script idempotent (Req 1.2). The Firestore user-modifications
+ * overlay was removed with the Firebase decommission (Req 8.4).
  */
 
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
@@ -17,9 +17,7 @@ import * as fs from 'fs/promises';
 import * as path from 'path';
 import { fileURLToPath } from 'url';
 import { buildRows } from '../src/services/supabaseMappers';
-import type { UserModifications } from '../src/types/storage';
-import type { Activity, TripData } from '../src/types/trip';
-import { sortActivitiesByOrder } from '../src/utils/tripUtils';
+import type { TripData } from '../src/types/trip';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -76,55 +74,8 @@ async function getAllTripDataFiles(): Promise<string[]> {
   return files.filter((file) => file.endsWith('_trip-plan.json'));
 }
 
-/**
- * Mirror App.tsx's getCustomOrder: the Firestore order array holds original
- * indices; activities it does not reference keep their own `order` field.
- * Never drop activities - stale order arrays predate later-added activities.
- */
-function toCustomOrder(activities: Activity[], orderArray?: number[]): Record<string, number> | undefined {
-  if (!orderArray) {
-    return;
-  }
-  const customOrder: Record<string, number> = {};
-  orderArray.forEach((originalIndex, newIndex) => {
-    if (activities[originalIndex]) {
-      customOrder[activities[originalIndex].activity_id] = newIndex;
-    }
-  });
-  return customOrder;
-}
-
-function applyModifications(trip: TripData, mods: UserModifications | null): TripData {
-  if (!mods) {
-    return trip;
-  }
-  return {
-    ...trip,
-    stops: trip.stops.map((stop) => {
-      const customOrder = toCustomOrder(stop.activities, mods.activityOrders[stop.stop_id]);
-      const sorted = sortActivitiesByOrder(stop.activities, customOrder);
-      return {
-        ...stop,
-        activities: sorted.map((activity, index) => ({
-          ...activity,
-          order: index,
-          status: {
-            done: mods.activityStatus[activity.activity_id] ?? activity.status?.done ?? false,
-          },
-        })),
-        scenic_waypoints: (stop.scenic_waypoints ?? []).map((waypoint) => ({
-          ...waypoint,
-          status: {
-            done: mods.activityStatus[waypoint.activity_id] ?? waypoint.status?.done ?? false,
-          },
-        })),
-      };
-    }),
-  };
-}
-
-async function migrateTrip(supabase: SupabaseClient, tripId: string, tripData: TripData, mods: UserModifications | null): Promise<void> {
-  const bundle = buildRows(applyModifications(tripData, mods), tripId);
+async function migrateTrip(supabase: SupabaseClient, tripId: string, tripData: TripData): Promise<void> {
+  const bundle = buildRows(tripData, tripId);
   const upsert = async (table: string, rows: object[]) => {
     if (rows.length === 0) {
       return;
@@ -156,20 +107,7 @@ async function main(): Promise<void> {
   );
 
   const args = process.argv.slice(2);
-  const skipFirestore = args.includes('--skip-firestore');
   const filenames = args.filter((arg) => !arg.startsWith('--'));
-
-  let getUserModifications: ((tripId: string) => Promise<UserModifications>) | null = null;
-  if (skipFirestore) {
-    console.log('Skipping Firestore overlay (--skip-firestore)\n');
-  } else {
-    // Dynamic imports after env is loaded; Firestore is read-only here (Req 8.1)
-    const firebaseConfig = await import('../src/config/firebase.js');
-    const firebaseService = await import('../src/services/firebaseService.js');
-    firebaseConfig.initializeFirebase();
-    getUserModifications = firebaseService.getUserModifications;
-    console.log('✓ Firebase initialized (read-only overlay)\n');
-  }
 
   try {
     const files = filenames.length > 0 ? filenames : await getAllTripDataFiles();
@@ -181,8 +119,7 @@ async function main(): Promise<void> {
     for (const filename of files) {
       const tripData = await readTripDataFile(filename);
       const tripId = generateTripId(filename);
-      const mods = getUserModifications ? await getUserModifications(tripId) : null;
-      await migrateTrip(supabase, tripId, tripData, mods);
+      await migrateTrip(supabase, tripId, tripData);
     }
 
     console.log('\n✅ Migration completed successfully!');

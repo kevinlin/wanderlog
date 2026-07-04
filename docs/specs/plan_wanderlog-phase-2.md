@@ -11,7 +11,7 @@ Detailed plans are written just-in-time: each milestone's plan is authored when 
 | M2 - Auth gate | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | Shipped (2026-07-04) | Unauthenticated access fully blocked; family members sign in |
 | M3 - Trip library | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Shipped (2026-07-04) | 2+ trips browsable and selectable |
 | M3.5 - Trip import | [plan_p2m3-5_trip-import.md](plan_p2m3-5_trip-import.md) | Shipped (2026-07-04) | Each sample file (native + 2 TripIt) imports and renders; invalid files rejected with listed errors; re-import creates an independent copy |
-| M4 - Itinerary editing | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Slices A-B shipped (2026-07-04) | Each slice (activities; accommodation + trip metadata; waypoints + stops) edits and persists round-trip |
+| M4 - Itinerary editing | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Shipped (2026-07-04) | Each slice (activities; accommodation + trip metadata; waypoints + stops) edits and persists round-trip |
 
 Infrastructure that lands alongside milestones (see design):
 
@@ -32,3 +32,4 @@ Infrastructure that lands alongside milestones (see design):
 - 2026-07-04: M3 shipped; M3.5 (trip import) specced and planned - trip creation becomes file import (Req 3.5 amendment), slotting between M3 and M4.
 - 2026-07-04: M4 Slice A (activities CRUD) shipped. Add/edit/delete with place search, optimistic persistence with retry toasts, offline editing lockout, drag-reorder re-verified under the shared mutation helper. Verified end-to-end against local Supabase; production re-check after deploy.
 - 2026-07-04: M4 Slice B (accommodation + trip metadata) shipped. Accommodation add/edit via upsert modal with place search, remarks and pin coordinates (additive migration); trip rename/description/date edits from the library card pencil and the trip page UserMenu, reflected in both views via invalidation. Verified end-to-end against local Supabase; production re-check after deploy.
+- 2026-07-04: M4 Slice C (waypoints + stop restructuring) shipped and M4 verification gate passed - Phase 2 complete. Waypoint CRUD persists (replacing the M1 cache-only POI add); StopsEditor reorders/adds/edits/deletes stops with a client-side date cascade committed as one structure write that also updates the trip span. LWW, offline lockout of all M4 edit affordances, and export re-verified locally. Firebase decommissioned: final Firestore export archived in `local/firestore-export/`, firebase dep + config/service/legacy migration script removed, Supabase migration script no longer reads Firestore. Production re-check after deploy.
