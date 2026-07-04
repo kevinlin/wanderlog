@@ -47,7 +47,7 @@ export function updateActivity(activityId: string, input: ActivityInput): Promis
 export function deleteActivity(activityId: string): Promise<void>;
 ```
 
-- [ ] **Step 1: Write failing tests**
+- [x] **Step 1: Write failing tests**
 
 ```typescript
 it('createActivity inserts with generated uuid, stop_id and sort_order', async () => {
@@ -71,7 +71,7 @@ it('deleteActivity deletes by id', async () => {
 });
 ```
 
-- [ ] **Step 2: Implement**
+- [x] **Step 2: Implement**
 
 ```typescript
 const activityInputToRow = (input: ActivityInput) => ({
@@ -105,7 +105,7 @@ export const deleteActivity = (activityId: string): Promise<void> =>
 
 Add the `deleteById(table, id)` helper next to M1's `updateById`, throwing on error the same way; M3's `deleteTrip` can be refactored onto it in passing (same file, three lines).
 
-- [ ] **Step 3: Green, full suite, commit**
+- [x] **Step 3: Green, full suite, commit**
 
 ```bash
 pnpm vitest run src/services/__tests__/supabaseService.test.ts && pnpm test:run
@@ -128,7 +128,7 @@ export function useOnlineStatus(): boolean;
 // Toast gains: action?: { label: string; onClick: () => void }
 ```
 
-- [ ] **Step 1: TDD the hook**
+- [x] **Step 1: TDD the hook**
 
 ```typescript
 import { act, renderHook } from '@testing-library/react';
@@ -165,15 +165,15 @@ export const useOnlineStatus = (): boolean =>
   useSyncExternalStore(subscribe, () => navigator.onLine, () => true);
 ```
 
-- [ ] **Step 2: Toast action button**
+- [x] **Step 2: Toast action button**
 
 Extend the existing `Toast` props with `action?: { label: string; onClick: () => void }`, rendered as an underlined button after the message. Existing call sites compile unchanged (optional prop).
 
-- [ ] **Step 3: Offline copy**
+- [x] **Step 3: Offline copy**
 
 `OfflineIndicator` message becomes "You're offline - viewing cached data, editing disabled" (the old "changes will sync" promise was never true and offline editing is out of scope by design).
 
-- [ ] **Step 4: Green, commit**
+- [x] **Step 4: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -200,7 +200,7 @@ export function useTripCacheMutation<TVars, TResult = void>(options: {
 }): UseMutationResult<TResult, Error, TVars>;
 ```
 
-- [ ] **Step 1: Extract the pattern**
+- [x] **Step 1: Extract the pattern**
 
 M1's `useToggleActivityDone`/`useReorderActivities` duplicate cancel/snapshot/patch/rollback/invalidate. Move that boilerplate into `useTripCacheMutation`:
 
@@ -240,11 +240,11 @@ export function useTripCacheMutation<TVars, TResult = void>({ tripId, mutationFn
 
 Match `showToast` to the actual Toast API in the repo (Task 2 extended it); if Toast is prop-driven rather than hook-driven, thread a callback - the retry contract is the fixed part, the wiring follows the existing component.
 
-- [ ] **Step 2: Refactor the two M1 hooks onto the helper**
+- [x] **Step 2: Refactor the two M1 hooks onto the helper**
 
 `useToggleActivityDone` and `useReorderActivities` shrink to a `mutationFn` + `patch` pair each. Their existing optimistic/rollback tests must pass unchanged - that is the refactor's safety net. Add one new test: on error, the toast fires with a working Retry action (assert `mutationFn` called twice after clicking retry).
 
-- [ ] **Step 3: Green, commit**
+- [x] **Step 3: Green, commit**
 
 ```bash
 pnpm test:run && pnpm build
@@ -266,7 +266,7 @@ git add -A && git commit -m "refactor: shared optimistic trip mutation helper wi
   - `ItemModalShell` - the generic editing dialog every entity form reuses: `{ title, isOpen, onClose, onSubmit, isPending, error, children }` with Save/Cancel footer (design: one reusable modal pattern).
   - `ActivityFormModal` with props `{ stopId, activity?: Activity, isOpen, onClose }` - `activity` absent means create mode.
 
-- [ ] **Step 1: Mutations via the helper (test first)**
+- [x] **Step 1: Mutations via the helper (test first)**
 
 Tests mirror Task 3's pattern - for each hook assert the optimistic cache patch and rollback. Create appends at the end of the stop's list:
 
@@ -288,17 +288,17 @@ export function useCreateActivity(tripId: string) {
 
 `tempId = crypto.randomUUID()` from the caller; `onSettled` invalidation swaps it for the server row (same id semantics, different generator call - acceptable flicker: none, ids are client-side anyway). `inputToDomain` is a small local mapper from `ActivityInput` to the domain activity fields. Update/delete hooks patch/remove the matching activity in place.
 
-- [ ] **Step 2: The modal (test first)**
+- [x] **Step 2: The modal (test first)**
 
 `ActivityFormModal` fields: name (required), type (select over `ActivityType` values), address (text) with a "Find place" button that runs the existing `placesService` search and fills `lat`/`lng`/`google_place_id`/`thumbnail_url` from the picked result, duration, url, remarks (textarea). Component test: create mode submits `ActivityInput` with entered values; edit mode pre-fills from the `activity` prop; empty name blocks submit.
 
-- [ ] **Step 3: Wire the cards**
+- [x] **Step 3: Wire the cards**
 
 - `ActivityCard`: pencil icon (edit modal) + trash icon (M3 `ConfirmDialog` → `useDeleteActivity`), both hidden when `!useOnlineStatus()`.
 - `ActivitiesPanel`: "Add activity" button opens create mode; the M1 POI-add cache patch is replaced by `useCreateActivity` - POI results now persist (closing the M1 parity note).
 - Drag-and-drop: pass `disabled={!isOnline}` into the dnd-kit sortable context.
 
-- [ ] **Step 4: Slice A round-trip verification, commit**
+- [x] **Step 4: Slice A round-trip verification, commit**
 
 Manual on a preview: add an activity (with a place search), see its pin appear; edit its name, pin/card update; delete it, pin gone; refresh - all changes persisted; second browser sees them. Offline (DevTools network offline): pencils/add/delete/drag disabled, banner shows (Req 4.10).
 
@@ -311,12 +311,12 @@ git add -A && git commit -m "feat: activity crud editing with optimistic persist
 
 ### Task 5: Slice A ship gate
 
-- [ ] All Task 4 manual checks pass on production after deploy
-- [ ] Req 4.1: add activity with name, type, location, notes - persists
-- [ ] Req 4.2: edit + delete persist, map pins update
-- [ ] Req 4.3: drag-reorder persists canonically (M1 behavior, re-verified under the refactored helper)
-- [ ] Req 4.8: kill network mid-edit - error toast with Retry appears; retry after reconnect succeeds
-- [ ] Update the M4 row in `plan_wanderlog-phase-2.md`: `Slice A shipped (<date>)`
+- [ ] All Task 4 manual checks pass on production after deploy (verified locally against local Supabase; production re-check pending merge + deploy)
+- [x] Req 4.1: add activity with name, type, location, notes - persists
+- [x] Req 4.2: edit + delete persist, map pins update
+- [x] Req 4.3: drag-reorder persists canonically (M1 behavior, re-verified under the refactored helper)
+- [x] Req 4.8: kill network mid-edit - error toast with Retry appears; retry after reconnect succeeds
+- [x] Update the M4 row in `plan_wanderlog-phase-2.md`: `Slice A shipped (<date>)`
 
 ```bash
 git add docs/specs/plan_wanderlog-phase-2.md
