@@ -1,5 +1,7 @@
+import { differenceInCalendarDays } from 'date-fns';
 import { toTripData, wanderlogTripSchema } from '@/schemas/tripFileSchemas';
-import type { TripData } from '@/types/trip';
+import { type TripitFile, type TripitFlight, type TripitLodging, type TripitTrip, tripitFileSchema } from '@/schemas/tripitSchemas';
+import type { Activity, TripBase, TripData } from '@/types/trip';
 
 export interface ImportIssue {
   message: string;
@@ -96,10 +98,216 @@ export async function parseTripFile(text: string, geocode: GeocodeFn): Promise<P
   return parseTripitFile(raw, geocode);
 }
 
-// Implemented in Task 3; keeping the native path shippable on its own.
-function parseTripitFile(_raw: unknown, _geocode: GeocodeFn): Promise<ParseResult> {
-  return Promise.resolve({
-    ok: false,
-    errors: [{ path: 'file', message: 'TripIt import not available yet' }],
+const MONTHS: Record<string, string> = {
+  Jan: '01',
+  Feb: '02',
+  Mar: '03',
+  Apr: '04',
+  May: '05',
+  Jun: '06',
+  Jul: '07',
+  Aug: '08',
+  Sep: '09',
+  Oct: '10',
+  Nov: '11',
+  Dec: '12',
+};
+
+// "Mon, May 12, 2025 3:00 PM CEST" / "Fri, Feb 5, 2027 3:00 PM GMT+8"
+const DATETIME_RE = /([A-Z][a-z]{2}) (\d{1,2}),? (\d{4})\s+(\d{1,2}):(\d{2}) (AM|PM)/;
+const HOURS_HALF_DAY = 12;
+
+export function parseTripitDateTime(text: string): { date: string; time: string } | null {
+  const match = DATETIME_RE.exec(text);
+  if (!match) {
+    return null;
+  }
+  const [, monthName, day, year, rawHour, minute, meridiem] = match;
+  const month = MONTHS[monthName];
+  if (!month) {
+    return null;
+  }
+  let hour = Number(rawHour) % HOURS_HALF_DAY;
+  if (meridiem === 'PM') {
+    hour += HOURS_HALF_DAY;
+  }
+  return {
+    date: `${year}-${month}-${day.padStart(2, '0')}`,
+    time: `${String(hour).padStart(2, '0')}:${minute}`,
+  };
+}
+
+// "Check in Fri, Feb 5, 2027 3:00 PM GMT+8 Check out Tue, Feb 9, 2027 11:00 AM GMT+8"
+const CHECK_TEXT_RE = /Check in (.+?)\s*Check out (.+)$/;
+
+const lodgingCheckTimes = (lodging: TripitLodging): { checkIn: string | null; checkOut: string | null } => {
+  if (lodging.checkIn || lodging.checkOut) {
+    return { checkIn: lodging.checkIn ?? null, checkOut: lodging.checkOut ?? null };
+  }
+  const match = lodging.checkInText ? CHECK_TEXT_RE.exec(lodging.checkInText) : null;
+  return match ? { checkIn: match[1], checkOut: match[2] } : { checkIn: null, checkOut: null };
+};
+
+// "Singapore May 11Terminal 2 11:30 PM GMT+8" → month + day; year resolved from the
+// trip start date, rolling over New Year if the resulting date precedes the trip start.
+const MONTH_DAY_RE = /(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2})/;
+
+const flightDate = (flight: TripitFlight, trip: TripitTrip): string | null => {
+  const match = flight.departureText ? MONTH_DAY_RE.exec(flight.departureText) : null;
+  if (!match) {
+    return null;
+  }
+  const [, monthName, day] = match;
+  const year = trip.startDate.slice(0, 4);
+  const candidate = `${year}-${MONTHS[monthName]}-${day.padStart(2, '0')}`;
+  return candidate < trip.startDate ? `${Number(year) + 1}${candidate.slice(4)}` : candidate;
+};
+
+const flightToActivity = (flight: TripitFlight): Activity => {
+  const route = flight.route?.replace(' ', ' → ') ?? '';
+  const label = flight.flightNumber ?? flight.title ?? 'Flight';
+  const legs = [flight.departureText, flight.arrivalText].filter(Boolean).join(' → ');
+  return {
+    activity_id: '',
+    activity_name: route ? `${label}: ${route}` : label,
+    activity_type: 'transport',
+    remarks: [flight.airline, legs].filter(Boolean).join('. '),
+    status: { done: false },
+  };
+};
+
+const nearestStopIndex = (stops: TripBase[], date: string): number => {
+  const contained = stops.findIndex((stop) => stop.date.from <= date && date <= stop.date.to);
+  if (contained !== -1) {
+    return contained;
+  }
+  let best = 0;
+  let bestDistance = Number.POSITIVE_INFINITY;
+  stops.forEach((stop, index) => {
+    const distance = Math.min(
+      Math.abs(Date.parse(stop.date.from) - Date.parse(date)),
+      Math.abs(Date.parse(stop.date.to) - Date.parse(date))
+    );
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      best = index;
+    }
   });
+  return best;
+};
+
+const lodgingToStop = async (
+  lodging: TripitLodging,
+  trip: TripitTrip,
+  geocode: GeocodeFn,
+  warnings: string[]
+): Promise<{ stop: TripBase | null; error: string | null }> => {
+  const address = lodging.address ?? lodging.title;
+  let coords: { lat: number; lng: number } | null = null;
+  try {
+    coords = await geocode(address);
+  } catch {
+    coords = null;
+  }
+  if (!coords) {
+    return { stop: null, error: `Could not locate "${address}" for stop "${lodging.title}"` };
+  }
+  const { checkIn, checkOut } = lodgingCheckTimes(lodging);
+  const parsedIn = checkIn ? parseTripitDateTime(checkIn) : null;
+  const parsedOut = checkOut ? parseTripitDateTime(checkOut) : null;
+  if (!(parsedIn && parsedOut)) {
+    warnings.push(`Check-in/check-out times unreadable for "${lodging.title}"; using the trip date range.`);
+  }
+  const from = parsedIn?.date ?? trip.startDate;
+  const to = parsedOut?.date ?? trip.endDate;
+  return {
+    stop: {
+      stop_id: '',
+      name: lodging.title,
+      date: { from, to },
+      location: coords,
+      duration_days: differenceInCalendarDays(new Date(`${to}T00:00:00`), new Date(`${from}T00:00:00`)),
+      accommodation: {
+        name: lodging.title,
+        address: lodging.address ?? '',
+        check_in: parsedIn ? `${parsedIn.date} ${parsedIn.time}` : '',
+        check_out: parsedOut ? `${parsedOut.date} ${parsedOut.time}` : '',
+        confirmation: lodging.confirmation ?? undefined,
+        url: lodging.website ?? undefined,
+        phone: lodging.phone ?? undefined,
+      },
+      activities: [],
+      scenic_waypoints: [],
+    },
+    error: null,
+  };
+};
+
+export async function tripitToTripData(
+  file: TripitFile,
+  geocode: GeocodeFn
+): Promise<{ tripData: TripData | null; warnings: string[]; errors: ImportIssue[] }> {
+  const warnings: string[] = [];
+  const errors: ImportIssue[] = [];
+  const trip = file.trips[0];
+  if (file.trips.length > 1) {
+    warnings.push(`File contains ${file.trips.length} trips; importing "${trip.name}".`);
+  }
+  if (trip.lodging.length === 0) {
+    return {
+      tripData: null,
+      warnings,
+      errors: [{ path: 'trips[0].lodging', message: 'No lodging found - cannot derive stops' }],
+    };
+  }
+
+  const stops: TripBase[] = [];
+  for (const [index, lodging] of trip.lodging.entries()) {
+    const { stop, error } = await lodgingToStop(lodging, trip, geocode, warnings);
+    if (stop) {
+      stops.push(stop);
+    } else if (error) {
+      errors.push({ path: `trips[0].lodging[${index}]`, message: error });
+    }
+  }
+
+  if (errors.length > 0) {
+    return { tripData: null, warnings, errors };
+  }
+
+  stops.sort((a, b) => a.date.from.localeCompare(b.date.from));
+
+  for (const flight of trip.flights) {
+    const date = flightDate(flight, trip);
+    const stopIndex = date ? nearestStopIndex(stops, date) : 0;
+    const activity = flightToActivity(flight);
+    activity.order = stops[stopIndex].activities.length;
+    stops[stopIndex].activities.push(activity);
+  }
+
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  warnings.push(`No timezone in TripIt exports - using this device's timezone (${timezone}).`);
+
+  return {
+    tripData: { trip_name: trip.name, timezone, stops },
+    warnings,
+    errors,
+  };
+}
+
+async function parseTripitFile(raw: unknown, geocode: GeocodeFn): Promise<ParseResult> {
+  const parsed = tripitFileSchema.safeParse(raw);
+  if (!parsed.success) {
+    return { ok: false, errors: toIssues(parsed.error) };
+  }
+  const { tripData, warnings, errors } = await tripitToTripData(parsed.data, geocode);
+  if (!tripData || errors.length > 0) {
+    return { ok: false, errors };
+  }
+  // Final gate: converted output passes the same schema as native files.
+  const validated = wanderlogTripSchema.safeParse(tripData);
+  if (!validated.success) {
+    return { ok: false, errors: toIssues(validated.error) };
+  }
+  return { ok: true, preview: toPreview(toTripData(validated.data), 'tripit', warnings) };
 }
