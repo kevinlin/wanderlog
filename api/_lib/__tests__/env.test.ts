@@ -5,6 +5,7 @@ const FULL_ENV = {
   ANTHROPIC_API_KEY: 'sk-test',
   ANTHROPIC_MODEL: 'test-model',
   ANTHROPIC_BASE_URL: 'https://example.com/anthropic',
+  GOOGLE_GEOCODING_API_KEY: 'geo-key',
   VITE_SUPABASE_URL: 'https://proj.supabase.co',
   VITE_SUPABASE_ANON_KEY: 'anon-key',
 } as NodeJS.ProcessEnv;
@@ -15,6 +16,7 @@ describe('loadAgentEnv', () => {
       anthropicApiKey: 'sk-test',
       anthropicModel: 'test-model',
       anthropicBaseUrl: 'https://example.com/anthropic',
+      googleGeocodingApiKey: 'geo-key',
       supabaseUrl: 'https://proj.supabase.co',
       supabaseAnonKey: 'anon-key',
     });
@@ -27,7 +29,7 @@ describe('loadAgentEnv', () => {
 
   it('throws naming every missing required var', () => {
     expect(() => loadAgentEnv({} as NodeJS.ProcessEnv)).toThrow(
-      /ANTHROPIC_API_KEY.*ANTHROPIC_MODEL.*VITE_SUPABASE_URL.*VITE_SUPABASE_ANON_KEY/s
+      /ANTHROPIC_API_KEY.*ANTHROPIC_MODEL.*GOOGLE_GEOCODING_API_KEY.*VITE_SUPABASE_URL.*VITE_SUPABASE_ANON_KEY/s
     );
   });
 });

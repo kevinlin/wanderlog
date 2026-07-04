@@ -116,4 +116,9 @@ describe('progressLabel', () => {
     expect(progressLabel('delete_stop', { stop_id: 's1' })).toBe('Deleting stop…');
     expect(progressLabel('unknown_tool', {})).toBe('Running unknown_tool…');
   });
+
+  it('labels address- and trip_name-carrying inputs', () => {
+    expect(progressLabel('geocode', { address: 'Tokyo' })).toBe('Looking up "Tokyo"…');
+    expect(progressLabel('create_trip', { trip_name: 'Tokyo with kids' })).toBe('Creating trip "Tokyo with kids"…');
+  });
 });

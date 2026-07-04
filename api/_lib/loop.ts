@@ -22,6 +22,8 @@ const LABEL_TEMPLATES: Record<string, string> = {
   update_stop: 'Updating stop{name}…',
   delete_stop: 'Deleting stop…',
   restructure_stops: 'Reordering stops and recalculating dates…',
+  geocode: 'Looking up{name}…',
+  create_trip: 'Creating trip{name}…',
 };
 
 export function progressLabel(toolName: string, input: unknown): string {
@@ -29,8 +31,9 @@ export function progressLabel(toolName: string, input: unknown): string {
   if (!template) {
     return `Running ${toolName}…`;
   }
-  const fields = input as { name?: unknown } | null;
-  const name = typeof fields?.name === 'string' && fields.name ? ` "${fields.name}"` : '';
+  const fields = input as { address?: unknown; name?: unknown; trip_name?: unknown } | null;
+  const raw = fields?.name ?? fields?.trip_name ?? fields?.address;
+  const name = typeof raw === 'string' && raw ? ` "${raw}"` : '';
   return template.replace('{name}', name);
 }
 

@@ -16,7 +16,7 @@ import { loadAgentEnv } from './_lib/env.js';
 import { MAX_ITERATIONS, runAgentLoop } from './_lib/loop.js';
 import { createUserClient, extractBearerToken, getAuthenticatedUserId } from './_lib/supabase.js';
 import { buildSystemPrompt } from './_lib/systemPrompt.js';
-import { AGENT_TOOLS } from './_lib/tools/index.js';
+import { buildAgentTools } from './_lib/tools/index.js';
 
 export const MAX_PROMPT_CHARS = 4000;
 
@@ -71,11 +71,12 @@ async function handleAgent(request: Request): Promise<Response> {
 
   const anthropic = new Anthropic({ apiKey: env.anthropicApiKey, baseURL: env.anthropicBaseUrl });
   const systemPrompt = buildSystemPrompt(context);
+  const tools = buildAgentTools(env.googleGeocodingApiKey);
   const wantsBuffered = request.headers.get('accept') === 'application/json';
 
   const runToEvents = async (emit: (event: AgentEvent) => void): Promise<void> => {
     const { finalText, hitIterationCap } = await runAgentLoop(
-      { anthropic, emit, model: env.anthropicModel, signal: request.signal, supabase, tools: AGENT_TOOLS },
+      { anthropic, emit, model: env.anthropicModel, signal: request.signal, supabase, tools },
       systemPrompt,
       prompt
     );
