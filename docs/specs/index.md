@@ -37,6 +37,8 @@ Navigation map for the Wanderlog specification docs. All specs use the `default`
 | Itinerary Editing (Phase 2 M4) | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Three slices: activities CRUD + retry/offline, accommodation + trip metadata, waypoints + stop restructuring with date cascade; Firebase decommission. |
 | Phase 3 | [plan_wanderlog-phase-3.md](plan_wanderlog-phase-3.md) | Phase 3 master plan: milestone tracker linking per-milestone plans (written just-in-time). |
 | Agent Backend + Q&A (Phase 3 M1) | [plan_p3m1_agent-backend-qa.md](plan_p3m1_agent-backend-qa.md) | Vercel /api/agent endpoint: JWT auth + RLS client, read-tool loop (@anthropic-ai/sdk), NDJSON/buffered responses, agent button + modal. |
+| Bounded Edits (Phase 3 M2) | [plan_p3m2_bounded-edits.md](plan_p3m2_bounded-edits.md) | Write tools (activities, waypoints, accommodation, metadata, stops + restructure) with zod validation, delete guard, change-event plumbing, modal change list. |
+| Generative Creation (Phase 3 M3) | [plan_p3m3_generative-creation.md](plan_p3m3_generative-creation.md) | Server-side geocode tool, shared trip-bundle insert, create_trip over the import pipeline, result navigation, Hermes contract finalization. |
 
 ## Meta
 
