@@ -4,6 +4,7 @@ export { READ_TOOLS } from './read.js';
 import type { AgentTool } from './core.js';
 import { ACTIVITY_TOOLS, WAYPOINT_TOOLS } from './items.js';
 import { READ_TOOLS } from './read.js';
+import { TRIP_FIELD_TOOLS } from './tripFields.js';
 
 // Full registry passed to the loop. Write tools are appended by M2 Tasks 2-4.
-export const AGENT_TOOLS: AgentTool[] = [...READ_TOOLS, ...ACTIVITY_TOOLS, ...WAYPOINT_TOOLS];
+export const AGENT_TOOLS: AgentTool[] = [...READ_TOOLS, ...ACTIVITY_TOOLS, ...WAYPOINT_TOOLS, ...TRIP_FIELD_TOOLS];
