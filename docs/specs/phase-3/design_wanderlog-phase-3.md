@@ -108,7 +108,7 @@ Status codes: 200 (loop ran; tool-level failures live in events/`errors`), 400 (
 
 New `src/components/Agent/`:
 
-- **AgentButton** - on `TripLibraryPage` (global scope) and `TripPage` (trip scope, passes `tripId`). Disabled offline via M4's `useOnlineStatus`.
+- **AgentButton** - on `TripLibraryPage` (global scope) and `TripPage` (trip scope, passes `tripId`). Disabled offline via M4's `useOnlineStatus`. On `TripPage` it is corner-pinned in the top-right (`fixed top-2 right-14 sm:top-4`), left of the `UserMenu`. Both controls stay anchored to the corner; the activities panel drops below them (`sm:top-16`) instead of the controls shifting left to clear the panel.
 - **AgentModal** - states: *input* (textarea, example-prompt hints, submit) → *running* (progress lines appended from the stream; cancel aborts the fetch) → *result* (summary text, change list grouped by entity with names, errors in red; "Open trip" button when `result.tripId` is set) . Closing or resubmitting resets - one-shot semantics.
 - On terminal event: invalidate `['trips']` and `['trip', tripId]`; map, timeline, and library refresh through the normal query path. No manual cache surgery.
 - Q&A renders `answer` as text.
@@ -162,3 +162,4 @@ Risk-ordered; each independently shippable. Detailed plans written just-in-time 
 
 - 2026-07-04: Initial design (brainstormed and approved): Vercel-hosted tool-use loop, mirrored CRUD tool surface, immediate writes with delete guard, one-shot prompts, NDJSON/buffered dual rendering, Hermes programmatic access.
 - 2026-07-04: Code-sharing rationale corrected during M1 planning: `src/config/supabase.ts` already runs under Node (migration script); the function's own client exists for the per-request caller token (RLS), not env incompatibility.
+- 2026-07-04: Agent UI layout note added: on `TripPage` the AgentButton and UserMenu are corner-pinned (top-right); the activities panel drops below them (`sm:top-16`) rather than the controls shifting left to dodge it. Tracked in [plan_p3m2_bounded-edits.md](plan_p3m2_bounded-edits.md) changelog.

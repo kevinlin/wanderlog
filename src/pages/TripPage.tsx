@@ -226,15 +226,14 @@ export const TripPage = () => {
         {/* Floating Timeline Strip */}
         <TimelineStrip currentStopId={state.currentBase} onStopSelect={handleStopSelect} stops={tripData.stops} />
 
-        {/* Floating User Menu - shifts left of the activities panel on desktop */}
+        {/* Floating User Menu - pinned to the top-right corner */}
         <UserMenu
-          className={isActivitiesPanelVisible && !isMobile ? 'sm:right-[25rem]' : ''}
           onEditStops={isOnline ? () => setIsStopsEditorOpen(true) : undefined}
           onEditTrip={isOnline && tripSummary ? () => setIsEditTripModalOpen(true) : undefined}
         />
 
-        {/* Floating agent button - sits left of the user menu */}
-        <div className={`fixed top-2 right-14 z-30 sm:top-4 ${isActivitiesPanelVisible && !isMobile ? 'sm:right-[28rem]' : ''}`}>
+        {/* Floating agent button - sits left of the user menu, also corner-pinned */}
+        <div className="fixed top-2 right-14 z-30 sm:top-4">
           <AgentButton tripId={tripId} />
         </div>
 

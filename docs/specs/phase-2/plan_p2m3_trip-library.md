@@ -73,5 +73,6 @@ Verified Req 3.1-3.6 on production: the library lists every trip with status bad
 
 ## Changelog
 
+- 2026-07-04 — **UI: corner-pinned controls on TripPage.** The `UserMenu` no longer shifts left (`sm:right-[25rem]`) to dodge the activities panel; it stays pinned to the top-right corner. The activities panel now starts below the control row on desktop (`sm:top-16`, was `sm:top-4`) and its expanded height gains a `sm:h-[calc(100vh-5rem)]` cap so it clears the buttons without overflowing. Library-page `UserMenu` placement is unchanged. Files: `src/pages/TripPage.tsx`, `src/components/Activities/ActivitiesPanel.tsx`. Companion AgentButton change logged in [plan_p3m2_bounded-edits.md](../phase-3/plan_p3m2_bounded-edits.md).
 - 2026-07-04 — **Compacted post-implementation.** Removed step-by-step tasks, code snippets, `Files:`/`Interfaces:` preambles, and verification command lists now that M3 has shipped. Preserved Goal/Architecture, Global Constraints, Self-Review Notes, and added a Critical Files summary. Original plan recoverable via git history.
 - 2026-07-03: Initial plan.

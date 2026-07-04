@@ -291,12 +291,12 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   return (
     <div
-      className={`fixed right-0 bottom-0 left-0 z-10 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur-sm transition-all duration-400 ease-in-out sm:absolute sm:top-2 sm:top-4 sm:right-2 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
+      className={`fixed right-0 bottom-0 left-0 z-10 rounded-t-xl border-white/20 border-t bg-white/30 shadow-md backdrop-blur-sm transition-all duration-400 ease-in-out sm:absolute sm:top-16 sm:right-2 sm:bottom-auto sm:left-auto sm:rounded-xl sm:border ${mobileClasses}
         ${
           isMobile
             ? 'w-full max-w-full overflow-hidden'
             : isExpanded || isScenicWaypointsExpanded
-              ? 'h-[calc(100vh-4rem)] w-full max-w-full overflow-hidden sm:bottom-2 sm:bottom-4 sm:w-96 sm:max-w-96'
+              ? 'h-[calc(100vh-4rem)] w-full max-w-full overflow-hidden sm:bottom-2 sm:bottom-4 sm:h-[calc(100vh-5rem)] sm:w-96 sm:max-w-96'
               : 'h-auto max-h-[60vh] w-full max-w-full sm:max-h-[calc(100vh-8rem)] sm:w-96 sm:max-w-96'
         }
         ${className}

@@ -1478,3 +1478,4 @@ git commit -m "docs: mark phase 3 m2 (bounded edits) shipped"
 ## Changelog
 
 - 2026-07-04: Initial plan (written ahead of M1 execution; symbol names follow the M1 and Phase 2 M4 plans).
+- 2026-07-04 — **UI: corner-pinned agent button on TripPage.** The `AgentButton` (shipped in M1) dropped its panel-dodge shift (`sm:right-[28rem]`) and stays corner-pinned left of the `UserMenu` (`fixed top-2 right-14 sm:top-4`). The activities panel drops to `sm:top-16` to clear the control row. Files: `src/pages/TripPage.tsx`, `src/components/Activities/ActivitiesPanel.tsx`. Companion UserMenu/panel change logged in [plan_p2m3_trip-library.md](../phase-2/plan_p2m3_trip-library.md).
