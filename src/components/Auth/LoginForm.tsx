@@ -1,4 +1,5 @@
 import { type FormEvent, useState } from 'react';
+import { Link } from 'react-router';
 import { useAuth } from '@/contexts/AuthContext';
 
 const GoogleIcon = () => (
@@ -78,6 +79,11 @@ export const LoginForm = () => {
               type="password"
               value={password}
             />
+          </div>
+          <div className="text-right">
+            <Link className="text-alpine-teal text-sm hover:underline" to="/forgot-password">
+              Forgot password?
+            </Link>
           </div>
           <button
             className="flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 active:bg-alpine-teal/80 disabled:opacity-50"

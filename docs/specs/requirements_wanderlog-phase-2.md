@@ -48,6 +48,8 @@ These decisions were settled before drafting and size everything below. Changing
 5. WHEN a session exists, THEN it SHALL persist across browser restarts until explicit sign-out or token expiry.
 6. WHEN a user signs out, THEN cached credentials SHALL be cleared and the login screen SHALL be shown.
 7. WHEN any Supabase query executes, THEN access SHALL be enforced server-side by row-level security, not only by UI routing.
+8. WHEN a user has forgotten their password, THEN they SHALL be able to request a reset from the login screen; a recovery email SHALL be sent, and following its link SHALL let them set a new password and gain access.
+9. WHEN the app owner invites a family member (Req 2.4), THEN following the invitation link SHALL let the invitee set their initial password and gain access, without any public sign-up form.
 
 ### 3. Trip Library
 
@@ -156,3 +158,4 @@ Hosting (Requirement 6) and the Maps key referrer restrictions (Requirement 7) l
 - 2026-07-03: Amended alongside [design_wanderlog-phase-2.md](design_wanderlog-phase-2.md): user modifications become canonical columns (Req 1.4); weather cache moves client-side (Req 1.5); Edge Function weather proxy dropped (Req 7, Scope Decisions); Milestone 0 (toolchain upgrades) added.
 - 2026-07-04: Trip creation reworked to file import (Req 3.5 amended; Req 3.7-3.9 added): drag-and-drop JSON (Wanderlog or TripIt export), validation failures displayed with nothing written on failure, TripIt conversion via geocoding, fresh ids per import. Milestone M3.5 added. TripIt API integration and blank-trip creation moved out of scope.
 - 2026-07-04: Scope Decision "Server-side code: None" superseded by [requirements_wanderlog-phase-3.md](requirements_wanderlog-phase-3.md) (agent mode requires a serverless endpoint holding the model API key). Phase 2 itself is unchanged.
+- 2026-07-04: Req 2.8 (password reset via recovery email) and Req 2.9 (invitation acceptance sets initial password) added — the manual-provisioning path in Req 2.4 had no in-app way for invitees or locked-out members to set a password. Design and M2 plan updated alongside.

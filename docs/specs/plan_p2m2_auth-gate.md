@@ -43,6 +43,18 @@ Renamed the preview workflow to `vercel-deploy.yml` and split it: PRs get previe
 
 Deleted `.github/workflows/deploy.yml`, collapsed the Vite `base` to `/` (the `basename` trick degrades to a no-op), removed `VITE_BASE_PATH` from the Vercel env, disabled repo Pages, dropped the GH Pages origin from the Maps key referrer list, and documented the retired `https://kevinlin.github.io/wanderlog/` URL in the README.
 
+### Task 9: Password reset + invitation acceptance (post-M2 addition, Req 2.8/2.9)
+
+Closed a gap left after M2 sign-off: manual provisioning (Req 2.4) had no in-app way for an invitee to set an initial password, and members had no way to recover a forgotten one. Both flows converge on one public landing page because a recovery/invite email delivers a PKCE `?code=` link that `detectSessionInUrl` exchanges into a session; the user then sets a password with `updateUser`.
+
+- `AuthContext`: added `resetPassword(email)` (`resetPasswordForEmail` with `redirectTo: <origin><BASE_URL>reset-password`) and `updatePassword(password)` (`updateUser({ password })`), both surfacing the supabase error message.
+- `LoginForm`: "Forgot password?" link → `/forgot-password`.
+- `ForgotPasswordPage` (`/forgot-password`, public): email → `resetPassword` → confirmation copy that does not enumerate accounts.
+- `ResetPasswordPage` (`/reset-password`, public): shared landing for recovery **and** invitation. Waits for the code exchange, then a new-password + confirm form (min-length + match checks) → `updatePassword` → navigate `/`; shows an invalid/expired-link state when no session appears.
+- Both new routes sit outside `ProtectedRoute` — the session does not exist until the code is exchanged on the page, so guarding them would bounce the link to `/login` and drop the `?code=`.
+- Dashboard-only (documented, not coded): add `<origin>/reset-password` to Auth Redirect URLs and point the invite email template at it, so invitees land on the set-password page instead of entering the app password-less.
+- Tests: `AuthContext` (`resetPassword` redirect + error, `updatePassword`), `ForgotPasswordPage` (send + error), `ResetPasswordPage` (verifying / invalid-link / success-navigate / mismatch / min-length). Full suite green (356), build + `ultracite check` clean.
+
 ### Task 8: M2 verification gate (Req 2) + sign-off
 
 Verified Req 2 and Req 6.1/6.4 against production (https://wanderlog-xi.vercel.app): pre-auth zero `*.supabase.co/rest/*` requests, family email/password + Google sign-in work, sign-up rejected (signups-disabled), session survives a full browser restart, sign-out purges the `sb-*-auth-token` and IndexedDB query cache, anonymous REST returns `[]`, and the old GH Pages URL 404s. Marked the M2 row `Shipped` in `plan_wanderlog-phase-2.md`.
@@ -56,10 +68,12 @@ Verified Req 2 and Req 6.1/6.4 against production (https://wanderlog-xi.vercel.a
 | `src/App.tsx` | Router shell: route table with `ProtectedRoute`-wrapped authenticated routes. |
 | `src/pages/TripPage.tsx` | Authenticated trip UI (map/timeline/activities); reads `:tripId`, records it via `setCurrentTripId`. |
 | `src/pages/LoginPage.tsx` | Frosted-glass login surface (email/password + Google), redirects signed-in users. |
+| `src/pages/ForgotPasswordPage.tsx` | Public reset entry (Req 2.8): email → `resetPassword` → confirmation. |
+| `src/pages/ResetPasswordPage.tsx` | Public landing for recovery + invitation (Req 2.8/2.9): sets a new password via `updatePassword`. |
 | `src/pages/HomeRedirect.tsx` | Redirects `/` to the last-selected trip. |
 | `src/components/Auth/ProtectedRoute.tsx` | Client-side auth gate: spinner / `/login` redirect / children. |
 | `src/components/Auth/UserMenu.tsx` | Floating control with sign-out. |
-| `src/contexts/AuthContext.tsx` | `signInWithGoogle` (PKCE), `signOut` with cache purge. |
+| `src/contexts/AuthContext.tsx` | `signInWithGoogle` (PKCE), `signOut` with cache purge, `resetPassword`, `updatePassword`. |
 | `src/config/supabase.ts` | supabase-js client configured for the PKCE flow. |
 | `src/lib/queryClient.ts` | `clearPersistedCache()` deletes the persisted query cache. |
 | `.github/workflows/vercel-deploy.yml` | Preview (PR) + production (main) deploy pipeline. |
@@ -77,3 +91,4 @@ Verified Req 2 and Req 6.1/6.4 against production (https://wanderlog-xi.vercel.a
 - 2026-07-03: Initial plan.
 - 2026-07-04: Tasks 1-7 code shipped (react-router, ProtectedRoute, login polish, Google sign-in PKCE, sign-out with cache purge, Vercel deploy workflow, GH Pages retirement). Remaining before Task 8 sign-off: manual dashboard setup (Google OAuth client + Supabase provider/URL config, Vercel domain + env cleanup, Maps key referrers, repo Pages disable), push to main, and production verification.
 - 2026-07-04: Task 8 verification gate passed against production (https://wanderlog-xi.vercel.app). Automated checks: pre-auth zero supabase requests, signup rejected (422 signup_disabled), anonymous REST returns [], sign-out purges token + IndexedDB cache, checkmark toggle persists round-trip, GH Pages URL 404s. Manual confirmations: Google sign-in round-trips, family accounts work, session survives browser restart. M2 signed off.
+- 2026-07-04: **Task 9 added (post-M2) — password reset + invitation acceptance (Req 2.8/2.9).** `AuthContext.resetPassword`/`updatePassword`, `LoginForm` "Forgot password?" link, public `/forgot-password` + `/reset-password` pages (one shared landing for recovery and invite via PKCE code exchange), 13 new/updated unit tests. Full suite green (356), build + lint clean. Requirements Req 2.8/2.9 and the design Authentication section updated alongside. Remaining (dashboard-only): add `<origin>/reset-password` to Auth Redirect URLs and point the invite email template at it.

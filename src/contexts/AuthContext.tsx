@@ -5,13 +5,17 @@ import { clearPersistedCache, queryClient } from '@/lib/queryClient';
 
 interface AuthContextValue {
   isLoading: boolean;
+  resetPassword: (email: string) => Promise<void>;
   session: Session | null;
   signIn: (email: string, password: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   signOut: () => Promise<void>;
+  updatePassword: (password: string) => Promise<void>;
 }
 
 const PERSISTER_FLUSH_MS = 1500;
+// BASE_URL ends with '/', so this appends to it without a leading slash.
+const RESET_PASSWORD_PATH = 'reset-password';
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
@@ -55,7 +59,31 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     await clearPersistedCache();
   };
 
-  return <AuthContext.Provider value={{ session, isLoading, signIn, signInWithGoogle, signOut }}>{children}</AuthContext.Provider>;
+  // Sends a recovery email. The link lands on /reset-password, where the PKCE
+  // code is exchanged for a session so updatePassword can run. The same landing
+  // page also serves dashboard-issued invitations (see AuthContext docs in the
+  // design spec).
+  const resetPassword = async (email: string) => {
+    const { error } = await getSupabase().auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.origin + import.meta.env.BASE_URL + RESET_PASSWORD_PATH,
+    });
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  const updatePassword = async (password: string) => {
+    const { error } = await getSupabase().auth.updateUser({ password });
+    if (error) {
+      throw new Error(error.message);
+    }
+  };
+
+  return (
+    <AuthContext.Provider value={{ session, isLoading, resetPassword, signIn, signInWithGoogle, signOut, updatePassword }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };
 
 export const useAuth = (): AuthContextValue => {

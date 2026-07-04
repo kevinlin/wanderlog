@@ -21,6 +21,7 @@ Settled during design review, in addition to the Scope Decisions in the requirem
 | Import validation | zod schemas at the import boundary | Structured field-path errors for the UI without hand-rolled type narrowing; one schema is the source of truth for "valid trip file". `validationUtils.ts` untouched (serves other callers). |
 | Import ids | Fresh UUIDs minted for every imported row | Text PKs are global; natural ids from files collide on re-import. Re-import creates an independent copy, never overwrites. |
 | TripIt coordinates | Geocode lodging addresses at import via Maps Geocoder | TripIt exports carry no lat/lng; `stops.lat/lng` are NOT NULL. Geocode failure blocks the import as a validation error. |
+| Password reset + invite landing (Req 2.8, 2.9) | One public `/reset-password` page for both; `updateUser({ password })` sets the password | Recovery and invitation both deliver a PKCE code that `detectSessionInUrl` exchanges into a session; the only difference is who initiates (user vs. dashboard). A single landing page and one `updatePassword` path serve both — no per-flow UI. Invite redirect is dashboard-configured, matching how Google OAuth was set up. |
 
 ## Architecture
 
@@ -190,6 +191,14 @@ Query keys:
 - Session persistence across restarts is the supabase-js default (Req 2.5).
 - Sign-out clears the Supabase session, the query cache, and the IndexedDB persist (Req 2.6).
 
+**Password reset and invitation acceptance (Req 2.8, 2.9).** Both flows converge on one public landing page. A recovery/invite email carries a PKCE `?code=` link; the client's `detectSessionInUrl` exchanges it for an active (short-lived) session on landing, and the user then calls `updateUser({ password })` to set a real password.
+
+- `AuthContext.resetPassword(email)` → `resetPasswordForEmail(email, { redirectTo: <origin><BASE_URL>reset-password })`. Entry point: a "Forgot password?" link on `LoginForm` → `/forgot-password` page (email field → confirmation message; no account enumeration in the copy).
+- `AuthContext.updatePassword(password)` → `updateUser({ password })`.
+- `/reset-password` page (`ResetPasswordPage`) is the shared landing for **both** recovery and invitation. It waits for the code exchange (`isLoading`), shows a "set new password" form once a session exists (Save → `updatePassword` → navigate `/`), and shows an invalid/expired-link message with a "request a new link" path when no session appears.
+- `/forgot-password` and `/reset-password` are **public** routes (outside `ProtectedRoute`) — the recovery/invite session does not exist until the code is exchanged on that page, so guarding them would bounce the link to `/login` and drop the `?code=`.
+- **Invitations** are issued from the Supabase dashboard ("Invite user", Req 2.4) — no in-app initiation. Dashboard config (like the Google OAuth setup): `<origin>/reset-password` must be in the Auth **Redirect URLs** allowlist, and the invite email template's link must target it, so an invitee lands on the set-password page rather than entering the app password-less.
+
 ## Trip Library (`/trips`)
 
 - Lists all trips: name, destination, date range, derived status - `past` / `active` / `upcoming` vs today in the trip's timezone (Req 3.1).
@@ -334,3 +343,4 @@ Applied to [requirements_wanderlog-phase-2.md](requirements_wanderlog-phase-2.md
 - 2026-07-03: Initial design (brainstormed and approved).
 - 2026-07-04: Trip Import (M3.5) added: file-only create modal, zod validation pipeline, TripIt conversion with geocoding, fresh-id imports, compensation delete (brainstormed and approved).
 - 2026-07-04: Schema doc updated with the M4 `accommodations` columns (`remarks`, `lat`, `lng`); migration-before-deploy ordering rule and schema-drift-tolerant mapper guards added after a production incident (see plan_p2m4 Task 6 post-ship fix).
+- 2026-07-04: Authentication section extended with password reset and invitation acceptance (Req 2.8, 2.9): `resetPassword`/`updatePassword` on `AuthContext`, public `/forgot-password` + `/reset-password` routes, one shared landing page for both flows, and the dashboard Redirect-URL / invite-template config. Design decision row added. Tracked in [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) Task 9.

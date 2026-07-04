@@ -5,13 +5,17 @@ const mockGetSession = vi.fn().mockResolvedValue({ data: { session: null } });
 const mockOnAuthStateChange = vi.fn().mockReturnValue({ data: { subscription: { unsubscribe: vi.fn() } } });
 const mockSignInWithOAuth = vi.fn();
 const mockAuthSignOut = vi.fn().mockResolvedValue({ error: null });
+const mockResetPasswordForEmail = vi.fn().mockResolvedValue({ error: null });
+const mockUpdateUser = vi.fn().mockResolvedValue({ error: null });
 vi.mock('@/config/supabase', () => ({
   getSupabase: () => ({
     auth: {
       getSession: mockGetSession,
       onAuthStateChange: mockOnAuthStateChange,
+      resetPasswordForEmail: mockResetPasswordForEmail,
       signInWithOAuth: mockSignInWithOAuth,
       signOut: mockAuthSignOut,
+      updateUser: mockUpdateUser,
     },
   }),
 }));
@@ -61,6 +65,53 @@ describe('AuthProvider', () => {
       provider: 'google',
       options: { redirectTo: window.location.origin + import.meta.env.BASE_URL },
     });
+  });
+
+  it('resetPassword sends a recovery email pointing at /reset-password', async () => {
+    let resetPassword: ((email: string) => Promise<void>) | undefined;
+    const ResetProbe = () => {
+      resetPassword = useAuth().resetPassword;
+      return null;
+    };
+    render(
+      <AuthProvider>
+        <ResetProbe />
+      </AuthProvider>
+    );
+    await resetPassword?.('member@example.com');
+    expect(mockResetPasswordForEmail).toHaveBeenCalledWith('member@example.com', {
+      redirectTo: window.location.origin + import.meta.env.BASE_URL + 'reset-password',
+    });
+  });
+
+  it('resetPassword surfaces the supabase error message', async () => {
+    mockResetPasswordForEmail.mockResolvedValueOnce({ error: { message: 'rate limited' } });
+    let resetPassword: ((email: string) => Promise<void>) | undefined;
+    const ResetProbe = () => {
+      resetPassword = useAuth().resetPassword;
+      return null;
+    };
+    render(
+      <AuthProvider>
+        <ResetProbe />
+      </AuthProvider>
+    );
+    await expect(resetPassword?.('member@example.com')).rejects.toThrow('rate limited');
+  });
+
+  it('updatePassword updates the user password', async () => {
+    let updatePassword: ((password: string) => Promise<void>) | undefined;
+    const UpdateProbe = () => {
+      updatePassword = useAuth().updatePassword;
+      return null;
+    };
+    render(
+      <AuthProvider>
+        <UpdateProbe />
+      </AuthProvider>
+    );
+    await updatePassword?.('new-secret');
+    expect(mockUpdateUser).toHaveBeenCalledWith({ password: 'new-secret' });
   });
 
   it('signOut clears supabase session, query cache and persisted cache', async () => {
