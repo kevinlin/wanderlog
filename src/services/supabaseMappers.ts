@@ -36,7 +36,10 @@ export interface AccommodationRow {
   created_at: string;
   google_place_id: string | null;
   id: string;
+  lat: number | null;
+  lng: number | null;
   name: string;
+  remarks: string | null;
   stop_id: string;
   thumbnail_url: string | null;
   updated_at: string;
@@ -130,6 +133,8 @@ const toAccommodation = (row: AccommodationRow): Accommodation => ({
   check_out: row.check_out ?? '',
   confirmation: orNothing(row.confirmation),
   url: orNothing(row.url),
+  remarks: orNothing(row.remarks),
+  location: row.lat !== null && row.lng !== null ? { lat: row.lat, lng: row.lng } : undefined,
   thumbnail_url: orNothing(row.thumbnail_url),
   google_place_id: orNothing(row.google_place_id),
 });
@@ -201,6 +206,9 @@ export const buildRows = (trip: TripData, tripId: string): RowBundle => {
         check_out: stop.accommodation.check_out ?? null,
         confirmation: stop.accommodation.confirmation ?? null,
         url: stop.accommodation.url ?? null,
+        remarks: stop.accommodation.remarks ?? null,
+        lat: stop.accommodation.location?.lat ?? null,
+        lng: stop.accommodation.location?.lng ?? null,
         thumbnail_url: stop.accommodation.thumbnail_url ?? null,
         google_place_id: stop.accommodation.google_place_id ?? null,
         created_at: now,

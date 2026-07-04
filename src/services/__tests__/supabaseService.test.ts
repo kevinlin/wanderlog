@@ -11,11 +11,13 @@ const chain = {
 const mockUpdateEq = vi.fn();
 const mockUpdate = vi.fn(() => ({ eq: mockUpdateEq }));
 const mockInsert = vi.fn();
+const mockUpsert = vi.fn();
 const mockDeleteEq = vi.fn();
 const fromSpy = vi.fn(() => ({
   ...chain,
   update: mockUpdate,
   insert: mockInsert,
+  upsert: mockUpsert,
   delete: vi.fn(() => ({ eq: mockDeleteEq })),
 }));
 vi.mock('@/config/supabase', () => ({
@@ -34,6 +36,8 @@ import {
   setActivityDone,
   setWaypointDone,
   updateActivity,
+  updateTripMetadata,
+  upsertAccommodation,
 } from '../supabaseService';
 
 const importableTrip: TripData = {
@@ -194,6 +198,64 @@ describe('supabaseService activity crud', () => {
   it('deleteActivity throws on error', async () => {
     mockDeleteEq.mockResolvedValueOnce({ error: { message: 'denied' } });
     await expect(deleteActivity('act-1')).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService accommodation + trip metadata', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUpsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+  });
+
+  it('upsertAccommodation writes a deterministic id and null-safe columns', async () => {
+    await upsertAccommodation('queenstown', {
+      name: 'Lakeview Motel',
+      address: '1 Lake Rd',
+      checkIn: '2025-12-13 15:00',
+      lat: -45.03,
+      lng: 168.66,
+    });
+    expect(fromSpy).toHaveBeenCalledWith('accommodations');
+    expect(mockUpsert).toHaveBeenCalledWith(
+      {
+        id: 'queenstown_accommodation',
+        stop_id: 'queenstown',
+        name: 'Lakeview Motel',
+        address: '1 Lake Rd',
+        check_in: '2025-12-13 15:00',
+        check_out: null,
+        remarks: null,
+        url: null,
+        confirmation: null,
+        lat: -45.03,
+        lng: 168.66,
+        google_place_id: null,
+      },
+      { onConflict: 'id' }
+    );
+  });
+
+  it('upsertAccommodation throws on error', async () => {
+    mockUpsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(upsertAccommodation('s1', { name: 'X' })).rejects.toThrow('denied');
+  });
+
+  it('updateTripMetadata patches only the provided fields', async () => {
+    await updateTripMetadata('t1', { name: 'Renamed', endDate: '2026-01-05' });
+    expect(fromSpy).toHaveBeenCalledWith('trips');
+    expect(mockUpdate).toHaveBeenCalledWith({ name: 'Renamed', end_date: '2026-01-05' });
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 't1');
+  });
+
+  it('updateTripMetadata maps description and startDate columns', async () => {
+    await updateTripMetadata('t1', { description: 'Family trip', startDate: '2026-01-01' });
+    expect(mockUpdate).toHaveBeenCalledWith({ description: 'Family trip', start_date: '2026-01-01' });
+  });
+
+  it('updateTripMetadata throws on error', async () => {
+    mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(updateTripMetadata('t1', { name: 'X' })).rejects.toThrow('denied');
   });
 });
 

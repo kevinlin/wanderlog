@@ -53,6 +53,7 @@ export interface Accommodation {
   location?: Coordinates;
   name: string;
   phone?: string;
+  remarks?: string;
   room?: string;
   thumbnail_url?: string;
   url?: string;

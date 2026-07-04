@@ -129,3 +129,68 @@ export const updateActivity = (activityId: string, input: ActivityInput): Promis
   updateById('activities', activityId, activityInputToRow(input));
 
 export const deleteActivity = (activityId: string): Promise<void> => deleteById('activities', activityId);
+
+export interface AccommodationInput {
+  address?: string;
+  checkIn?: string; // 'YYYY-MM-DD HH:mm'
+  checkOut?: string;
+  confirmation?: string;
+  googlePlaceId?: string;
+  lat?: number;
+  lng?: number;
+  name: string;
+  remarks?: string;
+  url?: string;
+}
+
+// Upsert (not update) because a stop may have no accommodation yet - the same
+// edit modal covers add and edit. The id is deterministic, matching the
+// migration script convention.
+export async function upsertAccommodation(stopId: string, input: AccommodationInput): Promise<void> {
+  const { error } = await getSupabase()
+    .from('accommodations')
+    .upsert(
+      {
+        id: `${stopId}_accommodation`,
+        stop_id: stopId,
+        name: input.name,
+        address: input.address ?? null,
+        check_in: input.checkIn ?? null,
+        check_out: input.checkOut ?? null,
+        remarks: input.remarks ?? null,
+        url: input.url ?? null,
+        confirmation: input.confirmation ?? null,
+        lat: input.lat ?? null,
+        lng: input.lng ?? null,
+        google_place_id: input.googlePlaceId ?? null,
+      },
+      { onConflict: 'id' }
+    );
+  if (error) {
+    throw new Error(error.message);
+  }
+}
+
+export interface TripMetadataPatch {
+  description?: string;
+  endDate?: string;
+  name?: string;
+  startDate?: string;
+}
+
+export async function updateTripMetadata(tripId: string, patch: TripMetadataPatch): Promise<void> {
+  const row: Record<string, unknown> = {};
+  if (patch.name !== undefined) {
+    row.name = patch.name;
+  }
+  if (patch.description !== undefined) {
+    row.description = patch.description;
+  }
+  if (patch.startDate !== undefined) {
+    row.start_date = patch.startDate;
+  }
+  if (patch.endDate !== undefined) {
+    row.end_date = patch.endDate;
+  }
+  await updateById('trips', tripId, row);
+}

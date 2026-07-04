@@ -35,6 +35,9 @@ const tripRow: TripRowNested = {
           check_out: '2025-12-16 10:00',
           confirmation: null,
           url: null,
+          remarks: 'Ask for a lake-facing room',
+          lat: -45.031,
+          lng: 168.662,
           thumbnail_url: null,
           google_place_id: null,
           created_at: '2025-11-01T00:00:00Z',
@@ -113,6 +116,21 @@ describe('toTripData', () => {
     expect(toTripData({ ...tripRow, stops: [asNull] }).stops[0].accommodation).toBeUndefined();
   });
 
+  it('maps accommodation remarks and builds location from lat/lng', () => {
+    const accommodation = toTripData(tripRow).stops[0].accommodation;
+    expect(accommodation?.remarks).toBe('Ask for a lake-facing room');
+    expect(accommodation?.location).toEqual({ lat: -45.031, lng: 168.662 });
+  });
+
+  it('omits accommodation location when lat/lng are null', () => {
+    const accommodations = tripRow.stops[0].accommodations;
+    const first = Array.isArray(accommodations) ? accommodations[0] : accommodations;
+    const bare = { ...tripRow.stops[0], accommodations: [{ ...(first as object), lat: null, lng: null, remarks: null }] };
+    const accommodation = toTripData({ ...tripRow, stops: [bare as (typeof tripRow.stops)[0]] }).stops[0].accommodation;
+    expect(accommodation?.location).toBeUndefined();
+    expect(accommodation?.remarks).toBeUndefined();
+  });
+
   it('omits activity location when no coordinates or address exist', () => {
     const bare = { ...tripRow.stops[0].activities[0], lat: null, lng: null, address: null };
     const trip = toTripData({ ...tripRow, stops: [{ ...tripRow.stops[0], activities: [bare] }] });
@@ -127,6 +145,13 @@ describe('buildRows', () => {
     expect(bundle.stops[0].sort_order).toBe(0);
     expect(bundle.activities.find((a) => a.id === 'act-2')?.is_done).toBe(true);
     expect(bundle.accommodations[0].stop_id).toBe('queenstown');
+  });
+
+  it('round-trips accommodation remarks and coordinates', () => {
+    const bundle = buildRows(toTripData(tripRow), '202512_NZ');
+    expect(bundle.accommodations[0].remarks).toBe('Ask for a lake-facing room');
+    expect(bundle.accommodations[0].lat).toBe(-45.031);
+    expect(bundle.accommodations[0].lng).toBe(168.662);
   });
 
   it('derives trip start/end dates from stops when building rows', () => {
