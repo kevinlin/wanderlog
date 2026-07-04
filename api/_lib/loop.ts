@@ -4,7 +4,8 @@ import type { AgentEvent } from '../../src/types/agent.js';
 import { type AgentTool, dispatchTool, toAnthropicTools } from './tools/index.js';
 
 export const MAX_ITERATIONS = 16;
-export const MAX_TOKENS_PER_CALL = 4096;
+// Sized for a full trip bundle in one tool_use block (creation runs).
+export const MAX_TOKENS_PER_CALL = 8192;
 
 // {name} carries its own leading space so nameless inputs collapse cleanly.
 const LABEL_TEMPLATES: Record<string, string> = {
@@ -73,6 +74,16 @@ export async function runAgentLoop(
       { signal: deps.signal }
     );
     lastText = finalTextOf(response.content) || lastText;
+    // A truncated response can carry a mangled or incomplete tool_use block;
+    // executing it would be worse than stopping and telling the user.
+    if (response.stop_reason === 'max_tokens') {
+      deps.emit({
+        type: 'error',
+        message: 'The model response was cut off before finishing; results may be incomplete.',
+        detail: null,
+      });
+      return { finalText: lastText, hitIterationCap: false };
+    }
     const toolUses = response.content.filter((block): block is Anthropic.ToolUseBlock => block.type === 'tool_use');
     if (response.stop_reason !== 'tool_use' || toolUses.length === 0) {
       return { finalText: lastText, hitIterationCap: false };

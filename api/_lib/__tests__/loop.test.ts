@@ -94,6 +94,18 @@ describe('runAgentLoop', () => {
     expect(createMock).toHaveBeenCalledTimes(MAX_ITERATIONS);
   });
 
+  it('surfaces a max_tokens truncation as an error event and stops', async () => {
+    createMock.mockResolvedValueOnce({ stop_reason: 'max_tokens', content: [{ type: 'text', text: 'partial' }] });
+    const { finalText } = await runAgentLoop(deps, 'sys', 'plan a big trip');
+    expect(finalText).toBe('partial');
+    expect(emitted).toContainEqual({
+      type: 'error',
+      message: 'The model response was cut off before finishing; results may be incomplete.',
+      detail: null,
+    });
+    expect(createMock).toHaveBeenCalledTimes(1);
+  });
+
   it('emits change events from tool executions', async () => {
     const changeTool: AgentTool = {
       name: 'create_thing',

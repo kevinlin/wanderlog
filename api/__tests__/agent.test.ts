@@ -4,6 +4,7 @@ const loadAgentEnvMock = vi.fn(() => ({
   anthropicApiKey: 'k',
   anthropicBaseUrl: undefined,
   anthropicModel: 'test-model',
+  googleGeocodingApiKey: 'geo',
   supabaseUrl: 'https://proj.supabase.co',
   supabaseAnonKey: 'anon',
 }));
@@ -123,6 +124,30 @@ describe('agent handler', () => {
       errors: [],
       tripId: null,
     });
+  });
+
+  it('sets result.tripId from a trip-created change event (buffered)', async () => {
+    runAgentLoopMock.mockImplementation(async (deps: { emit: (e: unknown) => void }) => {
+      deps.emit({ type: 'change', op: 'created', entity: 'trip', id: 't-9', name: 'Tokyo with kids' });
+      return { finalText: 'Created the Tokyo trip.', hitIterationCap: false };
+    });
+    const res = await handler(post({ prompt: 'plan tokyo' }, 'token', { Accept: 'application/json' }));
+    const body = await res.json();
+    expect(body.tripId).toBe('t-9');
+    expect(body.changes).toEqual([{ type: 'change', op: 'created', entity: 'trip', id: 't-9', name: 'Tokyo with kids' }]);
+  });
+
+  it('sets result.tripId in the streamed result event', async () => {
+    runAgentLoopMock.mockImplementation(async (deps: { emit: (e: unknown) => void }) => {
+      deps.emit({ type: 'change', op: 'created', entity: 'trip', id: 't-9', name: 'Tokyo with kids' });
+      return { finalText: 'Created.', hitIterationCap: false };
+    });
+    const res = await handler(post({ prompt: 'plan tokyo' }, 'token'));
+    const lines = (await res.text())
+      .trim()
+      .split('\n')
+      .map((line) => JSON.parse(line));
+    expect(lines.at(-1)).toMatchObject({ type: 'result', tripId: 't-9' });
   });
 
   it('maps a model-provider failure to 502', async () => {

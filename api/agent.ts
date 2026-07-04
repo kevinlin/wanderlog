@@ -75,15 +75,22 @@ async function handleAgent(request: Request): Promise<Response> {
   const wantsBuffered = request.headers.get('accept') === 'application/json';
 
   const runToEvents = async (emit: (event: AgentEvent) => void): Promise<void> => {
+    let createdTripId: string | null = null;
+    const emitTracked = (event: AgentEvent): void => {
+      if (event.type === 'change' && event.entity === 'trip' && event.op === 'created') {
+        createdTripId = event.id;
+      }
+      emit(event);
+    };
     const { finalText, hitIterationCap } = await runAgentLoop(
-      { anthropic, emit, model: env.anthropicModel, signal: request.signal, supabase, tools },
+      { anthropic, emit: emitTracked, model: env.anthropicModel, signal: request.signal, supabase, tools },
       systemPrompt,
       prompt
     );
     if (hitIterationCap) {
       emit({ type: 'error', message: `Stopped after ${MAX_ITERATIONS} steps without finishing.`, detail: null });
     }
-    emit({ type: 'result', summary: finalText, answer: finalText || null, tripId: null });
+    emit({ type: 'result', summary: finalText, answer: finalText || null, tripId: createdTripId });
   };
 
   if (wantsBuffered) {
