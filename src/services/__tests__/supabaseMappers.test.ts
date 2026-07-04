@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildRows, type TripRowNested, toTripData } from '../supabaseMappers';
+import { buildRows, type TripRowNested, toTripData, toTripSummary } from '../supabaseMappers';
 
 const tripRow: TripRowNested = {
   id: '202512_NZ',
@@ -159,6 +159,34 @@ describe('toTripData', () => {
       const legacy = stripCoords({ ...tripRow.stops[0].activities[0], address: null });
       const trip = toTripData({ ...tripRow, stops: [{ ...tripRow.stops[0], activities: [legacy] }] });
       expect(trip.stops[0].activities[0].location).toBeUndefined();
+    });
+  });
+});
+
+describe('toTripSummary', () => {
+  it('maps a summary row to the domain shape', () => {
+    expect(
+      toTripSummary({
+        id: 't1',
+        name: 'NZ',
+        description: null,
+        destination: 'New Zealand',
+        start_date: '2025-12-13',
+        end_date: '2025-12-28',
+        timezone: 'Pacific/Auckland',
+        created_at: 'c',
+        updated_at: 'u',
+      })
+    ).toEqual({
+      trip_id: 't1',
+      trip_name: 'NZ',
+      description: null,
+      destination: 'New Zealand',
+      start_date: '2025-12-13',
+      end_date: '2025-12-28',
+      timezone: 'Pacific/Auckland',
+      created_at: 'c',
+      updated_at: 'u',
     });
   });
 });
