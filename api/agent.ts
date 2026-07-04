@@ -28,7 +28,7 @@ const bodySchema = z.object({
 const json = (status: number, body: unknown): Response =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 
-export default async function handler(request: Request): Promise<Response> {
+async function handleAgent(request: Request): Promise<Response> {
   if (request.method !== 'POST') {
     return json(405, { error: 'Method not allowed' });
   }
@@ -127,3 +127,8 @@ export default async function handler(request: Request): Promise<Response> {
   });
   return new Response(stream, { headers: { 'Content-Type': 'application/x-ndjson' } });
 }
+
+// The `fetch` Web Standard export: a plain default-exported function would be
+// treated by Vercel's Node runtime as the legacy (req, res) signature, whose
+// req lacks web Request methods like headers.get().
+export default { fetch: handleAgent };

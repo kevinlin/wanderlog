@@ -45,7 +45,9 @@ vi.mock('@anthropic-ai/sdk', () => ({
   default: class MockAnthropic {},
 }));
 
-import handler from '../agent';
+import agentFunction from '../agent';
+
+const handler = (request: Request): Promise<Response> => agentFunction.fetch(request);
 
 const post = (body: unknown, token?: string, headers?: Record<string, string>): Request =>
   new Request('http://x/api/agent', {
