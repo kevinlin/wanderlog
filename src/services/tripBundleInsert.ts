@@ -1,6 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { TripData } from '@/types/trip';
-import { buildRows } from './supabaseMappers';
+// Explicit .js extension: reachable from api/ (Node ESM runtime).
+import { buildRows } from './supabaseMappers.js';
 
 // Pure module (client injected) so both the browser importTrip path and the
 // api/ create_trip tool share one FK-ordered, all-or-nothing insert pipeline.

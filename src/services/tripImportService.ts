@@ -1,7 +1,10 @@
 import { differenceInCalendarDays } from 'date-fns';
-import { toTripData, wanderlogTripSchema } from '@/schemas/tripFileSchemas';
-import { type TripitFile, type TripitFlight, type TripitLodging, type TripitTrip, tripitFileSchema } from '@/schemas/tripitSchemas';
 import type { Activity, TripBase, TripData } from '@/types/trip';
+// Relative imports with explicit .js extensions: this module is reachable from
+// api/ (create_trip uses withFreshIds), whose Node ESM runtime cannot resolve
+// the @/ alias.
+import { toTripData, wanderlogTripSchema } from '../schemas/tripFileSchemas.js';
+import { type TripitFile, type TripitFlight, type TripitLodging, type TripitTrip, tripitFileSchema } from '../schemas/tripitSchemas.js';
 
 export interface ImportIssue {
   message: string;

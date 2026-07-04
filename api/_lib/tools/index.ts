@@ -2,6 +2,7 @@ export { type AgentTool, dispatchTool, type ToolExecution, toAnthropicTools } fr
 export { READ_TOOLS } from './read.js';
 
 import type { AgentTool } from './core.js';
+import { CREATE_TRIP_TOOL } from './createTrip.js';
 import { buildGeocodeTool } from './geocode.js';
 import { ACTIVITY_TOOLS, WAYPOINT_TOOLS } from './items.js';
 import { READ_TOOLS } from './read.js';
@@ -13,5 +14,5 @@ export const AGENT_TOOLS: AgentTool[] = [...READ_TOOLS, ...ACTIVITY_TOOLS, ...WA
 
 // Full registry including key-dependent tools (geocode needs the server key).
 export function buildAgentTools(geocodingApiKey: string): AgentTool[] {
-  return [...AGENT_TOOLS, buildGeocodeTool(geocodingApiKey)];
+  return [...AGENT_TOOLS, buildGeocodeTool(geocodingApiKey), CREATE_TRIP_TOOL];
 }

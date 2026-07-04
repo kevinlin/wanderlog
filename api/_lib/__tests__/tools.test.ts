@@ -1,7 +1,7 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
-import { AGENT_TOOLS, type AgentTool, dispatchTool, READ_TOOLS, toAnthropicTools } from '../tools';
+import { type AgentTool, buildAgentTools, dispatchTool, READ_TOOLS, toAnthropicTools } from '../tools';
 
 const tripRowNested = {
   id: 't1',
@@ -135,14 +135,20 @@ describe('dispatchTool change events', () => {
 });
 
 describe('AGENT_TOOLS registry', () => {
-  it('contains exactly the M2 tool surface', () => {
-    expect(AGENT_TOOLS.map((t) => t.name).sort()).toEqual([
+  it('contains exactly the M2 fourteen plus create_trip and geocode', () => {
+    expect(
+      buildAgentTools('k')
+        .map((t) => t.name)
+        .sort()
+    ).toEqual([
       'create_activity',
       'create_stop',
+      'create_trip',
       'create_waypoint',
       'delete_activity',
       'delete_stop',
       'delete_waypoint',
+      'geocode',
       'get_trip',
       'list_trips',
       'restructure_stops',
@@ -155,8 +161,9 @@ describe('AGENT_TOOLS registry', () => {
   });
 
   it('defines no tool that can delete a trip', () => {
-    expect(AGENT_TOOLS.some((t) => t.name === 'delete_trip')).toBe(false);
-    for (const tool of AGENT_TOOLS.filter((t) => t.name.startsWith('delete_'))) {
+    const tools = buildAgentTools('k');
+    expect(tools.some((t) => t.name === 'delete_trip')).toBe(false);
+    for (const tool of tools.filter((t) => t.name.startsWith('delete_'))) {
       expect(['delete_activity', 'delete_stop', 'delete_waypoint']).toContain(tool.name);
     }
   });
