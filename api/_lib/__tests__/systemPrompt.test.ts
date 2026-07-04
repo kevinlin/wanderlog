@@ -40,6 +40,13 @@ describe('buildSystemPrompt', () => {
     expect(buildSystemPrompt({})).not.toContain('read-only');
   });
 
+  it('states the trip creation rules', () => {
+    const prompt = buildSystemPrompt({});
+    expect(prompt).toContain('create_trip exactly once');
+    expect(prompt).toContain('never place a stop at coordinates you guessed');
+    expect(prompt).toContain('IANA');
+  });
+
   it('embeds the scoped trip as JSON', () => {
     const prompt = buildSystemPrompt({ trip: nzTripFixture });
     expect(prompt).toContain('"trip_name": "NZ Trip"');
