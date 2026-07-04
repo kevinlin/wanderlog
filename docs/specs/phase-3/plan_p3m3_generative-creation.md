@@ -787,7 +787,7 @@ git add -A && git commit -m "feat: open created trip from the agent modal"
 **Files:**
 - Modify: `docs/specs/phase-3/design_wanderlog-phase-3.md` (changelog), `docs/specs/phase-3/plan_phase-3.md` (status rows)
 
-- [ ] **Step 1: Configure Vercel + provision Hermes**
+- [x] **Step 1: Configure Vercel + provision Hermes**
 
 - Vercel env settings: add `GOOGLE_GEOCODING_API_KEY` (all environments). Restrict the key to the Geocoding API in the Google Cloud console (API restriction; no referrer restriction - this is a server key).
 - Supabase Auth dashboard: manually provision the dedicated Hermes family-member account (email + password), so its actions are attributable (Req 7.1).
@@ -796,7 +796,7 @@ git add -A && git commit -m "feat: open created trip from the agent modal"
 
 Read the "API Contract" section of [design_wanderlog-phase-3.md](design_wanderlog-phase-3.md) line by line against the implementation: request body, all four event shapes, buffered shape, status codes (200/400/401/502), `result.tripId` semantics. Fix any drift in the design doc (it is the Hermes integration doc, Req 7.3) and append a changelog line: `M3 shipped - contract verified as the stable Hermes integration surface`.
 
-- [ ] **Step 3: Hermes-style curl session against a preview (Req 7.1, 7.2, 7.4)**
+- [x] **Step 3: Hermes-style curl session against a preview (Req 7.1, 7.2, 7.4)**
 
 ```bash
 PREVIEW=https://<preview-url>
@@ -815,13 +815,13 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST "$PREVIEW/api/agent" \
   -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d '{}'   # expect 400
 ```
 
-- [ ] **Step 4: Creation verification in the app (Req 5)**
+- [x] **Step 4: Creation verification in the app (Req 5)**
 
 - Library page → agent modal → the same Tokyo prompt: progress lines show geocoding and creation; result shows the summary and "Open trip"; clicking it lands on a fully rendered trip (stops pinned, timeline navigable, activities listed; un-geocoded activities render without pins and are named in the summary).
 - The new trip appears in the library with destination and date range; its timezone is a plausible IANA zone for the destination (Req 5.6).
 - Negative test: "Plan a 3-day trip to the lost city of Atlantis" → geocoding fails; the agent reports failure; the library contains no new or half-created trip (Req 5.2, 5.4).
 
-- [ ] **Step 5: Ship**
+- [x] **Step 5: Ship**
 
 - Merge to `main`; re-run Step 3's buffered call against production with the Hermes account.
 - Update `plan_phase-3.md`: M3 row `Shipped (<date>)`; note Phase 3 complete.
