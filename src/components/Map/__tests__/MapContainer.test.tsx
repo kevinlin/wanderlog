@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen, waitFor } from '@testing-library/react';
 import React from 'react';
+import { ToastProvider } from '@/components/Layout/Toast';
 import { AppStateProvider } from '@/contexts/AppStateContext';
 import { ActivityType, type TripData } from '@/types/trip';
 import * as activityUtils from '@/utils/activityUtils';
@@ -10,7 +11,9 @@ const queryClient = new QueryClient({ defaultOptions: { queries: { retry: false 
 
 const Providers = ({ children }: { children: React.ReactNode }) => (
   <QueryClientProvider client={queryClient}>
-    <AppStateProvider>{children}</AppStateProvider>
+    <ToastProvider>
+      <AppStateProvider>{children}</AppStateProvider>
+    </ToastProvider>
   </QueryClientProvider>
 );
 

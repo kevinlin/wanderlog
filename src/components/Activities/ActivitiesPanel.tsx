@@ -1,21 +1,23 @@
-import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { useQueryClient } from '@tanstack/react-query';
+import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
 import { POISearchResultCard } from '@/components/Cards/POISearchResultCard';
 import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
 import { WeatherCard } from '@/components/Cards/WeatherCard';
+import { ActivityFormModal } from '@/components/Editing/ActivityFormModal';
+import { ConfirmDialog } from '@/components/Layout/ConfirmDialog';
 import { useAppStateContext } from '@/contexts/AppStateContext';
+import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useScreenSize } from '@/hooks/useScreenSize';
+import { useCreateActivity, useDeleteActivity } from '@/hooks/useTripMutations';
 import { useWeather } from '@/hooks/useWeather';
-import { tripKeys } from '@/lib/queryClient';
 import { ExportService } from '@/services/exportService';
 import { PlacesService } from '@/services/placesService';
 import type { Accommodation, Activity, TripData } from '@/types';
 import type { Coordinates, ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
-import { addActivityToStop, inferActivityType } from '@/utils/activityUtils';
+import { inferActivityType } from '@/utils/activityUtils';
 import { DraggableActivitiesList } from './DraggableActivity';
 
 // Constants for mobile panel resize
@@ -69,7 +71,14 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const { state, dispatch } = useAppStateContext();
   const { poiSearch } = state;
   const [searchInputValue, setSearchInputValue] = useState('');
-  const queryClient = useQueryClient();
+
+  // Editing state (M4): pencil/add open the form modal, trash opens a confirm
+  const isOnline = useOnlineStatus();
+  const tripId = tripData?.trip_id ?? '';
+  const createActivityMutation = useCreateActivity(tripId);
+  const deleteActivityMutation = useDeleteActivity(tripId);
+  const [activityModal, setActivityModal] = useState<{ mode: 'create' } | { mode: 'edit'; activity: Activity } | null>(null);
+  const [deletingActivity, setDeletingActivity] = useState<Activity | null>(null);
 
   // Screen size detection
   const { isMobile } = useScreenSize();
@@ -214,34 +223,28 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   const handleAddActivityFromPOI = useCallback(
     (poi: POIDetails) => {
-      const tripId = tripData?.trip_id;
       if (!tripId) {
         return;
       }
-
-      const activityType = inferActivityType(poi.name, undefined, poi.types);
-      const activityId = `poi_${poi.place_id}_${Date.now()}`;
-
-      const newActivity: Activity = {
-        activity_id: activityId,
-        activity_name: poi.name,
-        activity_type: activityType,
-        location: {
+      createActivityMutation.mutate({
+        stopId: baseId,
+        sortOrder: activities.length,
+        tempId: crypto.randomUUID(),
+        input: {
+          name: poi.name,
+          type: inferActivityType(poi.name, undefined, poi.types),
           lat: poi.location.lat,
           lng: poi.location.lng,
           address: poi.formatted_address,
+          duration: '1-2 hours',
+          url: poi.website,
+          remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
+          thumbnailUrl: poi.photos?.[0]?.photo_reference,
+          googlePlaceId: poi.place_id,
         },
-        duration: '1-2 hours',
-        url: poi.website,
-        remarks: poi.rating ? `Rating: ${poi.rating}/5 (${poi.user_ratings_total} reviews)` : undefined,
-        google_place_id: poi.place_id,
-        order: 999,
-      };
-
-      // Memory-only cache patch, preserving pre-Supabase behavior (persistence arrives in M4)
-      queryClient.setQueryData<TripData>(tripKeys.detail(tripId), (old) => (old ? addActivityToStop(old, baseId, newActivity) : old));
+      });
     },
-    [baseId, queryClient, tripData?.trip_id]
+    [baseId, tripId, activities.length, createActivityMutation]
   );
 
   // Auto-expand and scroll to activity when one is selected from map
@@ -390,12 +393,29 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   accommodation={accommodation}
                   activities={activities}
                   activityStatus={activityStatus}
+                  isDragDisabled={!isOnline}
                   onActivitySelect={onActivitySelect}
+                  onDeleteActivity={isOnline ? setDeletingActivity : undefined}
+                  onEditActivity={isOnline ? (activity) => setActivityModal({ mode: 'edit', activity }) : undefined}
                   onReorder={onReorder}
                   onToggleDone={onToggleDone}
                   selectedActivityId={selectedActivityId}
                 />
               </div>
+
+              {/* Add Activity */}
+              {isOnline && (
+                <div className="px-3 pb-3">
+                  <button
+                    className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-emerald-500/30 border-dashed bg-emerald-500/10 px-4 py-2 font-medium text-emerald-700 text-sm transition-all duration-200 hover:bg-emerald-500/20"
+                    onClick={() => setActivityModal({ mode: 'create' })}
+                    type="button"
+                  >
+                    <PlusIcon className="h-4 w-4" />
+                    Add activity
+                  </button>
+                </div>
+              )}
             </>
           )}
 
@@ -467,6 +487,33 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           </div>
         </div>
       </div>
+
+      {/* Activity create/edit modal - remounted per open so fields reset */}
+      {activityModal && (
+        <ActivityFormModal
+          activity={activityModal.mode === 'edit' ? activityModal.activity : undefined}
+          isOpen
+          onClose={() => setActivityModal(null)}
+          searchLocation={baseLocation}
+          sortOrder={activities.length}
+          stopId={baseId}
+          tripId={tripId}
+        />
+      )}
+
+      {/* Delete confirmation */}
+      {deletingActivity && (
+        <ConfirmDialog
+          confirmLabel="Delete"
+          message={`Delete "${deletingActivity.activity_name}"? This cannot be undone.`}
+          onCancel={() => setDeletingActivity(null)}
+          onConfirm={() => {
+            deleteActivityMutation.mutate({ activityId: deletingActivity.activity_id });
+            setDeletingActivity(null);
+          }}
+          title="Delete activity"
+        />
+      )}
     </div>
   );
 };

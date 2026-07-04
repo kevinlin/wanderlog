@@ -9,7 +9,10 @@ interface DraggableActivitiesListProps {
   accommodation?: Accommodation;
   activities: Activity[];
   activityStatus: Record<string, boolean>;
+  isDragDisabled?: boolean;
   onActivitySelect: (activityId: string) => void;
+  onDeleteActivity?: (activity: Activity) => void;
+  onEditActivity?: (activity: Activity) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
   onToggleDone: (activityId: string, done: boolean) => void;
   selectedActivityId?: string | null;
@@ -20,9 +23,12 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
   accommodation,
   selectedActivityId,
   activityStatus,
+  isDragDisabled = false,
   onActivitySelect,
   onToggleDone,
   onReorder,
+  onEditActivity,
+  onDeleteActivity,
 }) => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -67,9 +73,11 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
               accommodation={accommodation}
               activity={activity}
               isDone={activityStatus[activity.activity_id]}
-              isDraggable={true}
+              isDraggable={!isDragDisabled}
               isSelected={activity.activity_id === selectedActivityId}
               key={activity.activity_id}
+              onDelete={onDeleteActivity}
+              onEdit={onEditActivity}
               onSelect={onActivitySelect}
               onToggleDone={onToggleDone}
             />

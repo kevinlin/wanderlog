@@ -1,5 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
@@ -16,6 +17,8 @@ interface ActivityCardProps {
   isDone: boolean;
   isDraggable?: boolean;
   isSelected: boolean;
+  onDelete?: (activity: Activity) => void;
+  onEdit?: (activity: Activity) => void;
   onSelect: (activityId: string) => void;
   onToggleDone: (activityId: string, done: boolean) => void;
 }
@@ -27,6 +30,8 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   isDone,
   onToggleDone,
   onSelect,
+  onEdit,
+  onDelete,
   isDraggable = false,
 }) => {
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
@@ -115,6 +120,37 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                       {activity.activity_name}
                     </h4>
                   </div>
+
+                  {(onEdit || onDelete) && (
+                    <div className="ml-2 flex shrink-0 gap-1">
+                      {onEdit && (
+                        <button
+                          aria-label="Edit activity"
+                          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-sky-500/10 hover:text-sky-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit(activity);
+                          }}
+                          type="button"
+                        >
+                          <PencilIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                      {onDelete && (
+                        <button
+                          aria-label="Delete activity"
+                          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-500/10 hover:text-red-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(activity);
+                          }}
+                          type="button"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  )}
 
                   {activity.thumbnail_url && (
                     <div className="ml-3 shrink-0">
