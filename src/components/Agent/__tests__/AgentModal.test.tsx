@@ -9,6 +9,11 @@ const runAgentMock = vi.fn();
 vi.mock('@/services/agentService', () => ({
   runAgent: (params: RunAgentParams) => runAgentMock(params),
 }));
+const navigateMock = vi.fn();
+vi.mock('react-router', async (importOriginal) => ({
+  ...(await importOriginal<object>()),
+  useNavigate: () => navigateMock,
+}));
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({
     session: { access_token: 'jwt', user: { email: 'kev@example.com' } },
@@ -120,6 +125,27 @@ describe('AgentModal', () => {
     await submitPrompt('how many trips?');
     expect(await screen.findByText('Two trips.')).toBeInTheDocument();
     expect(screen.queryByText('Changes')).not.toBeInTheDocument();
+  });
+
+  it('shows Open trip and navigates when the result carries a tripId', async () => {
+    runAgentMock.mockImplementation(async ({ onEvent }: RunAgentParams) => {
+      onEvent({ type: 'change', op: 'created', entity: 'trip', id: 't-new', name: 'Tokyo with kids' });
+      onEvent({ type: 'result', summary: 'Created the Tokyo trip.', answer: null, tripId: 't-new' });
+    });
+    renderModal({ isOpen: true, onClose: vi.fn() });
+    await submitPrompt('plan a tokyo trip');
+    await userEvent.click(await screen.findByRole('button', { name: /open trip/i }));
+    expect(navigateMock).toHaveBeenCalledWith('/trips/t-new');
+  });
+
+  it('shows no Open trip button when tripId is null', async () => {
+    runAgentMock.mockImplementation(async ({ onEvent }: RunAgentParams) => {
+      onEvent({ type: 'result', summary: 'Two trips.', answer: 'Two trips.', tripId: null });
+    });
+    renderModal({ isOpen: true, onClose: vi.fn() });
+    await submitPrompt('how many trips?');
+    expect(await screen.findByText('Two trips.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /open trip/i })).not.toBeInTheDocument();
   });
 
   it('clears collected changes on Ask another', async () => {
