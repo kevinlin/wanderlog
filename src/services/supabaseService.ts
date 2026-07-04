@@ -131,6 +131,47 @@ export const updateActivity = (activityId: string, input: ActivityInput): Promis
 
 export const deleteActivity = (activityId: string): Promise<void> => deleteById('activities', activityId);
 
+// ActivityInput minus type/travel-time; scenic_waypoints has no such columns.
+export interface WaypointInput {
+  address?: string;
+  duration?: string;
+  googlePlaceId?: string;
+  lat?: number;
+  lng?: number;
+  name: string;
+  remarks?: string;
+  thumbnailUrl?: string;
+  url?: string;
+}
+
+const waypointInputToRow = (input: WaypointInput) => ({
+  name: input.name,
+  lat: input.lat ?? null,
+  lng: input.lng ?? null,
+  address: input.address ?? null,
+  duration: input.duration ?? null,
+  url: input.url ?? null,
+  remarks: input.remarks ?? null,
+  thumbnail_url: input.thumbnailUrl ?? null,
+  google_place_id: input.googlePlaceId ?? null,
+});
+
+export async function createWaypoint(stopId: string, sortOrder: number, input: WaypointInput): Promise<string> {
+  const id = crypto.randomUUID();
+  const { error } = await getSupabase()
+    .from('scenic_waypoints')
+    .insert({ id, stop_id: stopId, sort_order: sortOrder, is_done: false, ...waypointInputToRow(input) });
+  if (error) {
+    throw new Error(error.message);
+  }
+  return id;
+}
+
+export const updateWaypoint = (waypointId: string, input: WaypointInput): Promise<void> =>
+  updateById('scenic_waypoints', waypointId, waypointInputToRow(input));
+
+export const deleteWaypoint = (waypointId: string): Promise<void> => deleteById('scenic_waypoints', waypointId);
+
 export interface AccommodationInput {
   address?: string;
   checkIn?: string; // 'YYYY-MM-DD HH:mm'

@@ -495,13 +495,13 @@ export function deleteWaypoint(waypointId: string): Promise<void>;
 
 plus `useCreateWaypoint/useUpdateWaypoint/useDeleteWaypoint(tripId)` hooks.
 
-- [ ] **Step 1: Service functions (test first)** - mirror Task 1 against `scenic_waypoints` (no `type`, no `travel_time_from_accommodation`). Same `insert`/`updateById`/`deleteById` shapes and error tests.
+- [x] **Step 1: Service functions (test first)** - mirror Task 1 against `scenic_waypoints` (no `type`, no `travel_time_from_accommodation`). Same `insert`/`updateById`/`deleteById` shapes and error tests.
 
-- [ ] **Step 2: Mutations (test first)** - via `useTripCacheMutation`, patching `stop.scenic_waypoints`. The M1 POI waypoint-add cache patch is replaced by `useCreateWaypoint` (persistent now).
+- [x] **Step 2: Mutations (test first)** - via `useTripCacheMutation`, patching `stop.scenic_waypoints`. The M1 POI waypoint-add cache patch is replaced by `useCreateWaypoint` (persistent now).
 
-- [ ] **Step 3: Modal + wiring** - `WaypointFormModal` = `ActivityFormModal` minus the type select (build it from `ItemModalShell` directly; the two forms stay separate - a shared "generic item form" abstraction for exactly two variants is not worth it). Pencil/trash on `ScenicWaypointCard`, "Add waypoint" in the panel's waypoint section, offline-hidden.
+- [x] **Step 3: Modal + wiring** - `WaypointFormModal` = `ActivityFormModal` minus the type select (build it from `ItemModalShell` directly; the two forms stay separate - a shared "generic item form" abstraction for exactly two variants is not worth it). Pencil/trash on `ScenicWaypointCard`, "Add waypoint" in the panel's waypoint section, offline-hidden.
 
-- [ ] **Step 4: Route re-render verification (Req 4.6), commit**
+- [x] **Step 4: Route re-render verification (Req 4.6), commit** *(verified locally 2026-07-04: waypoint add/edit/delete round-trips through Supabase; directions effect recomputes from tripData)*
 
 Manual: add a waypoint between two stops - the polyline re-routes through it; delete it - route reverts. This works because `MapContainer`'s directions effect recomputes from `tripData` (cache invalidation triggers it).
 

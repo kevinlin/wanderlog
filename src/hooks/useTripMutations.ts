@@ -2,13 +2,18 @@ import {
   type AccommodationInput,
   type ActivityInput,
   createActivity,
+  createWaypoint,
   deleteActivity,
+  deleteWaypoint,
   reorderActivities,
   setActivityDone,
   setWaypointDone,
   updateActivity,
+  updateWaypoint,
   upsertAccommodation,
+  type WaypointInput,
 } from '@/services/supabaseService';
+import type { ScenicWaypoint } from '@/types/map';
 import type { Accommodation, Activity } from '@/types/trip';
 import { useTripCacheMutation } from './useTripCacheMutation';
 
@@ -147,6 +152,77 @@ export function useUpsertAccommodation(tripId: string) {
       return trip;
     },
     errorMessage: 'Could not save the accommodation',
+  });
+}
+
+// Domain-shape equivalent of the row written by the waypoint service functions.
+const waypointInputToDomain = (input: WaypointInput): Omit<ScenicWaypoint, 'activity_id'> => ({
+  activity_name: input.name,
+  location: { lat: input.lat, lng: input.lng, address: input.address },
+  duration: input.duration,
+  url: input.url,
+  remarks: input.remarks,
+  thumbnail_url: input.thumbnailUrl,
+  google_place_id: input.googlePlaceId,
+});
+
+interface CreateWaypointVariables {
+  input: WaypointInput;
+  sortOrder: number;
+  stopId: string;
+  tempId: string;
+}
+
+export function useCreateWaypoint(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ stopId, sortOrder, input }: CreateWaypointVariables) => createWaypoint(stopId, sortOrder, input),
+    patch: (trip, { stopId, input, tempId }) => {
+      const stop = trip.stops.find((s) => s.stop_id === stopId);
+      if (stop) {
+        stop.scenic_waypoints = [
+          ...(stop.scenic_waypoints ?? []),
+          { activity_id: tempId, ...waypointInputToDomain(input), status: { done: false } },
+        ];
+      }
+      return trip;
+    },
+    errorMessage: 'Could not add the waypoint',
+  });
+}
+
+interface UpdateWaypointVariables {
+  input: WaypointInput;
+  waypointId: string;
+}
+
+export function useUpdateWaypoint(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ waypointId, input }: UpdateWaypointVariables) => updateWaypoint(waypointId, input),
+    patch: (trip, { waypointId, input }) => {
+      for (const stop of trip.stops) {
+        stop.scenic_waypoints = (stop.scenic_waypoints ?? []).map((waypoint) =>
+          waypoint.activity_id === waypointId ? { ...waypoint, ...waypointInputToDomain(input) } : waypoint
+        );
+      }
+      return trip;
+    },
+    errorMessage: 'Could not save the waypoint',
+  });
+}
+
+export function useDeleteWaypoint(tripId: string) {
+  return useTripCacheMutation({
+    tripId,
+    mutationFn: ({ waypointId }: { waypointId: string }) => deleteWaypoint(waypointId),
+    patch: (trip, { waypointId }) => {
+      for (const stop of trip.stops) {
+        stop.scenic_waypoints = (stop.scenic_waypoints ?? []).filter((waypoint) => waypoint.activity_id !== waypointId);
+      }
+      return trip;
+    },
+    errorMessage: 'Could not delete the waypoint',
   });
 }
 

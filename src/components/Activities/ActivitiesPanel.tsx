@@ -7,11 +7,12 @@ import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
 import { WeatherCard } from '@/components/Cards/WeatherCard';
 import { AccommodationFormModal } from '@/components/Editing/AccommodationFormModal';
 import { ActivityFormModal } from '@/components/Editing/ActivityFormModal';
+import { WaypointFormModal } from '@/components/Editing/WaypointFormModal';
 import { ConfirmDialog } from '@/components/Layout/ConfirmDialog';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useScreenSize } from '@/hooks/useScreenSize';
-import { useCreateActivity, useDeleteActivity } from '@/hooks/useTripMutations';
+import { useCreateActivity, useDeleteActivity, useDeleteWaypoint } from '@/hooks/useTripMutations';
 import { useWeather } from '@/hooks/useWeather';
 import { ExportService } from '@/services/exportService';
 import { PlacesService } from '@/services/placesService';
@@ -78,9 +79,12 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const tripId = tripData?.trip_id ?? '';
   const createActivityMutation = useCreateActivity(tripId);
   const deleteActivityMutation = useDeleteActivity(tripId);
+  const deleteWaypointMutation = useDeleteWaypoint(tripId);
   const [activityModal, setActivityModal] = useState<{ mode: 'create' } | { mode: 'edit'; activity: Activity } | null>(null);
   const [deletingActivity, setDeletingActivity] = useState<Activity | null>(null);
   const [isAccommodationModalOpen, setIsAccommodationModalOpen] = useState(false);
+  const [waypointModal, setWaypointModal] = useState<{ mode: 'create' } | { mode: 'edit'; waypoint: ScenicWaypoint } | null>(null);
+  const [deletingWaypoint, setDeletingWaypoint] = useState<ScenicWaypoint | null>(null);
 
   // Screen size detection
   const { isMobile } = useScreenSize();
@@ -361,13 +365,39 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                       isDone={activityStatus[waypoint.activity_id] ?? waypoint.status?.done ?? false}
                       isSelected={selectedActivityId === waypoint.activity_id}
                       key={waypoint.activity_id}
+                      onDelete={isOnline ? setDeletingWaypoint : undefined}
+                      onEdit={isOnline ? (waypoint) => setWaypointModal({ mode: 'edit', waypoint }) : undefined}
                       onSelect={onActivitySelect}
                       onToggleDone={onToggleDone}
                       waypoint={waypoint}
                     />
                   ))}
+                  {isOnline && (
+                    <button
+                      className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 border-dashed bg-violet-500/10 px-4 py-2 font-medium text-sm text-violet-700 transition-all duration-200 hover:bg-violet-500/20"
+                      onClick={() => setWaypointModal({ mode: 'create' })}
+                      type="button"
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                      Add waypoint
+                    </button>
+                  )}
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Add-waypoint affordance when the stop has none yet */}
+          {scenicWaypoints.length === 0 && isOnline && (
+            <div className="px-3 pb-3">
+              <button
+                className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 border-dashed bg-violet-500/10 px-4 py-2 font-medium text-sm text-violet-700 transition-all duration-200 hover:bg-violet-500/20"
+                onClick={() => setWaypointModal({ mode: 'create' })}
+                type="button"
+              >
+                <PlusIcon className="h-4 w-4" />
+                Add waypoint
+              </button>
             </div>
           )}
 
@@ -532,6 +562,19 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         />
       )}
 
+      {/* Waypoint create/edit modal - remounted per open so fields reset */}
+      {waypointModal && (
+        <WaypointFormModal
+          isOpen
+          onClose={() => setWaypointModal(null)}
+          searchLocation={baseLocation}
+          sortOrder={scenicWaypoints.length}
+          stopId={baseId}
+          tripId={tripId}
+          waypoint={waypointModal.mode === 'edit' ? waypointModal.waypoint : undefined}
+        />
+      )}
+
       {/* Delete confirmation */}
       {deletingActivity && (
         <ConfirmDialog
@@ -543,6 +586,19 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             setDeletingActivity(null);
           }}
           title="Delete activity"
+        />
+      )}
+
+      {deletingWaypoint && (
+        <ConfirmDialog
+          confirmLabel="Delete"
+          message={`Delete "${deletingWaypoint.activity_name}"? This cannot be undone.`}
+          onCancel={() => setDeletingWaypoint(null)}
+          onConfirm={() => {
+            deleteWaypointMutation.mutate({ waypointId: deletingWaypoint.activity_id });
+            setDeletingWaypoint(null);
+          }}
+          title="Delete waypoint"
         />
       )}
     </div>

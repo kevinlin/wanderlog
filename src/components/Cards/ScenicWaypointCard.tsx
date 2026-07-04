@@ -1,3 +1,4 @@
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
@@ -10,6 +11,8 @@ interface ScenicWaypointCardProps {
   accommodation?: Accommodation;
   isDone: boolean;
   isSelected: boolean;
+  onDelete?: (waypoint: ScenicWaypoint) => void;
+  onEdit?: (waypoint: ScenicWaypoint) => void;
   onSelect: (waypointId: string) => void;
   onToggleDone: (waypointId: string, done: boolean) => void;
   waypoint: ScenicWaypoint;
@@ -22,6 +25,8 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
   isDone,
   onToggleDone,
   onSelect,
+  onEdit,
+  onDelete,
 }) => {
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 
@@ -65,10 +70,40 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
           <div className="min-w-0 flex-1">
             <div className="flex items-start justify-between">
               <div className="flex-1">
-                <div className="mb-2 flex items-center">
+                <div className="mb-2 flex items-center justify-between">
                   <h4 className={`font-semibold text-base ${isDone ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
                     {waypoint.activity_name}
                   </h4>
+                  {(onEdit || onDelete) && (
+                    <div className="ml-2 flex shrink-0 gap-1">
+                      {onEdit && (
+                        <button
+                          aria-label="Edit waypoint"
+                          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-violet-500/10 hover:text-violet-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onEdit(waypoint);
+                          }}
+                          type="button"
+                        >
+                          <PencilIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                      {onDelete && (
+                        <button
+                          aria-label="Delete waypoint"
+                          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-red-500/10 hover:text-red-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(waypoint);
+                          }}
+                          type="button"
+                        >
+                          <TrashIcon className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                  )}
                 </div>
 
                 {waypoint.location?.address && <p className="mb-2 text-gray-600 text-sm">📍 {waypoint.location.address}</p>}

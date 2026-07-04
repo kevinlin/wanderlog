@@ -27,8 +27,10 @@ vi.mock('@/config/supabase', () => ({
 import type { TripData } from '@/types/trip';
 import {
   createActivity,
+  createWaypoint,
   deleteActivity,
   deleteTrip,
+  deleteWaypoint,
   fetchTripById,
   fetchTripSummaries,
   importTrip,
@@ -37,6 +39,7 @@ import {
   setWaypointDone,
   updateActivity,
   updateTripMetadata,
+  updateWaypoint,
   upsertAccommodation,
 } from '../supabaseService';
 
@@ -200,6 +203,56 @@ describe('supabaseService activity crud', () => {
   it('deleteActivity throws on error', async () => {
     mockDeleteEq.mockResolvedValueOnce({ error: { message: 'denied' } });
     await expect(deleteActivity('act-1')).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService waypoint crud', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+    mockDeleteEq.mockResolvedValue({ error: null });
+  });
+
+  it('createWaypoint inserts with generated uuid, stop_id and sort_order', async () => {
+    const id = await createWaypoint('stop-1', 2, { name: 'Devils Punchbowl', lat: -42.94, lng: 171.56 });
+    expect(id).toMatch(/^[0-9a-f-]{36}$/);
+    expect(fromSpy).toHaveBeenCalledWith('scenic_waypoints');
+    expect(mockInsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id,
+        stop_id: 'stop-1',
+        sort_order: 2,
+        name: 'Devils Punchbowl',
+        lat: -42.94,
+        lng: 171.56,
+        is_done: false,
+      })
+    );
+    expect(mockInsert.mock.calls[0][0]).not.toHaveProperty('type');
+  });
+
+  it('createWaypoint throws on error', async () => {
+    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(createWaypoint('stop-1', 0, { name: 'Falls' })).rejects.toThrow('denied');
+  });
+
+  it('updateWaypoint patches the row by id, mapping undefined to null', async () => {
+    await updateWaypoint('wp-1', { name: 'Renamed Falls', remarks: undefined });
+    expect(fromSpy).toHaveBeenCalledWith('scenic_waypoints');
+    expect(mockUpdate).toHaveBeenCalledWith(expect.objectContaining({ name: 'Renamed Falls', remarks: null }));
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'wp-1');
+  });
+
+  it('deleteWaypoint deletes by id', async () => {
+    await deleteWaypoint('wp-1');
+    expect(fromSpy).toHaveBeenCalledWith('scenic_waypoints');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', 'wp-1');
+  });
+
+  it('deleteWaypoint throws on error', async () => {
+    mockDeleteEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(deleteWaypoint('wp-1')).rejects.toThrow('denied');
   });
 });
 

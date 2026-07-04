@@ -9,6 +9,9 @@ const mockCreateActivity = vi.fn();
 const mockUpdateActivity = vi.fn();
 const mockDeleteActivity = vi.fn();
 const mockUpsertAccommodation = vi.fn();
+const mockCreateWaypoint = vi.fn();
+const mockUpdateWaypoint = vi.fn();
+const mockDeleteWaypoint = vi.fn();
 vi.mock('@/services/supabaseService', () => ({
   setActivityDone: (...args: unknown[]) => mockSetActivityDone(...args),
   setWaypointDone: vi.fn(),
@@ -17,6 +20,9 @@ vi.mock('@/services/supabaseService', () => ({
   updateActivity: (...args: unknown[]) => mockUpdateActivity(...args),
   deleteActivity: (...args: unknown[]) => mockDeleteActivity(...args),
   upsertAccommodation: (...args: unknown[]) => mockUpsertAccommodation(...args),
+  createWaypoint: (...args: unknown[]) => mockCreateWaypoint(...args),
+  updateWaypoint: (...args: unknown[]) => mockUpdateWaypoint(...args),
+  deleteWaypoint: (...args: unknown[]) => mockDeleteWaypoint(...args),
 }));
 
 import { ToastProvider } from '@/components/Layout/Toast';
@@ -24,10 +30,13 @@ import { tripKeys } from '@/lib/queryClient';
 import type { TripData } from '@/types/trip';
 import {
   useCreateActivity,
+  useCreateWaypoint,
   useDeleteActivity,
+  useDeleteWaypoint,
   useReorderActivities,
   useToggleActivityDone,
   useUpdateActivity,
+  useUpdateWaypoint,
   useUpsertAccommodation,
 } from '../useTripMutations';
 
@@ -46,7 +55,7 @@ const seedTrip: TripData = {
         { activity_id: 'act-1', activity_name: 'A', order: 0, status: { done: false } },
         { activity_id: 'act-2', activity_name: 'B', order: 1, status: { done: false } },
       ],
-      scenic_waypoints: [],
+      scenic_waypoints: [{ activity_id: 'wp-1', activity_name: 'Falls', location: { lat: 1, lng: 2 }, status: { done: false } }],
     },
   ],
 };
@@ -269,6 +278,101 @@ describe('useUpsertAccommodation', () => {
     await waitFor(() => expect(result.current.isError).toBe(true));
     const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
     expect(trip?.stops[0].accommodation).toBeUndefined();
+  });
+});
+
+describe('useCreateWaypoint', () => {
+  it('optimistically appends the waypoint with the temp id', async () => {
+    mockCreateWaypoint.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useCreateWaypoint('t1'), { wrapper });
+
+    result.current.mutate({
+      stopId: 's1',
+      sortOrder: 1,
+      tempId: 'temp-wp',
+      input: { name: 'Devils Punchbowl', lat: -42.94, lng: 171.56 },
+    });
+
+    await waitFor(() => {
+      const waypoints = client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops[0].scenic_waypoints;
+      const added = waypoints?.at(-1);
+      expect(added?.activity_id).toBe('temp-wp');
+      expect(added?.activity_name).toBe('Devils Punchbowl');
+      expect(added?.location).toEqual({ lat: -42.94, lng: 171.56 });
+      expect(added?.status?.done).toBe(false);
+    });
+    expect(mockCreateWaypoint).toHaveBeenCalledWith('s1', 1, expect.objectContaining({ name: 'Devils Punchbowl' }));
+  });
+
+  it('rolls back the append when the write fails', async () => {
+    mockCreateWaypoint.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useCreateWaypoint('t1'), { wrapper });
+
+    result.current.mutate({ stopId: 's1', sortOrder: 1, tempId: 'temp-wp', input: { name: 'Falls' } });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
+    expect(trip?.stops[0].scenic_waypoints).toHaveLength(1);
+  });
+});
+
+describe('useUpdateWaypoint', () => {
+  it('optimistically patches the matching waypoint in place', async () => {
+    mockUpdateWaypoint.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useUpdateWaypoint('t1'), { wrapper });
+
+    result.current.mutate({ waypointId: 'wp-1', input: { name: 'Renamed Falls', remarks: 'note' } });
+
+    await waitFor(() => {
+      const updated = client.getQueryData<TripData>(tripKeys.detail('t1'))?.stops[0].scenic_waypoints?.[0];
+      expect(updated?.activity_name).toBe('Renamed Falls');
+      expect(updated?.remarks).toBe('note');
+      expect(updated?.status?.done).toBe(false); // untouched fields preserved
+    });
+    expect(mockUpdateWaypoint).toHaveBeenCalledWith('wp-1', expect.objectContaining({ name: 'Renamed Falls' }));
+  });
+
+  it('rolls back the patch when the write fails', async () => {
+    mockUpdateWaypoint.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useUpdateWaypoint('t1'), { wrapper });
+
+    result.current.mutate({ waypointId: 'wp-1', input: { name: 'Renamed Falls' } });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
+    expect(trip?.stops[0].scenic_waypoints?.[0].activity_name).toBe('Falls');
+  });
+});
+
+describe('useDeleteWaypoint', () => {
+  it('optimistically removes the waypoint', async () => {
+    mockDeleteWaypoint.mockReturnValue(new Promise(() => {}));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useDeleteWaypoint('t1'), { wrapper });
+
+    result.current.mutate({ waypointId: 'wp-1' });
+
+    await waitFor(() => {
+      const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
+      expect(trip?.stops[0].scenic_waypoints).toHaveLength(0);
+    });
+    expect(mockDeleteWaypoint).toHaveBeenCalledWith('wp-1');
+  });
+
+  it('restores the waypoint when the delete fails', async () => {
+    mockDeleteWaypoint.mockRejectedValue(new Error('offline'));
+    const { client, wrapper } = setup();
+    const { result } = renderHook(() => useDeleteWaypoint('t1'), { wrapper });
+
+    result.current.mutate({ waypointId: 'wp-1' });
+
+    await waitFor(() => expect(result.current.isError).toBe(true));
+    const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
+    expect(trip?.stops[0].scenic_waypoints?.map((w) => w.activity_id)).toEqual(['wp-1']);
   });
 });
 
