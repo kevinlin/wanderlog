@@ -25,6 +25,7 @@ Navigation map for the Wanderlog specification docs. All specs use the `default`
 | Supabase Foundation (Phase 2 M1) | [plan_p2m1_supabase-foundation.md](plan_p2m1_supabase-foundation.md) | Schema + RLS, mappers, supabaseService, migration script, TanStack Query, auth bootstrap, Vercel previews, parity checklist. |
 | Auth Gate (Phase 2 M2) | [plan_p2m2_auth-gate.md](plan_p2m2_auth-gate.md) | react-router route guards, login polish, Google sign-in (PKCE), sign-out cache purge, Vercel production cutover, GH Pages retirement. |
 | Trip Library (Phase 2 M3) | [plan_p2m3_trip-library.md](plan_p2m3_trip-library.md) | Library page with timezone-aware status, hero trip, create/delete trips, last-trip restore, empty-trip hardening. |
+| Trip Import (Phase 2 M3.5) | [plan_p2m3-5_trip-import.md](plan_p2m3-5_trip-import.md) | File-import trip creation: drag-n-drop JSON, zod validation with error list, TripIt conversion with geocoding, fresh-id inserts with compensation delete. |
 | Itinerary Editing (Phase 2 M4) | [plan_p2m4_itinerary-editing.md](plan_p2m4_itinerary-editing.md) | Three slices: activities CRUD + retry/offline, accommodation + trip metadata, waypoints + stop restructuring with date cascade; Firebase decommission. |
 
 ## Meta
