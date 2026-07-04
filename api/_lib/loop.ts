@@ -1,15 +1,38 @@
 import type Anthropic from '@anthropic-ai/sdk';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import type { AgentEvent } from '../../src/types/agent.js';
-import { type AgentTool, dispatchTool, toAnthropicTools } from './tools.js';
+import { type AgentTool, dispatchTool, toAnthropicTools } from './tools/index.js';
 
 export const MAX_ITERATIONS = 16;
 export const MAX_TOKENS_PER_CALL = 4096;
 
-const PROGRESS_LABELS: Record<string, string> = {
+// {name} carries its own leading space so nameless inputs collapse cleanly.
+const LABEL_TEMPLATES: Record<string, string> = {
   list_trips: 'Listing trips…',
   get_trip: 'Reading trip details…',
+  create_activity: 'Adding activity{name}…',
+  update_activity: 'Updating activity{name}…',
+  delete_activity: 'Deleting activity…',
+  create_waypoint: 'Adding scenic waypoint{name}…',
+  update_waypoint: 'Updating scenic waypoint{name}…',
+  delete_waypoint: 'Deleting scenic waypoint…',
+  upsert_accommodation: 'Saving accommodation{name}…',
+  update_trip_metadata: 'Updating trip details…',
+  create_stop: 'Adding stop{name}…',
+  update_stop: 'Updating stop{name}…',
+  delete_stop: 'Deleting stop…',
+  restructure_stops: 'Reordering stops and recalculating dates…',
 };
+
+export function progressLabel(toolName: string, input: unknown): string {
+  const template = LABEL_TEMPLATES[toolName];
+  if (!template) {
+    return `Running ${toolName}…`;
+  }
+  const fields = input as { name?: unknown } | null;
+  const name = typeof fields?.name === 'string' && fields.name ? ` "${fields.name}"` : '';
+  return template.replace('{name}', name);
+}
 
 export interface LoopDeps {
   anthropic: Anthropic;
@@ -54,11 +77,11 @@ export async function runAgentLoop(
     messages.push({ role: 'assistant', content: response.content });
     const results: Anthropic.ToolResultBlockParam[] = [];
     for (const toolUse of toolUses) {
-      deps.emit({
-        type: 'progress',
-        message: PROGRESS_LABELS[toolUse.name] ?? `Running ${toolUse.name}…`,
-      });
+      deps.emit({ type: 'progress', message: progressLabel(toolUse.name, toolUse.input) });
       const execution = await dispatchTool(deps.tools, deps.supabase, toolUse.name, toolUse.input);
+      for (const change of execution.changes) {
+        deps.emit(change);
+      }
       results.push({
         type: 'tool_result',
         tool_use_id: toolUse.id,
