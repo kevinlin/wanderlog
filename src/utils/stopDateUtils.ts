@@ -1,5 +1,7 @@
-import { addDays, differenceInCalendarDays, format, parseISO } from 'date-fns';
+import { addDays, format, parseISO } from 'date-fns';
 import type { TripBase } from '@/types/trip';
+// Explicit .js extension: reachable from api/ (Node ESM runtime).
+import { nightsBetween } from '../services/entityRows.js';
 
 const DATE_FORMAT = 'yyyy-MM-dd';
 
@@ -9,7 +11,7 @@ const DATE_FORMAT = 'yyyy-MM-dd';
 export function recalculateStopDates(stops: TripBase[], tripStartDate: string): TripBase[] {
   let cursor = parseISO(tripStartDate);
   return stops.map((stop) => {
-    const nights = differenceInCalendarDays(parseISO(stop.date.to), parseISO(stop.date.from));
+    const nights = nightsBetween(stop.date.from, stop.date.to);
     const from = cursor;
     const to = addDays(from, nights);
     cursor = to;

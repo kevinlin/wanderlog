@@ -1,8 +1,16 @@
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { z } from 'zod';
-// Relative import with explicit .js extension: the Vercel function runtime is
-// Node ESM, which neither rewrites tsconfig path aliases nor resolves
+// Relative imports with explicit .js extensions: the Vercel function runtime
+// is Node ESM, which neither rewrites tsconfig path aliases nor resolves
 // extensionless relative specifiers.
+import {
+  ACTIVITY_COLUMNS,
+  type ColumnDef,
+  CREATE_DEFAULTS,
+  ITEM_DONE_COLUMN,
+  patchRow,
+  WAYPOINT_COLUMNS,
+} from '../../../src/services/entityRows.js';
 import { ActivityType } from '../../../src/types/trip.js';
 import type { AgentTool } from './core.js';
 
@@ -29,22 +37,6 @@ const UPDATE_FIELDS = {
   done: z.boolean().optional(),
 };
 
-// Column patch from parsed input: only provided fields, `done` mapped to is_done.
-const CONTENT_COLUMNS = ['name', 'type', 'lat', 'lng', 'address', 'duration', 'url', 'remarks'] as const;
-
-const contentPatch = (input: Record<string, unknown>): Record<string, unknown> => {
-  const patch: Record<string, unknown> = {};
-  for (const column of CONTENT_COLUMNS) {
-    if (input[column] !== undefined) {
-      patch[column] = input[column];
-    }
-  }
-  if (input.done !== undefined) {
-    patch.is_done = input.done;
-  }
-  return patch;
-};
-
 const fetchName = async (client: SupabaseClient, table: string, id: string, noun: string): Promise<string> => {
   const { data, error } = await client.from(table).select('name').eq('id', id).maybeSingle();
   if (error) {
@@ -57,6 +49,7 @@ const fetchName = async (client: SupabaseClient, table: string, id: string, noun
 };
 
 interface ItemToolsConfig {
+  columns: readonly ColumnDef[];
   entity: 'activity' | 'waypoint';
   hasType: boolean;
   idField: 'activity_id' | 'waypoint_id';
@@ -64,8 +57,10 @@ interface ItemToolsConfig {
   table: 'activities' | 'scenic_waypoints';
 }
 
-function buildItemTools({ entity, hasType, idField, noun, table }: ItemToolsConfig): AgentTool[] {
+function buildItemTools({ columns, entity, hasType, idField, noun, table }: ItemToolsConfig): AgentTool[] {
   const typeField = hasType ? { type: activityTypeSchema.optional() } : {};
+  // Sparse patch semantics: only provided fields, `done` mapped to is_done.
+  const patchDefs = [...columns, ITEM_DONE_COLUMN];
   const createSchema = z.object({ stop_id: z.string().min(1), ...CREATE_FIELDS, ...typeField }).strict();
   const updateSchema = z
     .object({ [idField]: z.string().min(1), ...UPDATE_FIELDS, ...typeField })
@@ -91,8 +86,8 @@ function buildItemTools({ entity, hasType, idField, noun, table }: ItemToolsConf
           id,
           stop_id: input.stop_id,
           sort_order: count ?? 0,
-          is_done: false,
-          ...contentPatch(input),
+          ...CREATE_DEFAULTS,
+          ...patchRow(patchDefs, input),
         });
         if (error) {
           throw new Error(error.message);
@@ -108,7 +103,7 @@ function buildItemTools({ entity, hasType, idField, noun, table }: ItemToolsConf
       execute: async (client, input) => {
         const id = input[idField] as string;
         const currentName = await fetchName(client, table, id, noun);
-        const { error } = await client.from(table).update(contentPatch(input)).eq('id', id);
+        const { error } = await client.from(table).update(patchRow(patchDefs, input)).eq('id', id);
         if (error) {
           throw new Error(error.message);
         }
@@ -141,6 +136,7 @@ function buildItemTools({ entity, hasType, idField, noun, table }: ItemToolsConf
 }
 
 export const ACTIVITY_TOOLS = buildItemTools({
+  columns: ACTIVITY_COLUMNS,
   entity: 'activity',
   hasType: true,
   idField: 'activity_id',
@@ -149,6 +145,7 @@ export const ACTIVITY_TOOLS = buildItemTools({
 });
 
 export const WAYPOINT_TOOLS = buildItemTools({
+  columns: WAYPOINT_COLUMNS,
   entity: 'waypoint',
   hasType: false,
   idField: 'waypoint_id',

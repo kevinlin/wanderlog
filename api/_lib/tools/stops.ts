@@ -1,8 +1,8 @@
-import { differenceInCalendarDays } from 'date-fns';
 import { z } from 'zod';
 // Relative imports with explicit .js extensions: the Vercel function runtime
 // is Node ESM, which neither rewrites tsconfig path aliases nor resolves
 // extensionless relative specifiers.
+import { nightsBetween, patchRow, STOP_COLUMNS } from '../../../src/services/entityRows.js';
 import type { TripBase } from '../../../src/types/trip.js';
 import { recalculateStopDates } from '../../../src/utils/stopDateUtils.js';
 import type { AgentTool } from './core.js';
@@ -14,8 +14,6 @@ const LAT_MIN = -90;
 const LAT_MAX = 90;
 const LNG_MIN = -180;
 const LNG_MAX = 180;
-
-const dayCount = (from: string, to: string): number => differenceInCalendarDays(new Date(`${to}T00:00:00`), new Date(`${from}T00:00:00`));
 
 const createStopSchema = z
   .object({
@@ -78,12 +76,8 @@ export const STOP_TOOLS: AgentTool[] = [
       const { error } = await client.from('stops').insert({
         id,
         trip_id: input.trip_id,
-        name: input.name,
-        lat: input.lat,
-        lng: input.lng,
-        date_from: input.date_from,
-        date_to: input.date_to,
-        duration_days: dayCount(input.date_from as string, input.date_to as string),
+        ...patchRow(STOP_COLUMNS, input),
+        duration_days: nightsBetween(input.date_from as string, input.date_to as string),
         sort_order: count ?? 0,
       });
       if (error) {
@@ -107,19 +101,14 @@ export const STOP_TOOLS: AgentTool[] = [
         throw new Error(`No stop found with id ${id}`);
       }
       const row = current as { date_from: string; date_to: string; name: string };
-      const patch: Record<string, unknown> = {};
-      for (const column of ['name', 'lat', 'lng', 'date_from', 'date_to'] as const) {
-        if (input[column] !== undefined) {
-          patch[column] = input[column];
-        }
-      }
+      const patch = patchRow(STOP_COLUMNS, input);
       if (input.date_from !== undefined || input.date_to !== undefined) {
         const from = (input.date_from as string | undefined) ?? row.date_from;
         const to = (input.date_to as string | undefined) ?? row.date_to;
         if (from > to) {
           throw new Error(`date_to (${to}) precedes date_from (${from})`);
         }
-        patch.duration_days = dayCount(from, to);
+        patch.duration_days = nightsBetween(from, to);
       }
       const { error } = await client.from('stops').update(patch).eq('id', id);
       if (error) {
@@ -194,7 +183,7 @@ export const STOP_TOOLS: AgentTool[] = [
           name: row.name,
           date: { from: row.date_from, to: row.date_to },
           location: { lat: row.lat, lng: row.lng },
-          duration_days: dayCount(row.date_from, row.date_to),
+          duration_days: nightsBetween(row.date_from, row.date_to),
           activities: [],
           scenic_waypoints: [],
         };
@@ -208,7 +197,7 @@ export const STOP_TOOLS: AgentTool[] = [
               sort_order: index,
               date_from: stop.date.from,
               date_to: stop.date.to,
-              duration_days: dayCount(stop.date.from, stop.date.to),
+              duration_days: nightsBetween(stop.date.from, stop.date.to),
             })
             .eq('id', stop.stop_id)
         )

@@ -1,4 +1,8 @@
 import { z } from 'zod';
+// Relative import with explicit .js extension: the Vercel function runtime is
+// Node ESM, which neither rewrites tsconfig path aliases nor resolves
+// extensionless relative specifiers.
+import { ACCOMMODATION_COLUMNS, accommodationId, denseRow, patchRow, TRIP_METADATA_COLUMNS } from '../../../src/services/entityRows.js';
 import type { AgentTool } from './core.js';
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -24,8 +28,6 @@ const upsertAccommodationSchema = z
   })
   .strict();
 
-const METADATA_COLUMNS = ['name', 'description', 'destination', 'start_date', 'end_date'] as const;
-
 const updateTripMetadataSchema = z
   .object({
     trip_id: z.string().min(1),
@@ -48,27 +50,14 @@ export const TRIP_FIELD_TOOLS: AgentTool[] = [
       "Set or replace a stop's accommodation (one per stop). Provide the complete desired accommodation - this replaces all accommodation fields for the stop.",
     schema: upsertAccommodationSchema,
     execute: async (client, input) => {
-      const id = `${input.stop_id}_accommodation`;
+      const id = accommodationId(input.stop_id as string);
       const { data: existing, error: readError } = await client.from('accommodations').select('id').eq('id', id).maybeSingle();
       if (readError) {
         throw new Error(readError.message);
       }
-      const { error } = await client.from('accommodations').upsert(
-        {
-          id,
-          stop_id: input.stop_id,
-          name: input.name,
-          address: input.address ?? null,
-          check_in: input.check_in ?? null,
-          check_out: input.check_out ?? null,
-          confirmation: input.confirmation ?? null,
-          url: input.url ?? null,
-          remarks: input.remarks ?? null,
-          lat: input.lat ?? null,
-          lng: input.lng ?? null,
-        },
-        { onConflict: 'id' }
-      );
+      const { error } = await client
+        .from('accommodations')
+        .upsert({ id, stop_id: input.stop_id, ...denseRow(ACCOMMODATION_COLUMNS, input) }, { onConflict: 'id' });
       if (error) {
         throw new Error(error.message);
       }
@@ -96,15 +85,9 @@ export const TRIP_FIELD_TOOLS: AgentTool[] = [
       if (!existing) {
         throw new Error(`No trip found with id ${input.trip_id}`);
       }
-      const patch: Record<string, unknown> = {};
-      for (const column of METADATA_COLUMNS) {
-        if (input[column] !== undefined) {
-          patch[column] = input[column];
-        }
-      }
       const { error } = await client
         .from('trips')
-        .update(patch)
+        .update(patchRow(TRIP_METADATA_COLUMNS, input))
         .eq('id', input.trip_id as string);
       if (error) {
         throw new Error(error.message);
