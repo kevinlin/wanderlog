@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=1240" name="viewport">
+    <title>Wanderlog — AI Agent Architecture</title>
+    <style>
+    html {
+      width: fit-content;
+    }
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      background: #ffffff;
+    }
+    body {
+      display: inline-block;
+      padding: 20px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    </style>
+  </head>
+  <body>
+    <div style="width: 1200px; box-sizing: border-box; position: relative; background: #fafbff; padding: 20px; border-radius: 10px;">
+      <style scoped>
+      .arch-wrapper {
+        display: flex;
+        gap: 12px;
+      }
+      .arch-sidebar {
+        flex-shrink: 0;
+        width: 180px;
+      }
+      .arch-main {
+        flex: 1;
+        min-width: 0;
+      }
+      .arch-title {
+        margin-bottom: 16px;
+        font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+        font-size: 23px;
+        font-weight: 800;
+        color: #1e293b;
+        text-align: center;
+        letter-spacing: 0.2px;
+      }
+      .arch-layer {
+        padding: 14px;
+        margin: 8px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .arch-layer-title {
+        margin-bottom: 10px;
+        font-size: 13px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .arch-grid {
+        display: grid;
+        gap: 8px;
+      }
+      .arch-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .arch-grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .arch-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .arch-grid-5 {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .arch-grid-6 {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .arch-box {
+        min-width: 0;
+        padding: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.35;
+        color: #1e293b;
+        text-align: center;
+        overflow-wrap: anywhere;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+      }
+      .arch-box.tech {
+        font-size: 10px;
+        color: #475569;
+        background: #f8fafc;
+      }
+      .arch-layer.external {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px dashed #94a3b8;
+      }
+      .arch-layer.external .arch-layer-title {
+        color: #64748b;
+      }
+      .arch-layer.user {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border: 2px solid #3b82f6;
+      }
+      .arch-layer.user .arch-layer-title {
+        color: #1e40af;
+      }
+      .arch-layer.application {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid #eab308;
+      }
+      .arch-layer.application .arch-layer-title {
+        color: #854d0e;
+      }
+      .arch-layer.ai {
+        background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        border: 2px solid #22c55e;
+      }
+      .arch-layer.ai .arch-layer-title {
+        color: #15803d;
+      }
+      .arch-layer.data {
+        background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        border: 2px solid #ec4899;
+      }
+      .arch-layer.data .arch-layer-title {
+        color: #9d174d;
+      }
+      .arch-layer.infra {
+        background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+        border: 2px solid #6366f1;
+      }
+      .arch-layer.infra .arch-layer-title {
+        color: #4338ca;
+      }
+      .arch-sidebar-panel {
+        padding: 10px;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        border: 1px solid #9ca3af;
+        border-radius: 8px;
+      }
+      .arch-sidebar-title {
+        margin-bottom: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #1e293b;
+        text-align: center;
+      }
+      .arch-sidebar-item {
+        padding: 5px;
+        margin: 3px 0;
+        font-size: 10px;
+        color: #374151;
+        text-align: center;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 5px;
+      }
+      .arch-sidebar-item.metric {
+        font-weight: 600;
+        color: #1e40af;
+        background: #dbeafe;
+        border: 1px solid #3b82f6;
+      }
+      </style>
+      <div class="arch-title">Agent Endpoint — Tool-Use Loop</div>
+      <div class="arch-main">
+        <div class="arch-layer user">
+          <div class="arch-layer-title">Client</div>
+          <div class="arch-grid arch-grid-3">
+            <div class="arch-box">AgentModal<br><small>prompt in, live progress + change list out</small></div>
+            <div class="arch-box">agentService.runAgent<br><small>POST /api/agent + Bearer JWT</small></div>
+            <div class="arch-box">NDJSON reader<br><small>parse events, invalidate cache on change</small></div>
+          </div>
+        </div>
+        <div class="arch-layer application">
+          <div class="arch-layer-title">Request handling (api/agent.ts)</div>
+          <div class="arch-grid arch-grid-4">
+            <div class="arch-box">Auth check<br><small>extract Bearer → getAuthenticatedUserId</small></div>
+            <div class="arch-box">Validate body<br><small>zod: prompt ≤ 4000, optional tripId</small></div>
+            <div class="arch-box">Context prefetch<br><small>open trip (TRIP_SELECT) or trip summaries</small></div>
+            <div class="arch-box">buildSystemPrompt<br><small>core rules + injected trip data</small></div>
+          </div>
+        </div>
+        <div class="arch-layer ai">
+          <div class="arch-layer-title">Agent loop (runAgentLoop) — up to 16 iterations, 8192 tokens/call</div>
+          <div class="arch-grid arch-grid-3">
+            <div class="arch-box">Anthropic messages.create<br><small>Claude + tool defs</small></div>
+            <div class="arch-box">stop_reason: tool_use?<br><small>dispatch tools, append tool_result, loop</small></div>
+            <div class="arch-box">stop / max_tokens / cap<br><small>emit result or error, exit</small></div>
+          </div>
+        </div>
+        <div class="arch-layer data">
+          <div class="arch-layer-title">Tool registry (api/_lib/tools) — every call under caller RLS</div>
+          <div class="arch-grid arch-grid-5">
+            <div class="arch-box tech">read<br><small>list_trips, get_trip</small></div>
+            <div class="arch-box tech">items<br><small>activity + waypoint CRUD</small></div>
+            <div class="arch-box tech">tripFields / stops<br><small>metadata, accommodation, restructure</small></div>
+            <div class="arch-box tech">geocode<br><small>address → lat/lng</small></div>
+            <div class="arch-box">create_trip<br><small>full itinerary via bundle insert</small></div>
+          </div>
+        </div>
+        <div class="arch-layer external">
+          <div class="arch-layer-title">Backing services</div>
+          <div class="arch-grid arch-grid-3">
+            <div class="arch-box tech">Anthropic API<br><small>reasoning + tool selection</small></div>
+            <div class="arch-box tech">Supabase (RLS)<br><small>reads/writes as the user</small></div>
+            <div class="arch-box tech">Google Geocoding<br><small>server-side key</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

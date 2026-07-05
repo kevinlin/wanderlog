@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=1240" name="viewport">
+    <title>Wanderlog — Frontend Application Architecture</title>
+    <style>
+    html {
+      width: fit-content;
+    }
+    html,
+    body {
+      padding: 0;
+      margin: 0;
+      background: #ffffff;
+    }
+    body {
+      display: inline-block;
+      padding: 20px;
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+    </style>
+  </head>
+  <body>
+    <div style="width: 1200px; box-sizing: border-box; position: relative; background: #fafbff; padding: 20px; border-radius: 10px;">
+      <style scoped>
+      .arch-wrapper {
+        display: flex;
+        gap: 12px;
+      }
+      .arch-sidebar {
+        flex-shrink: 0;
+        width: 180px;
+      }
+      .arch-main {
+        flex: 1;
+        min-width: 0;
+      }
+      .arch-title {
+        margin-bottom: 16px;
+        font-family: "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+        font-size: 23px;
+        font-weight: 800;
+        color: #1e293b;
+        text-align: center;
+        letter-spacing: 0.2px;
+      }
+      .arch-layer {
+        padding: 14px;
+        margin: 8px 0;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      .arch-layer-title {
+        margin-bottom: 10px;
+        font-size: 13px;
+        font-weight: bold;
+        text-align: center;
+      }
+      .arch-grid {
+        display: grid;
+        gap: 8px;
+      }
+      .arch-grid-2 {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .arch-grid-3 {
+        grid-template-columns: repeat(3, 1fr);
+      }
+      .arch-grid-4 {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .arch-grid-5 {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .arch-grid-6 {
+        grid-template-columns: repeat(6, 1fr);
+      }
+      .arch-box {
+        min-width: 0;
+        padding: 8px;
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.35;
+        color: #1e293b;
+        text-align: center;
+        overflow-wrap: anywhere;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+      }
+      .arch-box.tech {
+        font-size: 10px;
+        color: #475569;
+        background: #f8fafc;
+      }
+      .arch-layer.external {
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border: 2px dashed #94a3b8;
+      }
+      .arch-layer.external .arch-layer-title {
+        color: #64748b;
+      }
+      .arch-layer.user {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border: 2px solid #3b82f6;
+      }
+      .arch-layer.user .arch-layer-title {
+        color: #1e40af;
+      }
+      .arch-layer.application {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border: 2px solid #eab308;
+      }
+      .arch-layer.application .arch-layer-title {
+        color: #854d0e;
+      }
+      .arch-layer.ai {
+        background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+        border: 2px solid #22c55e;
+      }
+      .arch-layer.ai .arch-layer-title {
+        color: #15803d;
+      }
+      .arch-layer.data {
+        background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        border: 2px solid #ec4899;
+      }
+      .arch-layer.data .arch-layer-title {
+        color: #9d174d;
+      }
+      .arch-layer.infra {
+        background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+        border: 2px solid #6366f1;
+      }
+      .arch-layer.infra .arch-layer-title {
+        color: #4338ca;
+      }
+      .arch-sidebar-panel {
+        padding: 10px;
+        margin-bottom: 8px;
+        background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+        border: 1px solid #9ca3af;
+        border-radius: 8px;
+      }
+      .arch-sidebar-title {
+        margin-bottom: 6px;
+        font-size: 12px;
+        font-weight: bold;
+        color: #1e293b;
+        text-align: center;
+      }
+      .arch-sidebar-item {
+        padding: 5px;
+        margin: 3px 0;
+        font-size: 10px;
+        color: #374151;
+        text-align: center;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 5px;
+      }
+      .arch-sidebar-item.metric {
+        font-weight: 600;
+        color: #1e40af;
+        background: #dbeafe;
+        border: 1px solid #3b82f6;
+      }
+      </style>
+      <div class="arch-title">Frontend Application Architecture</div>
+      <div class="arch-wrapper">
+        <div class="arch-main">
+          <div class="arch-layer user">
+            <div class="arch-layer-title">Routing & Pages (react-router)</div>
+            <div class="arch-grid arch-grid-6">
+              <div class="arch-box">LoginPage</div>
+              <div class="arch-box">HomeRedirect<br><small>restore last trip</small></div>
+              <div class="arch-box">TripLibraryPage<br><small>/trips</small></div>
+              <div class="arch-box">TripPage<br><small>/trips/:tripId</small></div>
+              <div class="arch-box">Forgot / Reset<br><small>password</small></div>
+              <div class="arch-box tech">ProtectedRoute<br><small>auth guard</small></div>
+            </div>
+          </div>
+          <div class="arch-layer application">
+            <div class="arch-layer-title">Component Modules (src/components)</div>
+            <div class="arch-grid arch-grid-4">
+              <div class="arch-box">Map<br><small>MapContainer, POIModal</small></div>
+              <div class="arch-box">Timeline<br><small>date navigation</small></div>
+              <div class="arch-box">Activities<br><small>dnd-kit reorder</small></div>
+              <div class="arch-box">Cards<br><small>Activity, Weather, Accommodation</small></div>
+            </div>
+            <div class="arch-grid arch-grid-4" style="margin-top:8px;">
+              <div class="arch-box">TripLibrary<br><small>multi-trip grid</small></div>
+              <div class="arch-box">Editing<br><small>stop/activity/waypoint modals</small></div>
+              <div class="arch-box">Agent<br><small>AgentButton, AgentModal</small></div>
+              <div class="arch-box">Auth / Layout<br><small>Toast, ErrorBoundary</small></div>
+            </div>
+          </div>
+          <div class="arch-layer ai">
+            <div class="arch-layer-title">State Management</div>
+            <div class="arch-grid arch-grid-3">
+              <div class="arch-box">TanStack Query<br><small>server state — trips, weather (source of truth)</small></div>
+              <div class="arch-box">AppStateContext<br><small>UI state — currentBase, selectedActivity, POI modal</small></div>
+              <div class="arch-box">AuthContext<br><small>Supabase session, sign-in/out</small></div>
+            </div>
+          </div>
+          <div class="arch-layer data">
+            <div class="arch-layer-title">Data Hooks (src/hooks)</div>
+            <div class="arch-grid arch-grid-5">
+              <div class="arch-box tech">useTrips<br><small>library list</small></div>
+              <div class="arch-box tech">useTripData<br><small>one trip</small></div>
+              <div class="arch-box tech">useWeather<br><small>per base</small></div>
+              <div class="arch-box tech">useTripMutations<br><small>optimistic CRUD</small></div>
+              <div class="arch-box tech">useTripLibraryMutations<br><small>create / delete</small></div>
+            </div>
+          </div>
+          <div class="arch-layer infra">
+            <div class="arch-layer-title">Services & Config (src/services, src/config)</div>
+            <div class="arch-grid arch-grid-6">
+              <div class="arch-box tech">supabaseService<br><small>only supabase-js caller</small></div>
+              <div class="arch-box tech">supabaseMappers<br><small>row ↔ domain</small></div>
+              <div class="arch-box tech">weatherService<br><small>Open-Meteo</small></div>
+              <div class="arch-box tech">placesService<br><small>Google Places</small></div>
+              <div class="arch-box tech">tripImportService<br><small>JSON / TripIt parse</small></div>
+              <div class="arch-box tech">agentService<br><small>NDJSON client</small></div>
+            </div>
+          </div>
+        </div>
+        <div class="arch-sidebar">
+          <div class="arch-sidebar-panel">
+            <div class="arch-sidebar-title">Cross-cutting</div>
+            <div class="arch-sidebar-item">Auth gate (ProtectedRoute)</div>
+            <div class="arch-sidebar-item">Offline reads (persisted cache)</div>
+            <div class="arch-sidebar-item">Optimistic + rollback</div>
+            <div class="arch-sidebar-item">Error boundary + Toast</div>
+          </div>
+          <div class="arch-sidebar-panel">
+            <div class="arch-sidebar-title">Tooling</div>
+            <div class="arch-sidebar-item">Vite 8 / TS 6</div>
+            <div class="arch-sidebar-item">Tailwind 4</div>
+            <div class="arch-sidebar-item">Vitest 4 (co-located tests)</div>
+            <div class="arch-sidebar-item">Ultracite / Biome</div>
+          </div>
+          <div class="arch-sidebar-panel">
+            <div class="arch-sidebar-title">Domain types</div>
+            <div class="arch-sidebar-item">TripData → stops[]</div>
+            <div class="arch-sidebar-item">TripBase → activities[]</div>
+            <div class="arch-sidebar-item">Activity / ScenicWaypoint</div>
+            <div class="arch-sidebar-item">TripSummary (list row)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
