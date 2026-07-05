@@ -3,14 +3,15 @@ import { z } from 'zod';
 // Relative imports with explicit .js extensions: the Vercel function runtime
 // is Node ESM, which neither rewrites tsconfig path aliases nor resolves
 // extensionless relative specifiers.
+import { ACTIVITY_COLUMNS, type ColumnDef, ITEM_DONE_COLUMN, patchRow, WAYPOINT_COLUMNS } from '../../../src/services/entityRows.js';
 import {
-  ACTIVITY_COLUMNS,
-  type ColumnDef,
-  CREATE_DEFAULTS,
-  ITEM_DONE_COLUMN,
-  patchRow,
-  WAYPOINT_COLUMNS,
-} from '../../../src/services/entityRows.js';
+  type ActivityInput,
+  createActivity,
+  createWaypoint,
+  deleteById,
+  updateById,
+  type WaypointInput,
+} from '../../../src/services/tripWrites.js';
 import { ActivityType } from '../../../src/types/trip.js';
 import type { AgentTool } from './core.js';
 
@@ -50,6 +51,7 @@ const fetchName = async (client: SupabaseClient, table: string, id: string, noun
 
 interface ItemToolsConfig {
   columns: readonly ColumnDef[];
+  create: (client: SupabaseClient, stopId: string, sortOrder: number, input: Record<string, unknown>) => Promise<string>;
   entity: 'activity' | 'waypoint';
   hasType: boolean;
   idField: 'activity_id' | 'waypoint_id';
@@ -57,7 +59,7 @@ interface ItemToolsConfig {
   table: 'activities' | 'scenic_waypoints';
 }
 
-function buildItemTools({ columns, entity, hasType, idField, noun, table }: ItemToolsConfig): AgentTool[] {
+function buildItemTools({ columns, create, entity, hasType, idField, noun, table }: ItemToolsConfig): AgentTool[] {
   const typeField = hasType ? { type: activityTypeSchema.optional() } : {};
   // Sparse patch semantics: only provided fields, `done` mapped to is_done.
   const patchDefs = [...columns, ITEM_DONE_COLUMN];
@@ -81,17 +83,7 @@ function buildItemTools({ columns, entity, hasType, idField, noun, table }: Item
         if (countError) {
           throw new Error(countError.message);
         }
-        const id = crypto.randomUUID();
-        const { error } = await client.from(table).insert({
-          id,
-          stop_id: input.stop_id,
-          sort_order: count ?? 0,
-          ...CREATE_DEFAULTS,
-          ...patchRow(patchDefs, input),
-        });
-        if (error) {
-          throw new Error(error.message);
-        }
+        const id = await create(client, input.stop_id as string, count ?? 0, input);
         return { id, name: input.name };
       },
       toChanges: (input, output) => [{ op: 'created', entity, id: (output as { id: string }).id, name: input.name as string }],
@@ -103,10 +95,8 @@ function buildItemTools({ columns, entity, hasType, idField, noun, table }: Item
       execute: async (client, input) => {
         const id = input[idField] as string;
         const currentName = await fetchName(client, table, id, noun);
-        const { error } = await client.from(table).update(patchRow(patchDefs, input)).eq('id', id);
-        if (error) {
-          throw new Error(error.message);
-        }
+        // Sparse update stays agent policy; the shared updateById does the write.
+        await updateById(client, table, id, patchRow(patchDefs, input));
         return { id, name: (input.name as string | undefined) ?? currentName };
       },
       toChanges: (_input, output) => {
@@ -121,10 +111,7 @@ function buildItemTools({ columns, entity, hasType, idField, noun, table }: Item
       execute: async (client, input) => {
         const id = input[idField] as string;
         const name = await fetchName(client, table, id, noun);
-        const { error } = await client.from(table).delete().eq('id', id);
-        if (error) {
-          throw new Error(error.message);
-        }
+        await deleteById(client, table, id);
         return { id, name, deleted: true };
       },
       toChanges: (_input, output) => {
@@ -137,6 +124,7 @@ function buildItemTools({ columns, entity, hasType, idField, noun, table }: Item
 
 export const ACTIVITY_TOOLS = buildItemTools({
   columns: ACTIVITY_COLUMNS,
+  create: (client, stopId, sortOrder, input) => createActivity(client, stopId, sortOrder, input as unknown as ActivityInput),
   entity: 'activity',
   hasType: true,
   idField: 'activity_id',
@@ -146,6 +134,7 @@ export const ACTIVITY_TOOLS = buildItemTools({
 
 export const WAYPOINT_TOOLS = buildItemTools({
   columns: WAYPOINT_COLUMNS,
+  create: (client, stopId, sortOrder, input) => createWaypoint(client, stopId, sortOrder, input as unknown as WaypointInput),
   entity: 'waypoint',
   hasType: false,
   idField: 'waypoint_id',

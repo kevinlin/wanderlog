@@ -2,7 +2,13 @@ import { z } from 'zod';
 // Relative import with explicit .js extension: the Vercel function runtime is
 // Node ESM, which neither rewrites tsconfig path aliases nor resolves
 // extensionless relative specifiers.
-import { ACCOMMODATION_COLUMNS, accommodationId, denseRow, patchRow, TRIP_METADATA_COLUMNS } from '../../../src/services/entityRows.js';
+import { accommodationId } from '../../../src/services/entityRows.js';
+import {
+  type AccommodationInput,
+  type TripMetadataPatch,
+  updateTripMetadata,
+  upsertAccommodation,
+} from '../../../src/services/tripWrites.js';
 import type { AgentTool } from './core.js';
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -51,16 +57,13 @@ export const TRIP_FIELD_TOOLS: AgentTool[] = [
     schema: upsertAccommodationSchema,
     execute: async (client, input) => {
       const id = accommodationId(input.stop_id as string);
+      // Pre-read is agent-only work: it decides the created/updated change label.
       const { data: existing, error: readError } = await client.from('accommodations').select('id').eq('id', id).maybeSingle();
       if (readError) {
         throw new Error(readError.message);
       }
-      const { error } = await client
-        .from('accommodations')
-        .upsert({ id, stop_id: input.stop_id, ...denseRow(ACCOMMODATION_COLUMNS, input) }, { onConflict: 'id' });
-      if (error) {
-        throw new Error(error.message);
-      }
+      // The snake_case agent input is accepted by the shared column defs.
+      await upsertAccommodation(client, input.stop_id as string, input as unknown as AccommodationInput);
       return { id, name: input.name, op: existing ? 'updated' : 'created' };
     },
     toChanges: (_input, output) => {
@@ -85,13 +88,9 @@ export const TRIP_FIELD_TOOLS: AgentTool[] = [
       if (!existing) {
         throw new Error(`No trip found with id ${input.trip_id}`);
       }
-      const { error } = await client
-        .from('trips')
-        .update(patchRow(TRIP_METADATA_COLUMNS, input))
-        .eq('id', input.trip_id as string);
-      if (error) {
-        throw new Error(error.message);
-      }
+      // The snake_case agent input (incl. destination) is accepted by the
+      // shared column defs; sparse patch semantics on both sides.
+      await updateTripMetadata(client, input.trip_id as string, input as TripMetadataPatch);
       return { id: input.trip_id, name: (input.name as string | undefined) ?? (existing as { name: string }).name };
     },
     toChanges: (_input, output) => {

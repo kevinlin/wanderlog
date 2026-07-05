@@ -3,6 +3,7 @@ import { z } from 'zod';
 // is Node ESM, which neither rewrites tsconfig path aliases nor resolves
 // extensionless relative specifiers.
 import { nightsBetween, patchRow, STOP_COLUMNS } from '../../../src/services/entityRows.js';
+import { applyStopStructure, createStop, deleteById, type StopInput, updateById } from '../../../src/services/tripWrites.js';
 import type { TripBase } from '../../../src/types/trip.js';
 import { recalculateStopDates } from '../../../src/utils/stopDateUtils.js';
 import type { AgentTool } from './core.js';
@@ -72,17 +73,9 @@ export const STOP_TOOLS: AgentTool[] = [
       if (countError) {
         throw new Error(countError.message);
       }
-      const id = crypto.randomUUID();
-      const { error } = await client.from('stops').insert({
-        id,
-        trip_id: input.trip_id,
-        ...patchRow(STOP_COLUMNS, input),
-        duration_days: nightsBetween(input.date_from as string, input.date_to as string),
-        sort_order: count ?? 0,
-      });
-      if (error) {
-        throw new Error(error.message);
-      }
+      // The shared createStop maps columns and computes duration_days; the
+      // snake_case agent input is accepted by the shared column defs.
+      const id = await createStop(client, input.trip_id as string, count ?? 0, input as unknown as StopInput);
       return { id, name: input.name };
     },
     toChanges: (input, output) => [{ op: 'created', entity: 'stop', id: (output as { id: string }).id, name: input.name as string }],
@@ -110,10 +103,8 @@ export const STOP_TOOLS: AgentTool[] = [
         }
         patch.duration_days = nightsBetween(from, to);
       }
-      const { error } = await client.from('stops').update(patch).eq('id', id);
-      if (error) {
-        throw new Error(error.message);
-      }
+      // Sparse update stays agent policy; the shared updateById does the write.
+      await updateById(client, 'stops', id, patch);
       return { id, name: (input.name as string | undefined) ?? row.name };
     },
     toChanges: (_input, output) => {
@@ -135,10 +126,7 @@ export const STOP_TOOLS: AgentTool[] = [
       if (!current) {
         throw new Error(`No stop found with id ${id}`);
       }
-      const { error } = await client.from('stops').delete().eq('id', id);
-      if (error) {
-        throw new Error(error.message);
-      }
+      await deleteById(client, 'stops', id);
       return { id, name: (current as { name: string }).name, deleted: true };
     },
     toChanges: (_input, output) => {
@@ -189,29 +177,20 @@ export const STOP_TOOLS: AgentTool[] = [
         };
       });
       const recalculated = recalculateStopDates(orderedBases, trip.start_date);
-      const results = await Promise.all(
-        recalculated.map((stop, index) =>
-          client
-            .from('stops')
-            .update({
-              sort_order: index,
-              date_from: stop.date.from,
-              date_to: stop.date.to,
-              duration_days: nightsBetween(stop.date.from, stop.date.to),
-            })
-            .eq('id', stop.stop_id)
-        )
-      );
-      const failed = results.find((result) => result.error);
-      if (failed?.error) {
-        throw new Error(failed.error.message);
-      }
       const startDate = recalculated[0].date.from;
       const endDate = recalculated.at(-1)?.date.to ?? startDate;
-      const { error: spanError } = await client.from('trips').update({ start_date: startDate, end_date: endDate }).eq('id', tripId);
-      if (spanError) {
-        throw new Error(spanError.message);
-      }
+      await applyStopStructure(
+        client,
+        tripId,
+        recalculated.map((stop, index) => ({
+          id: stop.stop_id,
+          sort_order: index,
+          date_from: stop.date.from,
+          date_to: stop.date.to,
+        })),
+        startDate,
+        endDate
+      );
       const changedStops = recalculated
         .filter((stop, index) => {
           const before = byId.get(stop.stop_id) as StopRowLite;
