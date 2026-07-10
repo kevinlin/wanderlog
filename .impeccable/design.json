@@ -1,0 +1,350 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-07-10T00:00:00Z",
+  "title": "Design System: Wanderlog",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Fresh Alpine Teal",
+        "canonical": "oklch(0.63 0.06 192)",
+        "tonalRamp": [
+          "oklch(0.32 0.05 192)",
+          "oklch(0.42 0.055 192)",
+          "oklch(0.52 0.06 192)",
+          "oklch(0.63 0.06 192)",
+          "oklch(0.72 0.055 192)",
+          "oklch(0.80 0.045 192)",
+          "oklch(0.88 0.03 192)",
+          "oklch(0.94 0.02 192)"
+        ]
+      },
+      "lake-blue": {
+        "role": "secondary",
+        "displayName": "Lake Blue",
+        "canonical": "oklch(0.74 0.08 232)",
+        "tonalRamp": [
+          "oklch(0.40 0.07 232)",
+          "oklch(0.50 0.08 232)",
+          "oklch(0.60 0.09 232)",
+          "oklch(0.68 0.09 232)",
+          "oklch(0.74 0.08 232)",
+          "oklch(0.82 0.06 232)",
+          "oklch(0.89 0.04 232)",
+          "oklch(0.95 0.02 232)"
+        ]
+      },
+      "sandy-beige": {
+        "role": "secondary",
+        "displayName": "Sandy Beige",
+        "canonical": "oklch(0.93 0.03 80)",
+        "tonalRamp": [
+          "oklch(0.55 0.05 80)",
+          "oklch(0.64 0.05 80)",
+          "oklch(0.73 0.045 80)",
+          "oklch(0.81 0.04 80)",
+          "oklch(0.87 0.035 80)",
+          "oklch(0.93 0.03 80)",
+          "oklch(0.96 0.02 80)",
+          "oklch(0.98 0.01 80)"
+        ]
+      },
+      "fern-green": {
+        "role": "secondary",
+        "displayName": "Fern Green",
+        "canonical": "oklch(0.58 0.09 145)",
+        "tonalRamp": [
+          "oklch(0.32 0.07 145)",
+          "oklch(0.41 0.08 145)",
+          "oklch(0.50 0.09 145)",
+          "oklch(0.58 0.09 145)",
+          "oklch(0.67 0.085 145)",
+          "oklch(0.77 0.07 145)",
+          "oklch(0.86 0.05 145)",
+          "oklch(0.93 0.03 145)"
+        ]
+      },
+      "selection": {
+        "role": "tertiary",
+        "displayName": "Selection Sky",
+        "canonical": "#0ea5e9",
+        "tonalRamp": [
+          "#0c4a6e",
+          "#075985",
+          "#0369a1",
+          "#0284c7",
+          "#0ea5e9",
+          "#38bdf8",
+          "#7dd3fc",
+          "#bae6fd"
+        ]
+      },
+      "success": {
+        "role": "tertiary",
+        "displayName": "Success Emerald",
+        "canonical": "#10b981",
+        "tonalRamp": [
+          "#064e3b",
+          "#065f46",
+          "#047857",
+          "#059669",
+          "#10b981",
+          "#34d399",
+          "#6ee7b7",
+          "#a7f3d0"
+        ]
+      },
+      "danger": {
+        "role": "tertiary",
+        "displayName": "Danger Red",
+        "canonical": "#ef4444",
+        "tonalRamp": [
+          "#7f1d1d",
+          "#991b1b",
+          "#b91c1c",
+          "#dc2626",
+          "#ef4444",
+          "#f87171",
+          "#fca5a5",
+          "#fecaca"
+        ]
+      },
+      "active": {
+        "role": "tertiary",
+        "displayName": "Active Orange",
+        "canonical": "#f97316",
+        "tonalRamp": [
+          "#7c2d12",
+          "#9a3412",
+          "#c2410c",
+          "#ea580c",
+          "#f97316",
+          "#fb923c",
+          "#fdba74",
+          "#fed7aa"
+        ]
+      },
+      "warning": {
+        "role": "tertiary",
+        "displayName": "Warning Amber",
+        "canonical": "#f59e0b",
+        "tonalRamp": [
+          "#78350f",
+          "#92400e",
+          "#b45309",
+          "#d97706",
+          "#f59e0b",
+          "#fbbf24",
+          "#fcd34d",
+          "#fde68a"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#111827",
+        "tonalRamp": [
+          "#030712",
+          "#111827",
+          "#1f2937",
+          "#374151",
+          "#6b7280",
+          "#9ca3af",
+          "#d1d5db",
+          "#f3f4f6"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Wordmark and top-level page titles (login screen)."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section and panel headers."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Card titles: activity and accommodation names."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Dominant UI text: card content, rows, descriptions."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Field labels, meta, badges, timeline dates. Sentence case."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-rest",
+        "value": "0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06)",
+        "purpose": "Default lift for content cards (shadow-md)."
+      },
+      {
+        "name": "card-hover",
+        "value": "0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05)",
+        "purpose": "Hover, drag, or selected response (shadow-lg)."
+      },
+      {
+        "name": "micro",
+        "value": "0 1px 2px rgba(0,0,0,0.05)",
+        "purpose": "Duration badges and tiny floating chips (shadow-xs)."
+      },
+      {
+        "name": "auth-splash",
+        "value": "0 25px 50px -12px rgba(0,0,0,0.25)",
+        "purpose": "The sign-in card on the scenic gradient (shadow-2xl)."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Default easing for state and layout transitions (ease-in-out)."
+      },
+      {
+        "name": "duration-fast",
+        "value": "200ms",
+        "purpose": "Color and opacity transitions (buttons, hovers)."
+      },
+      {
+        "name": "duration-medium",
+        "value": "300ms",
+        "purpose": "Timeline expand/collapse and stop selection."
+      },
+      {
+        "name": "press-spring",
+        "value": "scale(1.05) on hover, scale(0.95) on active",
+        "purpose": "Tactile press feedback on timeline stops and interactive pills."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Main-action button: sign in, confirm, send. Teal fill, white text, 44px touch target.",
+      "html": "<button class=\"ds-btn-primary\">Sign in</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 44px; padding: 8px 16px; border: none; border-radius: 8px; background: #4a9e9e; color: #fff; font: 500 0.875rem/1.4 Inter, system-ui, sans-serif; cursor: pointer; transition: background-color 200ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-primary:hover { background: rgba(74,158,158,0.9); } .ds-btn-primary:active { background: rgba(74,158,158,0.8); } .ds-btn-primary:focus-visible { outline: 2px solid #4a9e9e; outline-offset: 2px; } .ds-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; } @media (prefers-reduced-motion: reduce) { .ds-btn-primary { transition: none; } }"
+    },
+    {
+      "name": "Secondary / Tinted Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Quieter action (add, toolbar). Teal-tint fill with a teal border and teal text.",
+      "html": "<button class=\"ds-btn-secondary\"><span aria-hidden=\"true\">＋</span> Add activity</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; gap: 4px; padding: 8px 12px; border: 1px solid rgba(74,158,158,0.4); border-radius: 8px; background: rgba(74,158,158,0.1); color: #4a9e9e; font: 500 0.875rem/1.4 Inter, system-ui, sans-serif; cursor: pointer; transition: background-color 200ms cubic-bezier(0.4,0,0.2,1); } .ds-btn-secondary:hover { background: rgba(74,158,158,0.2); } .ds-btn-secondary:focus-visible { outline: 2px solid #4a9e9e; outline-offset: 2px; }"
+    },
+    {
+      "name": "Activity Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Content card. Flat white at rest with a soft shadow that grows on hover. Emoji leads inline facts.",
+      "html": "<div class=\"ds-card\"><h4 class=\"ds-card-title\"><span aria-hidden=\"true\">🍜</span> Ramen at Ichiran</h4><p class=\"ds-card-meta\">📍 Shibuya, Tokyo</p></div>",
+      "css": ".ds-card { position: relative; box-sizing: border-box; min-height: 60px; padding: 12px; border-radius: 8px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); cursor: pointer; transition: box-shadow 200ms cubic-bezier(0.4,0,0.2,1); } .ds-card:hover { box-shadow: 0 10px 15px rgba(0,0,0,0.1), 0 4px 6px rgba(0,0,0,0.05); } .ds-card-title { margin: 0 0 4px; font: 600 1rem/1.4 Inter, system-ui, sans-serif; color: #111827; } .ds-card-meta { margin: 0; font: 400 0.875rem/1.6 Inter, system-ui, sans-serif; color: #4b5563; } @media (prefers-reduced-motion: reduce) { .ds-card { transition: none; } }"
+    },
+    {
+      "name": "Selected Card (state)",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Selected state: sky ring with offset plus a sky tint. Selection is always Sky.",
+      "html": "<div class=\"ds-card-selected\"><h4 class=\"ds-card-title\"><span aria-hidden=\"true\">⛩️</span> Senso-ji Temple</h4><p class=\"ds-card-meta\">📍 Asakusa, Tokyo</p></div>",
+      "css": ".ds-card-selected { position: relative; box-sizing: border-box; min-height: 60px; padding: 12px; border-radius: 8px; background: rgba(14,165,233,0.1); box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0ea5e9, 0 1px 3px rgba(0,0,0,0.1); } .ds-card-selected .ds-card-title { margin: 0 0 4px; font: 600 1rem/1.4 Inter, system-ui, sans-serif; color: #111827; } .ds-card-selected .ds-card-meta { margin: 0; font: 400 0.875rem/1.6 Inter, system-ui, sans-serif; color: #4b5563; }"
+    },
+    {
+      "name": "Text Input",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Text field. Gray stroke, teal focus (border shift plus soft teal ring). 44px tall, text-base to avoid iOS zoom.",
+      "html": "<label class=\"ds-input-label\" for=\"demo\">Email</label><input class=\"ds-input\" id=\"demo\" type=\"email\" placeholder=\"you@example.com\">",
+      "css": ".ds-input-label { display: block; margin-bottom: 4px; font: 500 0.875rem/1.4 Inter, system-ui, sans-serif; color: #374151; } .ds-input { box-sizing: border-box; width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; color: #111827; font: 400 1rem/1.4 Inter, system-ui, sans-serif; transition: border-color 200ms, box-shadow 200ms; } .ds-input::placeholder { color: #6b7280; } .ds-input:focus { outline: none; border-color: #4a9e9e; box-shadow: 0 0 0 2px rgba(74,158,158,0.3); } @media (prefers-reduced-motion: reduce) { .ds-input { transition: none; } }"
+    },
+    {
+      "name": "Timeline Stop",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature component. A trip stop as a colored pill; width scales with nights stayed. Color rotates through a 12-hue palette by index (violet shown). Duration badge floats top-right; springs on press.",
+      "html": "<button class=\"ds-timeline-stop\"><span class=\"ds-timeline-badge\">3</span><span class=\"ds-timeline-name\">Kyoto</span><span class=\"ds-timeline-date\">Mon, Apr 8</span></button>",
+      "css": ".ds-timeline-stop { position: relative; display: inline-flex; flex-direction: column; align-items: center; min-height: 36px; padding: 4px 12px; border: none; border-radius: 8px; background: #8b5cf6; color: #fff; font-family: Inter, system-ui, sans-serif; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 300ms cubic-bezier(0.4,0,0.2,1), box-shadow 300ms; } .ds-timeline-stop:hover { transform: scale(1.05); box-shadow: 0 10px 15px rgba(0,0,0,0.1); } .ds-timeline-stop:active { transform: scale(0.95); } .ds-timeline-name { font: 600 1rem/1.2 Inter; } .ds-timeline-date { font: 500 0.75rem/1.2 Inter; opacity: 0.95; } .ds-timeline-badge { position: absolute; top: -4px; right: -4px; display: flex; align-items: center; justify-content: center; height: 20px; min-width: 20px; padding: 0 6px; border: 1px solid #e5e7eb; border-radius: 9999px; background: #fff; color: #1f2937; font: 700 0.75rem/1 Inter; box-shadow: 0 1px 2px rgba(0,0,0,0.05); } @media (prefers-reduced-motion: reduce) { .ds-timeline-stop { transition: none; } .ds-timeline-stop:hover, .ds-timeline-stop:active { transform: none; } }"
+    },
+    {
+      "name": "Done Checkbox",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Marks an activity done. Emerald accent; pairs with a strike-through title and emerald tint on the card so 'done' never relies on color alone.",
+      "html": "<label class=\"ds-check\"><input type=\"checkbox\" checked> <span>Book train tickets</span></label>",
+      "css": ".ds-check { display: inline-flex; align-items: center; gap: 12px; font: 400 0.875rem/1.6 Inter, system-ui, sans-serif; color: #374151; cursor: pointer; } .ds-check input { width: 16px; height: 16px; border-radius: 4px; accent-color: #10b981; } .ds-check input:checked + span { color: #6b7280; text-decoration: line-through; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Living Field Journal",
+    "overview": "Wanderlog looks like a travel notebook that fills itself in as you go. The whole system is built around one idea — a living plan you track as you go — so the interface reads as personal, tactile, and always current, not a document you filed before leaving. Color is the primary carrier of meaning: a calm teal chrome holds the app together while a bright functional palette tells you at a glance what is selected, what is done, and what needs attention. The register is a working tool, so clarity wins over decoration and density is deliberately high. Personality is earned through behavior and warmth — emoji markers, springy presses, a rainbow timeline, encouraging copy — never through visual excess. The system rejects the cold gray card-grid of a generic SaaS dashboard, the busyness of a cluttered booking site, the joyless density of an enterprise admin panel, and trend-chasing over-design.",
+    "keyCharacteristics": [
+      "Color carries meaning: teal chrome, plus a functional palette for selection / done / danger / active / warning.",
+      "Tactile and responsive: springy press feedback, immediate state changes.",
+      "Dense and legible: text-sm base, 44px touch targets, works at desk and on-the-go with no mode switch.",
+      "Warmth through moments: emoji content markers, a rotating rainbow timeline, encouraging microcopy.",
+      "Flat content, floating chrome: soft shadows on cards; glass and blur only where UI floats over the map."
+    ],
+    "rules": [
+      {
+        "name": "The One Meaning Per Color Rule",
+        "body": "Sky is selection, emerald is done, orange is press, red is danger, amber is warning. Never reassign these. A card can be selected and done at once, and the two colors must stay legible together.",
+        "section": "colors"
+      },
+      {
+        "name": "The Rainbow Timeline Rule",
+        "body": "Trip stops cycle through a fixed 12-color palette by index, giving each stop its own bright identity. This is the one place the app is deliberately, joyfully saturated. Everywhere else, color is rationed to meaning.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight-Not-Family Rule",
+        "body": "Never introduce a second typeface for emphasis. Reach for 600/700 and a size bump. Wanderlog is a one-family (Inter) system.",
+        "section": "typography"
+      },
+      {
+        "name": "The No-Tracked-Caps Rule",
+        "body": "Labels stay sentence case. No wide-tracked uppercase eyebrows.",
+        "section": "typography"
+      },
+      {
+        "name": "The Glass-Over-Map-Only Rule",
+        "body": "backdrop-blur is permitted only where a surface sits over the map or the auth gradient. Never blur a content card on a solid background.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Shadow-Responds Rule",
+        "body": "Content is flat at rest; shadow deepens as feedback (hover, drag, select), then relaxes. Depth is a verb, not a decoration.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do keep one meaning per functional color: sky = selected, emerald = done, orange = press, red = danger, amber = warning.",
+      "Do carry personality through motion, color-coding, and emoji content markers.",
+      "Do hold 44px minimum touch targets and text-base on inputs.",
+      "Do pair every color signal with a non-color cue (icon, strike-through, label).",
+      "Do provide a prefers-reduced-motion alternative for every spring, scale, and transition.",
+      "Do reserve backdrop-blur for chrome floating over the map or the auth gradient.",
+      "Do build hierarchy from Inter weight and size alone."
+    ],
+    "donts": [
+      "Don't ship a generic SaaS dashboard: no cold gray card-grid of identical tiles, no charts for their own sake.",
+      "Don't drift toward a cluttered booking site: no ad-dense, upsell-heavy busyness.",
+      "Don't become an enterprise admin panel: no joyless dense tables or form-first screens where a map or timeline would tell the story better.",
+      "Don't over-design: no gradient fills on content, no gradient text, no decorative glassmorphism on solid backgrounds, no motion for its own sake.",
+      "Don't use backdrop-blur on a content card sitting on a solid background.",
+      "Don't use wide-tracked uppercase eyebrow labels.",
+      "Don't introduce a second typeface for emphasis, or add a colored border-left stripe as a card accent.",
+      "Don't let muted gray text fall below 4.5:1 contrast on tinted surfaces."
+    ]
+  }
+}

@@ -168,3 +168,16 @@ VITE_SUPABASE_URL=your_supabase_project_url
 VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key   # script-only (migration); never in the client bundle
 ```
+
+## Design Context
+
+Strategic design context lives in [PRODUCT.md](PRODUCT.md) (register, users, positioning, brand personality, anti-references). Visual system lives in DESIGN.md. Read them before any UI work.
+
+- Register: `product` (working tool) · Platform: `web`, mobile-first.
+- Positioning: a living plan you track as you go — not a static itinerary doc.
+- Design principles:
+  1. The plan is alive — every screen reflects current state (done, reordered, synced).
+  2. Delight in the moments, restraint in the frame — joy in behavior and copy, not ornament.
+  3. Two moments, one plan — desk planning and on-the-go phone use as equals, no mode switch.
+  4. Shared and trustworthy — canonical plan reads correct for every companion.
+  5. Show the trip, not a form — lead with map, timeline, place.

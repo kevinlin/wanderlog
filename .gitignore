@@ -42,3 +42,6 @@ supabase/.temp
 
 # local symlink (worktree convenience; local/ above only matches directories)
 local
+
+# Impeccable Live
+.impeccable/live/
