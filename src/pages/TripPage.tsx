@@ -9,6 +9,7 @@ import { ErrorBoundary } from '@/components/Layout/ErrorBoundary';
 import { ErrorMessage } from '@/components/Layout/ErrorMessage';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { OfflineIndicator } from '@/components/Layout/OfflineIndicator';
+import { SyncIndicator } from '@/components/Layout/SyncIndicator';
 import { Toast, type ToastState } from '@/components/Layout/Toast';
 import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
@@ -324,6 +325,9 @@ export const TripPage = () => {
 
         {/* Offline Indicator */}
         <OfflineIndicator />
+
+        {/* Sync status for shared-plan trust */}
+        <SyncIndicator />
       </div>
     </ErrorBoundary>
   );

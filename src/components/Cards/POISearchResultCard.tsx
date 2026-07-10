@@ -22,18 +22,18 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
 
     for (let i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.push(<StarIconSolid className="h-3.5 w-3.5 text-yellow-400" key={i} />);
+        stars.push(<StarIconSolid className="h-3.5 w-3.5 text-amber-400" key={`star-full-${i}`} />);
       } else if (i === fullStars && hasHalfStar) {
         stars.push(
-          <div className="relative h-3.5 w-3.5" key={i}>
+          <div className="relative h-3.5 w-3.5" key={`star-half-${i}`}>
             <StarIcon className="absolute h-3.5 w-3.5 text-gray-300" />
             <div className="w-1.5 overflow-hidden">
-              <StarIconSolid className="absolute h-3.5 w-3.5 text-yellow-400" />
+              <StarIconSolid className="absolute h-3.5 w-3.5 text-amber-400" />
             </div>
           </div>
         );
       } else {
-        stars.push(<StarIcon className="h-3.5 w-3.5 text-gray-300" key={i} />);
+        stars.push(<StarIcon className="h-3.5 w-3.5 text-gray-300" key={`star-empty-${i}`} />);
       }
     }
 
@@ -67,7 +67,7 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
   const photoUrl = getPhotoUrl(poi);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-rose-200/50 bg-linear-to-br from-rose-50/80 to-orange-50/80 shadow-xs transition-all hover:shadow-md">
+    <div className="overflow-hidden rounded-xl border border-rose-200/50 bg-white shadow-xs transition-all hover:shadow-md">
       {/* Photo Section */}
       {photoUrl && (
         <div className="relative h-32 w-full overflow-hidden">
@@ -83,7 +83,7 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
           {/* Business Status Badge */}
           {poi.business_status && poi.business_status !== 'OPERATIONAL' && (
             <div className="absolute top-2 left-2">
-              <span className="rounded-full bg-yellow-500/90 px-2 py-0.5 text-white text-xs">
+              <span className="rounded-full bg-amber-500/90 px-2 py-0.5 text-white text-xs">
                 {poi.business_status.replace(/_/g, ' ').toLowerCase()}
               </span>
             </div>
@@ -162,7 +162,7 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
 
         {/* Add to Activities Button */}
         <button
-          className="min-h-[36px] w-full touch-manipulation rounded-lg border border-emerald-500/30 bg-emerald-500/20 px-3 py-2 font-medium text-emerald-700 text-sm transition-all hover:bg-emerald-500/30 hover:shadow-xs active:bg-emerald-500/40"
+          className="min-h-[36px] w-full touch-manipulation rounded-lg border border-alpine-teal/30 bg-alpine-teal/10 px-3 py-2 font-medium text-alpine-teal text-sm transition-all hover:bg-alpine-teal/20 hover:shadow-xs active:bg-alpine-teal/30"
           onClick={() => onAddToActivities(poi)}
         >
           ➕ Add to Activities

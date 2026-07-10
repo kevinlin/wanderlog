@@ -67,9 +67,9 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           ${isDraggable ? 'touch-none' : ''} w-full transition-transform duration-200`}
         ref={isDraggable ? setNodeRef : undefined}
         style={style}
-        {...(isDraggable ? attributes : {})}
       >
         <div
+          aria-label={`${activity.activity_name}${isDone ? ', done' : ''}${isSelected ? ', selected' : ''}`}
           className={`relative min-h-[60px] w-full cursor-pointer touch-manipulation rounded-lg p-3 shadow-md transition-all duration-200 hover:shadow-lg active:bg-orange-500/10 ${
             isSelected && isDone
               ? 'bg-emerald-500/10 opacity-75 ring-2 ring-sky-500 ring-offset-2'
@@ -80,14 +80,25 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                   : 'bg-white'
           }`}
           onClick={() => onSelect(activity.activity_id)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onSelect(activity.activity_id);
+            }
+          }}
+          // biome-ignore lint/a11y/noNoninteractiveTabindex: composite widget — card contains buttons/links, can't use role="button"
+          tabIndex={0}
         >
           {/* Drag Handle - positioned inside the card on the left edge middle */}
           {isDraggable && (
-            <div
+            <button
+              {...attributes}
               {...listeners}
               aria-label="Drag to reorder activity"
-              className="absolute top-1/2 left-2 z-10 flex min-h-[32px] min-w-[32px] -translate-y-1/2 transform cursor-grab touch-none items-center justify-center rounded-md p-1 transition-all duration-200 hover:bg-sky-500/20 active:cursor-grabbing active:bg-sky-500/30"
+              aria-roledescription="sortable"
+              className="absolute top-1/2 left-2 z-10 flex min-h-[32px] min-w-[32px] -translate-y-1/2 transform cursor-grab touch-none items-center justify-center rounded-md border-none bg-transparent p-1 transition-all duration-200 hover:bg-sky-500/20 active:cursor-grabbing active:bg-sky-500/30"
               onClick={(e) => e.stopPropagation()}
+              type="button"
             >
               {/* Drag handle icon */}
               <svg
@@ -99,7 +110,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
               >
                 <path d="M8 9h8m-8 6h8" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-            </div>
+            </button>
           )}
 
           {/* Card content with left padding when draggable */}

@@ -143,6 +143,21 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
     isDraggingRef.current = false;
   }, []);
 
+  const RESIZE_STEP = 40;
+
+  const handleResizeKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!isMobile) return;
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+        e.preventDefault();
+        const current = mobilePanelHeight ?? getMaxPanelHeight() * MOBILE_DEFAULT_PANEL_RATIO;
+        const delta = e.key === 'ArrowUp' ? RESIZE_STEP : -RESIZE_STEP;
+        setMobilePanelHeight(clampHeight(current + delta));
+      }
+    },
+    [isMobile, mobilePanelHeight, getMaxPanelHeight, clampHeight]
+  );
+
   // Mouse event handlers for desktop testing
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -191,7 +206,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
       ExportService.exportAndDownload(tripData);
       onExportSuccess?.();
     } catch {
-      // Export failed silently; the user sees no download
+      // Export failed — the user sees no download appear
     }
   };
 
@@ -307,13 +322,18 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
         {/* Mobile Resize Handle */}
         {isMobile && (
           <div
-            aria-label="Drag to resize panel"
+            aria-label="Resize panel"
+            aria-valuemax={getMaxPanelHeight()}
+            aria-valuemin={MOBILE_MIN_PANEL_HEIGHT}
+            aria-valuenow={mobilePanelHeight ?? Math.round(getMaxPanelHeight() * MOBILE_DEFAULT_PANEL_RATIO)}
             className="flex shrink-0 cursor-grab touch-none justify-center py-3 active:cursor-grabbing"
+            onKeyDown={handleResizeKeyDown}
             onMouseDown={handleMouseDown}
             onTouchEnd={handleTouchEnd}
             onTouchMove={handleTouchMove}
             onTouchStart={handleTouchStart}
             role="slider"
+            tabIndex={0}
           >
             <div className="h-1.5 w-10 rounded-full bg-gray-400" />
           </div>
@@ -496,7 +516,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           <div className="mb-2 flex gap-2">
             <div className="relative flex-1">
               <input
-                className="h-9 w-full rounded-lg border border-gray-300/50 bg-white/70 pr-8 pl-3 text-sm placeholder-gray-500 focus:border-emerald-400 focus:outline-hidden focus:ring-1 focus:ring-emerald-400"
+                className="h-9 w-full rounded-lg border border-gray-300/50 bg-white/70 pr-8 pl-3 text-sm placeholder-gray-500 focus:border-alpine-teal focus:outline-hidden focus:ring-1 focus:ring-alpine-teal/30"
                 onChange={(e) => setSearchInputValue(e.target.value)}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="Search nearby places..."
@@ -515,12 +535,12 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             </div>
             <button
               aria-label="Search"
-              className="flex h-9 w-9 touch-manipulation items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-700 transition-all hover:bg-emerald-500/30 active:bg-emerald-500/40 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-9 w-9 touch-manipulation items-center justify-center rounded-lg border border-alpine-teal/30 bg-alpine-teal/10 text-alpine-teal transition-all hover:bg-alpine-teal/20 active:bg-alpine-teal/30 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!searchInputValue.trim() || poiSearch.loading}
               onClick={handleSearch}
             >
               {poiSearch.loading ? (
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-400 border-t-transparent" />
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-alpine-teal border-t-transparent" />
               ) : (
                 <MagnifyingGlassIcon className="h-4 w-4" />
               )}

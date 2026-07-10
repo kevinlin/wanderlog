@@ -134,8 +134,12 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
     const donePct = total > 0 ? Math.round((done / total) * 100) : 0;
     const isComplete = total > 0 && done === total;
 
+    const stopLabel = `${stop.name}${total > 0 ? `, ${done} of ${total} done` : ''}`;
+
     return (
       <button
+        aria-current={isSelected ? 'true' : undefined}
+        aria-label={stopLabel}
         className={`relative min-h-[36px] shrink-0 touch-manipulation whitespace-nowrap rounded-lg font-medium text-xs transition-all duration-300 ease-in-out sm:min-h-auto ${
           isSelected
             ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} px-2.5 py-1.5 shadow-lg ring-offset-2 ring-offset-white/20 sm:px-4 sm:py-2`
@@ -147,7 +151,10 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
         type="button"
       >
         {/* Duration badge at top-right */}
-        <div className="absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full border border-gray-200 bg-white px-1.5 font-bold text-gray-800 text-xs shadow-xs">
+        <div
+          aria-label={`${stop.duration_days} nights`}
+          className="absolute -top-1 -right-1 flex h-5 min-w-[20px] items-center justify-center rounded-full border border-gray-200 bg-white px-1.5 font-bold text-gray-800 text-xs shadow-xs"
+        >
           {stop.duration_days}
         </div>
 

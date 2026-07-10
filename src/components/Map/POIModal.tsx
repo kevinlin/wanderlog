@@ -120,7 +120,11 @@ export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error,
           {error && (
             <div className="p-6 text-center">
               <p className="mb-4 text-red-600">{error}</p>
-              <button className="rounded-sm bg-gray-500 px-4 py-2 text-white transition-colors hover:bg-gray-600" onClick={onClose}>
+              <button
+                className="rounded-sm border border-gray-300 px-4 py-2 text-gray-700 transition-colors hover:bg-gray-50"
+                onClick={onClose}
+                type="button"
+              >
                 Close
               </button>
             </div>

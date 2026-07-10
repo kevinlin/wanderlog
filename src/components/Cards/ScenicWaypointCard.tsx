@@ -49,6 +49,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
   return (
     <>
       <div
+        aria-label={`${waypoint.activity_name}, scenic waypoint${isDone ? ', done' : ''}${isSelected ? ', selected' : ''}`}
         className={`min-h-[60px] cursor-pointer touch-manipulation rounded-lg border border-violet-200/50 p-3 shadow-md transition-all duration-200 hover:shadow-lg active:bg-violet-500/10 ${
           isSelected && isDone
             ? 'bg-emerald-500/10 opacity-75 ring-2 ring-violet-500 ring-offset-2'
@@ -59,6 +60,14 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
                 : 'bg-white hover:bg-gray-50'
         }`}
         onClick={() => onSelect(waypoint.activity_id)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect(waypoint.activity_id);
+          }
+        }}
+        // biome-ignore lint/a11y/noNoninteractiveTabindex: composite widget — card contains buttons/links, can't use role="button"
+        tabIndex={0}
       >
         <div className="flex items-start space-x-3">
           <div className="shrink-0 pt-0.5">
