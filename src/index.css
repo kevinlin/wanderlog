@@ -73,3 +73,46 @@ body {
 .overscroll-contain {
   overscroll-behavior: contain;
 }
+
+/* Done-checkbox delight: a satisfying pop + checkmark draw when an item is
+   marked done. Only plays on user toggle (JS-gated), never on mount. */
+@keyframes check-pop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.32);
+  }
+  70% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes check-draw {
+  from {
+    stroke-dashoffset: 22;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-check-pop {
+  animation: check-pop 380ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.animate-check-draw {
+  stroke-dasharray: 22;
+  animation: check-draw 300ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+
+/* Reduced motion: the state still changes instantly, just without the spring. */
+@media (prefers-reduced-motion: reduce) {
+  .animate-check-pop,
+  .animate-check-draw {
+    animation: none;
+  }
+}

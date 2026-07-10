@@ -4,14 +4,20 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { TripBase } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
 
+interface StopProgress {
+  done: number;
+  total: number;
+}
+
 interface TimelineStripProps {
   className?: string;
   currentStopId: string | null;
   onStopSelect: (stopId: string) => void;
+  stopProgress?: Record<string, StopProgress>;
   stops: TripBase[];
 }
 
-export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStopId, onStopSelect, className = '' }) => {
+export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStopId, onStopSelect, stopProgress, className = '' }) => {
   const timelineRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
@@ -121,6 +127,13 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
     const colors = getStopColor(index);
     const stopWidth = getStopWidth(stop);
 
+    // "Watching the timeline fill in": each stop shows how much of it is done.
+    const progress = stopProgress?.[stop.stop_id];
+    const total = progress?.total ?? 0;
+    const done = progress?.done ?? 0;
+    const donePct = total > 0 ? Math.round((done / total) * 100) : 0;
+    const isComplete = total > 0 && done === total;
+
     return (
       <button
         className={`relative min-h-[36px] shrink-0 touch-manipulation whitespace-nowrap rounded-lg font-medium text-xs transition-all duration-300 ease-in-out sm:min-h-auto ${
@@ -138,6 +151,15 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
           {stop.duration_days}
         </div>
 
+        {/* Completion seal at top-left — the non-color cue that this stop is fully done */}
+        {isComplete && (
+          <div className="absolute -top-1 -left-1 flex h-5 w-5 items-center justify-center rounded-full border border-emerald-200 bg-white text-emerald-600 shadow-xs">
+            <svg aria-hidden="true" className="h-3 w-3" fill="none" stroke="currentColor" strokeWidth={3} viewBox="0 0 24 24">
+              <path d="M5 13l4 4L19 7" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+        )}
+
         <div className="text-center">
           <div className={`font-semibold ${isSelected ? 'text-sm' : 'text-base'}`}>{stop.name}</div>
           <div className="text-xs">
@@ -148,6 +170,13 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
             })}
           </div>
         </div>
+
+        {/* Progress fill: the stop visibly "fills in" as activities get checked off */}
+        {total > 0 && (
+          <div className="absolute right-2 bottom-1 left-2 h-1 overflow-hidden rounded-full bg-black/20">
+            <div className="h-full rounded-full bg-white/85 transition-[width] duration-500 ease-out" style={{ width: `${donePct}%` }} />
+          </div>
+        )}
 
         {isSelected && (
           <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 transform">

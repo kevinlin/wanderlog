@@ -3,6 +3,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
+import { DoneCheckbox } from '@/components/Cards/DoneCheckbox';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation, Activity } from '@/types';
@@ -52,11 +53,6 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
       }
     : {};
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    onToggleDone(activity.activity_id, e.target.checked);
-  };
-
   const handleNavigate = (e: React.MouseEvent) => {
     e.stopPropagation();
     const url = generateGoogleMapsUrl(activity, accommodation?.location ? { location: accommodation.location } : undefined);
@@ -103,12 +99,12 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
           <div className={isDraggable ? 'pl-8' : ''}>
             {/* Header with checkbox and title */}
             <div className="mb-2 flex items-start space-x-3">
-              <div className="shrink-0 pt-1">
-                <input
+              <div className="shrink-0 pt-0.5">
+                <DoneCheckbox
+                  accent="emerald"
+                  ariaLabel={`Mark "${activity.activity_name}" done`}
                   checked={isDone}
-                  className="h-4 w-4 touch-manipulation rounded-sm border-gray-300 text-emerald-500 focus:ring-2 focus:ring-emerald-500"
-                  onChange={handleCheckboxChange}
-                  type="checkbox"
+                  onToggle={(done) => onToggleDone(activity.activity_id, done)}
                 />
               </div>
 

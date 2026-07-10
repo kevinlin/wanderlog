@@ -1,6 +1,7 @@
 import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
+import { DoneCheckbox } from '@/components/Cards/DoneCheckbox';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation, ScenicWaypoint } from '@/types';
@@ -39,11 +40,6 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
 
   const showLocationWarning = activityHasLocationIssues(waypointAsActivity);
 
-  const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    e.stopPropagation();
-    onToggleDone(waypoint.activity_id, e.target.checked);
-  };
-
   const handleNavigate = (e: React.MouseEvent) => {
     e.stopPropagation();
     const url = generateGoogleMapsUrl(waypointAsActivity, accommodation?.location ? { location: accommodation.location } : undefined);
@@ -58,12 +54,12 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
         onClick={() => onSelect(waypoint.activity_id)}
       >
         <div className="flex items-start space-x-3">
-          <div className="shrink-0 pt-1">
-            <input
+          <div className="shrink-0 pt-0.5">
+            <DoneCheckbox
+              accent="violet"
+              ariaLabel={`Mark "${waypoint.activity_name}" done`}
               checked={isDone}
-              className="h-4 w-4 touch-manipulation rounded-sm border-gray-300 text-violet-500 focus:ring-2 focus:ring-violet-500"
-              onChange={handleCheckboxChange}
-              type="checkbox"
+              onToggle={(done) => onToggleDone(waypoint.activity_id, done)}
             />
           </div>
 

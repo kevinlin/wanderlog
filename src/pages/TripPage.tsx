@@ -19,6 +19,7 @@ import { useTripData } from '@/hooks/useTripData';
 import { useReorderActivities, useToggleActivityDone } from '@/hooks/useTripMutations';
 import { useTrips } from '@/hooks/useTrips';
 import { getLastViewedBase, setCurrentTripId, setLastViewedBase } from '@/services/viewStateStorage';
+import { celebrateStopComplete, celebrateTripComplete } from '@/utils/celebrate';
 import { getCurrentStop } from '@/utils/dateUtils';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 
@@ -87,6 +88,17 @@ export const TripPage = () => {
     }
     return status;
   }, [tripData]);
+
+  // Per-stop done/total so the timeline can visibly fill in as items are checked off
+  const stopProgress = useMemo(() => {
+    const map: Record<string, { done: number; total: number }> = {};
+    for (const stop of tripData?.stops ?? []) {
+      const items = [...stop.activities, ...(stop.scenic_waypoints ?? [])];
+      const done = items.filter((item) => activityStatus[item.activity_id]).length;
+      map[stop.stop_id] = { done, total: items.length };
+    }
+    return map;
+  }, [tripData, activityStatus]);
 
   if (isLoading) {
     return <LoadingSpinner fullScreen message="Loading your adventure..." size="lg" variant="adventure" />;
@@ -166,8 +178,33 @@ export const TripPage = () => {
 
   // Write failures surface through the shared mutation helper's retry toast
   const handleActivityToggle = (activityId: string, done: boolean) => {
-    const isWaypoint = tripData.stops.some((stop) => (stop.scenic_waypoints ?? []).some((waypoint) => waypoint.activity_id === activityId));
+    const stop = tripData.stops.find(
+      (s) => s.activities.some((a) => a.activity_id === activityId) || (s.scenic_waypoints ?? []).some((w) => w.activity_id === activityId)
+    );
+    const isWaypoint = !!stop && (stop.scenic_waypoints ?? []).some((w) => w.activity_id === activityId);
+
     toggleDoneMutation.mutate({ activityId, isDone: done, isWaypoint });
+
+    // Celebrate only the moment a stop crosses into fully-done on a check (never an uncheck).
+    // activityStatus is the pre-toggle snapshot, so override the item we just checked.
+    if (!(done && stop)) return;
+    const isDoneAfter = (id: string) => (id === activityId ? true : activityStatus[id]);
+    const stopItems = [...stop.activities, ...(stop.scenic_waypoints ?? [])];
+    const stopComplete = stopItems.length > 0 && stopItems.every((item) => isDoneAfter(item.activity_id));
+    if (!stopComplete) return;
+
+    const tripComplete = tripData.stops.every((s) => {
+      const items = [...s.activities, ...(s.scenic_waypoints ?? [])];
+      return items.length === 0 || items.every((item) => isDoneAfter(item.activity_id));
+    });
+
+    if (tripComplete) {
+      celebrateTripComplete();
+      showToast('Every last stop, done. What a trip. 🌍', 'success');
+    } else {
+      celebrateStopComplete();
+      showToast(`That's all of ${stop.name} ticked off. Onward! 🎉`, 'success');
+    }
   };
 
   const handleActivitySelect = (activityId: string) => {
@@ -224,7 +261,12 @@ export const TripPage = () => {
         </div>
 
         {/* Floating Timeline Strip */}
-        <TimelineStrip currentStopId={state.currentBase} onStopSelect={handleStopSelect} stops={tripData.stops} />
+        <TimelineStrip
+          currentStopId={state.currentBase}
+          onStopSelect={handleStopSelect}
+          stopProgress={stopProgress}
+          stops={tripData.stops}
+        />
 
         {/* Floating User Menu - pinned to the top-right corner */}
         <UserMenu
