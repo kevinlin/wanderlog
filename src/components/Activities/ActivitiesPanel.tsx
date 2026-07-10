@@ -184,15 +184,14 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
 
   const handleExport = () => {
     if (!tripData) {
-      console.warn('Export failed: Missing trip data');
       return;
     }
 
     try {
       ExportService.exportAndDownload(tripData);
       onExportSuccess?.();
-    } catch (error) {
-      console.error('Export failed:', error);
+    } catch {
+      // Export failed silently; the user sees no download
     }
   };
 
@@ -335,7 +334,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             isOnline && (
               <div className="px-3 py-3">
                 <button
-                  className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-sky-500/30 border-dashed bg-sky-500/10 px-4 py-2 font-medium text-sky-700 text-sm transition-all duration-200 hover:bg-sky-500/20"
+                  className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                   onClick={() => setIsAccommodationModalOpen(true)}
                   type="button"
                 >
@@ -374,7 +373,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   ))}
                   {isOnline && (
                     <button
-                      className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 border-dashed bg-violet-500/10 px-4 py-2 font-medium text-sm text-violet-700 transition-all duration-200 hover:bg-violet-500/20"
+                      className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                       onClick={() => setWaypointModal({ mode: 'create' })}
                       type="button"
                     >
@@ -391,7 +390,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           {scenicWaypoints.length === 0 && isOnline && (
             <div className="px-3 pb-3">
               <button
-                className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 border-dashed bg-violet-500/10 px-4 py-2 font-medium text-sm text-violet-700 transition-all duration-200 hover:bg-violet-500/20"
+                className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                 onClick={() => setWaypointModal({ mode: 'create' })}
                 type="button"
               >
@@ -456,7 +455,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               {isOnline && (
                 <div className="px-3 pb-3">
                   <button
-                    className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-emerald-500/30 border-dashed bg-emerald-500/10 px-4 py-2 font-medium text-emerald-700 text-sm transition-all duration-200 hover:bg-emerald-500/20"
+                    className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                     onClick={() => setActivityModal({ mode: 'create' })}
                     type="button"
                   >

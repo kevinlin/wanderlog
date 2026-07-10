@@ -121,6 +121,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     return saved.overlayLayers;
   });
 
+  const prefersReducedMotion =
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   // Refs for overlay layer instances
   const trafficLayerRef = useRef<google.maps.TrafficLayer | null>(null);
   const transitLayerRef = useRef<google.maps.TransitLayer | null>(null);
@@ -321,10 +326,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         // Truncate waypoints if exceeding Google Maps limit (prioritize accommodation stops)
         let finalWaypoints = waypoints;
         if (waypoints.length > MAX_WAYPOINTS) {
-          console.warn(
-            `Route has ${waypoints.length} waypoints, exceeding limit of ${MAX_WAYPOINTS}. ` +
-              `Truncating to ${MAX_WAYPOINTS} waypoints (accommodation stops prioritized).`
-          );
           // Separate accommodation stops (stopover: true) from scenic waypoints (stopover: false)
           const accommodationStops = waypoints.filter((w) => w.stopover === true);
           const scenicWaypoints = waypoints.filter((w) => w.stopover === false);
@@ -349,7 +350,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             setRouteError(null);
             setRouteFallback([]);
           } else {
-            console.warn('Directions request failed:', status);
             setRouteError('Unable to load route details');
             // Fall back to straight-line polylines
             const fallbackRoute = stops.map((stop) => new google.maps.LatLng(stop.location.lat, stop.location.lng));
@@ -357,8 +357,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
             setDirectionsResponse(null);
           }
         });
-      } catch (error) {
-        console.error('Error fetching route:', error);
+      } catch {
         setRouteError('Route service unavailable');
         // Fall back to straight-line polylines
         const fallbackRoute = tripData.stops.map((stop) => new google.maps.LatLng(stop.location.lat, stop.location.lng));
@@ -383,7 +382,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
       // Animate the accommodation marker
       const accommodationMarker = accommodationMarkersRef.current.get(currentBaseId);
-      if (accommodationMarker && window.google?.maps?.Animation) {
+      if (accommodationMarker && window.google?.maps?.Animation && !prefersReducedMotion) {
         // Use Google Maps DROP animation
         accommodationMarker.setAnimation(window.google.maps.Animation.DROP);
         // Stop animation after duration
@@ -401,12 +400,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           if (marker && window.google?.maps?.Animation) {
             // Stagger the animations slightly for visual effect
             setTimeout(() => {
-              marker.setAnimation(window.google.maps.Animation.DROP);
-              setTimeout(() => {
-                if (marker.getAnimation()) {
-                  marker.setAnimation(null);
-                }
-              }, 600);
+              if (!prefersReducedMotion) {
+                marker.setAnimation(window.google.maps.Animation.DROP);
+                setTimeout(() => {
+                  if (marker.getAnimation()) {
+                    marker.setAnimation(null);
+                  }
+                }, 600);
+              }
             }, index * 100); // 100ms delay between each waypoint animation
           }
         });
@@ -414,7 +415,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
       previousCurrentBaseRef.current = currentBaseId;
     }
-  }, [currentBaseId, isMapLoaded, tripData?.stops, centerAndZoomOnLocation]);
+  }, [currentBaseId, isMapLoaded, tripData?.stops, centerAndZoomOnLocation, prefersReducedMotion]);
 
   useEffect(() => {
     // Animate activity pin and center/zoom when activity selection changes
@@ -435,7 +436,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
       // Animate the marker
       const marker = activityMarkersRef.current.get(selectedActivityId) || scenicWaypointMarkersRef.current.get(selectedActivityId);
-      if (marker && window.google?.maps?.Animation) {
+      if (marker && window.google?.maps?.Animation && !prefersReducedMotion) {
         // Use Google Maps DROP animation
         marker.setAnimation(window.google.maps.Animation.DROP);
         // Stop animation after duration
@@ -449,7 +450,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     } else if (!selectedActivityId) {
       previousSelectedActivityRef.current = null;
     }
-  }, [selectedActivityId, isMapLoaded, currentBaseId, tripData?.stops, centerAndZoomOnLocation]);
+  }, [selectedActivityId, isMapLoaded, currentBaseId, tripData?.stops, centerAndZoomOnLocation, prefersReducedMotion]);
 
   // Map type change handler
   const handleMapTypeChange = useCallback(
@@ -542,12 +543,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     return 'current';
   };
 
-  // Accommodation pin (lodge-style) - Enhanced with glow effect and polished Material Design icon
+  // Accommodation pin (lodge-style)
   const getAccommodationPinIcon = (baseId: string, isSelected: boolean, isHovered = false) => {
     const status = getBaseStatus(baseId);
     const color = '#f97316'; // Orange-500 for active states
     const strokeColor = '#ea580c'; // Orange-600 for outline
-    const glowColor = 'rgba(249, 115, 22, 0.7)'; // Orange glow
     let opacity = 1.0;
 
     if (status === 'past') {
@@ -561,37 +561,19 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     const size = isSelected || isHovered ? selectedSize : baseSize;
     const svgPath = getAccommodationSvgPath();
 
-    // Glow intensity based on state
-    const glowStdDev = isHovered ? 4 : 2;
-    const glowOpacity = isHovered ? 0.9 : 0.6;
-
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
-            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
-            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
-            <feMerge>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
           <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
             <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
           </filter>
         </defs>
-        <style>
-          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
-          .pin-icon { animation: pulse 2s ease-in-out infinite; }
-        </style>
-        <path class="pin-icon" d="${svgPath}" 
+        <path d="${svgPath}" 
               fill="${color}" 
               fill-opacity="${opacity}"
               stroke="${strokeColor}" 
               stroke-width="1" 
-              filter="url(#glow)"/>
+              filter="url(#shadow)"/>
       </svg>
     `)}`;
 
@@ -602,11 +584,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
-  // Activity pin with type-specific colors - Enhanced with glow effect and polished icons
+  // Activity pin with type-specific colors
   const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean, isVisited = false, isHovered = false) => {
     // Use activity type-specific color from activityUtils, green for visited
     const color = isVisited ? '#10b981' : getActivityTypeColor(activityType); // Emerald-500 for visited, type-specific for unvisited
-    const glowColor = isVisited ? 'rgba(16, 185, 129, 0.7)' : `${color}b3`; // Add alpha for glow
     const svgPath = getActivityTypeSvgPath(activityType);
 
     // Calculate stroke color (darker version of fill color)
@@ -628,33 +609,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     const selectedSize = 33; // 1.1x hover scaling
     const size = isSelected || isHovered ? selectedSize : baseSize;
 
-    // Glow intensity based on state
-    const glowStdDev = isHovered ? 4 : 2;
-    const glowOpacity = isHovered ? 0.9 : 0.6;
-
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
-            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
-            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
-            <feMerge>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-        <style>
-          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
-          .pin-icon { animation: pulse 2s ease-in-out infinite; }
-        </style>
-        <path class="pin-icon" d="${svgPath}" 
+        <path d="${svgPath}" 
               fill="${color}" 
               stroke="${strokeHex}" 
-              stroke-width="1" 
-              filter="url(#glow)"/>
+              stroke-width="1"/>
       </svg>
     `)}`;
 
@@ -665,11 +625,10 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     };
   };
 
-  // Scenic waypoint pin with distinctive violet styling - Enhanced with glow effect
+  // Scenic waypoint pin with distinctive violet styling
   const getScenicWaypointPinIconFn = (isSelected: boolean, isVisited = false, isHovered = false) => {
     // Violet color scheme for scenic waypoints
     const color = isVisited ? '#10b981' : '#8b5cf6'; // Emerald-500 for visited, Violet-500 for unvisited
-    const glowColor = isVisited ? 'rgba(16, 185, 129, 0.7)' : 'rgba(139, 92, 246, 0.7)';
     const svgPath = getScenicWaypointSvgPath();
 
     // Calculate stroke color (darker version of fill color)
@@ -691,33 +650,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     const selectedSize = 33; // 1.1x hover scaling
     const size = isSelected || isHovered ? selectedSize : baseSize;
 
-    // Glow intensity based on state
-    const glowStdDev = isHovered ? 4 : 2;
-    const glowOpacity = isHovered ? 0.9 : 0.6;
-
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
-            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
-            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
-            <feMerge>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-        <style>
-          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
-          .pin-icon { animation: pulse 2s ease-in-out infinite; }
-        </style>
-        <path class="pin-icon" d="${svgPath}" 
+        <path d="${svgPath}" 
               fill="${color}" 
               stroke="${strokeHex}" 
-              stroke-width="1" 
-              filter="url(#glow)"/>
+              stroke-width="1"/>
       </svg>
     `)}`;
 
@@ -731,7 +669,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   // POI search result pin with distinctive rose/coral styling
   const getSearchResultPinIcon = (isHovered = false) => {
     const color = '#f43f5e'; // Rose-500 for search results
-    const glowColor = 'rgba(244, 63, 94, 0.7)';
     const strokeColor = '#e11d48'; // Rose-600 for outline
 
     // Search result icon: magnifying glass / location marker combo
@@ -742,32 +679,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     const selectedSize = 31;
     const size = isHovered ? selectedSize : baseSize;
 
-    const glowStdDev = isHovered ? 4 : 2;
-    const glowOpacity = isHovered ? 0.9 : 0.6;
-
     const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
       <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="glow" x="-100%" y="-100%" width="300%" height="300%">
-            <feGaussianBlur in="SourceAlpha" stdDeviation="${glowStdDev}" result="blur"/>
-            <feFlood flood-color="${glowColor}" flood-opacity="${glowOpacity}" result="glowColor"/>
-            <feComposite in="glowColor" in2="blur" operator="in" result="glow"/>
-            <feMerge>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="glow"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-        </defs>
-        <style>
-          @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.85; } }
-          .pin-icon { animation: pulse 2s ease-in-out infinite; }
-        </style>
-        <path class="pin-icon" d="${svgPath}" 
+        <path d="${svgPath}" 
               fill="${color}" 
               stroke="${strokeColor}" 
-              stroke-width="1" 
-              filter="url(#glow)"/>
+              stroke-width="1"/>
       </svg>
     `)}`;
 
@@ -1043,7 +960,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
       {/* Route error indicator */}
       {routeError && (
-        <div className="absolute top-4 left-4 rounded-md border border-yellow-400 bg-yellow-100 px-3 py-2 text-sm text-yellow-700">
+        <div className="absolute top-4 left-4 rounded-md border border-amber-400 bg-amber-100 px-3 py-2 text-amber-700 text-sm">
           ⚠️ {routeError}
         </div>
       )}

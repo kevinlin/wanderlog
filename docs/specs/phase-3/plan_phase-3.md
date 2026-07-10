@@ -11,8 +11,7 @@ Detailed plans are written just-in-time, following the Phase 2 convention: each 
 | M1 - Agent backend + Q&A | [plan_p3m1_agent-backend-qa.md](plan_p3m1_agent-backend-qa.md) | Shipped (2026-07-04) | Questions about seeded trips answered from modal and curl (stream + buffered); unauthenticated requests rejected with 401; no write tool exists |
 | M2 - Bounded edits | [plan_p3m2_bounded-edits.md](plan_p3m2_bounded-edits.md) | Shipped (2026-07-04) | Scripted edit prompts round-trip on a preview; deletes fire only on explicit request; partial failure reported honestly |
 | M3 - Generative creation + programmatic contract | [plan_p3m3_generative-creation.md](plan_p3m3_generative-creation.md) | Shipped (2026-07-04) | Creation prompt yields a complete rendered trip; Hermes-style curl session (password grant → buffered call) works end-to-end |
-
-**Phase 3 complete** - all three milestones shipped.
+| M4 - Design quality: critique remediation | [plan_p3m4_design-quality.md](plan_p3m4_design-quality.md) | In Progress | Trip page critique score ≥ 32/40; all P1 issues resolved; `pnpm test:run` + `pnpm build` clean |
 
 ## Changelog
 

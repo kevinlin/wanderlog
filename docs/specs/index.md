@@ -38,6 +38,7 @@ Generated conventions and lint reports live under [`meta/`](meta/).
 | Agent Backend + Q&A (Phase 3 M1) | [phase-3/plan_p3m1_agent-backend-qa.md](phase-3/plan_p3m1_agent-backend-qa.md) | Vercel /api/agent endpoint: JWT auth + RLS client, read-tool loop (@anthropic-ai/sdk), NDJSON/buffered responses, agent button + modal. |
 | Bounded Edits (Phase 3 M2) | [phase-3/plan_p3m2_bounded-edits.md](phase-3/plan_p3m2_bounded-edits.md) | Write tools (activities, waypoints, accommodation, metadata, stops + restructure) with zod validation, delete guard, change-event plumbing, modal change list. |
 | Generative Creation (Phase 3 M3) | [phase-3/plan_p3m3_generative-creation.md](phase-3/plan_p3m3_generative-creation.md) | Server-side geocode tool, shared trip-bundle insert, create_trip over the import pipeline, result navigation, Hermes contract finalization. |
+| Design Quality (Phase 3 M4) | [phase-3/plan_p3m4_design-quality.md](phase-3/plan_p3m4_design-quality.md) | Critique remediation: self-consistency (stripe, gradient, tracked-caps, add-button colors), reduced-motion + a11y audit, timeline contrast, reorder undo + error copy, polish sweep. |
 
 ## Meta
 

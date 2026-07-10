@@ -25,7 +25,7 @@ export const AccommodationCard: React.FC<AccommodationCardProps> = ({ accommodat
   };
 
   return (
-    <div className="rounded-lg border-sky-500 border-l-4 bg-white p-3 shadow-md sm:p-4">
+    <div className="rounded-lg border border-gray-200 bg-white p-3 shadow-md sm:p-4">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <h3 className="mb-1 font-semibold text-base text-gray-900 sm:text-lg">{accommodation.name}</h3>

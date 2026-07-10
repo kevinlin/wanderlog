@@ -56,14 +56,14 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
               ? 'bg-violet-500/10 ring-2 ring-violet-500 ring-offset-2'
               : isDone
                 ? 'bg-emerald-500/10 opacity-75'
-                : 'bg-linear-to-r from-violet-50 to-sky-50 hover:from-violet-100/50 hover:to-sky-100/50'
+                : 'bg-white hover:bg-gray-50'
         }`}
         onClick={() => onSelect(waypoint.activity_id)}
       >
         <div className="flex items-start space-x-3">
           <div className="shrink-0 pt-0.5">
             <DoneCheckbox
-              accent="violet"
+              accent="emerald"
               ariaLabel={`Mark "${waypoint.activity_name}" done`}
               checked={isDone}
               onToggle={(done) => onToggleDone(waypoint.activity_id, done)}

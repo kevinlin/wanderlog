@@ -196,7 +196,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
                     }
                     return (
                       <div className="mt-2" key={entity}>
-                        <h4 className="text-gray-500 text-xs uppercase">{ENTITY_LABELS[entity]}</h4>
+                        <h4 className="text-gray-500 text-xs">{ENTITY_LABELS[entity]}</h4>
                         <ul className="mt-1 space-y-1 text-gray-800 text-sm">
                           {group.map((change, index) => (
                             <li key={`${change.id}-${index}`}>

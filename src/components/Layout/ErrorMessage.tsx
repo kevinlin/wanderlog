@@ -85,23 +85,23 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, fu
             )}
             {type === 'data' && (
               <>
-                <li>• Verify the trip data file exists</li>
-                <li>• Check the file format is correct</li>
-                <li>• Try reloading the page</li>
+                <li>• Check your connection and try again</li>
+                <li>• The trip might have been moved or deleted</li>
+                <li>• Try refreshing the page</li>
               </>
             )}
             {type === 'permission' && (
               <>
-                <li>• Check if you have the required permissions</li>
-                <li>• Try logging in again</li>
-                <li>• Contact support if the issue persists</li>
+                <li>• Make sure you're signed in</li>
+                <li>• Ask the trip owner to share access with you</li>
+                <li>• Try signing out and back in</li>
               </>
             )}
             {type === 'general' && (
               <>
+                <li>• Give it another go — these things usually sort themselves out</li>
                 <li>• Try refreshing the page</li>
-                <li>• Clear your browser cache</li>
-                <li>• Check the browser console for more details</li>
+                <li>• If it keeps happening, sign out and back in</li>
               </>
             )}
           </ul>
@@ -129,9 +129,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, fu
 
         {/* Help text */}
         <div className="mt-6 text-center">
-          <p className="text-gray-500 text-xs leading-relaxed">
-            If this problem continues, try clearing your browser's cache and cookies for this site.
-          </p>
+          <p className="text-gray-500 text-xs leading-relaxed">Still stuck? Try signing out and back in, or refreshing the page.</p>
         </div>
       </div>
     </div>
