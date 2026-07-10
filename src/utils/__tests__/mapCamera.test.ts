@@ -25,9 +25,9 @@ describe('mapCamera', () => {
       expect(hopArcDepth(0.1)).toBe(0);
     });
 
-    it('grows with distance and caps at 3', () => {
-      expect(hopArcDepth(0.6)).toBeCloseTo(0.88, 2);
-      expect(hopArcDepth(10)).toBe(3);
+    it('grows with distance and caps at 2', () => {
+      expect(hopArcDepth(0.6)).toBeCloseTo(0.64, 2);
+      expect(hopArcDepth(10)).toBe(2);
     });
   });
 

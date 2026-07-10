@@ -24,8 +24,9 @@ export const easeInOutCubic = (t: number): number => (t < 0.5 ? 4 * t * t * t : 
 export const legDistance = (from: LatLng, to: LatLng): number => Math.hypot(to.lat - from.lat, to.lng - from.lng);
 
 // How many zoom levels to pull back at the midpoint. Near stops stay flat (a
-// plain pan); long legs pull back so both ends are briefly in frame.
-export const hopArcDepth = (distance: number): number => clamp((distance - 0.2) * 2.2, 0, 3);
+// plain pan); long legs pull back a little so both ends come into frame —
+// gentle on purpose, so even the longest leg only eases out ~2 levels.
+export const hopArcDepth = (distance: number): number => clamp((distance - 0.2) * 1.6, 0, 2);
 
 // Longer legs take a little longer, capped so the hop always feels quick.
 export const hopDuration = (distance: number): number => clamp(520 + distance * 220, 520, 920);
