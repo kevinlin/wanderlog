@@ -27,6 +27,10 @@ const mockMap = {
   fitBounds: vi.fn(),
   panTo: vi.fn(),
   setZoom: vi.fn(),
+  setCenter: vi.fn(),
+  moveCamera: vi.fn(),
+  getCenter: vi.fn(() => ({ lat: () => -44.5, lng: () => 170 })),
+  getZoom: vi.fn(() => 14),
 };
 
 // Mock @react-google-maps/api
@@ -64,6 +68,22 @@ vi.mock('@react-google-maps/api', () => ({
 
 // Mock the CSS import
 vi.mock('@/assets/styles/map-animations.css', () => ({}));
+
+// jsdom has no matchMedia; report reduced-motion so the cinematic stop-hop
+// takes its instant, deterministic path (no rAF or travel markers) under test.
+vi.stubGlobal(
+  'matchMedia',
+  vi.fn(() => ({
+    matches: true,
+    media: '',
+    onchange: null,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  }))
+);
 
 // Mock window.google
 Object.defineProperty(window, 'google', {

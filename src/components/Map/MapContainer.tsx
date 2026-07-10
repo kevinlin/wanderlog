@@ -22,7 +22,14 @@ import {
   inferActivityType,
 } from '@/utils/activityUtils';
 import * as dateUtils from '@/utils/dateUtils';
+import { flyCamera, type LatLng } from '@/utils/mapCamera';
 import '@/assets/styles/map-animations.css';
+
+const prefersReducedMotion = (): boolean =>
+  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// The travelling pulse + trail drawn along a leg while the camera flies to the next stop.
+const TRAVEL_COLOR = '#4a9e9e'; // Alpine teal — reads as "this trip", matches the route line.
 
 // Hover state interface for place hover card
 interface HoverState {
@@ -133,6 +140,28 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const previousSelectedActivityRef = useRef<string | null>(null);
   const previousCurrentBaseRef = useRef<string | null>(null);
 
+  // Cinematic stop-hop: cancel handle for the in-flight camera fly, plus the
+  // pulse/halo/trail markers drawn along the leg while it travels.
+  const travelCancelRef = useRef<(() => void) | null>(null);
+  const travelVizRef = useRef<{
+    dot: google.maps.Marker;
+    halo: google.maps.Marker;
+    trail: google.maps.Polyline;
+  } | null>(null);
+
+  // Tear down any in-flight hop: cancel the rAF and remove the travel markers.
+  const clearTravelViz = useCallback(() => {
+    travelCancelRef.current?.();
+    travelCancelRef.current = null;
+    const viz = travelVizRef.current;
+    if (viz) {
+      viz.dot.setMap(null);
+      viz.halo.setMap(null);
+      viz.trail.setMap(null);
+      travelVizRef.current = null;
+    }
+  }, []);
+
   const onLoad = useCallback(
     (map: google.maps.Map) => {
       setMapInstance(map);
@@ -166,8 +195,9 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   );
 
   const onUnmount = useCallback(() => {
+    clearTravelViz();
     setMapInstance(null);
-  }, []);
+  }, [clearTravelViz]);
 
   // Default zoom level for centering on a place (neighborhood-level view)
   const PLACE_ZOOM_LEVEL = 14;
@@ -180,6 +210,139 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       mapInstance.setZoom(PLACE_ZOOM_LEVEL);
     },
     [mapInstance]
+  );
+
+  // Apply a camera pose atomically where supported, falling back to discrete setters.
+  const applyCamera = useCallback(
+    (center: LatLng, zoom: number) => {
+      if (!mapInstance) return;
+      if (typeof mapInstance.moveCamera === 'function') {
+        mapInstance.moveCamera({ center, zoom });
+      } else {
+        mapInstance.setCenter(center);
+        mapInstance.setZoom(zoom);
+      }
+    },
+    [mapInstance]
+  );
+
+  // Fade the pulse + trail out over ~220ms after the camera settles, then remove.
+  const fadeOutTravelViz = useCallback(() => {
+    const viz = travelVizRef.current;
+    if (!viz) return;
+    const FADE_MS = 220;
+    let start = 0;
+    const step = (ts: number) => {
+      if (travelVizRef.current !== viz) return; // superseded by a newer hop
+      if (!start) start = ts;
+      const k = Math.min((ts - start) / FADE_MS, 1);
+      const o = 1 - k;
+      viz.dot.setOpacity(o);
+      viz.halo.setOpacity(o * 0.35);
+      viz.trail.setOptions({ strokeOpacity: o * 0.9 });
+      if (k < 1) {
+        travelCancelRef.current = (() => {
+          const raf = requestAnimationFrame(step);
+          return () => cancelAnimationFrame(raf);
+        })();
+      } else {
+        clearTravelViz();
+      }
+    };
+    travelCancelRef.current = (() => {
+      const raf = requestAnimationFrame(step);
+      return () => cancelAnimationFrame(raf);
+    })();
+  }, [clearTravelViz]);
+
+  // The signature "reaching the next stop" moment: ease the camera along the
+  // leg (pulling back for long legs), tracing a pulse + growing trail from the
+  // previous stop to the new one. Reduced motion settles instantly with no viz.
+  const animateStopHop = useCallback(
+    (from: LatLng | null, to: LatLng) => {
+      if (!mapInstance) return;
+
+      if (prefersReducedMotion()) {
+        applyCamera(to, PLACE_ZOOM_LEVEL);
+        return;
+      }
+
+      clearTravelViz();
+
+      const startCenter = mapInstance.getCenter();
+      const fromCam: LatLng = startCenter ? { lat: startCenter.lat(), lng: startCenter.lng() } : (from ?? to);
+      const fromZoom = mapInstance.getZoom() ?? PLACE_ZOOM_LEVEL;
+
+      // Only draw the travelling pulse when we know which stop we came from.
+      if (from) {
+        const dot = new google.maps.Marker({
+          map: mapInstance,
+          position: from,
+          zIndex: 9999,
+          clickable: false,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+            fillColor: TRAVEL_COLOR,
+            fillOpacity: 1,
+            strokeColor: '#ffffff',
+            strokeWeight: 2,
+          },
+        });
+        const halo = new google.maps.Marker({
+          map: mapInstance,
+          position: from,
+          zIndex: 9998,
+          clickable: false,
+          opacity: 0.35,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 12,
+            fillColor: TRAVEL_COLOR,
+            fillOpacity: 1,
+            strokeWeight: 0,
+          },
+        });
+        const trail = new google.maps.Polyline({
+          map: mapInstance,
+          path: [from, from],
+          geodesic: true,
+          strokeColor: TRAVEL_COLOR,
+          strokeOpacity: 0.9,
+          strokeWeight: 3,
+          zIndex: 9997,
+        });
+        travelVizRef.current = { dot, halo, trail };
+      }
+
+      travelCancelRef.current = flyCamera({
+        from: fromCam,
+        to,
+        fromZoom,
+        toZoom: PLACE_ZOOM_LEVEL,
+        onFrame: (center, zoom, e) => {
+          applyCamera(center, zoom);
+          const viz = travelVizRef.current;
+          if (from && viz) {
+            const point: LatLng = {
+              lat: from.lat + (to.lat - from.lat) * e,
+              lng: from.lng + (to.lng - from.lng) * e,
+            };
+            viz.dot.setPosition(point);
+            viz.halo.setPosition(point);
+            viz.trail.setPath([from, point]);
+          }
+        },
+        onDone: () => {
+          if (travelVizRef.current) {
+            fadeOutTravelViz();
+          } else {
+            travelCancelRef.current = null;
+          }
+        },
+      });
+    },
+    [mapInstance, applyCamera, clearTravelViz, fadeOutTravelViz]
   );
 
   // Convert lat/lng to screen position for hover card placement
@@ -374,11 +537,14 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   useEffect(() => {
     // Animate accommodation pin and scenic waypoints when base selection changes
     if (currentBaseId && currentBaseId !== previousCurrentBaseRef.current && isMapLoaded) {
-      // Find the base and center/zoom on it
+      // Fly from the stop we came from to the one just selected, so switching
+      // stops reads as a journey rather than a jump.
+      const previousStop = tripData?.stops?.find((stop) => stop.stop_id === previousCurrentBaseRef.current);
       const currentStop = tripData?.stops?.find((stop) => stop.stop_id === currentBaseId);
       if (currentStop) {
-        const position = currentStop.accommodation?.location || currentStop.location;
-        centerAndZoomOnLocation(position.lat, position.lng);
+        const target = currentStop.accommodation?.location || currentStop.location;
+        const origin = previousStop ? previousStop.accommodation?.location || previousStop.location : null;
+        animateStopHop(origin ? { lat: origin.lat, lng: origin.lng } : null, { lat: target.lat, lng: target.lng });
       }
 
       // Animate the accommodation marker
@@ -414,7 +580,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
       previousCurrentBaseRef.current = currentBaseId;
     }
-  }, [currentBaseId, isMapLoaded, tripData?.stops, centerAndZoomOnLocation]);
+  }, [currentBaseId, isMapLoaded, tripData?.stops, animateStopHop]);
 
   useEffect(() => {
     // Animate activity pin and center/zoom when activity selection changes
@@ -898,6 +1064,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
         disableDefaultUI: false,
         zoomControl: true,
         streetViewControl: false,
+        isFractionalZoomEnabled: true, // Smooth sub-integer zoom for the cinematic stop-hop arc
         mapTypeControl: false, // We use our custom MapLayerPicker
         fullscreenControl: false,
         scaleControl: true, // Show distance scale ruler at bottom right

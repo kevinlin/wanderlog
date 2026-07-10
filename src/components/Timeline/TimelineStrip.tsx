@@ -181,7 +181,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
         {isSelected && (
           <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 transform">
             <div
-              className={`h-0 w-0 border-t-4 border-r-4 border-r-transparent border-l-4 border-l-transparent ${colors.ring.replace('ring-', 'border-t-')}`}
+              className={`timeline-pointer-enter h-0 w-0 border-t-4 border-r-4 border-r-transparent border-l-4 border-l-transparent ${colors.ring.replace('ring-', 'border-t-')}`}
             />
           </div>
         )}

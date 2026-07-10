@@ -443,6 +443,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   activities={activities}
                   activityStatus={activityStatus}
                   isDragDisabled={!isOnline}
+                  key={baseId}
                   onActivitySelect={onActivitySelect}
                   onDeleteActivity={isOnline ? setDeletingActivity : undefined}
                   onEditActivity={isOnline ? (activity) => setActivityModal({ mode: 'edit', activity }) : undefined}

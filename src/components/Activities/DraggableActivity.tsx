@@ -68,19 +68,22 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
     <DndContext collisionDetection={closestCenter} onDragEnd={handleDragEnd} sensors={sensors}>
       <SortableContext items={activities.map((a) => a.activity_id)} strategy={verticalListSortingStrategy}>
         <div className="space-y-3">
-          {activities.map((activity) => (
-            <ActivityCard
-              accommodation={accommodation}
-              activity={activity}
-              isDone={activityStatus[activity.activity_id]}
-              isDraggable={!isDragDisabled}
-              isSelected={activity.activity_id === selectedActivityId}
-              key={activity.activity_id}
-              onDelete={onDeleteActivity}
-              onEdit={onEditActivity}
-              onSelect={onActivitySelect}
-              onToggleDone={onToggleDone}
-            />
+          {activities.map((activity, index) => (
+            // Presentational entrance wrapper — keeps the stagger off the card's
+            // own drag transform. Replays only when the list remounts (stop change).
+            <div className="activity-enter" key={activity.activity_id} style={{ '--enter-index': index } as React.CSSProperties}>
+              <ActivityCard
+                accommodation={accommodation}
+                activity={activity}
+                isDone={activityStatus[activity.activity_id]}
+                isDraggable={!isDragDisabled}
+                isSelected={activity.activity_id === selectedActivityId}
+                onDelete={onDeleteActivity}
+                onEdit={onEditActivity}
+                onSelect={onActivitySelect}
+                onToggleDone={onToggleDone}
+              />
+            </div>
           ))}
         </div>
       </SortableContext>

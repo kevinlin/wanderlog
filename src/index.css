@@ -109,10 +109,49 @@ body {
   animation: check-draw 300ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
 }
 
+/* Stop-hop arrival: the activities for the stop you just reached rise in,
+   staggered, so the plan for this place "appears". The resting style is fully
+   visible — the animation only enhances it, so content is never gated on it. */
+@keyframes activity-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.activity-enter {
+  animation: activity-enter 360ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* Cap the cascade so a long list still finishes quickly. */
+  animation-delay: calc(min(var(--enter-index, 0), 8) * 45ms);
+}
+
+/* Timeline aim cue: the pointer under the newly selected stop draws up into
+   place, confirming where the journey just landed. */
+@keyframes timeline-pointer {
+  from {
+    opacity: 0;
+    transform: translateY(-5px) scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.timeline-pointer-enter {
+  animation: timeline-pointer 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
 /* Reduced motion: the state still changes instantly, just without the spring. */
 @media (prefers-reduced-motion: reduce) {
   .animate-check-pop,
-  .animate-check-draw {
+  .animate-check-draw,
+  .activity-enter,
+  .timeline-pointer-enter {
     animation: none;
   }
 }
