@@ -69,12 +69,18 @@ vi.mock('@react-google-maps/api', () => ({
 // Mock the CSS import
 vi.mock('@/assets/styles/map-animations.css', () => ({}));
 
-// jsdom has no matchMedia; report reduced-motion so the cinematic stop-hop
-// takes its instant, deterministic path (no rAF or travel markers) under test.
+// Mock flyCamera to avoid rAF-based animation in tests
+vi.mock('@/utils/mapCamera', () => ({
+  flyCamera: vi.fn(),
+}));
+
+// jsdom has no matchMedia; report no-reduced-motion so marker drop animations
+// fire deterministically. flyCamera is mocked above so the stop-hop camera
+// animation is a no-op regardless.
 vi.stubGlobal(
   'matchMedia',
   vi.fn(() => ({
-    matches: true,
+    matches: false,
     media: '',
     onchange: null,
     addEventListener: vi.fn(),

@@ -25,9 +25,6 @@ import * as dateUtils from '@/utils/dateUtils';
 import { flyCamera, type LatLng } from '@/utils/mapCamera';
 import '@/assets/styles/map-animations.css';
 
-const prefersReducedMotion = (): boolean =>
-  typeof window !== 'undefined' && typeof window.matchMedia === 'function' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 // The travelling pulse + trail drawn along a leg while the camera flies to the next stop.
 const TRAVEL_COLOR = '#4a9e9e'; // Alpine teal — reads as "this trip", matches the route line.
 
@@ -267,7 +264,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     (from: LatLng | null, to: LatLng) => {
       if (!mapInstance) return;
 
-      if (prefersReducedMotion()) {
+      if (prefersReducedMotion) {
         applyCamera(to, PLACE_ZOOM_LEVEL);
         return;
       }
