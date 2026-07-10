@@ -36,7 +36,7 @@ export const DoneCheckbox: React.FC<DoneCheckboxProps> = ({ checked, onToggle, a
 
   return (
     <label
-      className="relative flex cursor-pointer touch-manipulation items-center justify-center p-0.5"
+      className="relative -m-2.5 flex cursor-pointer touch-manipulation items-center justify-center p-3"
       onClick={(e) => e.stopPropagation()}
     >
       <input aria-label={ariaLabel} checked={checked} className="peer sr-only" onChange={handleChange} type="checkbox" />

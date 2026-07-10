@@ -138,7 +138,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
       <button
         className={`relative min-h-[36px] shrink-0 touch-manipulation whitespace-nowrap rounded-lg font-medium text-xs transition-all duration-300 ease-in-out sm:min-h-auto ${
           isSelected
-            ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} px-1.5 py-0.5 shadow-lg ring-offset-2 ring-offset-white/20 sm:px-2 sm:py-1`
+            ? `${colors.selected} ${colors.text} ring-2 ${colors.ring} px-2.5 py-1.5 shadow-lg ring-offset-2 ring-offset-white/20 sm:px-4 sm:py-2`
             : `${colors.base} ${colors.text} px-2 py-1 sm:px-3 sm:py-1.5`
         } hover:scale-105 hover:shadow-lg active:scale-95`}
         key={stop.stop_id}
@@ -161,7 +161,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
         )}
 
         <div className="text-center">
-          <div className={`font-semibold ${isSelected ? 'text-sm' : 'text-base'}`}>{stop.name}</div>
+          <div className={`font-semibold text-sm ${isSelected ? 'sm:text-base' : ''}`}>{stop.name}</div>
           <div className="text-xs">
             {new Date(stop.date.from).toLocaleDateString('en-NZ', {
               month: 'short',

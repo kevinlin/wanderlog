@@ -49,8 +49,15 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
   return (
     <>
       <div
-        className={`cursor-pointer rounded-lg border border-violet-200/50 bg-linear-to-r from-violet-50 to-sky-50 p-3 shadow-md transition-all duration-200 ${isSelected ? 'bg-violet-500/10 ring-2 ring-violet-500 ring-offset-2' : ''}
-          ${isDone ? 'bg-emerald-500/10 opacity-75' : ''}hover:shadow-lg min-h-[60px] touch-manipulation hover:bg-violet-500/5 active:bg-violet-500/10`}
+        className={`min-h-[60px] cursor-pointer touch-manipulation rounded-lg border border-violet-200/50 p-3 shadow-md transition-all duration-200 hover:shadow-lg active:bg-violet-500/10 ${
+          isSelected && isDone
+            ? 'bg-emerald-500/10 opacity-75 ring-2 ring-violet-500 ring-offset-2'
+            : isSelected
+              ? 'bg-violet-500/10 ring-2 ring-violet-500 ring-offset-2'
+              : isDone
+                ? 'bg-emerald-500/10 opacity-75'
+                : 'bg-linear-to-r from-violet-50 to-sky-50 hover:from-violet-100/50 hover:to-sky-100/50'
+        }`}
         onClick={() => onSelect(waypoint.activity_id)}
       >
         <div className="flex items-start space-x-3">

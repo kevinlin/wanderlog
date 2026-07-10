@@ -70,8 +70,15 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
         {...(isDraggable ? attributes : {})}
       >
         <div
-          className={`relative w-full cursor-pointer rounded-lg bg-white p-3 shadow-md transition-all duration-200 ${isSelected ? 'bg-sky-500/10 ring-2 ring-sky-500 ring-offset-2' : ''}
-            ${isDone ? 'bg-emerald-500/10 opacity-75' : ''}hover:shadow-lg min-h-[60px] touch-manipulation active:bg-orange-500/10`}
+          className={`relative min-h-[60px] w-full cursor-pointer touch-manipulation rounded-lg p-3 shadow-md transition-all duration-200 hover:shadow-lg active:bg-orange-500/10 ${
+            isSelected && isDone
+              ? 'bg-emerald-500/10 opacity-75 ring-2 ring-sky-500 ring-offset-2'
+              : isSelected
+                ? 'bg-sky-500/10 ring-2 ring-sky-500 ring-offset-2'
+                : isDone
+                  ? 'bg-emerald-500/10 opacity-75'
+                  : 'bg-white'
+          }`}
           onClick={() => onSelect(activity.activity_id)}
         >
           {/* Drag Handle - positioned inside the card on the left edge middle */}
