@@ -97,6 +97,7 @@ export const Toast: React.FC<ToastProps> = ({ message, type = 'info', duration =
 
 // Simple toast state interface for App component integration
 export interface ToastState {
+  action?: ToastAction;
   message: string;
   show: boolean;
   type: 'success' | 'error' | 'warning' | 'info';

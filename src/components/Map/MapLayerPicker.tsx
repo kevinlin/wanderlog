@@ -103,7 +103,7 @@ export const MapLayerPicker: React.FC<MapLayerPickerProps> = ({ map, currentMapT
         <div className="mb-2 w-48 overflow-hidden rounded-xl border border-white/30 bg-white/90 shadow-lg backdrop-blur-md">
           {/* Map Types Section */}
           <div className="border-gray-200 border-b p-2">
-            <div className="mb-2 px-2 font-medium text-gray-600 text-xs uppercase tracking-wide">Map Type</div>
+            <div className="mb-2 px-2 font-medium text-gray-600 text-xs normal-case tracking-normal">Map Type</div>
             <div className="grid grid-cols-2 gap-1">
               {MAP_TYPE_OPTIONS.map((option) => (
                 <button
@@ -123,7 +123,7 @@ export const MapLayerPicker: React.FC<MapLayerPickerProps> = ({ map, currentMapT
 
           {/* Overlay Layers Section */}
           <div className="p-2">
-            <div className="mb-2 px-2 font-medium text-gray-600 text-xs uppercase tracking-wide">Layers</div>
+            <div className="mb-2 px-2 font-medium text-gray-600 text-xs normal-case tracking-normal">Layers</div>
             <div className="flex flex-col gap-1">
               {OVERLAY_OPTIONS.map((option) => (
                 <button

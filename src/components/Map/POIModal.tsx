@@ -148,8 +148,8 @@ export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error,
                 <h4 className="mb-2 font-semibold text-gray-900 text-xl">{poi.name}</h4>
                 {poi.types && poi.types.length > 0 && (
                   <div className="mb-2 flex flex-wrap gap-1">
-                    {poi.types.slice(0, 3).map((type, index) => (
-                      <span className="rounded-full bg-sky-100 px-2 py-1 text-sky-800 text-xs" key={index}>
+                    {poi.types.slice(0, 3).map((type) => (
+                      <span className="rounded-full bg-sky-100 px-2 py-1 text-sky-800 text-xs" key={type}>
                         {type.replace(/_/g, ' ').toLowerCase()}
                       </span>
                     ))}
@@ -193,8 +193,8 @@ export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error,
                   </div>
                   {poi.opening_hours.weekday_text && (
                     <div className="space-y-1 text-gray-600 text-xs">
-                      {poi.opening_hours.weekday_text.slice(0, 3).map((day, index) => (
-                        <div key={index}>{day}</div>
+                      {poi.opening_hours.weekday_text.slice(0, 3).map((day) => (
+                        <div key={day}>{day}</div>
                       ))}
                       {poi.opening_hours.weekday_text.length > 3 && <div className="text-gray-500 italic">...</div>}
                     </div>

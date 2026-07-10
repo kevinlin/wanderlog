@@ -56,18 +56,18 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
 
   // Colorful palette from Tailwind Colors - cycling through vibrant colors
   const colorPalette = [
-    { base: 'bg-blue-500', text: 'text-white', selected: 'bg-blue-600', ring: 'ring-blue-500' },
-    { base: 'bg-emerald-500', text: 'text-white', selected: 'bg-emerald-600', ring: 'ring-emerald-500' },
-    { base: 'bg-violet-500', text: 'text-white', selected: 'bg-violet-600', ring: 'ring-violet-500' },
-    { base: 'bg-orange-500', text: 'text-white', selected: 'bg-orange-600', ring: 'ring-orange-500' },
-    { base: 'bg-rose-500', text: 'text-white', selected: 'bg-rose-600', ring: 'ring-rose-500' },
-    { base: 'bg-cyan-500', text: 'text-white', selected: 'bg-cyan-600', ring: 'ring-cyan-500' },
-    { base: 'bg-amber-500', text: 'text-white', selected: 'bg-amber-600', ring: 'ring-amber-500' },
-    { base: 'bg-pink-500', text: 'text-white', selected: 'bg-pink-600', ring: 'ring-pink-500' },
-    { base: 'bg-indigo-500', text: 'text-white', selected: 'bg-indigo-600', ring: 'ring-indigo-500' },
-    { base: 'bg-teal-500', text: 'text-white', selected: 'bg-teal-600', ring: 'ring-teal-500' },
-    { base: 'bg-lime-500', text: 'text-white', selected: 'bg-lime-600', ring: 'ring-lime-500' },
-    { base: 'bg-fuchsia-500', text: 'text-white', selected: 'bg-fuchsia-600', ring: 'ring-fuchsia-500' },
+    { base: 'bg-blue-700', text: 'text-white', selected: 'bg-blue-800', ring: 'ring-blue-500' },
+    { base: 'bg-emerald-700', text: 'text-white', selected: 'bg-emerald-800', ring: 'ring-emerald-500' },
+    { base: 'bg-violet-700', text: 'text-white', selected: 'bg-violet-800', ring: 'ring-violet-500' },
+    { base: 'bg-orange-700', text: 'text-white', selected: 'bg-orange-800', ring: 'ring-orange-500' },
+    { base: 'bg-rose-700', text: 'text-white', selected: 'bg-rose-800', ring: 'ring-rose-500' },
+    { base: 'bg-cyan-700', text: 'text-white', selected: 'bg-cyan-800', ring: 'ring-cyan-500' },
+    { base: 'bg-amber-700', text: 'text-white', selected: 'bg-amber-800', ring: 'ring-amber-500' },
+    { base: 'bg-pink-700', text: 'text-white', selected: 'bg-pink-800', ring: 'ring-pink-500' },
+    { base: 'bg-indigo-700', text: 'text-white', selected: 'bg-indigo-800', ring: 'ring-indigo-500' },
+    { base: 'bg-teal-700', text: 'text-white', selected: 'bg-teal-800', ring: 'ring-teal-500' },
+    { base: 'bg-lime-700', text: 'text-white', selected: 'bg-lime-800', ring: 'ring-lime-500' },
+    { base: 'bg-fuchsia-700', text: 'text-white', selected: 'bg-fuchsia-800', ring: 'ring-fuchsia-500' },
   ];
 
   // Function to get color for a stop based on its index

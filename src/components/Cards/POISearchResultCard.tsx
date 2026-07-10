@@ -98,8 +98,8 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
           <h4 className="mb-1 font-semibold text-gray-900">{poi.name}</h4>
           {poi.types && poi.types.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {poi.types.slice(0, 3).map((type, index) => (
-                <span className="rounded-full bg-rose-100 px-2 py-0.5 text-rose-700 text-xs" key={index}>
+              {poi.types.slice(0, 3).map((type) => (
+                <span className="rounded-full bg-rose-100 px-2 py-0.5 text-rose-700 text-xs" key={type}>
                   {type.replace(/_/g, ' ').toLowerCase()}
                 </span>
               ))}

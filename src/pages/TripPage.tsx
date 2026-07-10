@@ -227,10 +227,21 @@ export const TripPage = () => {
     if (!state.currentBase || fromIndex === toIndex) {
       return;
     }
-    const orderedIds = sortedActivities.map((activity) => activity.activity_id);
+    const previousIds = sortedActivities.map((activity) => activity.activity_id);
+    const orderedIds = [...previousIds];
     const [moved] = orderedIds.splice(fromIndex, 1);
     orderedIds.splice(toIndex, 0, moved);
-    reorderMutation.mutate({ stopId: state.currentBase, orderedActivityIds: orderedIds });
+    const stopId = state.currentBase;
+    reorderMutation.mutate({ stopId, orderedActivityIds: orderedIds });
+    setToast({
+      message: 'Activities reordered',
+      type: 'info',
+      show: true,
+      action: {
+        label: 'Undo',
+        onClick: () => reorderMutation.mutate({ stopId, orderedActivityIds: previousIds }),
+      },
+    });
   };
 
   const showToast = (message: string, type: ToastState['type'] = 'info') => {
@@ -307,7 +318,9 @@ export const TripPage = () => {
         )}
 
         {/* Toast Notifications */}
-        {toast.show && <Toast message={toast.message} onClose={handleToastClose} show={toast.show} type={toast.type} />}
+        {toast.show && (
+          <Toast action={toast.action} message={toast.message} onClose={handleToastClose} show={toast.show} type={toast.type} />
+        )}
 
         {/* Offline Indicator */}
         <OfflineIndicator />
