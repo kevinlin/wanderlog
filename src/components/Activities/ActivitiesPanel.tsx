@@ -339,8 +339,8 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           </div>
         )}
 
-        {/* Scrollable Content Area */}
-        <div className="flex-1 overflow-y-auto overscroll-contain" ref={scrollContainerRef}>
+        {/* Scrollable Content Area — named so stop changes page-turn the content while the glass frame stays put */}
+        <div className="flex-1 overflow-y-auto overscroll-contain" ref={scrollContainerRef} style={{ viewTransitionName: 'panel-content' }}>
           {/* Accommodation Card - Visible when accommodation exists */}
           {accommodation ? (
             <div className="px-3 py-3">

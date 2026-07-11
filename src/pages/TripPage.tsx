@@ -22,6 +22,7 @@ import { useTrips } from '@/hooks/useTrips';
 import { getLastViewedBase, setCurrentTripId, setLastViewedBase } from '@/services/viewStateStorage';
 import { celebrateStopComplete, celebrateTripComplete } from '@/utils/celebrate';
 import { getCurrentStop } from '@/utils/dateUtils';
+import { runStopTransition } from '@/utils/stopTransition';
 import { sortActivitiesByOrder } from '@/utils/tripUtils';
 
 export const TripPage = () => {
@@ -214,10 +215,23 @@ export const TripPage = () => {
   };
 
   const handleStopSelect = (stopId: string) => {
-    dispatch({ type: 'SELECT_BASE', payload: stopId });
     setLastViewedBase(tripId, stopId);
-    // Auto-show activities panel on mobile when stop is selected
-    setIsActivitiesPanelVisible(true);
+
+    // Re-selecting the current stop only needs the panel back, no page-turn
+    if (stopId === state.currentBase) {
+      setIsActivitiesPanelVisible(true);
+      return;
+    }
+
+    const fromIndex = tripData.stops.findIndex((stop) => stop.stop_id === state.currentBase);
+    const toIndex = tripData.stops.findIndex((stop) => stop.stop_id === stopId);
+    const direction = fromIndex !== -1 && toIndex < fromIndex ? 'backward' : 'forward';
+
+    runStopTransition(direction, () => {
+      dispatch({ type: 'SELECT_BASE', payload: stopId });
+      // Auto-show activities panel on mobile when stop is selected
+      setIsActivitiesPanelVisible(true);
+    });
   };
 
   const handleHideActivitiesPanel = () => {
@@ -286,8 +300,9 @@ export const TripPage = () => {
           onEditTrip={isOnline && tripSummary ? () => setIsEditTripModalOpen(true) : undefined}
         />
 
-        {/* Floating agent button - sits left of the user menu, also corner-pinned */}
-        <div className="fixed top-2 right-14 z-30 sm:top-4">
+        {/* Floating agent button - sits left of the user menu, also corner-pinned.
+            Named so it keeps floating above the timeline snapshot during the stop page-turn. */}
+        <div className="fixed top-2 right-14 z-30 sm:top-4" style={{ viewTransitionName: 'agent-button' }}>
           <AgentButton tripId={tripId} />
         </div>
 

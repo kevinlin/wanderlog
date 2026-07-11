@@ -147,7 +147,8 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
         } hover:scale-105 hover:shadow-lg active:scale-95`}
         key={stop.stop_id}
         onClick={() => onStopSelect(stop.stop_id)}
-        style={{ width: `${stopWidth}px` }}
+        // The selection carries a view-transition-name so it morphs across the strip on stop change
+        style={{ width: `${stopWidth}px`, viewTransitionName: isSelected ? 'timeline-selected' : undefined }}
         type="button"
       >
         {/* Duration badge at top-right */}
@@ -211,6 +212,8 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
       onTouchMove={isExpanded ? handleTouchMove : undefined}
       onTouchStart={isExpanded ? handleTouchStart : undefined}
       ref={timelineRef}
+      // Named so the strip keeps occluding the panel snapshot during the stop page-turn
+      style={{ viewTransitionName: 'timeline-strip' }}
     >
       {/* Collapsed State */}
       {!isExpanded && currentStop && (

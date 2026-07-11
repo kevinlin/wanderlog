@@ -47,7 +47,8 @@ export const UserMenu = ({ className = '', onEditTrip, onEditStops }: UserMenuPr
   };
 
   return (
-    <div className={`fixed top-2 right-2 z-30 sm:top-4 ${className}`} ref={menuRef}>
+    // Named so the menu keeps floating above the timeline snapshot during the stop page-turn
+    <div className={`fixed top-2 right-2 z-30 sm:top-4 ${className}`} ref={menuRef} style={{ viewTransitionName: 'user-menu' }}>
       {isOpen && (
         <div className="absolute top-12 right-0 w-56 overflow-hidden rounded-xl border border-white/30 bg-white/90 shadow-lg backdrop-blur-md">
           <div className="truncate border-gray-200 border-b px-4 py-3 text-gray-700 text-sm" title={email}>
