@@ -34,13 +34,14 @@ coverage/
 local/
 
 # Supabase
+.supabase/
 supabase/.temp
 
 # Vercel
 .vercel
 .env*.local
 
-# local symlink (worktree convenience; local/ above only matches directories)
+# local data
 local
 
 # Impeccable Live
