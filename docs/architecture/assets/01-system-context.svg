@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 870" role="img" aria-label="Wanderlog system context diagram">
+  <title>Wanderlog — System Context</title>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    </pattern>
+    <marker id="a-cyan" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#0e7490"/></marker>
+    <marker id="a-green" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#15803d"/></marker>
+    <marker id="a-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#c2410c"/></marker>
+    <marker id="a-violet" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#7c3aed"/></marker>
+    <style>
+      text { font-family: Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; text-anchor: middle; }
+      .title { font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: start; }
+      .sub   { font-size: 11px; fill: #475569; text-anchor: start; }
+      .bl    { font-size: 10.5px; font-weight: 600; text-anchor: start; }
+      .n     { font-size: 12.5px; font-weight: 700; fill: #0f172a; }
+      .s     { font-size: 9.5px; fill: #475569; }
+      .el    { font-size: 8.5px; fill: #64748b; }
+      .la    { text-anchor: start; }
+      .ui  { fill: #cdeff7; stroke: #0e7490; stroke-width: 1.5; }
+      .sto { fill: #ebe1fb; stroke: #7c3aed; stroke-width: 1.5; }
+      .llm { fill: #ffe6d1; stroke: #c2410c; stroke-width: 1.5; }
+      .ext { fill: #eef1f5; stroke: #64748b; stroke-width: 1.5; }
+      .bnd { fill: none; stroke-width: 1.2; }
+      .edge { fill: none; stroke-width: 1.6; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <text class="title" x="40" y="42">Wanderlog — System Context</text>
+  <text class="sub" x="40" y="64">Who uses the system, what it depends on, and which credential crosses each boundary.</text>
+
+  <!-- boundaries -->
+  <rect class="bnd" x="40" y="88" width="1060" height="112" rx="12" stroke="#64748b" stroke-dasharray="10 5"/>
+  <text class="bl" x="54" y="108" fill="#64748b">People — one family, one shared set of trips</text>
+
+  <rect class="bnd" x="40" y="254" width="1060" height="134" rx="12" stroke="#2563eb" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="274" fill="#2563eb">Wanderlog — this system · hosted on Vercel</text>
+
+  <rect class="bnd" x="290" y="430" width="560" height="134" rx="12" stroke="#7c3aed" stroke-dasharray="6 4"/>
+  <text class="bl" x="304" y="450" fill="#7c3aed">System of record — Supabase (managed)</text>
+
+  <rect class="bnd" x="40" y="610" width="520" height="136" rx="12" stroke="#64748b" stroke-dasharray="10 5"/>
+  <text class="bl" x="54" y="630" fill="#64748b">Called from the browser — public keys</text>
+
+  <rect class="bnd" x="600" y="610" width="500" height="136" rx="12" stroke="#c2410c" stroke-dasharray="6 4"/>
+  <text class="bl" x="614" y="630" fill="#c2410c">Called from the function only — server keys</text>
+
+  <!-- edges: people to SPA -->
+  <path class="edge" stroke="#0e7490" d="M220,184 V206 H320 V286" marker-end="url(#a-cyan)"/>
+  <path class="edge" stroke="#0e7490" d="M570,184 V220 H380 V286" marker-end="url(#a-cyan)"/>
+  <path class="edge" stroke="#0e7490" d="M920,184 V234 H440 V286" marker-end="url(#a-cyan)"/>
+
+  <!-- edges: SPA to agent, SPA/agent to Supabase -->
+  <path class="edge" stroke="#c2410c" d="M520,326 H612" marker-end="url(#a-orange)"/>
+  <path class="edge" stroke="#7c3aed" d="M240,366 V499 H302" marker-end="url(#a-violet)"/>
+  <path class="edge" stroke="#7c3aed" d="M440,366 V410 H700 V456" marker-end="url(#a-violet)"/>
+  <path class="edge" stroke="#7c3aed" d="M860,366 V424 H760 V456" marker-end="url(#a-violet)"/>
+
+  <!-- edges: out to external groups -->
+  <path class="edge" stroke="#0e7490" d="M167,366 V604" marker-end="url(#a-cyan)"/>
+  <path class="edge" stroke="#c2410c" d="M973,366 V604" marker-end="url(#a-orange)"/>
+
+  <!-- people -->
+  <g>
+    <rect class="ui" x="60" y="122" width="320" height="62" rx="8"/>
+    <text class="n" x="220" y="148">Family Traveler</text>
+    <text class="s" x="220" y="166">follows the plan on a phone, ticks things off</text>
+
+    <rect class="ui" x="410" y="122" width="320" height="62" rx="8"/>
+    <text class="n" x="570" y="148">Trip Planner</text>
+    <text class="s" x="570" y="166">builds itineraries, imports Wanderlog / TripIt files</text>
+
+    <rect class="ui" x="760" y="122" width="320" height="62" rx="8"/>
+    <text class="n" x="920" y="148">Agent User</text>
+    <text class="s" x="920" y="166">asks questions, instructs edits in plain language</text>
+  </g>
+
+  <!-- system -->
+  <g>
+    <rect class="ui" x="60" y="286" width="460" height="80" rx="8"/>
+    <text class="n" x="290" y="312">React SPA</text>
+    <text class="s" x="290" y="330">map · timeline · activities · trip library · editing</text>
+    <text class="s" x="290" y="348">TanStack Query cache, persisted for offline reads</text>
+
+    <rect class="llm" x="620" y="286" width="460" height="80" rx="8"/>
+    <text class="n" x="850" y="312">Agent Endpoint — /api/agent</text>
+    <text class="s" x="850" y="330">Anthropic tool-use loop over trip data</text>
+    <text class="s" x="850" y="348">16 tools · NDJSON event stream · no undo</text>
+  </g>
+
+  <!-- data -->
+  <g>
+    <rect class="sto" x="310" y="456" width="245" height="86" rx="8"/>
+    <text class="n" x="432" y="482">Supabase Auth</text>
+    <text class="s" x="432" y="500">email + password, Google OAuth (PKCE)</text>
+    <text class="s" x="432" y="518">issues the JWT every call runs under</text>
+
+    <rect class="sto" x="585" y="456" width="245" height="86" rx="8"/>
+    <text class="n" x="707" y="482">Supabase Postgres</text>
+    <text class="s" x="707" y="500">5 tables, cascade deletes, RLS on</text>
+    <text class="s" x="707" y="518">authenticated = full access, anon = none</text>
+  </g>
+
+  <!-- externals -->
+  <g>
+    <rect class="ext" x="60" y="646" width="225" height="76" rx="8"/>
+    <text class="n" x="172" y="672">Google Maps + Places</text>
+    <text class="s" x="172" y="690">map render, POI search</text>
+    <text class="s" x="172" y="708">referrer-restricted browser key</text>
+
+    <rect class="ext" x="315" y="646" width="225" height="76" rx="8"/>
+    <text class="n" x="427" y="672">Open-Meteo</text>
+    <text class="s" x="427" y="690">per-stop weather forecast</text>
+    <text class="s" x="427" y="708">keyless</text>
+
+    <rect class="llm" x="620" y="646" width="215" height="76" rx="8"/>
+    <text class="n" x="727" y="672">Anthropic API</text>
+    <text class="s" x="727" y="690">Claude — reasoning + tool choice</text>
+    <text class="s" x="727" y="708">ANTHROPIC_API_KEY</text>
+
+    <rect class="ext" x="865" y="646" width="215" height="76" rx="8"/>
+    <text class="n" x="972" y="672">Google Geocoding</text>
+    <text class="s" x="972" y="690">address → lat / lng</text>
+    <text class="s" x="972" y="708">separate server-side key</text>
+  </g>
+
+  <!-- edge labels -->
+  <g class="el">
+    <rect x="522" y="306" width="88" height="13" fill="#ffffff"/>
+    <text x="566" y="316">Bearer JWT</text>
+    <text class="la" x="176" y="450">sign in /</text>
+    <text class="la" x="176" y="464">refresh session</text>
+    <rect x="448" y="392" width="204" height="13" fill="#ffffff"/>
+    <text x="550" y="402">supabase-js · anon key + user JWT</text>
+    <rect x="770" y="408" width="150" height="13" fill="#ffffff"/>
+    <text x="845" y="418">same JWT, RLS-scoped</text>
+    <text class="la" x="177" y="556">browser talks straight</text>
+    <text class="la" x="177" y="570">to the provider</text>
+    <text class="la" x="983" y="500">keys never reach</text>
+    <text class="la" x="983" y="514">the client bundle</text>
+  </g>
+
+  <!-- legend -->
+  <rect x="40" y="776" width="1060" height="64" rx="8" fill="#f5f7fa" stroke="#cbd5e1" stroke-width="1"/>
+  <g class="s">
+    <rect x="60" y="798" width="14" height="14" rx="3" class="ui"/>
+    <text class="la" x="82" y="809">Client / user-facing</text>
+    <rect x="230" y="798" width="14" height="14" rx="3" class="llm"/>
+    <text class="la" x="252" y="809">AI / server function</text>
+    <rect x="400" y="798" width="14" height="14" rx="3" class="sto"/>
+    <text class="la" x="422" y="809">Managed data + auth</text>
+    <rect x="580" y="798" width="14" height="14" rx="3" class="ext"/>
+    <text class="la" x="602" y="809">External provider</text>
+    <text class="la" x="740" y="809">Dashed outline = trust boundary · arrow label = the credential that crosses it</text>
+  </g>
+</svg>

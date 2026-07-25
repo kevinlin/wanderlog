@@ -1,0 +1,225 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1124" role="img" aria-label="Wanderlog agent endpoint tool-use loop">
+  <title>Wanderlog — Agent Endpoint Tool-Use Loop</title>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    </pattern>
+    <marker id="a-cyan" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#0e7490"/></marker>
+    <marker id="a-green" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#15803d"/></marker>
+    <marker id="a-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#c2410c"/></marker>
+    <marker id="a-rose" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#be123c"/></marker>
+    <style>
+      text { font-family: Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; text-anchor: middle; }
+      .title { font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: start; }
+      .sub   { font-size: 11px; fill: #475569; text-anchor: start; }
+      .bl    { font-size: 10.5px; font-weight: 600; text-anchor: start; }
+      .n     { font-size: 12.5px; font-weight: 700; fill: #0f172a; }
+      .nc    { font-size: 11.5px; font-weight: 700; fill: #0f172a; }
+      .s     { font-size: 9.5px; fill: #475569; }
+      .el    { font-size: 8.5px; fill: #64748b; }
+      .yn    { font-size: 9.5px; font-weight: 700; }
+      .la    { text-anchor: start; }
+      .ui  { fill: #cdeff7; stroke: #0e7490; stroke-width: 1.5; }
+      .svc { fill: #d6f0e0; stroke: #15803d; stroke-width: 1.5; }
+      .out { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.6; }
+      .sto { fill: #ebe1fb; stroke: #7c3aed; stroke-width: 1.5; }
+      .llm { fill: #ffe6d1; stroke: #c2410c; stroke-width: 1.5; }
+      .dec { fill: #fff2cc; stroke: #b7860b; stroke-width: 1.6; }
+      .alert { fill: #fde0e4; stroke: #be123c; stroke-width: 1.5; }
+      .ext { fill: #eef1f5; stroke: #64748b; stroke-width: 1.5; }
+      .bnd { fill: none; stroke-width: 1.2; }
+      .edge { fill: none; stroke-width: 1.6; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <text class="title" x="40" y="42">Wanderlog — Agent Endpoint Tool-Use Loop</text>
+  <text class="sub" x="40" y="64">One function, one loop. The model can only touch trip data through the tool registry, and only as the signed-in caller.</text>
+
+  <!-- boundaries -->
+  <rect class="bnd" x="40" y="86" width="1120" height="118" rx="12" stroke="#0e7490" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="106" fill="#0e7490">Client — browser</text>
+
+  <rect class="bnd" x="40" y="246" width="1120" height="506" rx="12" stroke="#c2410c" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="266" fill="#c2410c">Server — api/agent.ts</text>
+  <text class="bl" x="1146" y="266" fill="#c2410c" style="text-anchor:end">the only server-side code in the project</text>
+
+  <rect class="bnd" x="60" y="404" width="1080" height="216" rx="10" stroke="#b7860b" stroke-dasharray="4 3"/>
+  <text class="bl" x="74" y="424" fill="#b7860b">Agent loop — runAgentLoop</text>
+
+  <rect class="bnd" x="40" y="772" width="1120" height="120" rx="12" stroke="#15803d" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="792" fill="#15803d">Tool registry — api/_lib/tools · 16 tools, each with a zod input schema, every call under the caller's RLS</text>
+
+  <rect class="bnd" x="40" y="912" width="1120" height="104" rx="12" stroke="#64748b" stroke-dasharray="10 5"/>
+  <text class="bl" x="54" y="932" fill="#64748b">Backing services</text>
+
+  <!-- edges -->
+  <path class="edge" stroke="#0e7490" d="M393,156 H425" marker-end="url(#a-cyan)"/>
+  <path class="edge" stroke="#0e7490" d="M766,156 H798" marker-end="url(#a-cyan)"/>
+  <path class="edge" stroke="#c2410c" d="M460,194 V222 H240 V272" marker-end="url(#a-orange)"/>
+  <path class="edge" stroke="#15803d" d="M307,323 H329" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#15803d" d="M584,323 H606" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#15803d" d="M861,323 H883" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#c2410c" d="M1014,368 V446" marker-end="url(#a-orange)"/>
+  <path class="edge" stroke="#b7860b" d="M700,500 H788" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#15803d" d="M952,452 V420 H290 V446" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#2563eb" d="M600,548 V590 H320 V638" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#be123c" stroke-dasharray="5 4" d="M880,620 V638" marker-end="url(#a-rose)"/>
+  <path class="edge" stroke="#0e7490" stroke-dasharray="5 4" d="M320,730 V744 H1150 V210 H990 V198" marker-end="url(#a-cyan)"/>
+
+  <!-- client -->
+  <g>
+    <rect class="ui" x="60" y="118" width="333" height="76" rx="8"/>
+    <text class="n" x="226" y="144">AgentModal</text>
+    <text class="s" x="226" y="162">prompt in, live progress + change list out</text>
+    <text class="s" x="226" y="180">no undo, so the change list is the receipt</text>
+
+    <rect class="svc" x="433" y="118" width="333" height="76" rx="8"/>
+    <text class="n" x="599" y="144">agentService.runAgent</text>
+    <text class="s" x="599" y="162">POST /api/agent</text>
+    <text class="s" x="599" y="180">Authorization: Bearer &lt;Supabase JWT&gt;</text>
+
+    <rect class="svc" x="806" y="118" width="333" height="76" rx="8"/>
+    <text class="n" x="972" y="144">NDJSON reader</text>
+    <text class="s" x="972" y="162">one JSON event per line</text>
+    <text class="s" x="972" y="180">invalidates trips.all and trip.detail(id)</text>
+  </g>
+
+  <!-- request handling -->
+  <g>
+    <rect class="svc" x="60" y="278" width="247" height="90" rx="8"/>
+    <text class="nc" x="183" y="304">Auth check</text>
+    <text class="s" x="183" y="322">extract the Bearer token</text>
+    <text class="s" x="183" y="340">supabase.auth.getUser</text>
+    <text class="s" x="183" y="358">401 if missing or expired</text>
+
+    <rect class="svc" x="337" y="278" width="247" height="90" rx="8"/>
+    <text class="nc" x="460" y="304">Validate body</text>
+    <text class="s" x="460" y="322">zod schema</text>
+    <text class="s" x="460" y="340">prompt 1–4000 chars</text>
+    <text class="s" x="460" y="358">optional tripId, else 400</text>
+
+    <rect class="svc" x="614" y="278" width="247" height="90" rx="8"/>
+    <text class="nc" x="737" y="304">Context prefetch</text>
+    <text class="s" x="737" y="322">open trip via TRIP_SELECT</text>
+    <text class="s" x="737" y="340">otherwise every trip summary</text>
+    <text class="s" x="737" y="358">runs under the caller's RLS</text>
+
+    <rect class="llm" x="891" y="278" width="247" height="90" rx="8"/>
+    <text class="nc" x="1014" y="304">buildSystemPrompt</text>
+    <text class="s" x="1014" y="322">core rules + the trip as JSON</text>
+    <text class="s" x="1014" y="340">trip text is data, not instructions</text>
+    <text class="s" x="1014" y="358">refuses anything but trip work</text>
+  </g>
+
+  <!-- loop -->
+  <g>
+    <rect class="llm" x="90" y="452" width="300" height="96" rx="8"/>
+    <text class="nc" x="240" y="478">anthropic.messages.create</text>
+    <text class="s" x="240" y="496">system prompt + 16 tool defs</text>
+    <text class="s" x="240" y="514">full message history</text>
+    <text class="s" x="240" y="532">max_tokens 8192 per call</text>
+
+    <polygon class="dec" points="600,452 700,500 600,548 500,500"/>
+    <text class="yn" x="600" y="496" fill="#5c3a0f">stop_reason</text>
+    <text class="yn" x="600" y="510" fill="#5c3a0f">= tool_use?</text>
+
+    <rect class="svc" x="794" y="452" width="316" height="96" rx="8"/>
+    <text class="nc" x="952" y="478">Dispatch each tool_use</text>
+    <text class="s" x="952" y="496">run in order against the registry below</text>
+    <text class="s" x="952" y="514">emit a progress + change event per call</text>
+    <text class="s" x="952" y="532">append tool_result blocks, then loop</text>
+  </g>
+
+  <!-- outcomes -->
+  <g>
+    <rect class="out" x="60" y="644" width="520" height="86" rx="8"/>
+    <text class="nc" x="320" y="670">Emit result, close the stream</text>
+    <text class="s" x="320" y="688">summary + answer + any created tripId</text>
+    <text class="s" x="320" y="706">the model answered without asking for more tools</text>
+
+    <rect class="alert" x="620" y="644" width="520" height="86" rx="8"/>
+    <text class="nc" x="880" y="670">Guard: stop_reason = max_tokens</text>
+    <text class="s" x="880" y="688">a truncated tool_use block is never executed</text>
+    <text class="s" x="880" y="706">warn, return what exists — same for the 16-iteration cap</text>
+  </g>
+
+  <!-- tool registry -->
+  <g>
+    <rect class="svc" x="60" y="804" width="163" height="68" rx="7"/>
+    <text class="nc" x="141" y="828">read</text>
+    <text class="s" x="141" y="846">list_trips</text>
+    <text class="s" x="141" y="862">get_trip</text>
+
+    <rect class="svc" x="243" y="804" width="163" height="68" rx="7"/>
+    <text class="nc" x="324" y="828">activities</text>
+    <text class="s" x="324" y="846">create · update · delete</text>
+    <text class="s" x="324" y="862">mirrors the client CRUD</text>
+
+    <rect class="svc" x="426" y="804" width="163" height="68" rx="7"/>
+    <text class="nc" x="507" y="828">scenic waypoints</text>
+    <text class="s" x="507" y="846">create · update · delete</text>
+    <text class="s" x="507" y="862">same shape as activities</text>
+
+    <rect class="svc" x="609" y="804" width="163" height="68" rx="7"/>
+    <text class="nc" x="690" y="828">trip fields</text>
+    <text class="s" x="690" y="846">upsert_accommodation</text>
+    <text class="s" x="690" y="862">update_trip_metadata</text>
+
+    <rect class="svc" x="792" y="804" width="163" height="68" rx="7"/>
+    <text class="nc" x="873" y="828">stops</text>
+    <text class="s" x="873" y="846">create · update · delete</text>
+    <text class="s" x="873" y="862">restructure_stops re-dates</text>
+
+    <rect class="llm" x="975" y="804" width="163" height="68" rx="7"/>
+    <text class="nc" x="1056" y="828">geocode · create_trip</text>
+    <text class="s" x="1056" y="846">server key for lookups</text>
+    <text class="s" x="1056" y="862">shared bundle insert</text>
+  </g>
+
+  <!-- backing services -->
+  <g>
+    <rect class="llm" x="60" y="944" width="333" height="62" rx="8"/>
+    <text class="nc" x="226" y="968">Anthropic API</text>
+    <text class="s" x="226" y="986">reasoning and tool choice</text>
+
+    <rect class="sto" x="433" y="944" width="333" height="62" rx="8"/>
+    <text class="nc" x="599" y="968">Supabase under the caller's JWT</text>
+    <text class="s" x="599" y="986">reads and writes exactly what the user could</text>
+
+    <rect class="ext" x="806" y="944" width="333" height="62" rx="8"/>
+    <text class="nc" x="972" y="968">Google Geocoding</text>
+    <text class="s" x="972" y="986">server-side key, function only</text>
+  </g>
+
+  <!-- edge labels -->
+  <g class="el">
+    <rect x="468" y="228" width="166" height="13" fill="#ffffff"/>
+    <text class="la" x="470" y="238">POST /api/agent + Bearer JWT</text>
+    <rect x="708" y="482" width="72" height="13" fill="#ffffff"/>
+    <text class="yn" x="744" y="492" fill="#15803d">yes — run them</text>
+    <rect x="606" y="566" width="128" height="13" fill="#ffffff"/>
+    <text class="yn la" x="610" y="576" fill="#2563eb">no — it answered</text>
+    <rect x="404" y="430" width="470" height="13" fill="#ffffff"/>
+    <text x="640" y="440">next iteration, capped at 16</text>
+    <text transform="rotate(-90 1170 520)" class="la" x="1170" y="520">NDJSON events stream back live: progress · change · error · result</text>
+  </g>
+
+  <!-- legend -->
+  <rect x="40" y="1036" width="1120" height="58" rx="8" fill="#f5f7fa" stroke="#cbd5e1" stroke-width="1"/>
+  <g class="s">
+    <rect x="60" y="1058" width="14" height="14" rx="3" class="ui"/>
+    <text class="la" x="82" y="1069">Client</text>
+    <rect x="170" y="1058" width="14" height="14" rx="3" class="svc"/>
+    <text class="la" x="192" y="1069">Server step / tool</text>
+    <rect x="330" y="1058" width="14" height="14" rx="3" class="llm"/>
+    <text class="la" x="352" y="1069">Model-facing</text>
+    <rect x="470" y="1058" width="14" height="14" rx="3" class="dec"/>
+    <text class="la" x="492" y="1069">Loop decision</text>
+    <rect x="615" y="1058" width="14" height="14" rx="3" class="alert"/>
+    <text class="la" x="637" y="1069">Guard / early stop</text>
+    <text class="la" x="790" y="1069">Dashed edge = streamed back to the client · solid = in-process control flow</text>
+  </g>
+</svg>

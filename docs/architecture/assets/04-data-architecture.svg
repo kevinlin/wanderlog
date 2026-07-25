@@ -1,0 +1,165 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1056" role="img" aria-label="Wanderlog data model and cache layers">
+  <title>Wanderlog — Data Model &amp; Cache Layers</title>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    </pattern>
+    <marker id="a-violet" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#7c3aed"/></marker>
+    <marker id="a-blue" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#2563eb"/></marker>
+    <style>
+      text { font-family: Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; text-anchor: middle; }
+      .title { font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: start; }
+      .sub   { font-size: 11px; fill: #475569; text-anchor: start; }
+      .bl    { font-size: 10.5px; font-weight: 600; text-anchor: start; }
+      .n     { font-size: 13px; font-weight: 700; fill: #0f172a; }
+      .nb    { font-size: 12.5px; font-weight: 700; fill: #0f172a; }
+      .col   { font-size: 9.5px; fill: #475569; }
+      .s     { font-size: 9.5px; fill: #475569; }
+      .el    { font-size: 8.5px; fill: #64748b; }
+      .mono  { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 9px; fill: #475569; }
+      .la    { text-anchor: start; }
+      .out { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.6; }
+      .svc { fill: #d6f0e0; stroke: #15803d; stroke-width: 1.5; }
+      .sto { fill: #ebe1fb; stroke: #7c3aed; stroke-width: 1.5; }
+      .alert { fill: #fde0e4; stroke: #be123c; stroke-width: 1.5; }
+      .ext { fill: #eef1f5; stroke: #64748b; stroke-width: 1.5; }
+      .bnd { fill: none; stroke-width: 1.2; }
+      .edge { fill: none; stroke-width: 1.6; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <text class="title" x="40" y="42">Wanderlog — Data Model &amp; Cache Layers</text>
+  <text class="sub" x="40" y="64">One trip is a tree. It is fetched whole in a single query and cached in three places on the client.</text>
+
+  <!-- Section 1: schema -->
+  <rect class="bnd" x="40" y="86" width="1120" height="404" rx="12" stroke="#7c3aed" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="106" fill="#7c3aed">Postgres schema — foreign keys with ON DELETE CASCADE, updated_at kept by a moddatetime trigger</text>
+
+  <!-- relationship edges -->
+  <path class="edge" stroke="#7c3aed" d="M340,296 H412" marker-end="url(#a-violet)"/>
+  <path class="edge" stroke="#7c3aed" d="M680,276 V168 H732" marker-end="url(#a-violet)"/>
+  <path class="edge" stroke="#7c3aed" d="M680,296 H732" marker-end="url(#a-violet)"/>
+  <path class="edge" stroke="#7c3aed" d="M680,316 V424 H732" marker-end="url(#a-violet)"/>
+
+  <g>
+    <rect class="sto" x="80" y="246" width="260" height="100" rx="8"/>
+    <text class="n" x="210" y="272">trips</text>
+    <text class="col" x="210" y="292">id · name · destination</text>
+    <text class="col" x="210" y="310">start_date · end_date · timezone</text>
+    <text class="col" x="210" y="328">created_at · updated_at</text>
+
+    <rect class="sto" x="420" y="246" width="260" height="100" rx="8"/>
+    <text class="n" x="550" y="272">stops</text>
+    <text class="col" x="550" y="292">id · trip_id → trips.id</text>
+    <text class="col" x="550" y="310">name · lat · lng · sort_order</text>
+    <text class="col" x="550" y="328">date_from · date_to</text>
+
+    <rect class="sto" x="732" y="124" width="328" height="88" rx="8"/>
+    <text class="n" x="896" y="150">accommodations</text>
+    <text class="col" x="896" y="170">stop_id → stops.id, unique</text>
+    <text class="col" x="896" y="188">name · address · check_in / check_out · remarks · lat · lng</text>
+
+    <rect class="sto" x="732" y="252" width="328" height="88" rx="8"/>
+    <text class="n" x="896" y="278">activities</text>
+    <text class="col" x="896" y="298">stop_id → stops.id</text>
+    <text class="col" x="896" y="316">name · type · lat · lng · duration · is_done · sort_order</text>
+
+    <rect class="sto" x="732" y="380" width="328" height="88" rx="8"/>
+    <text class="n" x="896" y="406">scenic_waypoints</text>
+    <text class="col" x="896" y="426">stop_id → stops.id</text>
+    <text class="col" x="896" y="444">name · lat · lng · remarks · is_done · sort_order</text>
+  </g>
+
+  <g class="el">
+    <rect x="347" y="277" width="62" height="14" fill="#ffffff"/>
+    <text x="378" y="288">1 ─&lt; many</text>
+    <rect x="687" y="149" width="40" height="14" fill="#ffffff"/>
+    <text x="707" y="160">1 ─ 1</text>
+    <rect x="679" y="277" width="62" height="14" fill="#ffffff"/>
+    <text x="710" y="288">1 ─&lt; many</text>
+    <rect x="679" y="405" width="62" height="14" fill="#ffffff"/>
+    <text x="710" y="416">1 ─&lt; many</text>
+    <text class="la" x="80" y="368">is_done is a plain column on activities and scenic_waypoints — one canonical done-state shared by every member, not per user.</text>
+  </g>
+
+  <!-- Section 2: RLS -->
+  <rect class="bnd" x="40" y="510" width="1120" height="134" rx="12" stroke="#be123c" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="530" fill="#be123c">Access control — Row Level Security is the real gate</text>
+  <g>
+    <rect class="svc" x="60" y="542" width="333" height="90" rx="8"/>
+    <text class="nb" x="226" y="568">authenticated_all</text>
+    <text class="s" x="226" y="588">one policy per table, all 5 tables</text>
+    <text class="s" x="226" y="606">using (true) with check (true)</text>
+    <text class="s" x="226" y="624">every signed-in member shares one plan</text>
+
+    <rect class="alert" x="433" y="542" width="333" height="90" rx="8"/>
+    <text class="nb" x="599" y="568">anon</text>
+    <text class="s" x="599" y="588">no policy and no table grant</text>
+    <text class="s" x="599" y="606">signed-out requests read nothing,</text>
+    <text class="s" x="599" y="624">even with a valid project URL</text>
+
+    <rect class="alert" x="806" y="542" width="333" height="90" rx="8"/>
+    <text class="nb" x="972" y="568">service_role</text>
+    <text class="s" x="972" y="588">bypasses RLS entirely</text>
+    <text class="s" x="972" y="606">migration script only — the key must</text>
+    <text class="s" x="972" y="624">never reach the client bundle</text>
+  </g>
+
+  <!-- Section 3: fetch shapes -->
+  <rect class="bnd" x="40" y="664" width="1120" height="122" rx="12" stroke="#15803d" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="684" fill="#15803d">Fetch shapes — supabaseMappers owns both selects and the row ↔ domain conversion</text>
+  <g>
+    <rect class="svc" x="60" y="696" width="520" height="78" rx="8"/>
+    <text class="nb" x="320" y="720">TRIP_SELECT</text>
+    <text class="mono" x="320" y="740">*, stops(*, accommodations(*), activities(*), scenic_waypoints(*))</text>
+    <text class="s" x="320" y="760">the whole tree in one round trip → TripData</text>
+
+    <rect class="svc" x="620" y="696" width="519" height="78" rx="8"/>
+    <text class="nb" x="879" y="720">TRIP_SUMMARY_SELECT</text>
+    <text class="mono" x="879" y="740">flat trip columns, no children</text>
+    <text class="s" x="879" y="760">library list rows → TripSummary</text>
+  </g>
+
+  <!-- Section 4: cache -->
+  <path class="edge" stroke="#2563eb" d="M320,774 V832" marker-end="url(#a-blue)"/>
+  <path class="edge" stroke="#2563eb" d="M879,774 V804 H360 V832" marker-end="url(#a-blue)"/>
+
+  <rect class="bnd" x="40" y="806" width="1120" height="134" rx="12" stroke="#2563eb" stroke-dasharray="6 4"/>
+  <text class="bl" x="54" y="826" fill="#2563eb">Client cache tiers</text>
+  <g>
+    <rect class="out" x="60" y="838" width="333" height="90" rx="8"/>
+    <text class="nb" x="226" y="864">TanStack Query</text>
+    <text class="s" x="226" y="884">keys: trips.all · trip.detail(id)</text>
+    <text class="s" x="226" y="902">weather.base(id)</text>
+    <text class="s" x="226" y="920">staleTime 5 min, retry once</text>
+
+    <rect class="sto" x="433" y="838" width="333" height="90" rx="8"/>
+    <text class="nb" x="599" y="864">IndexedDB persister</text>
+    <text class="s" x="599" y="884">idb-keyval, maxAge 30 days</text>
+    <text class="s" x="599" y="902">gcTime must stay ≥ maxAge or the</text>
+    <text class="s" x="599" y="920">restored cache is thrown away</text>
+
+    <rect class="sto" x="806" y="838" width="333" height="90" rx="8"/>
+    <text class="nb" x="972" y="864">localStorage</text>
+    <text class="s" x="972" y="884">last trip, last stop</text>
+    <text class="s" x="972" y="902">small view state only</text>
+    <text class="s" x="972" y="920">device-local, never synced</text>
+  </g>
+
+  <!-- legend -->
+  <rect x="40" y="968" width="1120" height="58" rx="8" fill="#f5f7fa" stroke="#cbd5e1" stroke-width="1"/>
+  <g class="s">
+    <rect x="60" y="990" width="14" height="14" rx="3" class="sto"/>
+    <text class="la" x="82" y="1001">Persisted data</text>
+    <rect x="220" y="990" width="14" height="14" rx="3" class="svc"/>
+    <text class="la" x="242" y="1001">Query / mapping layer</text>
+    <rect x="410" y="990" width="14" height="14" rx="3" class="out"/>
+    <text class="la" x="432" y="1001">In-memory cache</text>
+    <rect x="580" y="990" width="14" height="14" rx="3" class="alert"/>
+    <text class="la" x="602" y="1001">Privileged or denied role</text>
+    <text class="la" x="790" y="1001">Legacy JSON imports through pnpm migrate:supabase (service-role key)</text>
+  </g>
+</svg>

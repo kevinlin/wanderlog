@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 982" role="img" aria-label="Wanderlog frontend application architecture">
+  <title>Wanderlog — Frontend Application Architecture</title>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    </pattern>
+    <marker id="a-slate" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#64748b"/></marker>
+    <style>
+      text { font-family: Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; text-anchor: middle; }
+      .title { font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: start; }
+      .sub   { font-size: 11px; fill: #475569; text-anchor: start; }
+      .bl    { font-size: 10.5px; font-weight: 600; text-anchor: start; }
+      .note  { font-size: 9.5px; fill: #475569; text-anchor: end; }
+      .n     { font-size: 11.5px; font-weight: 700; fill: #0f172a; }
+      .nb    { font-size: 12.5px; font-weight: 700; fill: #0f172a; }
+      .s     { font-size: 9px; fill: #475569; }
+      .el    { font-size: 8.5px; fill: #64748b; }
+      .la    { text-anchor: start; }
+      .ui  { fill: #cdeff7; stroke: #0e7490; stroke-width: 1.4; }
+      .out { fill: #dbeafe; stroke: #2563eb; stroke-width: 1.6; }
+      .svc { fill: #d6f0e0; stroke: #15803d; stroke-width: 1.4; }
+      .llm { fill: #ffe6d1; stroke: #c2410c; stroke-width: 1.4; }
+      .ext { fill: #eef1f5; stroke: #64748b; stroke-width: 1.4; }
+      .bnd { fill: none; stroke-width: 1.2; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <text class="title" x="40" y="42">Wanderlog — Frontend Application Architecture</text>
+  <text class="sub" x="40" y="64">Layers of the SPA. The rule that holds it together: server state lives in TanStack Query, UI state lives in a reducer.</text>
+
+  <!-- read-path spine -->
+  <path d="M68,120 V700" fill="none" stroke="#64748b" stroke-width="1.4" stroke-dasharray="6 4" marker-end="url(#a-slate)"/>
+  <text transform="rotate(-90 52 420)" class="el la" x="52" y="420">read path: route → hook → query cache → service → Supabase</text>
+
+  <!-- Band A: routing -->
+  <rect class="bnd" x="100" y="86" width="1060" height="112" rx="10" stroke="#2563eb" stroke-dasharray="6 4"/>
+  <text class="bl" x="114" y="106" fill="#2563eb">Routing &amp; pages — react-router, src/pages</text>
+  <text class="note" x="1146" y="106">ProtectedRoute wraps everything except /login and the password flows</text>
+  <g>
+    <rect class="ui" x="120" y="118" width="153" height="58" rx="7"/>
+    <text class="n" x="196" y="142">LoginPage</text>
+    <text class="s" x="196" y="160">/login</text>
+
+    <rect class="ui" x="293" y="118" width="153" height="58" rx="7"/>
+    <text class="n" x="369" y="142">Forgot / Reset</text>
+    <text class="s" x="369" y="160">password recovery</text>
+
+    <rect class="ui" x="466" y="118" width="153" height="58" rx="7"/>
+    <text class="n" x="542" y="142">HomeRedirect</text>
+    <text class="s" x="542" y="160">restores the last trip</text>
+
+    <rect class="ui" x="639" y="118" width="153" height="58" rx="7"/>
+    <text class="n" x="715" y="142">TripLibraryPage</text>
+    <text class="s" x="715" y="160">/trips</text>
+
+    <rect class="ui" x="812" y="118" width="153" height="58" rx="7"/>
+    <text class="n" x="888" y="142">NewTripPage</text>
+    <text class="s" x="888" y="160">/trips/new — blank or import</text>
+
+    <rect class="ui" x="985" y="118" width="153" height="58" rx="7"/>
+    <text class="n" x="1061" y="142">TripPage</text>
+    <text class="s" x="1061" y="160">/trips/:tripId</text>
+  </g>
+
+  <!-- Band B: components -->
+  <rect class="bnd" x="100" y="216" width="1060" height="112" rx="10" stroke="#0e7490" stroke-dasharray="6 4"/>
+  <text class="bl" x="114" y="236" fill="#0e7490">Component modules — src/components</text>
+  <g>
+    <rect class="ui" x="120" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="175" y="272">Map</text>
+    <text class="s" x="175" y="290">MapContainer, POI</text>
+
+    <rect class="ui" x="249" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="304" y="272">Timeline</text>
+    <text class="s" x="304" y="290">stop navigation</text>
+
+    <rect class="ui" x="378" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="433" y="272">Activities</text>
+    <text class="s" x="433" y="290">dnd-kit reorder</text>
+
+    <rect class="ui" x="507" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="562" y="272">Cards</text>
+    <text class="s" x="562" y="290">activity, stay, weather</text>
+
+    <rect class="ui" x="636" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="691" y="272">TripLibrary</text>
+    <text class="s" x="691" y="290">grid + import panel</text>
+
+    <rect class="ui" x="765" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="820" y="272">Editing</text>
+    <text class="s" x="820" y="290">form modals</text>
+
+    <rect class="llm" x="894" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="949" y="272">Agent</text>
+    <text class="s" x="949" y="290">button + modal</text>
+
+    <rect class="ui" x="1023" y="248" width="111" height="58" rx="7"/>
+    <text class="n" x="1078" y="272">Auth / Layout</text>
+    <text class="s" x="1078" y="290">guard, toast, errors</text>
+  </g>
+
+  <!-- Band C: state -->
+  <rect class="bnd" x="100" y="346" width="1060" height="130" rx="10" stroke="#2563eb" stroke-dasharray="6 4"/>
+  <text class="bl" x="114" y="366" fill="#2563eb">State — the hard split</text>
+  <g>
+    <rect class="out" x="120" y="378" width="313" height="76" rx="8"/>
+    <text class="nb" x="276" y="404">TanStack Query</text>
+    <text class="s" x="276" y="422">server state: trips, weather</text>
+    <text class="s" x="276" y="440">source of truth, never copied into useState</text>
+
+    <rect class="out" x="473" y="378" width="313" height="76" rx="8"/>
+    <text class="nb" x="629" y="404">AppStateContext</text>
+    <text class="s" x="629" y="422">UI state only, via reducer</text>
+    <text class="s" x="629" y="440">current stop, selection, POI modal + search</text>
+
+    <rect class="out" x="826" y="378" width="313" height="76" rx="8"/>
+    <text class="nb" x="982" y="404">AuthContext</text>
+    <text class="s" x="982" y="422">Supabase session</text>
+    <text class="s" x="982" y="440">sign-out purges the persisted cache</text>
+  </g>
+
+  <!-- Band D: hooks -->
+  <rect class="bnd" x="100" y="494" width="1060" height="112" rx="10" stroke="#15803d" stroke-dasharray="6 4"/>
+  <text class="bl" x="114" y="514" fill="#15803d">Data hooks — src/hooks</text>
+  <g>
+    <rect class="svc" x="120" y="526" width="153" height="58" rx="7"/>
+    <text class="n" x="196" y="550">useTrips</text>
+    <text class="s" x="196" y="568">library list</text>
+
+    <rect class="svc" x="293" y="526" width="153" height="58" rx="7"/>
+    <text class="n" x="369" y="550">useTripData</text>
+    <text class="s" x="369" y="568">one whole trip tree</text>
+
+    <rect class="svc" x="466" y="526" width="153" height="58" rx="7"/>
+    <text class="n" x="542" y="550">useWeather</text>
+    <text class="s" x="542" y="568">forecast per stop</text>
+
+    <rect class="svc" x="639" y="526" width="153" height="58" rx="7"/>
+    <text class="n" x="715" y="550">useTripCacheMutation</text>
+    <text class="s" x="715" y="568">the optimistic pattern</text>
+
+    <rect class="svc" x="812" y="526" width="153" height="58" rx="7"/>
+    <text class="n" x="888" y="550">useTripMutations</text>
+    <text class="s" x="888" y="568">itinerary CRUD</text>
+
+    <rect class="svc" x="985" y="526" width="153" height="58" rx="7"/>
+    <text class="n" x="1061" y="550">useTripLibraryMutations</text>
+    <text class="s" x="1061" y="568">create / delete trip</text>
+  </g>
+
+  <!-- Band E: services -->
+  <rect class="bnd" x="100" y="624" width="1060" height="112" rx="10" stroke="#15803d" stroke-dasharray="6 4"/>
+  <text class="bl" x="114" y="644" fill="#15803d">Services &amp; config — src/services, src/config</text>
+  <g>
+    <rect class="svc" x="120" y="656" width="128" height="58" rx="7"/>
+    <text class="n" x="184" y="680">supabaseService</text>
+    <text class="s" x="184" y="698">data-access entry</text>
+
+    <rect class="svc" x="268" y="656" width="128" height="58" rx="7"/>
+    <text class="n" x="332" y="680">supabaseMappers</text>
+    <text class="s" x="332" y="698">row ↔ domain</text>
+
+    <rect class="svc" x="416" y="656" width="128" height="58" rx="7"/>
+    <text class="n" x="480" y="680">tripWrites</text>
+    <text class="s" x="480" y="698">+ entityRows · shared</text>
+
+    <rect class="svc" x="564" y="656" width="128" height="58" rx="7"/>
+    <text class="n" x="628" y="680">tripBundleInsert</text>
+    <text class="s" x="628" y="698">one insert pipeline</text>
+
+    <rect class="svc" x="712" y="656" width="128" height="58" rx="7"/>
+    <text class="n" x="776" y="680">tripImportService</text>
+    <text class="s" x="776" y="698">Wanderlog / TripIt</text>
+
+    <rect class="llm" x="860" y="656" width="128" height="58" rx="7"/>
+    <text class="n" x="924" y="680">agentService</text>
+    <text class="s" x="924" y="698">NDJSON reader</text>
+
+    <rect class="ext" x="1008" y="656" width="128" height="58" rx="7"/>
+    <text class="n" x="1072" y="680">weather / places</text>
+    <text class="s" x="1072" y="698">Open-Meteo, Google</text>
+  </g>
+
+  <!-- Band F: cross-cutting + domain types -->
+  <rect class="bnd" x="100" y="754" width="540" height="112" rx="10" stroke="#64748b" stroke-dasharray="10 5"/>
+  <text class="bl" x="114" y="774" fill="#64748b">Cross-cutting</text>
+  <g>
+    <rect class="ext" x="120" y="786" width="114" height="58" rx="7"/>
+    <text class="n" x="177" y="810">Auth gate</text>
+    <text class="s" x="177" y="828">ProtectedRoute</text>
+
+    <rect class="ext" x="248" y="786" width="114" height="58" rx="7"/>
+    <text class="n" x="305" y="810">Offline reads</text>
+    <text class="s" x="305" y="828">persisted cache</text>
+
+    <rect class="ext" x="376" y="786" width="114" height="58" rx="7"/>
+    <text class="n" x="433" y="810">Rollback</text>
+    <text class="s" x="433" y="828">snapshot + retry toast</text>
+
+    <rect class="ext" x="504" y="786" width="114" height="58" rx="7"/>
+    <text class="n" x="561" y="810">Error surface</text>
+    <text class="s" x="561" y="828">ErrorBoundary, Toast</text>
+  </g>
+
+  <rect class="bnd" x="660" y="754" width="500" height="112" rx="10" stroke="#7c3aed" stroke-dasharray="6 4"/>
+  <text class="bl" x="674" y="774" fill="#7c3aed">Domain types — src/types/trip.ts</text>
+  <g>
+    <rect class="ext" x="680" y="786" width="106" height="58" rx="7"/>
+    <text class="n" x="733" y="810">TripData</text>
+    <text class="s" x="733" y="828">→ stops[]</text>
+
+    <rect class="ext" x="798" y="786" width="106" height="58" rx="7"/>
+    <text class="n" x="851" y="810">TripBase</text>
+    <text class="s" x="851" y="828">one stop</text>
+
+    <rect class="ext" x="916" y="786" width="106" height="58" rx="7"/>
+    <text class="n" x="969" y="810">Activity</text>
+    <text class="s" x="969" y="828">+ ScenicWaypoint</text>
+
+    <rect class="ext" x="1034" y="786" width="106" height="58" rx="7"/>
+    <text class="n" x="1087" y="810">TripSummary</text>
+    <text class="s" x="1087" y="828">library row</text>
+  </g>
+
+  <!-- footer -->
+  <rect x="100" y="894" width="1060" height="58" rx="8" fill="#f5f7fa" stroke="#cbd5e1" stroke-width="1"/>
+  <g class="s">
+    <text class="la" x="120" y="919" font-weight="700" fill="#0f172a">Toolchain</text>
+    <text class="la" x="120" y="937">Vite 8 · TypeScript 6 (strict) · Tailwind 4 · Vitest 4 with co-located __tests__ · Ultracite (Biome) for format + lint</text>
+    <text class="la" x="700" y="919" font-weight="700" fill="#0f172a">Reading the bands</text>
+    <text class="la" x="700" y="937">Blue = state · cyan = user-facing · green = data plumbing · orange = agent-related · grey = external or generic</text>
+  </g>
+</svg>

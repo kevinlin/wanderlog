@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1140 942" role="img" aria-label="Wanderlog runtime and deployment topology">
+  <title>Wanderlog — Runtime &amp; Deployment</title>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1"/>
+    </pattern>
+    <marker id="a-cyan" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#0e7490"/></marker>
+    <marker id="a-green" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#15803d"/></marker>
+    <marker id="a-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#c2410c"/></marker>
+    <marker id="a-violet" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#7c3aed"/></marker>
+    <style>
+      text { font-family: Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; text-anchor: middle; }
+      .title { font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: start; }
+      .sub   { font-size: 11px; fill: #475569; text-anchor: start; }
+      .bl    { font-size: 10.5px; font-weight: 600; text-anchor: start; }
+      .n     { font-size: 12.5px; font-weight: 700; fill: #0f172a; }
+      .s     { font-size: 9.5px; fill: #475569; }
+      .el    { font-size: 8.5px; fill: #64748b; }
+      .la    { text-anchor: start; }
+      .ui  { fill: #cdeff7; stroke: #0e7490; stroke-width: 1.5; }
+      .svc { fill: #d6f0e0; stroke: #15803d; stroke-width: 1.5; }
+      .sto { fill: #ebe1fb; stroke: #7c3aed; stroke-width: 1.5; }
+      .llm { fill: #ffe6d1; stroke: #c2410c; stroke-width: 1.5; }
+      .ext { fill: #eef1f5; stroke: #64748b; stroke-width: 1.5; }
+      .bnd { fill: none; stroke-width: 1.2; }
+      .edge { fill: none; stroke-width: 1.6; }
+    </style>
+  </defs>
+
+  <rect width="100%" height="100%" fill="#ffffff"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+
+  <text class="title" x="40" y="42">Wanderlog — Runtime &amp; Deployment Topology</text>
+  <text class="sub" x="40" y="64">Three runtime tiers. Everything the user installs is a static bundle; the only server-side code is one function.</text>
+
+  <!-- tier boundaries -->
+  <rect class="bnd" x="110" y="88" width="990" height="136" rx="12" stroke="#0e7490" stroke-dasharray="6 4"/>
+  <text class="bl" x="124" y="108" fill="#0e7490">Browser — the client device</text>
+
+  <rect class="bnd" x="110" y="278" width="990" height="150" rx="12" stroke="#d97706" stroke-dasharray="12 4"/>
+  <text class="bl" x="124" y="298" fill="#b45309">Vercel — CDN hosting, one serverless function, CI-driven deploys</text>
+
+  <rect class="bnd" x="110" y="498" width="990" height="150" rx="12" stroke="#7c3aed" stroke-dasharray="6 4"/>
+  <text class="bl" x="124" y="518" fill="#7c3aed">Supabase — managed Postgres, Auth, migrations</text>
+
+  <rect class="bnd" x="110" y="700" width="990" height="120" rx="12" stroke="#64748b" stroke-dasharray="10 5"/>
+  <text class="bl" x="124" y="720" fill="#64748b">Third-party APIs — the sublabel says which tier is allowed to call them</text>
+
+  <!-- edges -->
+  <path class="edge" stroke="#15803d" d="M276,312 V270 H237 V208" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#c2410c" d="M300,202 V244 H604 V306" marker-end="url(#a-orange)"/>
+  <path class="edge" stroke="#7c3aed" d="M604,406 V526" marker-end="url(#a-violet)"/>
+  <path class="edge" stroke="#0e7490" d="M130,180 H60 V579 H124" marker-end="url(#a-cyan)"/>
+  <path class="edge" stroke="#15803d" d="M786,579 H756" marker-end="url(#a-green)"/>
+
+  <!-- browser tier -->
+  <g>
+    <rect class="ui" x="130" y="122" width="215" height="80" rx="8"/>
+    <text class="n" x="237" y="148">SPA bundle</text>
+    <text class="s" x="237" y="166">Vite 8 build, React 19</text>
+    <text class="s" x="237" y="184">no secrets beyond public keys</text>
+
+    <rect class="sto" x="375" y="122" width="215" height="80" rx="8"/>
+    <text class="n" x="482" y="148">IndexedDB</text>
+    <text class="s" x="482" y="166">persisted query cache (idb-keyval)</text>
+    <text class="s" x="482" y="184">maxAge 30 days → offline reads</text>
+
+    <rect class="sto" x="620" y="122" width="215" height="80" rx="8"/>
+    <text class="n" x="727" y="148">localStorage</text>
+    <text class="s" x="727" y="166">view state: last trip, last stop</text>
+    <text class="s" x="727" y="184">device-local, never synced</text>
+
+    <rect class="ext" x="865" y="122" width="215" height="80" rx="8"/>
+    <text class="n" x="972" y="148">Google Maps JS</text>
+    <text class="s" x="972" y="166">@react-google-maps/api</text>
+    <text class="s" x="972" y="184">loaded and keyed in the browser</text>
+  </g>
+
+  <!-- vercel tier -->
+  <g>
+    <rect class="svc" x="130" y="312" width="292" height="94" rx="8"/>
+    <text class="n" x="276" y="338">Static CDN</text>
+    <text class="s" x="276" y="356">serves the SPA bundle</text>
+    <text class="s" x="276" y="374">vercel.json rewrites every</text>
+    <text class="s" x="276" y="392">non-/api/ path to index.html</text>
+
+    <rect class="llm" x="458" y="312" width="292" height="94" rx="8"/>
+    <text class="n" x="604" y="338">Serverless function — /api/agent</text>
+    <text class="s" x="604" y="356">Node ESM runtime, maxDuration 300 s</text>
+    <text class="s" x="604" y="374">holds ANTHROPIC_API_KEY and the</text>
+    <text class="s" x="604" y="392">server geocoding key</text>
+
+    <rect class="svc" x="786" y="312" width="292" height="94" rx="8"/>
+    <text class="n" x="932" y="338">GitHub Actions CI</text>
+    <text class="s" x="932" y="356">Node 24, pnpm 10, Vitest gate</text>
+    <text class="s" x="932" y="374">push to main → production</text>
+    <text class="s" x="932" y="392">pull request → preview deploy</text>
+  </g>
+
+  <!-- supabase tier -->
+  <g>
+    <rect class="sto" x="130" y="532" width="292" height="94" rx="8"/>
+    <text class="n" x="276" y="558">Auth (GoTrue)</text>
+    <text class="s" x="276" y="576">JWT sessions, PKCE flow</text>
+    <text class="s" x="276" y="594">email + password, Google OAuth</text>
+    <text class="s" x="276" y="612">sign-out purges the local cache</text>
+
+    <rect class="sto" x="458" y="532" width="292" height="94" rx="8"/>
+    <text class="n" x="604" y="558">Postgres + RLS</text>
+    <text class="s" x="604" y="576">5 tables, FK cascade deletes</text>
+    <text class="s" x="604" y="594">moddatetime keeps updated_at</text>
+    <text class="s" x="604" y="612">anon role gets no table grant</text>
+
+    <rect class="svc" x="786" y="532" width="292" height="94" rx="8"/>
+    <text class="n" x="932" y="558">Migrations</text>
+    <text class="s" x="932" y="576">supabase/migrations/*.sql</text>
+    <text class="s" x="932" y="594">schema, RLS policies, grants</text>
+    <text class="s" x="932" y="612">applied with the Supabase CLI</text>
+  </g>
+
+  <!-- third-party tier -->
+  <g>
+    <rect class="llm" x="130" y="734" width="215" height="68" rx="8"/>
+    <text class="n" x="237" y="760">Anthropic</text>
+    <text class="s" x="237" y="778">from the function only</text>
+
+    <rect class="ext" x="375" y="734" width="215" height="68" rx="8"/>
+    <text class="n" x="482" y="760">Google Maps / Places</text>
+    <text class="s" x="482" y="778">from the browser</text>
+
+    <rect class="ext" x="620" y="734" width="215" height="68" rx="8"/>
+    <text class="n" x="727" y="760">Google Geocoding</text>
+    <text class="s" x="727" y="778">from the function only</text>
+
+    <rect class="ext" x="865" y="734" width="215" height="68" rx="8"/>
+    <text class="n" x="972" y="760">Open-Meteo</text>
+    <text class="s" x="972" y="778">from the browser, keyless</text>
+  </g>
+
+  <!-- edge labels -->
+  <g class="el">
+    <rect x="180" y="262" width="94" height="13" fill="#ffffff"/>
+    <text x="227" y="272">static bundle</text>
+    <rect x="612" y="238" width="132" height="13" fill="#ffffff"/>
+    <text class="la" x="616" y="248">prompt + Bearer JWT</text>
+    <rect x="614" y="460" width="146" height="13" fill="#ffffff"/>
+    <text class="la" x="618" y="470">same JWT, RLS-scoped</text>
+    <text transform="rotate(-90 48 400)" class="la" x="48" y="400">browser → Supabase directly (anon key + user JWT)</text>
+  </g>
+
+  <!-- legend -->
+  <rect x="110" y="848" width="990" height="64" rx="8" fill="#f5f7fa" stroke="#cbd5e1" stroke-width="1"/>
+  <g class="s">
+    <rect x="130" y="870" width="14" height="14" rx="3" class="ui"/>
+    <text class="la" x="152" y="881">Client runtime</text>
+    <rect x="280" y="870" width="14" height="14" rx="3" class="svc"/>
+    <text class="la" x="302" y="881">Platform / build</text>
+    <rect x="435" y="870" width="14" height="14" rx="3" class="llm"/>
+    <text class="la" x="457" y="881">Server function / AI</text>
+    <rect x="615" y="870" width="14" height="14" rx="3" class="sto"/>
+    <text class="la" x="637" y="881">Persistence</text>
+    <rect x="760" y="870" width="14" height="14" rx="3" class="ext"/>
+    <text class="la" x="782" y="881">External</text>
+    <text class="la" x="880" y="881">Dashed outline = runtime tier</text>
+  </g>
+</svg>
