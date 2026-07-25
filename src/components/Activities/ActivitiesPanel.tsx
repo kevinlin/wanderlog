@@ -38,7 +38,7 @@ interface ActivitiesPanelProps {
   onExportSuccess?: () => void;
   onHide?: () => void; // Legacy prop for mobile panel hiding (deprecated, kept for compatibility)
   onItemDone: (itemId: string) => void;
-  onReorder: (fromIndex: number, toIndex: number) => void;
+  onReorder: (orderedActivityIds: string[]) => void;
   scenicWaypoints?: ScenicWaypoint[];
   selectedActivityId?: string | null;
   stopName: string;

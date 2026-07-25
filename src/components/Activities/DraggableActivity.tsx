@@ -9,12 +9,13 @@ import type { TripData } from '@/types/trip';
 interface DraggableActivitiesListProps {
   accommodation?: Accommodation;
   activities: Activity[];
+  emptyMessage?: string;
   isDragDisabled?: boolean;
   onActivitySelect: (activityId: string) => void;
   onDeleteActivity?: (activity: Activity) => void;
   onDone: (activityId: string) => void;
   onEditActivity?: (activity: Activity) => void;
-  onReorder: (fromIndex: number, toIndex: number) => void;
+  onReorder: (orderedActivityIds: string[]) => void;
   selectedActivityId?: string | null;
   trip: TripData;
   tripId: string;
@@ -23,6 +24,7 @@ interface DraggableActivitiesListProps {
 export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = ({
   activities,
   accommodation,
+  emptyMessage,
   selectedActivityId,
   isDragDisabled = false,
   onActivitySelect,
@@ -54,7 +56,12 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
       const newIndex = activities.findIndex((activity) => activity.activity_id === over.id);
 
       if (oldIndex !== -1 && newIndex !== -1) {
-        onReorder(oldIndex, newIndex);
+        // Ids, not indices: this list holds only the planned subset, so an index
+        // into it means nothing to the write that renumbers the whole stop.
+        const orderedIds = activities.map((activity) => activity.activity_id);
+        const [moved] = orderedIds.splice(oldIndex, 1);
+        orderedIds.splice(newIndex, 0, moved);
+        onReorder(orderedIds);
       }
     }
   };
@@ -62,7 +69,7 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
   if (activities.length === 0) {
     return (
       <div className="py-8 text-center">
-        <p className="text-gray-500">No activities planned for this stop.</p>
+        <p className="text-gray-500">{emptyMessage ?? 'No activities planned for this stop.'}</p>
       </div>
     );
   }
