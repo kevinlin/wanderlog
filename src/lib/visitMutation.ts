@@ -1,4 +1,4 @@
-import type { QueryClient } from '@tanstack/react-query';
+import type { MutationObserverOptions, QueryClient } from '@tanstack/react-query';
 import { tripKeys } from '@/lib/queryClient';
 import { writeVisitFields } from '@/services/supabaseService';
 import type { ScenicWaypoint } from '@/types/map';
@@ -109,9 +109,11 @@ const toRow = (vars: VisitVariables) => ({
 
 // Every callback lives here, not in a hook closure, so the live path and the
 // path resumed after a browser restart are the same code (Phase 4 Req 5.4).
-export const buildVisitMutationDefaults = (queryClient: QueryClient) => ({
-  mutationFn: (vars: VisitVariables) => writeVisitFields(vars.isWaypoint ? 'scenic_waypoints' : 'activities', vars.itemId, toRow(vars)),
-  onMutate: async (vars: VisitVariables): Promise<VisitContext> => {
+export type VisitMutationDefaults = Omit<MutationObserverOptions<void, Error, VisitVariables, VisitContext>, 'mutationKey'>;
+
+export const buildVisitMutationDefaults = (queryClient: QueryClient): VisitMutationDefaults => ({
+  mutationFn: (vars) => writeVisitFields(vars.isWaypoint ? 'scenic_waypoints' : 'activities', vars.itemId, toRow(vars)),
+  onMutate: async (vars) => {
     await queryClient.cancelQueries({ queryKey: tripKeys.detail(vars.tripId) });
     const current = queryClient.getQueryData<TripData>(tripKeys.detail(vars.tripId));
     // Only the item's four prior scalars: the context is dehydrated with the
@@ -120,7 +122,7 @@ export const buildVisitMutationDefaults = (queryClient: QueryClient) => ({
     queryClient.setQueryData<TripData>(tripKeys.detail(vars.tripId), (old) => (old ? applyVisitPatch(old, vars) : old));
     return { itemId: vars.itemId, previous };
   },
-  onError: (_error: Error, vars: VisitVariables, context: VisitContext | undefined) => {
+  onError: (_error, vars, context) => {
     if (context) {
       queryClient.setQueryData<TripData>(tripKeys.detail(vars.tripId), (old) => (old ? revertVisitPatch(old, context) : old));
     }
@@ -128,6 +130,5 @@ export const buildVisitMutationDefaults = (queryClient: QueryClient) => ({
       listener({ variables: vars });
     }
   },
-  onSettled: (_data: undefined, _error: Error | null, vars: VisitVariables) =>
-    queryClient.invalidateQueries({ queryKey: tripKeys.detail(vars.tripId) }),
+  onSettled: (_data, _error, vars) => queryClient.invalidateQueries({ queryKey: tripKeys.detail(vars.tripId) }),
 });

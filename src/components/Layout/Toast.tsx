@@ -1,6 +1,8 @@
 import { CheckCircleIcon, ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import { queryClient } from '@/lib/queryClient';
+import { onVisitWriteError, VISIT_MUTATION_KEY } from '@/lib/visitMutation';
 
 export interface ToastAction {
   label: string;
@@ -126,6 +128,30 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const showToast = useCallback((options: ShowToastOptions) => {
     setToast((previous) => ({ ...options, id: (previous?.id ?? 0) + 1 }));
   }, []);
+
+  // A visit write resumed from IndexedDB runs outside React and cannot call
+  // showToast itself, so the mutation module emits and this bridges it back in.
+  useEffect(
+    () =>
+      onVisitWriteError(({ variables }) => {
+        showToast({
+          message: 'Could not save your visit note',
+          type: 'error',
+          action: {
+            label: 'Retry',
+            onClick: () => {
+              // Same per-item scope as useVisitRecord, so a retry still queues
+              // behind any other write pending for this item.
+              queryClient
+                .getMutationCache()
+                .build(queryClient, { mutationKey: [...VISIT_MUTATION_KEY], scope: { id: `visit-${variables.itemId}` } })
+                .execute(variables);
+            },
+          },
+        });
+      }),
+    [showToast]
+  );
 
   return (
     <ToastContext.Provider value={{ showToast }}>
