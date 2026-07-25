@@ -8,6 +8,8 @@
     <marker id="a-green" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#15803d"/></marker>
     <marker id="a-orange" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#c2410c"/></marker>
     <marker id="a-rose" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#be123c"/></marker>
+    <marker id="a-amber" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#b7860b"/></marker>
+    <marker id="a-blue" markerWidth="9" markerHeight="7" refX="8" refY="3.5" orient="auto"><polygon points="0 0, 9 3.5, 0 7" fill="#2563eb"/></marker>
     <style>
       text { font-family: Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif; text-anchor: middle; }
       .title { font-size: 19px; font-weight: 700; fill: #0f172a; text-anchor: start; }
@@ -63,9 +65,10 @@
   <path class="edge" stroke="#15803d" d="M584,323 H606" marker-end="url(#a-green)"/>
   <path class="edge" stroke="#15803d" d="M861,323 H883" marker-end="url(#a-green)"/>
   <path class="edge" stroke="#c2410c" d="M1014,368 V446" marker-end="url(#a-orange)"/>
-  <path class="edge" stroke="#b7860b" d="M700,500 H788" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#c2410c" d="M390,500 H492" marker-end="url(#a-orange)"/>
+  <path class="edge" stroke="#b7860b" d="M700,500 H788" marker-end="url(#a-amber)"/>
   <path class="edge" stroke="#15803d" d="M952,452 V420 H290 V446" marker-end="url(#a-green)"/>
-  <path class="edge" stroke="#2563eb" d="M600,548 V590 H320 V638" marker-end="url(#a-green)"/>
+  <path class="edge" stroke="#2563eb" d="M600,548 V590 H320 V638" marker-end="url(#a-blue)"/>
   <path class="edge" stroke="#be123c" stroke-dasharray="5 4" d="M880,620 V638" marker-end="url(#a-rose)"/>
   <path class="edge" stroke="#0e7490" stroke-dasharray="5 4" d="M320,730 V744 H1150 V210 H990 V198" marker-end="url(#a-cyan)"/>
 
@@ -198,8 +201,10 @@
   <g class="el">
     <rect x="468" y="228" width="166" height="13" fill="#ffffff"/>
     <text class="la" x="470" y="238">POST /api/agent + Bearer JWT</text>
+    <rect x="404" y="481" width="76" height="13" fill="#ffffff"/>
+    <text x="441" y="491">model response</text>
     <rect x="708" y="482" width="72" height="13" fill="#ffffff"/>
-    <text class="yn" x="744" y="492" fill="#15803d">yes — run them</text>
+    <text class="yn" x="744" y="492" fill="#b7860b">yes — run them</text>
     <rect x="606" y="566" width="128" height="13" fill="#ffffff"/>
     <text class="yn la" x="610" y="576" fill="#2563eb">no — it answered</text>
     <rect x="404" y="430" width="470" height="13" fill="#ffffff"/>
