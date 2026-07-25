@@ -1,7 +1,7 @@
 # Wanderlog Spec Index
 
 Navigation map for the Wanderlog specification docs. All specs use the `default` profile
-(`<artifact>_<topic>.md`), organized into per-phase folders (`phase-1/`, `phase-2/`, `phase-3/`).
+(`<artifact>_<topic>.md`), organized into per-phase folders (`phase-1/`, `phase-2/`, `phase-3/`, `phase-4/`).
 Generated conventions and lint reports live under [`meta/`](meta/).
 
 ## Requirements Specifications
@@ -11,6 +11,7 @@ Generated conventions and lint reports live under [`meta/`](meta/).
 | [phase-1/requirements_phase-1.md](phase-1/requirements_phase-1.md) | Phase 1 acceptance criteria (map, timeline, activities, accommodation, weather, POI, responsive design) plus the original MVP FRS context, data schema, testing plan, and future enhancements. |
 | [phase-2/requirements_phase-2.md](phase-2/requirements_phase-2.md) | Supabase migration, auth gate, trip library, itinerary editing, offline read, hosting move. |
 | [phase-3/requirements_phase-3.md](phase-3/requirements_phase-3.md) | Agent mode: natural-language Q&A, bounded itinerary edits, generative trip creation; first server-side code. |
+| [phase-4/requirements_phase-4.md](phase-4/requirements_phase-4.md) | Visit records: optional time, duration, and note captured on check-off; visited items ordered chronologically; agent check-off support; offline capture. |
 
 ## Design Specifications
 
@@ -19,6 +20,7 @@ Generated conventions and lint reports live under [`meta/`](meta/).
 | [phase-1/design_phase-1.md](phase-1/design_phase-1.md) | Architecture, components, data models, services, and visual design system. |
 | [phase-2/design_phase-2.md](phase-2/design_phase-2.md) | Phase 2 architecture: Supabase schema + RLS, TanStack Query data layer, auth, routing, editing UX, offline cache, Vercel hosting, milestones M0-M4. |
 | [phase-3/design_wanderlog-phase-3.md](phase-3/design_wanderlog-phase-3.md) | Phase 3 architecture: Vercel agent endpoint, LLM tool-use loop, mirrored CRUD tool surface, NDJSON/buffered API contract, milestones M1-M3. |
+| [phase-4/design_phase-4.md](phase-4/design_phase-4.md) | Phase 4 architecture: shared visit-stamp module, duration text-to-minutes migration, planned/visited panel split, visit form, paused-mutation resume, agent tool fields, milestones M1-M3. |
 
 ## Implementation Plans
 
