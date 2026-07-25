@@ -34,8 +34,15 @@ export const ACTIVITY_COLUMNS: readonly ColumnDef[] = [
 // scenic_waypoints has no type column.
 export const WAYPOINT_COLUMNS: readonly ColumnDef[] = ACTIVITY_COLUMNS.filter((def) => def.column !== 'type');
 
-// The agent's update tools expose `done`; the browser toggles is_done via setActivityDone.
+// The agent's update tools expose `done`; the browser toggles is_done via writeVisitFields.
 export const ITEM_DONE_COLUMN: ColumnDef = col('done', 'is_done');
+
+// Deliberately outside ACTIVITY_COLUMNS, for the same reason ITEM_DONE_COLUMN
+// is: the item editors write those columns densely, so a full-form save would
+// null out any column the *Input shapes don't carry. Visit records are written
+// sparsely - by writeVisitFields in the browser, and by the agent appending
+// these defs to its patch defs.
+export const VISIT_COLUMNS: readonly ColumnDef[] = [col('visitedAt', 'visited_at'), col('visitDurationMinutes', 'visit_duration_minutes')];
 
 export const ACCOMMODATION_COLUMNS: readonly ColumnDef[] = [
   col('name'),

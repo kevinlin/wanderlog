@@ -15,12 +15,15 @@ export interface ScenicWaypoint {
     lng?: number;
     address?: string;
   };
+  order?: number;
   remarks?: string;
   status?: {
     done: boolean;
   };
   thumbnail_url?: string | null;
   url?: string;
+  visit_duration_minutes?: number;
+  visited_at?: string; // 'YYYY-MM-DD HH:mm' local to the trip timezone
 }
 
 export interface MapBounds {

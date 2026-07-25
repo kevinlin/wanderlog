@@ -61,6 +61,8 @@ const tripRow: TripRowNested = {
           google_place_id: null,
           sort_order: 1,
           is_done: true,
+          visited_at: '2025-12-15 14:32',
+          visit_duration_minutes: 80,
           created_at: '2025-11-01T00:00:00Z',
           updated_at: '2025-11-01T00:00:00Z',
         },
@@ -80,6 +82,8 @@ const tripRow: TripRowNested = {
           google_place_id: null,
           sort_order: 0,
           is_done: false,
+          visited_at: null,
+          visit_duration_minutes: null,
           created_at: '2025-11-01T00:00:00Z',
           updated_at: '2025-11-01T00:00:00Z',
         },
@@ -129,6 +133,33 @@ describe('toTripData', () => {
     const accommodation = toTripData({ ...tripRow, stops: [bare as (typeof tripRow.stops)[0]] }).stops[0].accommodation;
     expect(accommodation?.location).toBeUndefined();
     expect(accommodation?.remarks).toBeUndefined();
+  });
+
+  it('maps visit fields and waypoint order onto the domain', () => {
+    const waypointRow = {
+      ...tripRow.stops[0].activities[1],
+      id: 'wp-1',
+      name: 'Lake lookout',
+      sort_order: 3,
+      visited_at: null,
+      visit_duration_minutes: null,
+    };
+    const trip = toTripData({
+      ...tripRow,
+      stops: [{ ...tripRow.stops[0], scenic_waypoints: [waypointRow] }],
+    });
+    const stop = trip.stops[0];
+    expect(stop.activities[1].visited_at).toBe('2025-12-15 14:32');
+    expect(stop.activities[1].visit_duration_minutes).toBe(80);
+    expect(stop.activities[0].visited_at).toBeUndefined();
+    expect(stop.scenic_waypoints?.[0].order).toBe(3);
+    expect(stop.scenic_waypoints?.[0].visited_at).toBeUndefined();
+  });
+
+  it('carries the trip stored date range into TripData', () => {
+    const trip = toTripData(tripRow);
+    expect(trip.start_date).toBe('2025-12-13');
+    expect(trip.end_date).toBe('2025-12-29');
   });
 
   it('omits activity location when no coordinates or address exist', () => {
@@ -205,6 +236,14 @@ describe('buildRows', () => {
     expect(bundle.accommodations[0].remarks).toBe('Ask for a lake-facing room');
     expect(bundle.accommodations[0].lat).toBe(-45.031);
     expect(bundle.accommodations[0].lng).toBe(168.662);
+  });
+
+  it('round-trips visit fields back to row columns', () => {
+    const bundle = buildRows(toTripData(tripRow), '202512_NZ');
+    const visited = bundle.activities.find((a) => a.id === 'act-2');
+    expect(visited?.visited_at).toBe('2025-12-15 14:32');
+    expect(visited?.visit_duration_minutes).toBe(80);
+    expect(bundle.activities.find((a) => a.id === 'act-1')?.visited_at).toBeNull();
   });
 
   it('derives trip start/end dates from stops when building rows', () => {

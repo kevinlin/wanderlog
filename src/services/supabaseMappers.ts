@@ -68,6 +68,8 @@ export interface ActivityRow {
   type: string | null;
   updated_at: string;
   url: string | null;
+  visit_duration_minutes: number | null;
+  visited_at: string | null;
 }
 
 export type ScenicWaypointRow = Omit<ActivityRow, 'type' | 'travel_time_from_accommodation'>;
@@ -145,6 +147,8 @@ const toActivity = (row: ActivityRow): Activity => ({
   google_place_id: orNothing(row.google_place_id),
   order: row.sort_order,
   status: { done: row.is_done },
+  visited_at: orNothing(row.visited_at),
+  visit_duration_minutes: orNothing(row.visit_duration_minutes),
 });
 
 const toScenicWaypoint = (row: ScenicWaypointRow): ScenicWaypoint => ({
@@ -156,7 +160,10 @@ const toScenicWaypoint = (row: ScenicWaypointRow): ScenicWaypoint => ({
   remarks: orNothing(row.remarks),
   thumbnail_url: orNothing(row.thumbnail_url),
   google_place_id: orNothing(row.google_place_id),
+  order: row.sort_order,
   status: { done: row.is_done },
+  visited_at: orNothing(row.visited_at),
+  visit_duration_minutes: orNothing(row.visit_duration_minutes),
 });
 
 const toAccommodation = (row: AccommodationRow): Accommodation => ({
@@ -200,6 +207,10 @@ export const toTripData = (row: TripRowNested): TripData => ({
   trip_id: row.id,
   trip_name: row.name,
   timezone: row.timezone,
+  // Carried so the visit stamp rule has a source that does not depend on the
+  // trip library being cached (Phase 4 Req 1.5).
+  start_date: row.start_date,
+  end_date: row.end_date,
   stops: [...row.stops].sort(bySortOrder).map(toTripBase),
   created_at: row.created_at,
   updated_at: row.updated_at,
@@ -265,6 +276,8 @@ export const buildRows = (trip: TripData, tripId: string): RowBundle => {
         google_place_id: activity.google_place_id ?? null,
         sort_order: activity.order ?? index,
         is_done: activity.status?.done ?? false,
+        visited_at: activity.visited_at ?? null,
+        visit_duration_minutes: activity.visit_duration_minutes ?? null,
         created_at: now,
         updated_at: now,
       });
@@ -284,6 +297,8 @@ export const buildRows = (trip: TripData, tripId: string): RowBundle => {
         google_place_id: waypoint.google_place_id ?? null,
         sort_order: index,
         is_done: waypoint.status?.done ?? false,
+        visited_at: waypoint.visited_at ?? null,
+        visit_duration_minutes: waypoint.visit_duration_minutes ?? null,
         created_at: now,
         updated_at: now,
       });

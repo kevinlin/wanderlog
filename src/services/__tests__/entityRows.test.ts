@@ -10,6 +10,7 @@ import {
   patchRow,
   STOP_COLUMNS,
   TRIP_METADATA_COLUMNS,
+  VISIT_COLUMNS,
   WAYPOINT_COLUMNS,
 } from '../entityRows';
 
@@ -74,6 +75,23 @@ describe('activity and waypoint columns', () => {
       is_done: true,
     });
     expect(patchRow([...ACTIVITY_COLUMNS, ITEM_DONE_COLUMN], { done: false })).toEqual({ is_done: false });
+  });
+
+  // Regression: the item editors write ACTIVITY_COLUMNS densely, so folding the
+  // visit columns in would null out a saved visit record on every full-form edit.
+  it('keeps the visit columns out of the dense item column set', () => {
+    const dense = denseRow(ACTIVITY_COLUMNS, { name: 'Kayaking' });
+    expect(dense).not.toHaveProperty('visited_at');
+    expect(dense).not.toHaveProperty('visit_duration_minutes');
+    expect(denseRow(WAYPOINT_COLUMNS, { name: 'Lookout' })).not.toHaveProperty('visited_at');
+  });
+
+  it('patchRow writes the visit columns sparsely when they are appended', () => {
+    expect(patchRow([...ACTIVITY_COLUMNS, ITEM_DONE_COLUMN, ...VISIT_COLUMNS], { done: true, visited_at: '2026-07-15 14:32' })).toEqual({
+      is_done: true,
+      visited_at: '2026-07-15 14:32',
+    });
+    expect(patchRow([...ACTIVITY_COLUMNS, ...VISIT_COLUMNS], { visitDurationMinutes: 80 })).toEqual({ visit_duration_minutes: 80 });
   });
 });
 

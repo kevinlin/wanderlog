@@ -16,6 +16,8 @@ export interface TripSummary {
 export interface TripData {
   constraints?: TripConstraints;
   created_at?: string;
+  end_date?: string; // YYYY-MM-DD, from the stored trip row
+  start_date?: string; // YYYY-MM-DD, from the stored trip row
   stops: TripBase[];
   timezone: string;
   // Legacy fields for backward compatibility
@@ -96,6 +98,8 @@ export interface Activity {
   thumbnail_url?: string;
   travel_time_from_accommodation?: string;
   url?: string;
+  visit_duration_minutes?: number;
+  visited_at?: string; // 'YYYY-MM-DD HH:mm' local to the trip timezone
 }
 
 // Legacy interface mappings for backward compatibility
