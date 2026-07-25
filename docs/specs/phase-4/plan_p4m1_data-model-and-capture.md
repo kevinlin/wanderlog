@@ -60,7 +60,7 @@ Adds the columns and makes every field the later tasks depend on reachable from 
 **Interfaces:**
 - Produces: `Activity.visited_at?: string`, `Activity.visit_duration_minutes?: number`, `ScenicWaypoint.visited_at?: string`, `ScenicWaypoint.visit_duration_minutes?: number`, `ScenicWaypoint.order?: number`, `TripData.start_date?: string`, `TripData.end_date?: string`. Column defs `visitedAt`/`visit_duration_minutes` on `ACTIVITY_COLUMNS`.
 
-- [ ] **Step 1: Write the migration**
+- [x] **Step 1: Write the migration**
 
 Create `supabase/migrations/20260726120000_visit_records.sql`:
 
@@ -73,7 +73,7 @@ alter table scenic_waypoints add column visited_at             text;
 alter table scenic_waypoints add column visit_duration_minutes integer;
 ```
 
-- [ ] **Step 2: Write the failing mapper tests**
+- [x] **Step 2: Write the failing mapper tests**
 
 Add to `src/services/__tests__/supabaseMappers.test.ts`:
 
@@ -101,12 +101,12 @@ it('carries the trip stored date range into TripData', () => {
 
 Use the file's existing row-builder helpers; if it builds rows inline, follow that style instead of introducing new helpers.
 
-- [ ] **Step 3: Run the tests to verify they fail**
+- [x] **Step 3: Run the tests to verify they fail**
 
 Run: `pnpm vitest run src/services/__tests__/supabaseMappers.test.ts`
 Expected: FAIL - `visited_at` undefined, `order` undefined, `start_date` undefined.
 
-- [ ] **Step 4: Add the domain fields**
+- [x] **Step 4: Add the domain fields**
 
 In `src/types/trip.ts`, add to `Activity`:
 
@@ -130,7 +130,7 @@ In `src/types/map.ts`, add to `ScenicWaypoint`:
   visited_at?: string;
 ```
 
-- [ ] **Step 5: Add the row fields and map them**
+- [x] **Step 5: Add the row fields and map them**
 
 In `src/services/supabaseMappers.ts`, add to `ActivityRow` (which `ScenicWaypointRow` derives from):
 
@@ -164,7 +164,7 @@ In `buildRows`, write both new columns for activities and waypoints alongside th
 
 and the waypoint equivalent using `waypoint.`.
 
-- [ ] **Step 6: Add the column defs**
+- [x] **Step 6: Add the column defs**
 
 In `src/services/entityRows.ts`, append to `ACTIVITY_COLUMNS`:
 
@@ -175,17 +175,17 @@ In `src/services/entityRows.ts`, append to `ACTIVITY_COLUMNS`:
 
 `WAYPOINT_COLUMNS` filters only `type`, so both are inherited with no second edit.
 
-- [ ] **Step 7: Run the tests to verify they pass**
+- [x] **Step 7: Run the tests to verify they pass**
 
 Run: `pnpm vitest run src/services/__tests__/supabaseMappers.test.ts`
 Expected: PASS.
 
-- [ ] **Step 8: Apply the migration locally and typecheck**
+- [x] **Step 8: Apply the migration locally and typecheck**
 
 Run: `supabase db push --local && pnpm build`
 Expected: migration applies; `tsc -b` clean.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add supabase/migrations src/types src/services/entityRows.ts src/services/supabaseMappers.ts src/services/__tests__/supabaseMappers.test.ts
@@ -205,7 +205,7 @@ The one place that knows what "now, in the trip's timezone" means and when a tic
 **Interfaces:**
 - Produces: `formatTripLocal(now: Date, timeZone: string): string`, `stampIfDuringTrip(input: StampInput): string | null` where `StampInput = { now: Date; timeZone?: string; startDate?: string; endDate?: string }`, `isValidTripLocal(value: string): boolean`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Create `src/services/__tests__/visitRecord.test.ts`:
 
@@ -275,12 +275,12 @@ describe('isValidTripLocal', () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `pnpm vitest run src/services/__tests__/visitRecord.test.ts`
 Expected: FAIL - cannot resolve `../visitRecord`.
 
-- [ ] **Step 3: Implement the module**
+- [x] **Step 3: Implement the module**
 
 Create `src/services/visitRecord.ts`:
 
@@ -343,12 +343,12 @@ export const isValidTripLocal = (value: string): boolean => {
 };
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [x] **Step 4: Run the tests to verify they pass**
 
 Run: `pnpm vitest run src/services/__tests__/visitRecord.test.ts`
 Expected: PASS, all cases.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add src/services/visitRecord.ts src/services/__tests__/visitRecord.test.ts
@@ -369,7 +369,7 @@ Without this, a TripIt-imported trip carries the importing device's zone and sta
 - Consumes: nothing from earlier tasks.
 - Produces: `isValidTimeZone(value: string): boolean` exported from `src/services/visitRecord.ts`; `TripMetadataPatch.timezone?: string`.
 
-- [ ] **Step 1: Write the failing validator test**
+- [x] **Step 1: Write the failing validator test**
 
 Add to `src/services/__tests__/visitRecord.test.ts`:
 
@@ -391,12 +391,12 @@ describe('isValidTimeZone', () => {
 
 Add `isValidTimeZone` to the import at the top of the file.
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `pnpm vitest run src/services/__tests__/visitRecord.test.ts -t isValidTimeZone`
 Expected: FAIL - `isValidTimeZone is not a function`.
 
-- [ ] **Step 3: Implement the validator**
+- [x] **Step 3: Implement the validator**
 
 Append to `src/services/visitRecord.ts`:
 
@@ -415,12 +415,12 @@ export const isValidTimeZone = (value: string): boolean => {
 };
 ```
 
-- [ ] **Step 4: Run to verify it passes**
+- [x] **Step 4: Run to verify it passes**
 
 Run: `pnpm vitest run src/services/__tests__/visitRecord.test.ts -t isValidTimeZone`
 Expected: PASS.
 
-- [ ] **Step 5: Carry timezone through the shared write layer**
+- [x] **Step 5: Carry timezone through the shared write layer**
 
 In `src/services/entityRows.ts`, append to `TRIP_METADATA_COLUMNS`:
 
@@ -434,7 +434,7 @@ In `src/services/tripWrites.ts`, add to `TripMetadataPatch`:
   timezone?: string;
 ```
 
-- [ ] **Step 6: Write the failing modal test**
+- [x] **Step 6: Write the failing modal test**
 
 Add to `src/components/Editing/__tests__/TripMetadataFormModal.test.tsx` (create it following the sibling modal tests if absent):
 
@@ -468,12 +468,12 @@ it('rejects an unknown timezone without saving', async () => {
 });
 ```
 
-- [ ] **Step 7: Run to verify it fails**
+- [x] **Step 7: Run to verify it fails**
 
 Run: `pnpm vitest run src/components/Editing/__tests__/TripMetadataFormModal.test.tsx`
 Expected: FAIL - no timezone field.
 
-- [ ] **Step 8: Add the field to the modal**
+- [x] **Step 8: Add the field to the modal**
 
 In `src/components/Editing/TripMetadataFormModal.tsx`, add state beside the existing fields:
 
@@ -511,7 +511,7 @@ Add `timezone: timezone.trim(),` to the `patch` object, and render the input alo
 
 Import `isValidTimeZone` from `@/services/visitRecord`.
 
-- [ ] **Step 9: Add timezone to the agent tool**
+- [x] **Step 9: Add timezone to the agent tool**
 
 In `api/_lib/tools/tripFields.ts`, add to `updateTripMetadataSchema`'s object:
 
@@ -521,12 +521,12 @@ In `api/_lib/tools/tripFields.ts`, add to `updateTripMetadataSchema`'s object:
 
 Import it with the shared-module convention: `import { isValidTimeZone } from '../../../src/services/visitRecord.js';`. Add `timezone` to the tool's `description` field list.
 
-- [ ] **Step 10: Run the tests to verify they pass**
+- [x] **Step 10: Run the tests to verify they pass**
 
 Run: `pnpm vitest run src/components/Editing/__tests__/TripMetadataFormModal.test.tsx src/services/__tests__/visitRecord.test.ts`
 Expected: PASS.
 
-- [ ] **Step 11: Commit**
+- [x] **Step 11: Commit**
 
 ```bash
 git add src/services src/components/Editing api/_lib/tools/tripFields.ts
@@ -557,7 +557,7 @@ Everything a visit write does lives here, with no React in scope, so a mutation 
   - `VISIT_MUTATION_KEY = ['visit-record']`
   - `writeVisitFields(client, table, id, fields)` in `tripWrites`, plus its `supabaseService` binding.
 
-- [ ] **Step 1: Write the failing pure-function tests**
+- [x] **Step 1: Write the failing pure-function tests**
 
 Create `src/lib/__tests__/visitMutation.test.ts`:
 
@@ -639,12 +639,12 @@ describe('revertVisitPatch', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `pnpm vitest run src/lib/__tests__/visitMutation.test.ts`
 Expected: FAIL - cannot resolve `../visitMutation`.
 
-- [ ] **Step 3: Add the write function**
+- [x] **Step 3: Add the write function**
 
 In `src/services/tripWrites.ts`, replace `setActivityDone` and `setWaypointDone` with:
 
@@ -673,7 +673,7 @@ export const writeVisitFields = (table: 'activities' | 'scenic_waypoints', id: s
   writes.writeVisitFields(getSupabase(), table, id, fields);
 ```
 
-- [ ] **Step 4: Implement `visitMutation.ts`**
+- [x] **Step 4: Implement `visitMutation.ts`**
 
 Create `src/lib/visitMutation.ts`:
 
@@ -809,19 +809,19 @@ export const buildVisitMutationDefaults = (queryClient: QueryClient) => ({
 });
 ```
 
-- [ ] **Step 5: Run to verify it passes**
+- [x] **Step 5: Run to verify it passes**
 
 Run: `pnpm vitest run src/lib/__tests__/visitMutation.test.ts`
 Expected: PASS.
 
-- [ ] **Step 6: Fix the now-broken callers**
+- [x] **Step 6: Fix the now-broken callers**
 
 `setActivityDone`/`setWaypointDone` are gone. Run `pnpm build` and update every compile error - `useTripMutations.ts` (`useToggleActivityDone`) and its tests are the expected ones. Leave `useToggleActivityDone` in place for now; Task 7 removes it.
 
 Run: `pnpm build`
 Expected: clean.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add src/lib/visitMutation.ts src/lib/__tests__/visitMutation.test.ts src/services/tripWrites.ts src/services/supabaseService.ts src/hooks src/services/__tests__
@@ -843,7 +843,7 @@ Three small wirings that together make Req 5.3 true: without them a queued write
 - Consumes: `buildVisitMutationDefaults`, `VISIT_MUTATION_KEY`, `onVisitWriteError` from Task 4.
 - Produces: `registerMutationDefaults(queryClient: QueryClient): void`.
 
-- [ ] **Step 1: Write the failing resume test**
+- [x] **Step 1: Write the failing resume test**
 
 Create `src/lib/__tests__/visitResume.test.ts`:
 
@@ -944,12 +944,12 @@ describe('resumed visit mutations', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `pnpm vitest run src/lib/__tests__/visitResume.test.ts`
 Expected: FAIL - cannot resolve `../mutationDefaults`.
 
-- [ ] **Step 3: Implement the registration**
+- [x] **Step 3: Implement the registration**
 
 Create `src/lib/mutationDefaults.ts`:
 
@@ -965,12 +965,12 @@ export const registerMutationDefaults = (queryClient: QueryClient): void => {
 };
 ```
 
-- [ ] **Step 4: Run to verify it passes**
+- [x] **Step 4: Run to verify it passes**
 
 Run: `pnpm vitest run src/lib/__tests__/visitResume.test.ts`
 Expected: PASS - both the write firing and the rollback-plus-notify case.
 
-- [ ] **Step 5: Wire the app entry point**
+- [x] **Step 5: Wire the app entry point**
 
 In `src/main.tsx`, register the defaults and resume on restore, and bump the buster because the cached trip shape changed:
 
@@ -988,7 +988,7 @@ createRoot(document.getElementById('root')!).render(
     >
 ```
 
-- [ ] **Step 6: Subscribe the toast provider**
+- [x] **Step 6: Subscribe the toast provider**
 
 In `src/components/Layout/Toast.tsx`, inside `ToastProvider`, below the existing `showToast` callback:
 
@@ -1009,12 +1009,12 @@ In `src/components/Layout/Toast.tsx`, inside `ToastProvider`, below the existing
 
 Import `useEffect` from react, `onVisitWriteError` and `VISIT_MUTATION_KEY` from `@/lib/visitMutation`, and `queryClient` from `@/lib/queryClient`.
 
-- [ ] **Step 7: Run the full suite**
+- [x] **Step 7: Run the full suite**
 
 Run: `pnpm test:run`
 Expected: PASS.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add src/lib/mutationDefaults.ts src/lib/__tests__/visitResume.test.ts src/main.tsx src/components/Layout/Toast.tsx
@@ -1036,7 +1036,7 @@ The form itself. Deliberately carries no `min`/`max` on the date input: `ItemMod
 - Consumes: `formatTripLocal`, `isValidTripLocal` (Task 2); `useVisitRecord` (Task 7) is injected as an `onSave` prop so this task is testable before Task 7 exists.
 - Produces: `<DurationInput minutes={number | undefined} onChange={(minutes: number | undefined) => void} />`; `<VisitDetailsModal item isOpen onClose onSave tripTimezone tripStartDate tripEndDate />` where `onSave: (fields: { visitedAt: string | null; visitDurationMinutes: number | null; remarks: string | null }) => void`.
 
-- [ ] **Step 1: Write the failing modal tests**
+- [x] **Step 1: Write the failing modal tests**
 
 Create `src/components/Editing/__tests__/VisitDetailsModal.test.tsx`:
 
@@ -1115,12 +1115,12 @@ describe('VisitDetailsModal', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `pnpm vitest run src/components/Editing/__tests__/VisitDetailsModal.test.tsx`
 Expected: FAIL - cannot resolve `../VisitDetailsModal`.
 
-- [ ] **Step 3: Implement DurationInput**
+- [x] **Step 3: Implement DurationInput**
 
 Create `src/components/Editing/DurationInput.tsx`:
 
@@ -1176,7 +1176,7 @@ export const DurationInput = ({ minutes, onChange }: DurationInputProps) => {
 };
 ```
 
-- [ ] **Step 4: Implement VisitDetailsModal**
+- [x] **Step 4: Implement VisitDetailsModal**
 
 Create `src/components/Editing/VisitDetailsModal.tsx`:
 
@@ -1264,12 +1264,12 @@ export const VisitDetailsModal = ({ item, isOpen, onClose, onSave, tripTimezone,
 
 Add both components to `src/components/Editing/index.ts`.
 
-- [ ] **Step 5: Run to verify it passes**
+- [x] **Step 5: Run to verify it passes**
 
 Run: `pnpm vitest run src/components/Editing/__tests__/VisitDetailsModal.test.tsx`
 Expected: PASS, including the out-of-range save.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/components/Editing
@@ -1291,7 +1291,7 @@ The per-item container is what makes the mutation `scope` per item, which is wha
 - Consumes: `VISIT_MUTATION_KEY`, `VisitVariables` (Task 4); `stampIfDuringTrip` (Task 2); `VisitDetailsModal`, `VisitFormValues` (Task 6).
 - Produces: `useVisitRecord(itemId: string): UseMutationResult<void, Error, VisitVariables, VisitContext>`.
 
-- [ ] **Step 1: Write the failing hook test**
+- [x] **Step 1: Write the failing hook test**
 
 Create `src/hooks/__tests__/useVisitRecord.test.tsx`:
 
@@ -1357,12 +1357,12 @@ describe('useVisitRecord', () => {
 });
 ```
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `pnpm vitest run src/hooks/__tests__/useVisitRecord.test.tsx`
 Expected: FAIL - cannot resolve `../useVisitRecord`.
 
-- [ ] **Step 3: Implement the hook**
+- [x] **Step 3: Implement the hook**
 
 Create `src/hooks/useVisitRecord.ts`:
 
@@ -1381,12 +1381,12 @@ export function useVisitRecord(itemId: string): UseMutationResult<void, Error, V
 }
 ```
 
-- [ ] **Step 4: Run to verify it passes**
+- [x] **Step 4: Run to verify it passes**
 
 Run: `pnpm vitest run src/hooks/__tests__/useVisitRecord.test.tsx`
 Expected: PASS.
 
-- [ ] **Step 5: Build the per-item containers**
+- [x] **Step 5: Build the per-item containers**
 
 Create `src/components/Activities/ActivityListItem.tsx`:
 
@@ -1547,7 +1547,7 @@ export const WaypointListItem = ({ waypoint, trip, tripId, accommodation, isSele
 
 **Offline (Req 5.1):** neither container gates `onLogVisit` or the checkbox on `useOnlineStatus`. `ActivitiesPanel` wraps `onEdit`/`onDelete` in `isOnline ? … : undefined` - do **not** copy that pattern for `onLogVisit`. The visit form is the one editor that must work offline, and the containers own the prop, so the panel's gate never reaches it.
 
-- [ ] **Step 6: Add the log affordance to the cards**
+- [x] **Step 6: Add the log affordance to the cards**
 
 In `src/components/Cards/ActivityCard.tsx`, add `onLogVisit?: () => void;` to the props, destructure it, and render it beside the existing edit/delete buttons - so it appears only when the container passes it, which is only when the item is done (Req 2.5):
 
@@ -1596,13 +1596,13 @@ export const formatMinutes = (minutes: number): string => {
 
 Mirror both edits in `src/components/Cards/ScenicWaypointCard.tsx`.
 
-- [ ] **Step 7: Rewire the panel and page**
+- [x] **Step 7: Rewire the panel and page**
 
 In `DraggableActivity.tsx`, replace the inline `<ActivityCard>` with `<ActivityListItem>`, threading a new `trip` prop and renaming `onToggleDone` to `onDone: (activityId: string) => void`. In `ActivitiesPanel.tsx`, do the same for the waypoint list with `WaypointListItem`, and pass `tripData` down.
 
 In `src/pages/TripPage.tsx`, delete `toggleDoneMutation` and reduce `handleActivityToggle` to the celebration check only, renamed `handleItemDone(activityId: string)`; it no longer writes. Delete `useToggleActivityDone` from `src/hooks/useTripMutations.ts` and its tests.
 
-- [ ] **Step 8: Lock the offline carve-out with a regression test**
+- [x] **Step 8: Lock the offline carve-out with a regression test**
 
 Add to `src/components/Activities/__tests__/ActivityListItem.test.tsx`:
 
@@ -1622,12 +1622,12 @@ it('offers no visit form on an item that is not done', () => {
 Run: `pnpm vitest run src/components/Activities/__tests__/ActivityListItem.test.tsx`
 Expected: PASS. If the first test fails, an `isOnline` gate was copied onto `onLogVisit` - remove it.
 
-- [ ] **Step 9: Run the full suite and build**
+- [x] **Step 9: Run the full suite and build**
 
 Run: `pnpm test:run && pnpm build`
 Expected: PASS and clean.
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add src/hooks src/components src/pages/TripPage.tsx src/utils/tripUtils.ts
@@ -1646,7 +1646,7 @@ git commit -m "feat: capture visit details from per-item containers on check-off
 - Consumes: `isValidTripLocal` (Task 2).
 - Produces: nothing later tasks depend on.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Add to `src/schemas/__tests__/tripFileSchemas.test.ts`:
 
@@ -1676,12 +1676,12 @@ it('imports files without visit fields unchanged', () => {
 
 Use the file's existing fixture helper in place of `validTripFile()` if it is named differently.
 
-- [ ] **Step 2: Run to verify it fails**
+- [x] **Step 2: Run to verify it fails**
 
 Run: `pnpm vitest run src/schemas/__tests__/tripFileSchemas.test.ts`
 Expected: FAIL - the fields are stripped, and the malformed value is accepted.
 
-- [ ] **Step 3: Add the fields to both schemas**
+- [x] **Step 3: Add the fields to both schemas**
 
 In `src/schemas/tripFileSchemas.ts`, add to `activitySchema` and `waypointSchema`:
 
@@ -1692,19 +1692,19 @@ In `src/schemas/tripFileSchemas.ts`, add to `activitySchema` and `waypointSchema
 
 Import with the shared-module convention already used in that file: `import { isValidTripLocal } from '../services/visitRecord.js';`. If `toTripData` maps activity fields explicitly rather than spreading, add both fields there too.
 
-- [ ] **Step 4: Run to verify it passes**
+- [x] **Step 4: Run to verify it passes**
 
 Run: `pnpm vitest run src/schemas/__tests__/tripFileSchemas.test.ts`
 Expected: PASS.
 
-- [ ] **Step 5: Confirm export carries the fields**
+- [x] **Step 5: Confirm export carries the fields**
 
 Export serialises mapper output, so no code change should be needed. Verify:
 
 Run: `pnpm vitest run src/services/__tests__/exportService.test.ts`
 Expected: PASS. If the export builds its shape field-by-field, add the two fields and a test asserting they appear.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```bash
 git add src/schemas src/services
@@ -1769,3 +1769,12 @@ Add a changelog entry to this plan naming what was verified and anything deferre
 ## Changelog
 
 - 2026-07-26: Initial plan, written from [requirements_phase-4.md](requirements_phase-4.md) and [design_phase-4.md](design_phase-4.md) after the design review.
+- 2026-07-26: Tasks 1-8 implemented on `feat/p4m1-visit-records`. Full suite green (60 files, 541 tests); `tsc -b` and the production build clean.
+
+  Two plan corrections, both made deliberately:
+  - **Task 1 Step 6 reversed.** Adding the visit columns to `ACTIVITY_COLUMNS` would have destroyed visit records: `updateActivity` writes that set densely (`denseRow`), and `ActivityInput` carries no visit keys, so every save from the item editor would have nulled `visited_at` and `visit_duration_minutes`. They now live in a separate `VISIT_COLUMNS`, mirroring how `ITEM_DONE_COLUMN` is already held out of the dense set. M3 appends it to the agent's patch defs. Pinned by a regression test in `entityRows.test.ts`.
+  - **`DurationInput` holds typed state** rather than re-deriving hours/minutes from the total. The plan's version redisplayed a `0` the moment the hours box was cleared, and clearing both boxes emitted `0` minutes instead of `undefined` - so "no duration" was unsayable once either box had been filled.
+
+  Smaller deviations: `isValidTimeZone` replaced the identical `isIanaTimezone` already in `tripFileSchemas.ts` instead of shipping a second copy; the toast's Retry rebuilds the mutation with its per-item `scope`, which the plan's snippet dropped; no `src/components/Editing/index.ts` barrel was added, since that folder has none and siblings import directly.
+
+  **Task 9 not run.** It needs `supabase db push` against a real database and browser interaction against a preview deploy; Docker was not running locally. The migration is written but has been applied nowhere. Automated coverage stands in for parts of it: both stamp directions, the trip-zone-differs-from-device case, the out-of-range save through the real Save button, offline affordance, dehydrate/hydrate resume, and post-restart rollback-and-notify. Steps 1-6 of Task 9 remain outstanding, and the migration must reach the database before the frontend deploy.
