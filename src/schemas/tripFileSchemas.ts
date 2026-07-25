@@ -2,19 +2,11 @@ import { differenceInCalendarDays } from 'date-fns';
 import { z } from 'zod';
 // Relative import with explicit .js extension: this module is reachable from
 // api/ (create_trip), whose Node ESM runtime cannot resolve the @/ alias.
+import { isValidTimeZone } from '../services/visitRecord.js';
 import { ActivityType, type TripData } from '../types/trip.js';
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
 export const dateString = z.string().regex(DATE_RE, 'expected YYYY-MM-DD');
-
-const isIanaTimezone = (timezone: string): boolean => {
-  try {
-    new Intl.DateTimeFormat('en', { timeZone: timezone });
-    return true;
-  } catch {
-    return false;
-  }
-};
 
 const LAT_MIN = -90;
 const LAT_MAX = 90;
@@ -95,7 +87,7 @@ const stopSchema = z.object({
 
 export const wanderlogTripSchema = z.object({
   trip_name: z.string().min(1),
-  timezone: z.string().refine(isIanaTimezone, 'must be a valid IANA timezone'),
+  timezone: z.string().refine(isValidTimeZone, 'must be a valid IANA timezone'),
   stops: z.array(stopSchema).min(1, 'trip must contain at least one stop'),
   created_at: z.string().optional(),
   updated_at: z.string().optional(),

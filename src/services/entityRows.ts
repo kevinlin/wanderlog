@@ -71,6 +71,7 @@ export const TRIP_METADATA_COLUMNS: readonly ColumnDef[] = [
   col('destination'),
   col('startDate', 'start_date'),
   col('endDate', 'end_date'),
+  col('timezone'),
 ];
 
 const readInput = (input: Record<string, unknown>, def: ColumnDef): unknown => {

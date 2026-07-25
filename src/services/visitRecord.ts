@@ -56,3 +56,16 @@ export const isValidTripLocal = (value: string): boolean => {
   const parsed = new Date(`${date}T${time}:00Z`);
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().startsWith(`${date}T${time}`);
 };
+
+export const isValidTimeZone = (value: string): boolean => {
+  if (!value) {
+    return false;
+  }
+  try {
+    // Throws RangeError on an unknown zone in both the browser and Node.
+    new Intl.DateTimeFormat('en-US', { timeZone: value }).format();
+    return true;
+  } catch {
+    return false;
+  }
+};

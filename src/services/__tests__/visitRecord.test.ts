@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatTripLocal, isValidTripLocal, stampIfDuringTrip } from '../visitRecord';
+import { formatTripLocal, isValidTimeZone, isValidTripLocal, stampIfDuringTrip } from '../visitRecord';
 
 // 2026-07-15T05:32:00Z is 14:32 in Tokyo and 07:32 in Zurich.
 const INSTANT = new Date('2026-07-15T05:32:00Z');
@@ -59,6 +59,20 @@ describe('isValidTripLocal', () => {
   it('rejects bad shapes and impossible dates', () => {
     for (const bad of ['2026-07-15T14:32', '2026-7-15 14:32', '2026-02-30 10:00', '2026-07-15 25:61', '', 'yesterday']) {
       expect(isValidTripLocal(bad)).toBe(false);
+    }
+  });
+});
+
+describe('isValidTimeZone', () => {
+  it('accepts IANA zone names', () => {
+    expect(isValidTimeZone('Asia/Tokyo')).toBe(true);
+    expect(isValidTimeZone('Europe/Zurich')).toBe(true);
+    expect(isValidTimeZone('UTC')).toBe(true);
+  });
+
+  it('rejects anything the runtime does not know', () => {
+    for (const bad of ['Mars/Olympus', 'GMT+8', '', 'Tokyo']) {
+      expect(isValidTimeZone(bad)).toBe(false);
     }
   });
 });

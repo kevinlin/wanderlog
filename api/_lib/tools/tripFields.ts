@@ -9,6 +9,7 @@ import {
   updateTripMetadata,
   upsertAccommodation,
 } from '../../../src/services/tripWrites.js';
+import { isValidTimeZone } from '../../../src/services/visitRecord.js';
 import type { AgentTool } from './core.js';
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
@@ -42,6 +43,7 @@ const updateTripMetadataSchema = z
     destination: z.string().optional(),
     start_date: dateString.optional(),
     end_date: dateString.optional(),
+    timezone: z.string().refine(isValidTimeZone, { message: 'must be an IANA timezone name' }).optional(),
   })
   .strict()
   .refine((value) => Object.keys(value).length > 1, { message: 'provide at least one field to change' })
@@ -74,7 +76,7 @@ export const TRIP_FIELD_TOOLS: AgentTool[] = [
   {
     name: 'update_trip_metadata',
     description:
-      "Update trip-level fields: name, description, destination, start_date, end_date. Only provided fields change. Date edits set the trip's date span but never move stops - use restructure_stops to rebuild the stop date chain.",
+      "Update trip-level fields: name, description, destination, start_date, end_date, timezone. Only provided fields change. Date edits set the trip's date span but never move stops - use restructure_stops to rebuild the stop date chain. timezone is an IANA name such as Asia/Tokyo and is the zone visit times are recorded in.",
     schema: updateTripMetadataSchema,
     execute: async (client, input) => {
       const { data: existing, error: readError } = await client

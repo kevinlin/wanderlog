@@ -83,6 +83,27 @@ describe('TripMetadataFormModal', () => {
     expect(mockUpdateTripMetadata).not.toHaveBeenCalled();
   });
 
+  it('saves a corrected timezone', async () => {
+    render(<TripMetadataFormModal {...baseProps} />, { wrapper });
+
+    expect(screen.getByLabelText('Timezone')).toHaveValue('Pacific/Auckland');
+
+    fireEvent.change(screen.getByLabelText('Timezone'), { target: { value: 'Europe/Zurich' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(mockUpdateTripMetadata).toHaveBeenCalledWith('t1', expect.objectContaining({ timezone: 'Europe/Zurich' })));
+  });
+
+  it('blocks submit when the timezone is not a zone the runtime knows', async () => {
+    render(<TripMetadataFormModal {...baseProps} />, { wrapper });
+
+    fireEvent.change(screen.getByLabelText('Timezone'), { target: { value: 'Mars/Olympus' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(screen.getByText(/not a recognised timezone/i)).toBeInTheDocument());
+    expect(mockUpdateTripMetadata).not.toHaveBeenCalled();
+  });
+
   it('blocks submit when the name is empty', async () => {
     render(<TripMetadataFormModal {...baseProps} />, { wrapper });
 

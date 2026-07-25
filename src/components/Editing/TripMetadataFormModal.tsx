@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ItemModalShell } from '@/components/Editing/ItemModalShell';
 import { useUpdateTripMetadata } from '@/hooks/useTripLibraryMutations';
+import { isValidTimeZone } from '@/services/visitRecord';
 import type { TripSummary } from '@/types/trip';
 
 interface TripMetadataFormModalProps {
@@ -16,6 +17,7 @@ export const TripMetadataFormModal = ({ trip, isOpen, onClose }: TripMetadataFor
   const [description, setDescription] = useState(trip.description ?? '');
   const [startDate, setStartDate] = useState(trip.start_date);
   const [endDate, setEndDate] = useState(trip.end_date);
+  const [timezone, setTimezone] = useState(trip.timezone);
   const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSubmit = () => {
@@ -24,6 +26,12 @@ export const TripMetadataFormModal = ({ trip, isOpen, onClose }: TripMetadataFor
     }
     if (startDate && endDate && endDate < startDate) {
       setValidationError('End date must be on or after the start date');
+      return;
+    }
+    // Visit times are stamped in this zone, so a wrong one silently misdates
+    // every record on the trip.
+    if (!isValidTimeZone(timezone.trim())) {
+      setValidationError('That is not a recognised timezone. Use an IANA name such as Asia/Tokyo.');
       return;
     }
     setValidationError(null);
@@ -36,6 +44,7 @@ export const TripMetadataFormModal = ({ trip, isOpen, onClose }: TripMetadataFor
           description: description.trim() || null,
           startDate,
           endDate,
+          timezone: timezone.trim(),
         },
       },
       { onSuccess: onClose }
@@ -103,6 +112,26 @@ export const TripMetadataFormModal = ({ trip, isOpen, onClose }: TripMetadataFor
             value={endDate}
           />
         </div>
+      </div>
+
+      <div>
+        <label className="mb-1 block font-medium text-gray-700 text-sm" htmlFor="trip-timezone">
+          Timezone
+        </label>
+        <input
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-alpine-teal focus:outline-hidden focus:ring-1 focus:ring-alpine-teal"
+          id="trip-timezone"
+          list="iana-timezones"
+          onChange={(e) => setTimezone(e.target.value)}
+          type="text"
+          value={timezone}
+        />
+        <datalist id="iana-timezones">
+          {(Intl.supportedValuesOf?.('timeZone') ?? []).map((zone) => (
+            <option key={zone} value={zone} />
+          ))}
+        </datalist>
+        <p className="mt-1 text-gray-500 text-xs">Visit times are recorded in this zone.</p>
       </div>
     </ItemModalShell>
   );

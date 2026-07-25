@@ -77,6 +77,7 @@ export interface TripMetadataPatch {
   endDate?: string;
   name?: string;
   startDate?: string;
+  timezone?: string;
 }
 
 export async function updateById(client: SupabaseClient, table: string, id: string, row: Record<string, unknown>): Promise<void> {
