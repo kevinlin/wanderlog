@@ -41,6 +41,7 @@ Generated conventions and lint reports live under [`meta/`](meta/).
 | Bounded Edits (Phase 3 M2) | [phase-3/plan_p3m2_bounded-edits.md](phase-3/plan_p3m2_bounded-edits.md) | Write tools (activities, waypoints, accommodation, metadata, stops + restructure) with zod validation, delete guard, change-event plumbing, modal change list. |
 | Generative Creation (Phase 3 M3) | [phase-3/plan_p3m3_generative-creation.md](phase-3/plan_p3m3_generative-creation.md) | Server-side geocode tool, shared trip-bundle insert, create_trip over the import pipeline, result navigation, Hermes contract finalization. |
 | Design Quality (Phase 3 M4) | [phase-3/plan_p3m4_design-quality.md](phase-3/plan_p3m4_design-quality.md) | Critique remediation: self-consistency (stripe, gradient, tracked-caps, add-button colors), reduced-motion + a11y audit, timeline contrast, reorder undo + error copy, polish sweep. |
+| Data Model + Capture (Phase 4 M1) | [phase-4/plan_p4m1_data-model-and-capture.md](phase-4/plan_p4m1_data-model-and-capture.md) | Additive visit columns, shared `visitRecord` stamp module, trip timezone correction, module-scope visit mutation with restart resume, visit-details modal, per-item containers, import/export round-trip. |
 
 ## Meta
 
