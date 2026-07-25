@@ -10,6 +10,14 @@ const chain = {
 };
 const mockUpdateEq = vi.fn();
 const mockUpdate = vi.fn(() => ({ eq: mockUpdateEq }));
+// update().eq() is awaited directly by most writes and carries .select() for
+// writeVisitFields, so the stub answers to both.
+const updateResult = (value: { data?: unknown; error: { message: string } | null }) => ({
+  select: () => Promise.resolve(value),
+  // biome-ignore lint/suspicious/noThenProperty: deliberately thenable, mirroring supabase-js query builders
+  then: (onFulfilled?: (v: unknown) => unknown, onRejected?: (r: unknown) => unknown) =>
+    Promise.resolve(value).then(onFulfilled, onRejected),
+});
 const mockInsert = vi.fn();
 const mockUpsert = vi.fn();
 const mockDeleteEq = vi.fn();
@@ -134,7 +142,7 @@ describe('supabaseService reads', () => {
 describe('supabaseService writes', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUpdateEq.mockResolvedValue({ error: null });
+    mockUpdateEq.mockReturnValue(updateResult({ data: [{ id: 'row-1' }], error: null }));
   });
 
   it('writeVisitFields updates is_done by id on either table', async () => {
@@ -165,8 +173,13 @@ describe('supabaseService writes', () => {
   });
 
   it('writeVisitFields throws on error', async () => {
-    mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    mockUpdateEq.mockReturnValueOnce(updateResult({ error: { message: 'denied' } }));
     await expect(writeVisitFields('activities', 'act-1', { is_done: true })).rejects.toThrow('denied');
+  });
+
+  it('writeVisitFields throws when no row came back, rather than settling as a silent no-op', async () => {
+    mockUpdateEq.mockReturnValueOnce(updateResult({ data: [], error: null }));
+    await expect(writeVisitFields('activities', 'act-1', { is_done: true })).rejects.toThrow(/matched no row/);
   });
 });
 

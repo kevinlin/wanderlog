@@ -71,28 +71,49 @@ describe('applyVisitPatch', () => {
 });
 
 describe('revertVisitPatch', () => {
+  const failedWrite = {
+    tripId: 't1',
+    itemId: 'act-1',
+    isWaypoint: false,
+    isDone: true,
+    visitedAt: '2026-07-15 14:32',
+    remarks: 'queue was long',
+  };
+
   it('restores the captured prior values', () => {
-    const before = trip();
-    const after = applyVisitPatch(before, {
-      tripId: 't1',
-      itemId: 'act-1',
-      isWaypoint: false,
-      isDone: true,
-      visitedAt: '2026-07-15 14:32',
-      remarks: 'queue was long',
-    });
-    const restored = revertVisitPatch(after, {
-      itemId: 'act-1',
-      previous: { is_done: false, visited_at: undefined, visit_duration_minutes: undefined, remarks: 'book ahead' },
-    });
+    const after = applyVisitPatch(trip(), failedWrite);
+    const restored = revertVisitPatch(
+      after,
+      { itemId: 'act-1', previous: { is_done: false, visited_at: undefined, visit_duration_minutes: undefined, remarks: 'book ahead' } },
+      failedWrite
+    );
     const activity = restored.stops[0].activities[0];
     expect(activity.status).toEqual({ done: false });
     expect(activity.visited_at).toBeUndefined();
     expect(activity.remarks).toBe('book ahead');
   });
 
+  it('leaves a field a later write has already changed', () => {
+    const after = applyVisitPatch(applyVisitPatch(trip(), failedWrite), {
+      tripId: 't1',
+      itemId: 'act-1',
+      isWaypoint: false,
+      remarks: 'great views',
+      visitDurationMinutes: 80,
+    });
+    const restored = revertVisitPatch(
+      after,
+      { itemId: 'act-1', previous: { is_done: false, visited_at: undefined, visit_duration_minutes: undefined, remarks: 'book ahead' } },
+      failedWrite
+    );
+    const activity = restored.stops[0].activities[0];
+    expect(activity.status).toEqual({ done: false });
+    expect(activity.remarks).toBe('great views');
+    expect(activity.visit_duration_minutes).toBe(80);
+  });
+
   it('is a no-op when there is no snapshot', () => {
     const current = trip();
-    expect(revertVisitPatch(current, { itemId: 'act-1', previous: null })).toEqual(current);
+    expect(revertVisitPatch(current, { itemId: 'act-1', previous: null }, failedWrite)).toEqual(current);
   });
 });

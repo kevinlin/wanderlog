@@ -62,4 +62,25 @@ describe('TripPage', () => {
     expect(screen.getByText(/no stops yet/i)).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /trips/i })).toHaveAttribute('href', '/trips');
   });
+
+  // Every failed visit write invalidates the trip, so the refetch that follows
+  // fails on the same dead connection. Showing its error full-screen would take
+  // the trip away and bury the rollback toast the failure just raised.
+  it('keeps the cached trip on screen when a background refetch fails', () => {
+    mockUseTripData.mockReturnValue({
+      tripData: { trip_id: 'cached', trip_name: 'Japan Spring 2027', timezone: 'Asia/Tokyo', stops: [] },
+      isLoading: false,
+      error: 'TypeError: Failed to fetch',
+      refetch: vi.fn(),
+    });
+    renderTripPage();
+    expect(screen.getByText('Japan Spring 2027')).toBeInTheDocument();
+    expect(screen.queryByText(/adventure data unavailable/i)).not.toBeInTheDocument();
+  });
+
+  it('still shows the error state when the refetch fails with nothing cached', () => {
+    mockUseTripData.mockReturnValue({ tripData: null, isLoading: false, error: 'TypeError: Failed to fetch', refetch: vi.fn() });
+    renderTripPage();
+    expect(screen.getByText(/adventure data unavailable/i)).toBeInTheDocument();
+  });
 });

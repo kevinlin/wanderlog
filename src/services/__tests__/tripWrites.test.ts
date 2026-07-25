@@ -57,8 +57,8 @@ describe('activity writes', () => {
 
   it('writeVisitFields patches is_done on either table', async () => {
     const { calls, client } = createFakeClient([
-      { table: 'activities', method: 'update' },
-      { table: 'scenic_waypoints', method: 'update' },
+      { table: 'activities', method: 'update', data: [{ id: 'act-1' }] },
+      { table: 'scenic_waypoints', method: 'update', data: [{ id: 'wp-1' }] },
     ]);
     await writeVisitFields(client, 'activities', 'act-1', { is_done: true });
     await writeVisitFields(client, 'scenic_waypoints', 'wp-1', { is_done: false });
@@ -67,9 +67,17 @@ describe('activity writes', () => {
   });
 
   it('writeVisitFields sends only the named columns, so a visit save never clears the plan', async () => {
-    const { calls, client } = createFakeClient([{ table: 'activities', method: 'update' }]);
+    const { calls, client } = createFakeClient([{ table: 'activities', method: 'update', data: [{ id: 'act-1' }] }]);
     await writeVisitFields(client, 'activities', 'act-1', { visited_at: '2026-07-15 14:32', visit_duration_minutes: 80 });
     expect(calls[0].payload).toEqual({ visited_at: '2026-07-15 14:32', visit_duration_minutes: 80 });
+  });
+
+  // A queued write can replay hours later against a row that is gone or no
+  // longer visible. PostgREST answers that with no error and no rows, which
+  // would otherwise settle as success and drop the visit without a trace.
+  it('writeVisitFields throws when the update matched no row', async () => {
+    const { client } = createFakeClient([{ table: 'activities', method: 'update', data: [] }]);
+    await expect(writeVisitFields(client, 'activities', 'act-1', { is_done: true })).rejects.toThrow(/matched no row/);
   });
 
   it('reorderActivities writes sequential sort_order per id', async () => {

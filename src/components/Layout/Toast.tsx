@@ -137,6 +137,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         showToast({
           message: 'Could not save your visit note',
           type: 'error',
+          // Stays until dismissed. This one carries the only route back to a
+          // rolled-back visit, and it often lands mid-reload after a restart,
+          // where a four-second toast is gone before the trip has painted.
+          duration: 0,
           action: {
             label: 'Retry',
             onClick: () => {

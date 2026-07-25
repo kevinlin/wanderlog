@@ -34,6 +34,8 @@ export function createFakeClient(queue: QueueEntry[]): { calls: FakeCall[]; clie
         const chain = {
           eq: () => chain,
           order: () => chain,
+          // update().eq().select(): returning rows, not a second call
+          select: () => chain,
           maybeSingle: () => promise,
           // biome-ignore lint/suspicious/noThenProperty: deliberately thenable, mirroring supabase-js query builders
           then: (onFulfilled?: (value: unknown) => unknown, onRejected?: (reason: unknown) => unknown) =>

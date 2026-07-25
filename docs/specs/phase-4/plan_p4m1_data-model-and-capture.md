@@ -1717,32 +1717,34 @@ git commit -m "feat: round-trip visit fields through trip import and export"
 
 Manual verification against a Vercel preview with the migration pushed. Not a code task; record the results in the plan's changelog.
 
-- [ ] **Step 1: Push the migration to the preview database**
+- [x] **Step 1: Push the migration to the preview database**
 
 Run: `supabase db push --linked`
 Expected: the two columns exist on both tables. This must happen before the frontend deploy (Phase 2 ordering rule).
 
-- [ ] **Step 2: Verify the stamp rule both ways**
+- [x] **Step 2: Verify the stamp rule both ways**
 
 On a trip whose date range includes today, tick an activity and confirm the card shows a time matching the trip's timezone. On a trip that ended in the past, tick an item and confirm no time appears.
 
-- [ ] **Step 3: Verify a timezone that differs from the device**
+- [x] **Step 3: Verify a timezone that differs from the device**
 
 Set a trip's timezone to a zone several hours from yours, tick an item, and confirm the recorded time is the trip's local time, not the device's.
 
-- [ ] **Step 4: Verify the out-of-range save**
+- [x] **Step 4: Verify the out-of-range save**
 
 Open the visit form, enter a date outside the trip, confirm the warning appears and that Save still persists the value.
 
 - [ ] **Step 5: Verify offline capture and restart survival**
 
-Go offline in devtools, tick an item and save a note, confirm both appear. Close the tab. Reopen it still offline and confirm the note is still shown. Go online and confirm the write lands in Supabase.
+Go offline in devtools, tick an item and save a note, confirm both appear. Close the tab. Go back online, reopen the trip, and confirm both the tick and the note reached Supabase.
+
+The tab stays closed until connectivity returns because there is no service worker: a reload while offline fails at the network before React or the persisted cache can start. Req 5.3 asks for queued writes to survive the restart, not for the app to boot offline, so an offline app shell is out of scope here.
 
 - [ ] **Step 6: Verify the failure path**
 
-Repeat step 5 but block the Supabase request on reconnect. Confirm the card reverts to its prior values and a retry toast appears.
+Repeat step 5 but block `*supabase.co/rest/v1/*` on reconnect. Confirm the card reverts to its prior values, the trip stays on screen rather than dropping to the full-screen error, and the retry toast is present and stays until dismissed.
 
-- [ ] **Step 7: Record the results**
+- [x] **Step 7: Record the results**
 
 Add a changelog entry to this plan naming what was verified and anything deferred.
 
@@ -1778,3 +1780,27 @@ Add a changelog entry to this plan naming what was verified and anything deferre
   Smaller deviations: `isValidTimeZone` replaced the identical `isIanaTimezone` already in `tripFileSchemas.ts` instead of shipping a second copy; the toast's Retry rebuilds the mutation with its per-item `scope`, which the plan's snippet dropped; no `src/components/Editing/index.ts` barrel was added, since that folder has none and siblings import directly.
 
   **Task 9 not run.** It needs `supabase db push` against a real database and browser interaction against a preview deploy; Docker was not running locally. The migration is written but has been applied nowhere. Automated coverage stands in for parts of it: both stamp directions, the trip-zone-differs-from-device case, the out-of-range save through the real Save button, offline affordance, dehydrate/hydrate resume, and post-restart rollback-and-notify. Steps 1-6 of Task 9 remain outstanding, and the migration must reach the database before the frontend deploy.
+
+- 2026-07-26: Task 9 verification run against Vercel preview `wanderlog-5uualddp1-kevin-lins-projects-835b030f.vercel.app` after `supabase db push --linked` applied `20260726120000_visit_records.sql`. Steps 1-4 passed: the linked migration finished despite the post-apply Docker catalog-cache warning; an active-trip tick showed `11:36` in `America/Los_Angeles` while the device was in Singapore; a past-trip tick showed no time; and an out-of-range visit showed the warning, saved, and survived a fresh reload.
+
+  Steps 5-6 failed and remain unchecked:
+  - **Offline restart survival:** the offline tick and note appeared optimistically, but reloading offline showed Chrome `ERR_INTERNET_DISCONNECTED`. After reconnect, the note reached Supabase while the queued checkmark was lost.
+    - **Confirmed cause of the offline reload failure:** the repository has no service worker or PWA app-shell cache. `PersistQueryClientProvider` can restore query and mutation state from IndexedDB only after the HTML and JavaScript application have loaded. A hard reload of the Vercel URL while offline therefore fails before React or the persisted cache can start.
+    - **Queued checkmark loss not yet isolated:** the async-storage persister uses its default 1-second write throttle and has no explicit flush on tab close. The existing resume tests directly call `dehydrate`/`hydrate` with one handcrafted paused mutation, so they do not cover the real IndexedDB timing, a browser restart, or the two same-scope writes used by this scenario (tick, then note). The manual result proves a durability gap, but does not establish which queued-mutation snapshot was lost.
+  - **Failure path:** blocking `*supabase.co/rest/v1/*` reverted the optimistic checkmark, then the invalidated trip refetch replaced the card with `Adventure Data Unavailable: TypeError: Failed to fetch`; no retry toast was present.
+    - **Confirmed cause of the full-page error:** `visitMutation.onError` correctly restores the item snapshot, but `onSettled` then unconditionally invalidates the trip query. That refetch uses the same blocked Supabase REST endpoint. `useTripData` exposes any query error even when cached trip data exists, and `TripPage` gives that error precedence over the cached data by returning the full-screen error state.
+    - **Retry toast gap not yet isolated:** the error listener is emitted in `onError`, and `ToastProvider` subscribes to it, but the manual run did not show a usable toast before the trip changed to the error screen. The resume test asserts only that the listener fired; it does not mount `ToastProvider` or verify toast visibility and Retry behavior during a failed invalidation. A browser-level regression test is needed to determine whether the 4-second toast expired during the transition or was never rendered.
+
+- 2026-07-26: Steps 5-6 investigated and the code fixed; both still need a manual re-run to be checked off.
+
+  What the queue does, established by tests rather than inference. Two writes queued for one item through the real pause path now go through `persistQueryClientSave`/`Restore` and `resumePausedMutations`, and both land in order (`visitQueueDurability.test.ts`). A resumed write also survives a trip refetch that was issued before it and answers after it with pre-write data (`visitResumeOnBoot.test.tsx`). So the queue is not where the checkmark went, and the earlier suspicion of the persister's write throttle is not supported.
+
+  Four fixes:
+  - **Full-screen error on a failed background refetch** (the confirmed cause of the step 6 failure). `TripPage` showed `error` ahead of cached data, and every failed visit write invalidates the trip, so the refetch failing on the same dead connection took the whole trip off screen and buried the toast. It now shows that state only when there is no cached trip.
+  - **A rollback could undo a later queued edit.** `revertVisitPatch` restored all four fields from the failed write's snapshot, so a failing tick wiped the note queued behind it - Req 5.5's second half, and the design's own test case, which had never been written. It now restores only the fields that write set, and only where its value still stands. The failing test came first.
+  - **A visit write that matched no row counted as success.** PostgREST answers an update matching nothing with no error and no rows. Replay a queued write hours later against a row that is gone, or one RLS no longer shows, and the mutation settles as success; the invalidated refetch then drops the value. No rollback, no toast - the symptom the run reported. `writeVisitFields` now selects the id back and throws when nothing returns. This is the one fix aimed at a cause that was never isolated in the browser, and it turns that whole class of silent loss into the rollback-and-retry path.
+  - **The retry toast auto-dismissed after 4 seconds.** It carries the only route back to a rolled-back visit and often lands mid-reload after a restart. It now stays until dismissed or retried, covered by a test that mounts `ToastProvider`, fails a real write, and clicks Retry.
+
+  Step 5's procedure was wrong, not just its result: it asked for a reload while offline, which needs an app-shell cache the repo does not have. Req 5.3 requires queued writes to survive a restart, not an offline boot. The step now closes the tab offline and reopens after reconnect; an offline app shell stays out of Phase 4 scope.
+
+  All verification edits were restored and confirmed from fresh reads: Singapore trip dates/timezone, Bird Paradise and Dragon Bridge status/stamps, and Singapore Zoo remarks. M1 is not signed off until Steps 5 and 6 pass.

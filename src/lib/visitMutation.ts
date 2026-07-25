@@ -72,7 +72,10 @@ export const applyVisitPatch = (trip: TripData, vars: VisitVariables): TripData 
   return next;
 };
 
-export const revertVisitPatch = (trip: TripData, context: VisitContext): TripData => {
+// Restores only what this write applied and only where it still stands. A
+// second write queued behind this one has already patched the cache, and
+// Req 5.5 forbids a rollback from restoring values over that later edit.
+export const revertVisitPatch = (trip: TripData, context: VisitContext, vars: VisitVariables): TripData => {
   if (!context.previous) {
     return trip;
   }
@@ -81,10 +84,19 @@ export const revertVisitPatch = (trip: TripData, context: VisitContext): TripDat
   if (!item) {
     return next;
   }
-  item.status = { done: context.previous.is_done };
-  item.visited_at = context.previous.visited_at;
-  item.visit_duration_minutes = context.previous.visit_duration_minutes;
-  item.remarks = context.previous.remarks;
+  const previous = context.previous;
+  if (vars.isDone !== undefined && (item.status?.done ?? false) === vars.isDone) {
+    item.status = { done: previous.is_done };
+  }
+  if (vars.visitedAt !== undefined && item.visited_at === (vars.visitedAt ?? undefined)) {
+    item.visited_at = previous.visited_at;
+  }
+  if (vars.visitDurationMinutes !== undefined && item.visit_duration_minutes === (vars.visitDurationMinutes ?? undefined)) {
+    item.visit_duration_minutes = previous.visit_duration_minutes;
+  }
+  if (vars.remarks !== undefined && item.remarks === (vars.remarks ?? undefined)) {
+    item.remarks = previous.remarks;
+  }
   return next;
 };
 
@@ -124,7 +136,7 @@ export const buildVisitMutationDefaults = (queryClient: QueryClient): VisitMutat
   },
   onError: (_error, vars, context) => {
     if (context) {
-      queryClient.setQueryData<TripData>(tripKeys.detail(vars.tripId), (old) => (old ? revertVisitPatch(old, context) : old));
+      queryClient.setQueryData<TripData>(tripKeys.detail(vars.tripId), (old) => (old ? revertVisitPatch(old, context, vars) : old));
     }
     for (const listener of listeners) {
       listener({ variables: vars });

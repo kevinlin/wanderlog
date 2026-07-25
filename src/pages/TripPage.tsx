@@ -105,7 +105,11 @@ export const TripPage = () => {
     return <LoadingSpinner fullScreen message="Loading your adventure..." size="lg" variant="adventure" />;
   }
 
-  if (error) {
+  // Only when there is nothing to show. A background refetch fails on every
+  // offline visit write - the mutation invalidates the trip and the refetch
+  // hits the same dead connection - and swapping a cached trip for a full-screen
+  // error there would bury the rollback toast the failure just raised.
+  if (error && !tripData) {
     return <ErrorMessage details={error} fullScreen message={error} onRetry={refetch} title="Adventure Data Unavailable" type="data" />;
   }
 

@@ -111,12 +111,29 @@ export interface VisitFields {
 // One write for both gestures: the checkbox sends is_done + visited_at, the
 // details form sends the three detail fields. Absent keys are left alone, so
 // this never touches a column the caller did not name.
-export const writeVisitFields = (
+//
+// Unlike the other writes this one confirms a row came back. An update that
+// matches nothing - a row deleted meanwhile, or one RLS hides - is a silent
+// 204 from PostgREST, and this write is the one that can be replayed hours
+// later from a queue, where a silent no-op reads as a visit that vanished.
+export async function writeVisitFields(
   client: SupabaseClient,
   table: 'activities' | 'scenic_waypoints',
   id: string,
   fields: VisitFields
-): Promise<void> => updateById(client, table, id, fields as Record<string, unknown>);
+): Promise<void> {
+  const { data, error } = await client
+    .from(table)
+    .update(fields as Record<string, unknown>)
+    .eq('id', id)
+    .select('id');
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (!(data as unknown[] | null)?.length) {
+    throw new Error(`Visit write matched no row in ${table}`);
+  }
+}
 
 // Per-row updates are fine at family scale (a stop has under 20 activities);
 // a batch RPC is deliberate YAGNI.
