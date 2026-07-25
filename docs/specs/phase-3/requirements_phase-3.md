@@ -136,4 +136,4 @@ Each milestone is independently shippable and verifiable. Risk-ordered: the read
 ## Changelog
 
 - 2026-07-04: Initial draft (brainstormed and approved). Supersedes Phase 2's "Server-side code: None" scope decision.
-- 2026-07-26: Tool surface extended by [requirements_phase-4.md](../phase-4/requirements_phase-4.md): `update_activity` and `update_waypoint` gain `visited_at` and `duration_minutes`, and the system prompt gains the current trip-local date-time plus the trip's date range so relative times resolve.
+- 2026-07-26: Tool surface extended by [requirements_phase-4.md](../phase-4/requirements_phase-4.md): `update_activity` and `update_waypoint` gain `visited_at` and `visit_duration_minutes` plus a guard refusing visit fields on an item that is not done; `update_trip_metadata` gains `timezone`; the system prompt gains the current trip-local date-time plus the trip's date range so relative times resolve.

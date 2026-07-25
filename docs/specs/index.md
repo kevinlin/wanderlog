@@ -20,7 +20,7 @@ Generated conventions and lint reports live under [`meta/`](meta/).
 | [phase-1/design_phase-1.md](phase-1/design_phase-1.md) | Architecture, components, data models, services, and visual design system. |
 | [phase-2/design_phase-2.md](phase-2/design_phase-2.md) | Phase 2 architecture: Supabase schema + RLS, TanStack Query data layer, auth, routing, editing UX, offline cache, Vercel hosting, milestones M0-M4. |
 | [phase-3/design_wanderlog-phase-3.md](phase-3/design_wanderlog-phase-3.md) | Phase 3 architecture: Vercel agent endpoint, LLM tool-use loop, mirrored CRUD tool surface, NDJSON/buffered API contract, milestones M1-M3. |
-| [phase-4/design_phase-4.md](phase-4/design_phase-4.md) | Phase 4 architecture: shared visit-stamp module, duration text-to-minutes migration, planned/visited panel split, visit form, paused-mutation resume, agent tool fields, milestones M1-M3. |
+| [phase-4/design_phase-4.md](phase-4/design_phase-4.md) | Phase 4 architecture: shared visit-stamp module, additive visit columns, planned/visited panel split, visit form, module-scope visit mutation with restart resume, trip timezone correction, agent tool fields, milestones M1-M3. |
 
 ## Implementation Plans
 
