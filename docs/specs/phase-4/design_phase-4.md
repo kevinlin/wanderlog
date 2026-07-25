@@ -2,7 +2,7 @@
 
 Design for [requirements_phase-4.md](requirements_phase-4.md): visit records on check-off, chronological ordering of visited items, agent support, offline capture. Phase 2 ([design_phase-2.md](../phase-2/design_phase-2.md)) and Phase 3 ([design_wanderlog-phase-3.md](../phase-3/design_wanderlog-phase-3.md)) carry over except where amended here.
 
-Revised after [review_design-phase-4.md](review_design-phase-4.md); see the changelog for what moved.
+Revised after an external design review; see the changelog for what moved.
 
 ## Design Decisions
 
@@ -191,4 +191,4 @@ Applied to the Phase 2 and Phase 3 design docs alongside this one:
 ## Changelog
 
 - 2026-07-26: Initial design (brainstormed and approved).
-- 2026-07-26: Revised against [review_design-phase-4.md](review_design-phase-4.md), all nine findings verified against the code and accepted. Duration reuse reversed to a split (`visit_duration_minutes` added, `duration` untouched), which removed the parser, backfill script, contract migration, and import warning transport along with it. `TripData` now carries the trip's stored dates, giving the stamp rule an offline-safe source for both clients. Native `min`/`max` dropped from the date field, since the shell's form submit would have blocked the required out-of-range save. Visit mutation callbacks moved wholesale to module scope with a pure rollback and a per-item mutation scope, so live and resumed executions share one contract and queued writes to one item stay ordered. Waypoint `order` carried into the domain and a total ordering defined with explicit tie-breaks. Visit affordance restricted to done items, with a matching agent guard. `Intl` options pinned. Trip timezone correction added, replacing a false claim that the risk was already documented and repairable.
+- 2026-07-26: Revised against an external design review (nine findings, since removed from the repo), all verified against the code and accepted. Duration reuse reversed to a split (`visit_duration_minutes` added, `duration` untouched), which removed the parser, backfill script, contract migration, and import warning transport along with it. `TripData` now carries the trip's stored dates, giving the stamp rule an offline-safe source for both clients. Native `min`/`max` dropped from the date field, since the shell's form submit would have blocked the required out-of-range save. Visit mutation callbacks moved wholesale to module scope with a pure rollback and a per-item mutation scope, so live and resumed executions share one contract and queued writes to one item stay ordered. Waypoint `order` carried into the domain and a total ordering defined with explicit tie-breaks. Visit affordance restricted to done items, with a matching agent guard. `Intl` options pinned. Trip timezone correction added, replacing a false claim that the risk was already documented and repairable.
