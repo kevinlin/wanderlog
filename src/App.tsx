@@ -5,6 +5,7 @@ import { ToastProvider } from '@/components/Layout/Toast';
 import { ForgotPasswordPage } from '@/pages/ForgotPasswordPage';
 import { HomeRedirect } from '@/pages/HomeRedirect';
 import { LoginPage } from '@/pages/LoginPage';
+import { NewTripPage } from '@/pages/NewTripPage';
 import { ResetPasswordPage } from '@/pages/ResetPasswordPage';
 import { TripLibraryPage } from '@/pages/TripLibraryPage';
 import { TripPage } from '@/pages/TripPage';
@@ -32,6 +33,14 @@ const App = () => (
               </ProtectedRoute>
             }
             path="/trips"
+          />
+          <Route
+            element={
+              <ProtectedRoute>
+                <NewTripPage />
+              </ProtectedRoute>
+            }
+            path="/trips/new"
           />
           <Route
             element={

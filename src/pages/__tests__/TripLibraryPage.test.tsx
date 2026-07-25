@@ -22,16 +22,15 @@ const trips = [
     timezone: 'Asia/Tokyo',
   },
 ];
+const mockUseTrips = vi.fn();
 vi.mock('@/hooks/useTrips', () => ({
-  useTrips: () => ({ trips, isLoading: false, error: null }),
+  useTrips: () => mockUseTrips(),
 }));
 vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({ session: { user: { email: 'kev@example.com' } }, isLoading: false, signOut: vi.fn() }),
 }));
-const mockImportMutate = vi.fn();
 const mockDeleteMutate = vi.fn();
 vi.mock('@/hooks/useTripLibraryMutations', () => ({
-  useImportTrip: () => ({ mutate: mockImportMutate, isPending: false, error: null }),
   useDeleteTrip: () => ({ mutate: mockDeleteMutate, isPending: false, error: null }),
 }));
 
@@ -47,7 +46,10 @@ const renderPage = () =>
   );
 
 describe('TripLibraryPage', () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockUseTrips.mockReturnValue({ trips, isLoading: false, error: null });
+  });
 
   it('lists every trip with name, destination, dates and status', () => {
     renderPage();
@@ -60,6 +62,18 @@ describe('TripLibraryPage', () => {
   it('renders the upcoming trip as the hero card', () => {
     renderPage();
     expect(screen.getByTestId('hero-trip')).toHaveTextContent('Japan Spring');
+  });
+
+  it('links "New trip" to the creation page', () => {
+    renderPage();
+    expect(screen.getByRole('link', { name: /new trip/i })).toHaveAttribute('href', '/trips/new');
+  });
+
+  it('invites creating the first trip when the library is empty', () => {
+    mockUseTrips.mockReturnValue({ trips: [], isLoading: false, error: null });
+    renderPage();
+    expect(screen.getByText(/no trips yet/i)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: /create your first trip/i })).toHaveAttribute('href', '/trips/new');
   });
 
   it('deletes a trip after confirmation', async () => {

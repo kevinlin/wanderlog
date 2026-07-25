@@ -8,6 +8,7 @@ export { TRIP_SELECT } from './supabaseMappers';
 export type {
   AccommodationInput,
   ActivityInput,
+  CreateTripInput,
   StopInput,
   StopStructureRow,
   TripMetadataPatch,
@@ -35,6 +36,8 @@ export async function fetchTripSummaries(): Promise<TripSummary[]> {
 }
 
 export const importTrip = (tripData: TripData): Promise<string> => insertTripBundle(getSupabase(), tripData);
+
+export const createTrip = (input: writes.CreateTripInput): Promise<string> => writes.createTrip(getSupabase(), input);
 
 // The DB cascade (M1 schema `on delete cascade`) removes stops, accommodations,
 // activities, and waypoints - no client-side fan-out needed.

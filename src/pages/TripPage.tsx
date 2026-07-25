@@ -145,9 +145,9 @@ export const TripPage = () => {
           </div>
           <UserMenu />
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
-            <div className="pointer-events-auto max-w-md rounded-xl border border-gray-200 bg-white/95 p-8 text-center shadow-lg backdrop-blur-xs">
+            <div className="threshold-enter pointer-events-auto max-w-md rounded-xl border border-gray-200 bg-white/95 p-8 text-center shadow-lg backdrop-blur-xs">
               <h1 className="font-bold text-gray-900 text-xl">{tripData.trip_name}</h1>
-              <p className="mt-2 text-gray-600 text-sm">No stops yet. Add your first stop to start the itinerary.</p>
+              <p className="mt-2 text-gray-600 text-sm">No stops yet. Add the first place you're staying and the plan comes to life.</p>
               <div className="mt-6 flex justify-center gap-3">
                 <Link
                   className="inline-block rounded-xl border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-50"
@@ -157,11 +157,11 @@ export const TripPage = () => {
                 </Link>
                 {isOnline && (
                   <button
-                    className="rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90"
+                    className="rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 active:bg-alpine-teal/80"
                     onClick={() => setIsStopsEditorOpen(true)}
                     type="button"
                   >
-                    Add stops
+                    Add your first stop
                   </button>
                 )}
               </div>

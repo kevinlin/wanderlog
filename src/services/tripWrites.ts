@@ -196,3 +196,30 @@ export async function applyStopStructure(
 
 export const updateTripMetadata = (client: SupabaseClient, tripId: string, patch: TripMetadataPatch): Promise<void> =>
   updateById(client, 'trips', tripId, patchRow(TRIP_METADATA_COLUMNS, patch));
+
+export interface CreateTripInput {
+  description?: string;
+  endDate: string; // YYYY-MM-DD
+  name: string;
+  startDate: string; // YYYY-MM-DD
+  timezone: string;
+}
+
+// Dates are required: the trips schema declares start_date/end_date NOT NULL,
+// and a stop-less trip has no stops to derive them from (unlike insertTripBundle).
+export async function createTrip(client: SupabaseClient, input: CreateTripInput): Promise<string> {
+  const id = crypto.randomUUID();
+  const now = new Date().toISOString();
+  await insertRow(client, 'trips', {
+    id,
+    name: input.name,
+    description: input.description ?? null,
+    destination: null,
+    start_date: input.startDate,
+    end_date: input.endDate,
+    timezone: input.timezone,
+    created_at: now,
+    updated_at: now,
+  });
+  return id;
+}
