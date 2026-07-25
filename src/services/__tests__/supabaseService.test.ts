@@ -38,13 +38,12 @@ import {
   fetchTripSummaries,
   importTrip,
   reorderActivities,
-  setActivityDone,
-  setWaypointDone,
   updateActivity,
   updateStop,
   updateTripMetadata,
   updateWaypoint,
   upsertAccommodation,
+  writeVisitFields,
 } from '../supabaseService';
 
 const importableTrip: TripData = {
@@ -138,16 +137,24 @@ describe('supabaseService writes', () => {
     mockUpdateEq.mockResolvedValue({ error: null });
   });
 
-  it('setActivityDone updates is_done by id', async () => {
-    await setActivityDone('act-1', true);
+  it('writeVisitFields updates is_done by id on either table', async () => {
+    await writeVisitFields('activities', 'act-1', { is_done: true });
     expect(mockUpdate).toHaveBeenCalledWith({ is_done: true });
     expect(mockUpdateEq).toHaveBeenCalledWith('id', 'act-1');
-  });
 
-  it('setWaypointDone updates is_done by id', async () => {
-    await setWaypointDone('wp-1', false);
+    await writeVisitFields('scenic_waypoints', 'wp-1', { is_done: false });
     expect(mockUpdate).toHaveBeenCalledWith({ is_done: false });
     expect(mockUpdateEq).toHaveBeenCalledWith('id', 'wp-1');
+  });
+
+  it('writeVisitFields writes only the keys it is given', async () => {
+    await writeVisitFields('activities', 'act-1', { visited_at: '2026-07-15 14:32', visit_duration_minutes: 80 });
+    expect(mockUpdate).toHaveBeenCalledWith({ visited_at: '2026-07-15 14:32', visit_duration_minutes: 80 });
+  });
+
+  it('writeVisitFields passes an explicit null through to clear a column', async () => {
+    await writeVisitFields('activities', 'act-1', { is_done: false, visited_at: null });
+    expect(mockUpdate).toHaveBeenCalledWith({ is_done: false, visited_at: null });
   });
 
   it('reorderActivities writes sequential sort_order for each id', async () => {
@@ -157,9 +164,9 @@ describe('supabaseService writes', () => {
     expect(mockUpdateEq).toHaveBeenNthCalledWith(3, 'id', 'c');
   });
 
-  it('setActivityDone throws on error', async () => {
+  it('writeVisitFields throws on error', async () => {
     mockUpdateEq.mockResolvedValueOnce({ error: { message: 'denied' } });
-    await expect(setActivityDone('act-1', true)).rejects.toThrow('denied');
+    await expect(writeVisitFields('activities', 'act-1', { is_done: true })).rejects.toThrow('denied');
   });
 });
 

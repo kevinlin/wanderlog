@@ -101,11 +101,22 @@ async function insertRow(client: SupabaseClient, table: string, row: Record<stri
   }
 }
 
-export const setActivityDone = (client: SupabaseClient, activityId: string, isDone: boolean): Promise<void> =>
-  updateById(client, 'activities', activityId, { is_done: isDone });
+export interface VisitFields {
+  is_done?: boolean;
+  remarks?: string | null;
+  visit_duration_minutes?: number | null;
+  visited_at?: string | null;
+}
 
-export const setWaypointDone = (client: SupabaseClient, waypointId: string, isDone: boolean): Promise<void> =>
-  updateById(client, 'scenic_waypoints', waypointId, { is_done: isDone });
+// One write for both gestures: the checkbox sends is_done + visited_at, the
+// details form sends the three detail fields. Absent keys are left alone, so
+// this never touches a column the caller did not name.
+export const writeVisitFields = (
+  client: SupabaseClient,
+  table: 'activities' | 'scenic_waypoints',
+  id: string,
+  fields: VisitFields
+): Promise<void> => updateById(client, table, id, fields as Record<string, unknown>);
 
 // Per-row updates are fine at family scale (a stop has under 20 activities);
 // a batch RPC is deliberate YAGNI.

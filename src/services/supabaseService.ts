@@ -43,11 +43,8 @@ export const createTrip = (input: writes.CreateTripInput): Promise<string> => wr
 // activities, and waypoints - no client-side fan-out needed.
 export const deleteTrip = (tripId: string): Promise<void> => writes.deleteById(getSupabase(), 'trips', tripId);
 
-export const setActivityDone = (activityId: string, isDone: boolean): Promise<void> =>
-  writes.setActivityDone(getSupabase(), activityId, isDone);
-
-export const setWaypointDone = (waypointId: string, isDone: boolean): Promise<void> =>
-  writes.setWaypointDone(getSupabase(), waypointId, isDone);
+export const writeVisitFields = (table: 'activities' | 'scenic_waypoints', id: string, fields: writes.VisitFields): Promise<void> =>
+  writes.writeVisitFields(getSupabase(), table, id, fields);
 
 export const reorderActivities = (orderedActivityIds: string[]): Promise<void> =>
   writes.reorderActivities(getSupabase(), orderedActivityIds);

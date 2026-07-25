@@ -10,13 +10,12 @@ import {
   deleteWaypoint,
   reorderActivities,
   type StopInput,
-  setActivityDone,
-  setWaypointDone,
   updateActivity,
   updateStop,
   updateWaypoint,
   upsertAccommodation,
   type WaypointInput,
+  writeVisitFields,
 } from '@/services/supabaseService';
 import type { ScenicWaypoint } from '@/types/map';
 import type { Accommodation, Activity, TripBase } from '@/types/trip';
@@ -48,7 +47,7 @@ export function useToggleActivityDone(tripId: string) {
   return useTripCacheMutation({
     tripId,
     mutationFn: ({ activityId, isDone, isWaypoint }: ToggleDoneVariables) =>
-      isWaypoint ? setWaypointDone(activityId, isDone) : setActivityDone(activityId, isDone),
+      writeVisitFields(isWaypoint ? 'scenic_waypoints' : 'activities', activityId, { is_done: isDone }),
     patch: (trip, { activityId, isDone }) => {
       for (const stop of trip.stops) {
         for (const item of [...stop.activities, ...(stop.scenic_waypoints ?? [])]) {

@@ -3,7 +3,7 @@ import { fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-const mockSetActivityDone = vi.fn();
+const mockWriteVisitFields = vi.fn();
 const mockReorderActivities = vi.fn();
 const mockCreateActivity = vi.fn();
 const mockUpdateActivity = vi.fn();
@@ -17,8 +17,7 @@ const mockUpdateStop = vi.fn();
 const mockDeleteStop = vi.fn();
 const mockApplyStopStructure = vi.fn();
 vi.mock('@/services/supabaseService', () => ({
-  setActivityDone: (...args: unknown[]) => mockSetActivityDone(...args),
-  setWaypointDone: vi.fn(),
+  writeVisitFields: (...args: unknown[]) => mockWriteVisitFields(...args),
   reorderActivities: (...args: unknown[]) => mockReorderActivities(...args),
   createActivity: (...args: unknown[]) => mockCreateActivity(...args),
   updateActivity: (...args: unknown[]) => mockUpdateActivity(...args),
@@ -87,7 +86,7 @@ function setup() {
 
 describe('useToggleActivityDone', () => {
   it('optimistically flips status.done before the server responds', async () => {
-    mockSetActivityDone.mockReturnValue(new Promise(() => {})); // never resolves
+    mockWriteVisitFields.mockReturnValue(new Promise(() => {})); // never resolves
     const { client, wrapper } = setup();
     const { result } = renderHook(() => useToggleActivityDone('t1'), { wrapper });
 
@@ -100,7 +99,7 @@ describe('useToggleActivityDone', () => {
   });
 
   it('rolls back the cache when the write fails', async () => {
-    mockSetActivityDone.mockRejectedValue(new Error('offline'));
+    mockWriteVisitFields.mockRejectedValue(new Error('offline'));
     const { client, wrapper } = setup();
     const { result } = renderHook(() => useToggleActivityDone('t1'), { wrapper });
 
@@ -112,8 +111,8 @@ describe('useToggleActivityDone', () => {
   });
 
   it('shows an error toast with a working Retry action on failure', async () => {
-    mockSetActivityDone.mockReset();
-    mockSetActivityDone.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(undefined);
+    mockWriteVisitFields.mockReset();
+    mockWriteVisitFields.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(undefined);
     const { wrapper } = setup();
     const { result } = renderHook(() => useToggleActivityDone('t1'), { wrapper });
 
@@ -124,8 +123,8 @@ describe('useToggleActivityDone', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
 
-    await waitFor(() => expect(mockSetActivityDone).toHaveBeenCalledTimes(2));
-    expect(mockSetActivityDone).toHaveBeenLastCalledWith('act-1', true);
+    await waitFor(() => expect(mockWriteVisitFields).toHaveBeenCalledTimes(2));
+    expect(mockWriteVisitFields).toHaveBeenLastCalledWith('activities', 'act-1', { is_done: true });
   });
 });
 

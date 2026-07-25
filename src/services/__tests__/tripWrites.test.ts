@@ -7,12 +7,11 @@ import {
   createWaypoint,
   deleteById,
   reorderActivities,
-  setActivityDone,
-  setWaypointDone,
   updateActivity,
   updateStop,
   updateTripMetadata,
   upsertAccommodation,
+  writeVisitFields,
 } from '../tripWrites';
 
 const UUID_RE = /^[0-9a-f-]{36}$/;
@@ -56,15 +55,21 @@ describe('activity writes', () => {
     expect(calls[0].payload).toMatchObject({ name: 'Renamed', remarks: null, thumbnail_url: null, google_place_id: null });
   });
 
-  it('setActivityDone and setWaypointDone patch is_done on their tables', async () => {
+  it('writeVisitFields patches is_done on either table', async () => {
     const { calls, client } = createFakeClient([
       { table: 'activities', method: 'update' },
       { table: 'scenic_waypoints', method: 'update' },
     ]);
-    await setActivityDone(client, 'act-1', true);
-    await setWaypointDone(client, 'wp-1', false);
+    await writeVisitFields(client, 'activities', 'act-1', { is_done: true });
+    await writeVisitFields(client, 'scenic_waypoints', 'wp-1', { is_done: false });
     expect(calls[0]).toMatchObject({ table: 'activities', payload: { is_done: true } });
     expect(calls[1]).toMatchObject({ table: 'scenic_waypoints', payload: { is_done: false } });
+  });
+
+  it('writeVisitFields sends only the named columns, so a visit save never clears the plan', async () => {
+    const { calls, client } = createFakeClient([{ table: 'activities', method: 'update' }]);
+    await writeVisitFields(client, 'activities', 'act-1', { visited_at: '2026-07-15 14:32', visit_duration_minutes: 80 });
+    expect(calls[0].payload).toEqual({ visited_at: '2026-07-15 14:32', visit_duration_minutes: 80 });
   });
 
   it('reorderActivities writes sequential sort_order per id', async () => {
