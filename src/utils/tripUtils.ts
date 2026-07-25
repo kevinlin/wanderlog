@@ -87,3 +87,17 @@ export const findStopById = (stops: TripStop[], stopId: string): TripStop | unde
  */
 export const findActivityById = (stop: TripStop, activityId: string): Activity | undefined =>
   stop.activities.find((activity) => activity.activity_id === activityId);
+
+const MINUTES_PER_HOUR = 60;
+
+/**
+ * Format a visit duration in minutes for display ('90' -> '1h 30m')
+ */
+export const formatMinutes = (minutes: number): string => {
+  const hours = Math.floor(minutes / MINUTES_PER_HOUR);
+  const rest = minutes % MINUTES_PER_HOUR;
+  if (!hours) {
+    return `${rest}m`;
+  }
+  return rest ? `${hours}h ${rest}m` : `${hours}h`;
+};

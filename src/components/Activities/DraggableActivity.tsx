@@ -1,34 +1,37 @@
 import { closestCenter, DndContext, type DragEndEvent, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import type React from 'react';
-import { ActivityCard } from '@/components/Cards/ActivityCard';
+import { ActivityListItem } from '@/components/Activities/ActivityListItem';
 import type { Accommodation, Activity } from '@/types';
+import type { TripData } from '@/types/trip';
 
 // Main draggable activities list component
 interface DraggableActivitiesListProps {
   accommodation?: Accommodation;
   activities: Activity[];
-  activityStatus: Record<string, boolean>;
   isDragDisabled?: boolean;
   onActivitySelect: (activityId: string) => void;
   onDeleteActivity?: (activity: Activity) => void;
+  onDone: (activityId: string) => void;
   onEditActivity?: (activity: Activity) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
-  onToggleDone: (activityId: string, done: boolean) => void;
   selectedActivityId?: string | null;
+  trip: TripData;
+  tripId: string;
 }
 
 export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = ({
   activities,
   accommodation,
   selectedActivityId,
-  activityStatus,
   isDragDisabled = false,
   onActivitySelect,
-  onToggleDone,
+  onDone,
   onReorder,
   onEditActivity,
   onDeleteActivity,
+  trip,
+  tripId,
 }) => {
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -72,16 +75,17 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
             // Presentational entrance wrapper — keeps the stagger off the card's
             // own drag transform. Replays only when the list remounts (stop change).
             <div className="activity-enter" key={activity.activity_id} style={{ '--enter-index': index } as React.CSSProperties}>
-              <ActivityCard
+              <ActivityListItem
                 accommodation={accommodation}
                 activity={activity}
-                isDone={activityStatus[activity.activity_id]}
                 isDraggable={!isDragDisabled}
                 isSelected={activity.activity_id === selectedActivityId}
                 onDelete={onDeleteActivity}
+                onDone={onDone}
                 onEdit={onEditActivity}
                 onSelect={onActivitySelect}
-                onToggleDone={onToggleDone}
+                trip={trip}
+                tripId={tripId}
               />
             </div>
           ))}

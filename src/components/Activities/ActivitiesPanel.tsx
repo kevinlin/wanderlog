@@ -1,9 +1,9 @@
 import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { WaypointListItem } from '@/components/Activities/WaypointListItem';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
 import { POISearchResultCard } from '@/components/Cards/POISearchResultCard';
-import { ScenicWaypointCard } from '@/components/Cards/ScenicWaypointCard';
 import { WeatherCard } from '@/components/Cards/WeatherCard';
 import { AccommodationFormModal } from '@/components/Editing/AccommodationFormModal';
 import { ActivityFormModal } from '@/components/Editing/ActivityFormModal';
@@ -30,7 +30,6 @@ const MOBILE_DEFAULT_PANEL_RATIO = 0.5; // Default to 50% of available height
 interface ActivitiesPanelProps {
   accommodation?: Accommodation;
   activities: Activity[];
-  activityStatus: Record<string, boolean>;
   baseId: string;
   baseLocation: Coordinates;
   className?: string;
@@ -38,12 +37,12 @@ interface ActivitiesPanelProps {
   onActivitySelect: (activityId: string) => void;
   onExportSuccess?: () => void;
   onHide?: () => void; // Legacy prop for mobile panel hiding (deprecated, kept for compatibility)
+  onItemDone: (itemId: string) => void;
   onReorder: (fromIndex: number, toIndex: number) => void;
-  onToggleDone: (activityId: string, done: boolean) => void;
   scenicWaypoints?: ScenicWaypoint[];
   selectedActivityId?: string | null;
   stopName: string;
-  tripData?: TripData;
+  tripData: TripData;
 }
 
 export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
@@ -54,11 +53,10 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   baseId,
   baseLocation,
   selectedActivityId,
-  activityStatus,
   tripData,
   isVisible = true,
   onActivitySelect,
-  onToggleDone,
+  onItemDone,
   onReorder,
   onExportSuccess,
   onHide: _onHide, // Kept for backward compatibility but no longer used
@@ -379,15 +377,16 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               {isScenicWaypointsExpanded && (
                 <div className="space-y-3">
                   {scenicWaypoints.map((waypoint) => (
-                    <ScenicWaypointCard
+                    <WaypointListItem
                       accommodation={accommodation}
-                      isDone={activityStatus[waypoint.activity_id] ?? waypoint.status?.done ?? false}
                       isSelected={selectedActivityId === waypoint.activity_id}
                       key={waypoint.activity_id}
                       onDelete={isOnline ? setDeletingWaypoint : undefined}
+                      onDone={onItemDone}
                       onEdit={isOnline ? (waypoint) => setWaypointModal({ mode: 'edit', waypoint }) : undefined}
                       onSelect={onActivitySelect}
-                      onToggleDone={onToggleDone}
+                      trip={tripData}
+                      tripId={tripId}
                       waypoint={waypoint}
                     />
                   ))}
@@ -460,15 +459,16 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                 <DraggableActivitiesList
                   accommodation={accommodation}
                   activities={activities}
-                  activityStatus={activityStatus}
                   isDragDisabled={!isOnline}
                   key={baseId}
                   onActivitySelect={onActivitySelect}
                   onDeleteActivity={isOnline ? setDeletingActivity : undefined}
+                  onDone={onItemDone}
                   onEditActivity={isOnline ? (activity) => setActivityModal({ mode: 'edit', activity }) : undefined}
                   onReorder={onReorder}
-                  onToggleDone={onToggleDone}
                   selectedActivityId={selectedActivityId}
+                  trip={tripData}
+                  tripId={tripId}
                 />
               </div>
 

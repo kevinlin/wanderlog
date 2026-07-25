@@ -17,7 +17,7 @@ import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useTripData } from '@/hooks/useTripData';
-import { useReorderActivities, useToggleActivityDone } from '@/hooks/useTripMutations';
+import { useReorderActivities } from '@/hooks/useTripMutations';
 import { useTrips } from '@/hooks/useTrips';
 import { getLastViewedBase, setCurrentTripId, setLastViewedBase } from '@/services/viewStateStorage';
 import { celebrateStopComplete, celebrateTripComplete } from '@/utils/celebrate';
@@ -33,7 +33,6 @@ export const TripPage = () => {
   const { state, dispatch } = useAppStateContext();
   const { isMobile } = useScreenSize();
   const isOnline = useOnlineStatus();
-  const toggleDoneMutation = useToggleActivityDone(tripId);
   const reorderMutation = useReorderActivities(tripId);
   const [toast, setToast] = useState<ToastState>({ message: '', type: 'info', show: false });
   const [isActivitiesPanelVisible, setIsActivitiesPanelVisible] = useState(false);
@@ -178,18 +177,16 @@ export const TripPage = () => {
   // The mapper writes `order` onto each activity, so no custom order map is needed
   const sortedActivities = currentStop ? sortActivitiesByOrder(currentStop.activities) : [];
 
-  // Write failures surface through the shared mutation helper's retry toast
-  const handleActivityToggle = (activityId: string, done: boolean) => {
+  // The write itself belongs to the per-item container, which owns the mutation
+  // scope. This is only the celebration, which needs whole-trip knowledge.
+  const handleItemDone = (activityId: string) => {
     const stop = tripData.stops.find(
       (s) => s.activities.some((a) => a.activity_id === activityId) || (s.scenic_waypoints ?? []).some((w) => w.activity_id === activityId)
     );
-    const isWaypoint = !!stop && (stop.scenic_waypoints ?? []).some((w) => w.activity_id === activityId);
-
-    toggleDoneMutation.mutate({ activityId, isDone: done, isWaypoint });
 
     // Celebrate only the moment a stop crosses into fully-done on a check (never an uncheck).
     // activityStatus is the pre-toggle snapshot, so override the item we just checked.
-    if (!(done && stop)) return;
+    if (!stop) return;
     const isDoneAfter = (id: string) => (id === activityId ? true : activityStatus[id]);
     const stopItems = [...stop.activities, ...(stop.scenic_waypoints ?? [])];
     const stopComplete = stopItems.length > 0 && stopItems.every((item) => isDoneAfter(item.activity_id));
@@ -317,15 +314,14 @@ export const TripPage = () => {
           <ActivitiesPanel
             accommodation={currentStop.accommodation}
             activities={sortedActivities}
-            activityStatus={activityStatus}
             baseId={state.currentBase}
             baseLocation={currentStop.location}
             isVisible={isActivitiesPanelVisible}
             onActivitySelect={handleActivitySelect}
             onExportSuccess={handleExportSuccess}
             onHide={handleHideActivitiesPanel}
+            onItemDone={handleItemDone}
             onReorder={handleActivityReorder}
-            onToggleDone={handleActivityToggle}
             scenicWaypoints={currentStop.scenic_waypoints || []}
             selectedActivityId={state.selectedActivity}
             stopName={currentStop.name}

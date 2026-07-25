@@ -1,9 +1,8 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
+import { renderHook, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-const mockWriteVisitFields = vi.fn();
 const mockReorderActivities = vi.fn();
 const mockCreateActivity = vi.fn();
 const mockUpdateActivity = vi.fn();
@@ -17,7 +16,6 @@ const mockUpdateStop = vi.fn();
 const mockDeleteStop = vi.fn();
 const mockApplyStopStructure = vi.fn();
 vi.mock('@/services/supabaseService', () => ({
-  writeVisitFields: (...args: unknown[]) => mockWriteVisitFields(...args),
   reorderActivities: (...args: unknown[]) => mockReorderActivities(...args),
   createActivity: (...args: unknown[]) => mockCreateActivity(...args),
   updateActivity: (...args: unknown[]) => mockUpdateActivity(...args),
@@ -44,7 +42,6 @@ import {
   useDeleteStop,
   useDeleteWaypoint,
   useReorderActivities,
-  useToggleActivityDone,
   useUpdateActivity,
   useUpdateStop,
   useUpdateWaypoint,
@@ -83,50 +80,6 @@ function setup() {
   );
   return { client, wrapper };
 }
-
-describe('useToggleActivityDone', () => {
-  it('optimistically flips status.done before the server responds', async () => {
-    mockWriteVisitFields.mockReturnValue(new Promise(() => {})); // never resolves
-    const { client, wrapper } = setup();
-    const { result } = renderHook(() => useToggleActivityDone('t1'), { wrapper });
-
-    result.current.mutate({ activityId: 'act-1', isDone: true, isWaypoint: false });
-
-    await waitFor(() => {
-      const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
-      expect(trip?.stops[0].activities[0].status?.done).toBe(true);
-    });
-  });
-
-  it('rolls back the cache when the write fails', async () => {
-    mockWriteVisitFields.mockRejectedValue(new Error('offline'));
-    const { client, wrapper } = setup();
-    const { result } = renderHook(() => useToggleActivityDone('t1'), { wrapper });
-
-    result.current.mutate({ activityId: 'act-1', isDone: true, isWaypoint: false });
-
-    await waitFor(() => expect(result.current.isError).toBe(true));
-    const trip = client.getQueryData<TripData>(tripKeys.detail('t1'));
-    expect(trip?.stops[0].activities[0].status?.done).toBe(false);
-  });
-
-  it('shows an error toast with a working Retry action on failure', async () => {
-    mockWriteVisitFields.mockReset();
-    mockWriteVisitFields.mockRejectedValueOnce(new Error('offline')).mockResolvedValueOnce(undefined);
-    const { wrapper } = setup();
-    const { result } = renderHook(() => useToggleActivityDone('t1'), { wrapper });
-
-    result.current.mutate({ activityId: 'act-1', isDone: true, isWaypoint: false });
-
-    await waitFor(() => expect(result.current.isError).toBe(true));
-    expect(screen.getByText('Could not save the change')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
-
-    await waitFor(() => expect(mockWriteVisitFields).toHaveBeenCalledTimes(2));
-    expect(mockWriteVisitFields).toHaveBeenLastCalledWith('activities', 'act-1', { is_done: true });
-  });
-});
 
 describe('useCreateActivity', () => {
   it('optimistically appends the activity with the temp id', async () => {

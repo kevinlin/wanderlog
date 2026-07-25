@@ -15,7 +15,6 @@ import {
   updateWaypoint,
   upsertAccommodation,
   type WaypointInput,
-  writeVisitFields,
 } from '@/services/supabaseService';
 import type { ScenicWaypoint } from '@/types/map';
 import type { Accommodation, Activity, TripBase } from '@/types/trip';
@@ -36,31 +35,6 @@ const activityInputToDomain = (input: ActivityInput): Omit<Activity, 'activity_i
   thumbnail_url: input.thumbnailUrl,
   google_place_id: input.googlePlaceId,
 });
-
-interface ToggleDoneVariables {
-  activityId: string;
-  isDone: boolean;
-  isWaypoint: boolean;
-}
-
-export function useToggleActivityDone(tripId: string) {
-  return useTripCacheMutation({
-    tripId,
-    mutationFn: ({ activityId, isDone, isWaypoint }: ToggleDoneVariables) =>
-      writeVisitFields(isWaypoint ? 'scenic_waypoints' : 'activities', activityId, { is_done: isDone }),
-    patch: (trip, { activityId, isDone }) => {
-      for (const stop of trip.stops) {
-        for (const item of [...stop.activities, ...(stop.scenic_waypoints ?? [])]) {
-          if (item.activity_id === activityId) {
-            item.status = { done: isDone };
-          }
-        }
-      }
-      return trip;
-    },
-    errorMessage: 'Could not save the change',
-  });
-}
 
 interface CreateActivityVariables {
   input: ActivityInput;

@@ -1,6 +1,6 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
 import { DoneCheckbox } from '@/components/Cards/DoneCheckbox';
@@ -9,7 +9,7 @@ import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation, Activity } from '@/types';
 import { ActivityType } from '@/types/trip';
 import { getActivityTypeIcon } from '@/utils/activityUtils';
-import { generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripUtils';
+import { formatMinutes, generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripUtils';
 import { activityHasLocationIssues } from '@/utils/validationUtils';
 
 interface ActivityCardProps {
@@ -20,6 +20,7 @@ interface ActivityCardProps {
   isSelected: boolean;
   onDelete?: (activity: Activity) => void;
   onEdit?: (activity: Activity) => void;
+  onLogVisit?: () => void;
   onSelect: (activityId: string) => void;
   onToggleDone: (activityId: string, done: boolean) => void;
 }
@@ -33,6 +34,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   onSelect,
   onEdit,
   onDelete,
+  onLogVisit,
   isDraggable = false,
 }) => {
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
@@ -133,10 +135,30 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                       <span className="mr-2">{getActivityTypeIcon(activity.activity_type ?? ActivityType.OTHER)}</span>
                       {activity.activity_name}
                     </h4>
+                    {isDone && (activity.visited_at || activity.visit_duration_minutes) && (
+                      <p className="mt-0.5 text-emerald-700 text-xs">
+                        {activity.visited_at?.slice(11, 16)}
+                        {activity.visited_at && activity.visit_duration_minutes ? ' · ' : ''}
+                        {activity.visit_duration_minutes ? formatMinutes(activity.visit_duration_minutes) : ''}
+                      </p>
+                    )}
                   </div>
 
-                  {(onEdit || onDelete) && (
+                  {(onEdit || onDelete || onLogVisit) && (
                     <div className="ml-2 flex shrink-0 gap-1">
+                      {onLogVisit && (
+                        <button
+                          aria-label="Log visit details"
+                          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onLogVisit();
+                          }}
+                          type="button"
+                        >
+                          <PencilSquareIcon className="h-4 w-4" />
+                        </button>
+                      )}
                       {onEdit && (
                         <button
                           aria-label="Edit activity"

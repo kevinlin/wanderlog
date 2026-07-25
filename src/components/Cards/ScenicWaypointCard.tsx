@@ -1,11 +1,11 @@
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { PencilIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useState } from 'react';
 import { DoneCheckbox } from '@/components/Cards/DoneCheckbox';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
 import type { Accommodation, ScenicWaypoint } from '@/types';
-import { generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripUtils';
+import { formatMinutes, generateGoogleMapsPlaceUrl, generateGoogleMapsUrl } from '@/utils/tripUtils';
 import { activityHasLocationIssues } from '@/utils/validationUtils';
 
 interface ScenicWaypointCardProps {
@@ -14,6 +14,7 @@ interface ScenicWaypointCardProps {
   isSelected: boolean;
   onDelete?: (waypoint: ScenicWaypoint) => void;
   onEdit?: (waypoint: ScenicWaypoint) => void;
+  onLogVisit?: () => void;
   onSelect: (waypointId: string) => void;
   onToggleDone: (waypointId: string, done: boolean) => void;
   waypoint: ScenicWaypoint;
@@ -28,6 +29,7 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
   onSelect,
   onEdit,
   onDelete,
+  onLogVisit,
 }) => {
   const [isImageViewerOpen, setIsImageViewerOpen] = useState(false);
 
@@ -86,8 +88,21 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
                   <h4 className={`font-semibold text-base ${isDone ? 'text-gray-500 line-through' : 'text-gray-900'}`}>
                     {waypoint.activity_name}
                   </h4>
-                  {(onEdit || onDelete) && (
+                  {(onEdit || onDelete || onLogVisit) && (
                     <div className="ml-2 flex shrink-0 gap-1">
+                      {onLogVisit && (
+                        <button
+                          aria-label="Log visit details"
+                          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-emerald-500/10 hover:text-emerald-600"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onLogVisit();
+                          }}
+                          type="button"
+                        >
+                          <PencilSquareIcon className="h-4 w-4" />
+                        </button>
+                      )}
                       {onEdit && (
                         <button
                           aria-label="Edit waypoint"
@@ -117,6 +132,14 @@ export const ScenicWaypointCard: React.FC<ScenicWaypointCardProps> = ({
                     </div>
                   )}
                 </div>
+
+                {isDone && (waypoint.visited_at || waypoint.visit_duration_minutes) && (
+                  <p className="mb-2 text-emerald-700 text-xs">
+                    {waypoint.visited_at?.slice(11, 16)}
+                    {waypoint.visited_at && waypoint.visit_duration_minutes ? ' · ' : ''}
+                    {waypoint.visit_duration_minutes ? formatMinutes(waypoint.visit_duration_minutes) : ''}
+                  </p>
+                )}
 
                 {waypoint.location?.address && <p className="mb-2 text-gray-600 text-sm">📍 {waypoint.location.address}</p>}
 
