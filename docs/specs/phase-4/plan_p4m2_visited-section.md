@@ -859,3 +859,13 @@ Add a changelog entry to this plan naming what was verified and anything deferre
 ## Changelog
 
 - 2026-07-26: Initial plan, written from [requirements_phase-4.md](requirements_phase-4.md) Requirement 3 and [design_phase-4.md](design_phase-4.md), against the code shipped by [plan_p4m1_data-model-and-capture.md](plan_p4m1_data-model-and-capture.md).
+- 2026-07-26: Tasks 1-3 implemented on branch `worktree-p4m2-visited-section`. Suite green at 65 files / 567 tests, `tsc -b` clean, Ultracite clean.
+
+  Two corrections to the plan as written:
+
+  - Task 3's `renderPanel` helper re-applied `QueryClientProvider` by hand on `rerender`, on the premise that RTL skips the wrapper. RTL 16.3 does re-apply it (`rerender` passes `wrapper: WrapperComponent` straight back into `renderRoot`), so the hand-applied provider double-wrapped, changed the element type at that position, and remounted the panel, discarding the expand state the test had just set. The helper now passes the bare element and lets RTL wrap it.
+  - The `@/hooks/useWeather` mock needed `useWeatherDisplay` as well: `WeatherCard` renders inside the expanded activities section and calls it.
+
+  Task 1 has ten cases, not the twelve Step 4 claims. `applyPlannedOrder` avoids `queue[next++]` because Ultracite rejects the increment operator.
+
+  **Task 4 (manual gate) not run** — it needs an authenticated account on a Vercel preview. What the automated suite does establish: day-grouped headings in date order with items in time order, an activity and a waypoint interleaved by time in one visited list, the waypoint gone from the Scenic Waypoints group and its count, the undated group rendering last as "Time not recorded", exactly one drag handle across a planned-plus-visited render, an item moving between sections when it becomes done, and `applyPlannedOrder` leaving a visited item in its held slot. Still open and browser-only: that a real drag gesture persists across a reload (Step 4), that an untick end-to-end returns the item to its original position (Step 5), and the visual confirmation that the map, timeline, and library are unchanged (Step 6).
