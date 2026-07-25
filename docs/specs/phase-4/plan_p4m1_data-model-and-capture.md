@@ -1734,13 +1734,13 @@ Set a trip's timezone to a zone several hours from yours, tick an item, and conf
 
 Open the visit form, enter a date outside the trip, confirm the warning appears and that Save still persists the value.
 
-- [ ] **Step 5: Verify offline capture and restart survival**
+- [x] **Step 5: Verify offline capture and restart survival**
 
 Go offline in devtools, tick an item and save a note, confirm both appear. Close the tab. Go back online, reopen the trip, and confirm both the tick and the note reached Supabase.
 
 The tab stays closed until connectivity returns because there is no service worker: a reload while offline fails at the network before React or the persisted cache can start. Req 5.3 asks for queued writes to survive the restart, not for the app to boot offline, so an offline app shell is out of scope here.
 
-- [ ] **Step 6: Verify the failure path**
+- [x] **Step 6: Verify the failure path**
 
 Repeat step 5 but block `*supabase.co/rest/v1/*` on reconnect. Confirm the card reverts to its prior values, the trip stays on screen rather than dropping to the full-screen error, and the retry toast is present and stays until dismissed.
 
@@ -1804,3 +1804,10 @@ Add a changelog entry to this plan naming what was verified and anything deferre
   Step 5's procedure was wrong, not just its result: it asked for a reload while offline, which needs an app-shell cache the repo does not have. Req 5.3 requires queued writes to survive a restart, not an offline boot. The step now closes the tab offline and reopens after reconnect; an offline app shell stays out of Phase 4 scope.
 
   All verification edits were restored and confirmed from fresh reads: Singapore trip dates/timezone, Bird Paradise and Dragon Bridge status/stamps, and Singapore Zoo remarks. M1 is not signed off until Steps 5 and 6 pass.
+
+- 2026-07-26: Steps 5-6 re-verified against production deployment `d85e29e2` at `wanderlog-xi.vercel.app`; both passed and M1 is signed off.
+
+  - **Step 5:** while offline, the Singapore Zoo tick and test note both appeared optimistically. The tab was closed while the writes were queued, then reopened online. Both values reached Supabase and remained present after a second fresh reload.
+  - **Step 6:** while offline with `*supabase.co/rest/v1/*` blocked, the Food Republic tick and test note appeared optimistically. On reconnect, both rolled back to their prior values, the trip stayed visible, and the Retry toast remained present beyond its former 4-second timeout. After request blocking was disabled, a fresh reload confirmed that no Step 6 test data reached Supabase.
+
+  Singapore Zoo was restored to its original note and unchecked state. The final fresh read confirmed both test items matched their original server values.
