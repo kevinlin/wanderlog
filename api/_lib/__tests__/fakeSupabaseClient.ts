@@ -44,7 +44,7 @@ export function createFakeClient(queue: QueueEntry[]): { calls: FakeCall[]; clie
         return chain;
       };
       return {
-        select: (_columns?: string, _options?: unknown) => exec('select'),
+        select: (columns?: string, _options?: unknown) => exec('select', columns),
         insert: (rows: unknown) => exec('insert', rows),
         update: (patch: unknown) => exec('update', patch),
         upsert: (rows: unknown, _options?: unknown) => exec('upsert', rows),

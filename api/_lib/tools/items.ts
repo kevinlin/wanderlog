@@ -38,15 +38,61 @@ const UPDATE_FIELDS = {
   done: z.boolean().optional(),
 };
 
-const fetchName = async (client: SupabaseClient, table: string, id: string, noun: string): Promise<string> => {
-  const { data, error } = await client.from(table).select('name').eq('id', id).maybeSingle();
+// The item's done state and the owning trip's zone and dates arrive through the
+// same round trip this pre-read already made, so the stamp rule and the
+// not-done guard cost no extra query and resolve on library-scoped runs where
+// no trip was prefetched into the prompt.
+const ITEM_CONTEXT_SELECT = 'name, is_done, stops(trips(timezone, start_date, end_date))';
+
+// PostgREST returns a many-to-one embed as an object, but the same nested shape
+// arrives as a single-element array on some relationship shapes - which is why
+// supabaseMappers already unwraps both for accommodations.
+type Embedded<T> = T | T[] | null;
+
+interface TripContextRow {
+  end_date: string | null;
+  start_date: string | null;
+  timezone: string | null;
+}
+
+interface ItemContextRow {
+  is_done: boolean | null;
+  name: string;
+  stops: Embedded<{ trips: Embedded<TripContextRow> }>;
+}
+
+export interface ItemContext {
+  endDate?: string;
+  isDone: boolean;
+  name: string;
+  startDate?: string;
+  timeZone?: string;
+}
+
+const unwrap = <T>(value: Embedded<T> | undefined): T | undefined => {
+  if (value == null) {
+    return;
+  }
+  return Array.isArray(value) ? value[0] : value;
+};
+
+const fetchItemContext = async (client: SupabaseClient, table: string, id: string, noun: string): Promise<ItemContext> => {
+  const { data, error } = await client.from(table).select(ITEM_CONTEXT_SELECT).eq('id', id).maybeSingle();
   if (error) {
     throw new Error(error.message);
   }
   if (!data) {
     throw new Error(`No ${noun} found with id ${id}`);
   }
-  return (data as { name: string }).name;
+  const row = data as ItemContextRow;
+  const trip = unwrap(unwrap(row.stops)?.trips);
+  return {
+    name: row.name,
+    isDone: row.is_done ?? false,
+    timeZone: trip?.timezone ?? undefined,
+    startDate: trip?.start_date ?? undefined,
+    endDate: trip?.end_date ?? undefined,
+  };
 };
 
 interface ItemToolsConfig {
@@ -94,10 +140,10 @@ function buildItemTools({ columns, create, entity, hasType, idField, noun, table
       schema: updateSchema,
       execute: async (client, input) => {
         const id = input[idField] as string;
-        const currentName = await fetchName(client, table, id, noun);
+        const context = await fetchItemContext(client, table, id, noun);
         // Sparse update stays agent policy; the shared updateById does the write.
         await updateById(client, table, id, patchRow(patchDefs, input));
-        return { id, name: (input.name as string | undefined) ?? currentName };
+        return { id, name: (input.name as string | undefined) ?? context.name };
       },
       toChanges: (_input, output) => {
         const o = output as { id: string; name: string };
@@ -110,7 +156,7 @@ function buildItemTools({ columns, create, entity, hasType, idField, noun, table
       schema: deleteSchema,
       execute: async (client, input) => {
         const id = input[idField] as string;
-        const name = await fetchName(client, table, id, noun);
+        const { name } = await fetchItemContext(client, table, id, noun);
         await deleteById(client, table, id);
         return { id, name, deleted: true };
       },

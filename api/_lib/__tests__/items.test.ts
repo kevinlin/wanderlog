@@ -63,6 +63,30 @@ describe('update_activity', () => {
     expect((await dispatchTool(ACTIVITY_TOOLS, client, 'update_activity', { activity_id: 'act-1' })).isError).toBe(true);
   });
 
+  it('reads the item state and the owning trip window in one pre-read', async () => {
+    const { calls, client } = createFakeClient([
+      {
+        table: 'activities',
+        method: 'select',
+        data: {
+          name: 'Museum',
+          is_done: false,
+          stops: { trips: { timezone: 'Asia/Tokyo', start_date: '2026-07-12', end_date: '2026-07-19' } },
+        },
+      },
+      { table: 'activities', method: 'update' },
+    ]);
+
+    const result = await dispatchTool(ACTIVITY_TOOLS, client, 'update_activity', { activity_id: 'act-1', address: 'Ueno' });
+
+    expect(result.isError).toBe(false);
+    const selects = calls.filter((call) => call.method === 'select');
+    // One round trip, not two: the stamp rule's inputs ride along with the name.
+    expect(selects).toHaveLength(1);
+    expect(selects[0].payload).toBe('name, is_done, stops(trips(timezone, start_date, end_date))');
+    expect(result.changes[0]).toMatchObject({ name: 'Museum' });
+  });
+
   it('errors when the id does not exist, without writing', async () => {
     const { calls, client } = createFakeClient([{ table: 'activities', method: 'select', data: null }]);
     const result = await dispatchTool(ACTIVITY_TOOLS, client, 'update_activity', { activity_id: 'ghost', name: 'X' });
