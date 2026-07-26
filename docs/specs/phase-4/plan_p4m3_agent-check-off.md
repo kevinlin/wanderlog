@@ -723,11 +723,11 @@ Manual verification against `vercel dev` or a Vercel preview — `api/` is not s
 
 Use a trip whose date range includes today for the live-trip cases, and a trip that ended in the past for the catch-up case.
 
-- [ ] **Step 1: Verify an explicit time**
+- [x] **Step 1: Verify an explicit time**
 
 Ask agent mode: "mark the museum done, we left at 3". Confirm the item becomes done and its card shows `15:00` on the trip's date, and that the agent's summary says what it changed.
 
-- [ ] **Step 2: Verify the stamp matches the UI**
+- [x] **Step 2: Verify the stamp matches the UI**
 
 On the live trip, ask "mark <item> done" with no time. Confirm the recorded time is the current trip-local time. Tick a second item with the checkbox and confirm both times are in the same zone and shape.
 
@@ -735,7 +735,7 @@ On the live trip, ask "mark <item> done" with no time. Confirm the recorded time
 
 On the trip that ended in the past, ask "mark <item> done". Confirm the item becomes done with no time recorded, and that it lands in the Visited section's "Time not recorded" group.
 
-- [ ] **Step 4: Verify the not-done guard**
+- [x] **Step 4: Verify the not-done guard**
 
 Pick an unticked item and ask "note that we spent 90 minutes at <item>" without asking to tick it. Confirm no visit record is written. The model will normally recover by marking it done and retrying, which is the intended behaviour — confirm the end state is a done item with the duration, and that if it does not retry, the item is left untouched.
 
@@ -743,11 +743,11 @@ Pick an unticked item and ask "note that we spent 90 minutes at <item>" without 
 
 Confirm the agent modal's change list names the item for each visit write, as an `updated` change.
 
-- [ ] **Step 6: Verify the read-back**
+- [x] **Step 6: Verify the read-back**
 
 Ask "what did we do on <date>, and how long did it take?". Confirm the answer uses the recorded times and durations rather than the planned `duration` text.
 
-- [ ] **Step 7: Verify a relative expression**
+- [x] **Step 7: Verify a relative expression**
 
 On the live trip, ask "we finished <item> an hour ago". Confirm the recorded time is roughly one hour before the trip-local now, not the server's UTC hour.
 
@@ -806,3 +806,9 @@ Untick and clear anything ticked for verification, confirming from fresh reads t
   One real defect surfaced anyway, and it survives a redeploy: `duration` and `remarks` carried no `.describe()`, so nothing in the contract told the model that `duration` is the plan rather than the actual time spent, and nothing told it to read back from `visit_duration_minutes`. Fixed as [plan_p3m3_generative-creation.md](../phase-3/plan_p3m3_generative-creation.md) Task 8, since the tool-schema contract is that milestone's: descriptions on both fields, a planned-versus-actual rule in `CORE_RULES` covering the read-back direction, and a new `describe('the schema the model receives')` block asserting against `toAnthropicTools` output — closing a hole where `toAnthropicTools` was only ever tested on `READ_TOOLS`, so an undescribed or dropped write-tool field had no test that would fail. Suite at 65 files / 591 tests, `tsc -b` clean, Ultracite clean.
 
   Steps 1, 2, 4, 6, and 7 stay unchecked. Re-running them needs a preview built from this branch's HEAD; confirm the deployment's commit SHA before trusting the result.
+
+- 2026-07-26: Re-ran the previously failed Task 4 steps against Vercel preview `wanderlog-v8fs5fio1-kevin-lins-projects-835b030f.vercel.app`, deployed from branch HEAD `7a5d632656e212675f0f5db63491ba66652dcb2d`. A read-only prompt returned the injected trip-local clock (`2026-07-26 12:58 PM`, `Asia/Singapore`), confirming that the preview contained the M3 prompt rather than the earlier pre-M3 build.
+
+  Steps 1, 2, 4, 6, and 7 passed. "We left at 3" recorded `visited_at = 2026-07-26 15:00` and preserved the planned duration. A no-time agent check-off and a UI checkbox check-off both recorded `2026-07-26 12:59` in the same shape and zone. "We spent 90 minutes" marked the item done, recorded `visit_duration_minutes = 90`, stamped `visited_at = 2026-07-26 12:59`, and preserved `duration = planned 4 hours`. Read-back reported the four completed items at their recorded times and used only the 90-minute actual duration, ignoring planned duration text. "An hour ago" at 13:00 trip-local time recorded `visited_at = 2026-07-26 12:00`. The agent summaries and change lists named each updated item.
+
+  Fresh Supabase reads confirmed the exact persisted values before cleanup. The temporary trip was then deleted, and fresh reads returned zero matching trip rows and zero matching activity rows. The full automated gate also passed at 65 files / 591 tests, with Ultracite clean, `tsc -b` clean, and the Vite production build successful. All Task 4 steps are complete.
