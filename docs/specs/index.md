@@ -43,6 +43,7 @@ Generated conventions and lint reports live under [`meta/`](meta/).
 | Design Quality (Phase 3 M4) | [phase-3/plan_p3m4_design-quality.md](phase-3/plan_p3m4_design-quality.md) | Critique remediation: self-consistency (stripe, gradient, tracked-caps, add-button colors), reduced-motion + a11y audit, timeline contrast, reorder undo + error copy, polish sweep. |
 | Data Model + Capture (Phase 4 M1) | [phase-4/plan_p4m1_data-model-and-capture.md](phase-4/plan_p4m1_data-model-and-capture.md) | Additive visit columns, shared `visitRecord` stamp module, trip timezone correction, module-scope visit mutation with restart resume, visit-details modal, per-item containers, import/export round-trip. |
 | Visited Section (Phase 4 M2) | [phase-4/plan_p4m2_visited-section.md](phase-4/plan_p4m2_visited-section.md) | Planned/visited split with a total merged order, day-grouped visited section, id-based reorder so visited items keep their slots. |
+| Agent Check-off (Phase 4 M3) | [phase-4/plan_p4m3_agent-check-off.md](phase-4/plan_p4m3_agent-check-off.md) | Visit fields on the agent item update tools, widened item pre-read, shared stamp rule server-side, not-done guard, system-prompt clock and trip range. |
 
 ## Meta
 
