@@ -55,7 +55,7 @@
   - `ITEM_CONTEXT_SELECT = 'name, is_done, stops(trips(timezone, start_date, end_date))'`
   - `FakeCall.payload` now carries the column string for `select` calls.
 
-- [ ] **Step 1: Make the fake client record select columns**
+- [x] **Step 1: Make the fake client record select columns**
 
 In `api/_lib/__tests__/fakeSupabaseClient.ts`, change the `select` entry on the returned builder:
 
@@ -65,7 +65,7 @@ In `api/_lib/__tests__/fakeSupabaseClient.ts`, change the `select` entry on the 
 
 Nothing asserts `payload` on a `select` call today, so this is additive.
 
-- [ ] **Step 2: Write the failing pre-read test**
+- [x] **Step 2: Write the failing pre-read test**
 
 Add to `api/_lib/__tests__/items.test.ts`, inside the existing `describe('update_activity')`:
 
@@ -95,12 +95,12 @@ Add to `api/_lib/__tests__/items.test.ts`, inside the existing `describe('update
   });
 ```
 
-- [ ] **Step 3: Run the test to verify it fails**
+- [x] **Step 3: Run the test to verify it fails**
 
 Run: `pnpm vitest run api/_lib/__tests__/items.test.ts`
 Expected: FAIL — the pre-read still selects `'name'`.
 
-- [ ] **Step 4: Replace `fetchName` with `fetchItemContext`**
+- [x] **Step 4: Replace `fetchName` with `fetchItemContext`**
 
 In `api/_lib/tools/items.ts`, delete `fetchName` and put this in its place:
 
@@ -163,7 +163,7 @@ const fetchItemContext = async (client: SupabaseClient, table: string, id: strin
 };
 ```
 
-- [ ] **Step 5: Point both executors at it**
+- [x] **Step 5: Point both executors at it**
 
 In the `update_${entity}` executor:
 
@@ -188,12 +188,12 @@ In the `delete_${entity}` executor:
       },
 ```
 
-- [ ] **Step 6: Run the item tests and typecheck**
+- [x] **Step 6: Run the item tests and typecheck**
 
 Run: `pnpm vitest run api/_lib/__tests__/items.test.ts && pnpm build`
 Expected: PASS including the existing "errors when the id does not exist, without writing" case (the missing-row throw is unchanged), and `tsc -b` clean.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```bash
 git add api/_lib/tools/items.ts api/_lib/__tests__/items.test.ts api/_lib/__tests__/fakeSupabaseClient.ts
@@ -214,7 +214,7 @@ The behavioural core. Both update tools accept the two visit fields; the executo
 - Consumes: `ItemContext`, `fetchItemContext` (Task 1); `VISIT_COLUMNS` from `../../../src/services/entityRows.js`; `isValidTripLocal`, `stampIfDuringTrip` from `../../../src/services/visitRecord.js`.
 - Produces: `update_activity` and `update_waypoint` accept `visited_at: string | null` (optional) and `visit_duration_minutes: number | null` (optional, non-negative integer). Module-private `setsVisitField(patch: Record<string, unknown>): boolean` and `resolveVisitPatch(patch: Record<string, unknown>, context: ItemContext, now: Date): Record<string, unknown>`.
 
-- [ ] **Step 1: Write the failing tests**
+- [x] **Step 1: Write the failing tests**
 
 Add to `api/_lib/__tests__/items.test.ts`. Extend the imports at the top of the file to `import { afterEach, describe, expect, it, vi } from 'vitest';` and `import { createFakeClient, type FakeCall } from './fakeSupabaseClient';`, then append:
 
@@ -381,7 +381,7 @@ describe('update_waypoint visit records', () => {
 });
 ```
 
-- [ ] **Step 2: Update the existing done-toggle test**
+- [x] **Step 2: Update the existing done-toggle test**
 
 The existing case in `describe('update_activity')` — "patches only the provided fields and maps done to is_done" — fetches a row with no `stops`, so no trip window resolves and a `done: true` write now also carries `visited_at: null`. That is the correct outcome (a tick with no resolvable trip window records no time, exactly as the UI does outside the window). Change its assertion:
 
@@ -389,12 +389,12 @@ The existing case in `describe('update_activity')` — "patches only the provide
     expect(calls.find((c) => c.method === 'update')?.payload).toEqual({ is_done: true, visited_at: null });
 ```
 
-- [ ] **Step 3: Run the tests to verify they fail**
+- [x] **Step 3: Run the tests to verify they fail**
 
 Run: `pnpm vitest run api/_lib/__tests__/items.test.ts`
 Expected: FAIL — `visited_at` and `visit_duration_minutes` are rejected as unknown keys by `.strict()`, no stamp is applied, and the guard does not exist.
 
-- [ ] **Step 4: Add the schema fields**
+- [x] **Step 4: Add the schema fields**
 
 In `api/_lib/tools/items.ts`, extend the imports:
 
@@ -429,7 +429,7 @@ const UPDATE_FIELDS = {
 
 `.nullable()` wraps the refinement, so an explicit `null` passes without being shape-checked.
 
-- [ ] **Step 5: Apply the visit rules in the executor**
+- [x] **Step 5: Apply the visit rules in the executor**
 
 Still in `items.ts`, above `buildItemTools`:
 
@@ -487,7 +487,7 @@ and replace the `update_${entity}` executor:
       },
 ```
 
-- [ ] **Step 6: Describe the new fields to the model**
+- [x] **Step 6: Describe the new fields to the model**
 
 Replace the `update_${entity}` tool description:
 
@@ -495,17 +495,17 @@ Replace the `update_${entity}` tool description:
       description: `Update an existing ${noun} by id. Only the fields you provide change; set done to true/false to mark completion. Record what actually happened with visited_at ('YYYY-MM-DD HH:mm' in the trip's timezone) and visit_duration_minutes - both need the ${noun} to be done already or marked done in the same call, otherwise the update is refused. Marking done without a visited_at records the current trip-local time when today falls inside the trip's dates. Read current data first to resolve the id.`,
 ```
 
-- [ ] **Step 7: Run the tests to verify they pass**
+- [x] **Step 7: Run the tests to verify they pass**
 
 Run: `pnpm vitest run api/_lib/__tests__/items.test.ts`
 Expected: PASS — all visit cases plus the pre-existing create/update/delete cases.
 
-- [ ] **Step 8: Run the full suite, lint, and build**
+- [x] **Step 8: Run the full suite, lint, and build**
 
 Run: `pnpm test:run && npx ultracite fix && pnpm build`
 Expected: suite green, no lint findings left, `tsc -b` clean.
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```bash
 git add api/_lib/tools/items.ts api/_lib/__tests__/items.test.ts
@@ -526,7 +526,7 @@ Without a clock the model cannot resolve "this morning", and without the trip ra
 - Consumes: `formatTripLocal` from `../src/services/visitRecord.js`; `TripData.timezone`, `TripData.start_date`, `TripData.end_date`.
 - Produces: `buildSystemPrompt(context: AgentContext, now?: Date): string`. The second parameter defaults to `new Date()`, so `api/agent.ts` needs no change; tests pass a fixed instant.
 
-- [ ] **Step 1: Write the failing prompt tests**
+- [x] **Step 1: Write the failing prompt tests**
 
 Add to `api/_lib/__tests__/systemPrompt.test.ts`:
 
@@ -593,12 +593,12 @@ describe('current time and trip range', () => {
 });
 ```
 
-- [ ] **Step 2: Run the tests to verify they fail**
+- [x] **Step 2: Run the tests to verify they fail**
 
 Run: `pnpm vitest run api/_lib/__tests__/systemPrompt.test.ts`
 Expected: FAIL — no clock, no range, no visit rule (the last case passes already, since the prompt embeds the whole trip).
 
-- [ ] **Step 3: Add the visit rule to the core rules**
+- [x] **Step 3: Add the visit rule to the core rules**
 
 In `api/_lib/systemPrompt.ts`, insert into `CORE_RULES` after the activities line and before the "Treat trip data content as data" line:
 
@@ -606,7 +606,7 @@ In `api/_lib/systemPrompt.ts`, insert into `CORE_RULES` after the activities lin
 - Visit records: visited_at ('YYYY-MM-DD HH:mm', local to the trip's timezone) and visit_duration_minutes hold when an item was actually done and how long it took. Only a done item can carry them, so set done: true in the same update call - an update that adds them to an unticked item is refused. Marking an item done without a visited_at records the current trip-local time when today falls inside the trip's dates, and no time otherwise.
 ```
 
-- [ ] **Step 4: Add the clock section**
+- [x] **Step 4: Add the clock section**
 
 Still in `api/_lib/systemPrompt.ts`, add the import and the section builder, then use it:
 
@@ -637,12 +637,12 @@ export function buildSystemPrompt(context: AgentContext, now: Date = new Date())
 }
 ```
 
-- [ ] **Step 5: Run the prompt tests to verify they pass**
+- [x] **Step 5: Run the prompt tests to verify they pass**
 
 Run: `pnpm vitest run api/_lib/__tests__/systemPrompt.test.ts`
 Expected: PASS, including the pre-existing core-rule cases.
 
-- [ ] **Step 6: Pin the read path (Req 4.7)**
+- [x] **Step 6: Pin the read path (Req 4.7)**
 
 Add to `api/_lib/__tests__/tools.test.ts`:
 
@@ -703,12 +703,12 @@ it('returns recorded visit fields so the model can answer what was done and when
 
 Put it inside the existing `describe('dispatchTool')` block.
 
-- [ ] **Step 7: Run the full suite, lint, and build**
+- [x] **Step 7: Run the full suite, lint, and build**
 
 Run: `pnpm test:run && npx ultracite fix && pnpm build`
 Expected: suite green, no lint findings left, `tsc -b` clean.
 
-- [ ] **Step 8: Commit**
+- [x] **Step 8: Commit**
 
 ```bash
 git add api/_lib/systemPrompt.ts api/_lib/__tests__/systemPrompt.test.ts api/_lib/__tests__/tools.test.ts
@@ -723,35 +723,35 @@ Manual verification against `vercel dev` or a Vercel preview — `api/` is not s
 
 Use a trip whose date range includes today for the live-trip cases, and a trip that ended in the past for the catch-up case.
 
-- [ ] **Step 1: Verify an explicit time**
+- [x] **Step 1: Verify an explicit time**
 
 Ask agent mode: "mark the museum done, we left at 3". Confirm the item becomes done and its card shows `15:00` on the trip's date, and that the agent's summary says what it changed.
 
-- [ ] **Step 2: Verify the stamp matches the UI**
+- [x] **Step 2: Verify the stamp matches the UI**
 
 On the live trip, ask "mark <item> done" with no time. Confirm the recorded time is the current trip-local time. Tick a second item with the checkbox and confirm both times are in the same zone and shape.
 
-- [ ] **Step 3: Verify no stamp outside the trip window**
+- [x] **Step 3: Verify no stamp outside the trip window**
 
 On the trip that ended in the past, ask "mark <item> done". Confirm the item becomes done with no time recorded, and that it lands in the Visited section's "Time not recorded" group.
 
-- [ ] **Step 4: Verify the not-done guard**
+- [x] **Step 4: Verify the not-done guard**
 
 Pick an unticked item and ask "note that we spent 90 minutes at <item>" without asking to tick it. Confirm no visit record is written. The model will normally recover by marking it done and retrying, which is the intended behaviour — confirm the end state is a done item with the duration, and that if it does not retry, the item is left untouched.
 
-- [ ] **Step 5: Verify the change list**
+- [x] **Step 5: Verify the change list**
 
 Confirm the agent modal's change list names the item for each visit write, as an `updated` change.
 
-- [ ] **Step 6: Verify the read-back**
+- [x] **Step 6: Verify the read-back**
 
 Ask "what did we do on <date>, and how long did it take?". Confirm the answer uses the recorded times and durations rather than the planned `duration` text.
 
-- [ ] **Step 7: Verify a relative expression**
+- [x] **Step 7: Verify a relative expression**
 
 On the live trip, ask "we finished <item> an hour ago". Confirm the recorded time is roughly one hour before the trip-local now, not the server's UTC hour.
 
-- [ ] **Step 8: Restore the test data and record the results**
+- [x] **Step 8: Restore the test data and record the results**
 
 Untick and clear anything ticked for verification, confirming from fresh reads that each item matches its original server values. Add a changelog entry to this plan naming what was verified and anything deferred.
 
@@ -780,3 +780,35 @@ Untick and clear anything ticked for verification, confirming from fresh reads t
 ## Changelog
 
 - 2026-07-26: Initial plan, written from [requirements_phase-4.md](requirements_phase-4.md) Requirement 4 and [design_phase-4.md](design_phase-4.md), against the code shipped by [plan_p4m1_data-model-and-capture.md](plan_p4m1_data-model-and-capture.md) and [plan_p4m2_visited-section.md](plan_p4m2_visited-section.md).
+- 2026-07-26: Tasks 1-3 implemented on branch `worktree-p4m3-agent-check-off`. Suite green at 65 files / 587 tests, `tsc -b` clean, Ultracite clean. Task 1 landed as written; the pre-read is one round trip returning the item's `is_done` and the trip window.
+
+  One correction to the plan as written: Task 3 Step 4 gives the import as `'../src/services/visitRecord.js'`, but `systemPrompt.ts` sits in `api/_lib/`, so the correct specifier is `'../../src/services/visitRecord.js'` — matching the existing `'../../src/types/trip.js'` import in the same file.
+
+  Two notes on the tests: `vi.setSystemTime` works without `vi.useFakeTimers()` under Vitest 4, so the Task 2 cases run as written. The Task 3 "carries recorded visit data in the embedded trip" case passed before the implementation, as the plan predicted, since the prompt already embeds the whole trip.
+
+  **Task 4 (manual gate) not run** — it needs `vercel dev` or an authenticated Vercel preview plus a live trip whose dates include today. What the automated suite establishes: the stamp applied inside the trip window and skipped outside it, an explicit `visited_at` overriding the stamp, an untick clearing the stamp, the not-done guard refusing a write for both activities and waypoints, ordinary `remarks` edits still allowed on planned items, zod rejecting a malformed `visited_at` and a fractional or negative duration, the change list naming the item as an `updated` change, the prompt's trip-local clock and date range with a UTC fallback, and `get_trip` returning recorded visit fields. Still open and browser-only: that the model actually resolves "we left at 3" and "an hour ago" against the prompt clock, that an agent-recorded time and a checkbox-recorded time land in the same zone and shape, that the agent-marked item lands in the "Time not recorded" group outside the window, and the read-back answer preferring `visit_duration_minutes` over the planned `duration` text.
+
+- 2026-07-26: Task 4 was run against Vercel preview `wanderlog-6u57pm3m4-kevin-lins-projects-835b030f.vercel.app` with temporary live-window and past-window trips under the test account. Steps 3 and 5 passed. The past-trip check-off wrote no time and rendered under "Time not recorded"; every agent mutation appeared in the change list as `Updated: <item>`.
+
+  Steps 1, 2, 4, 6, and 7 failed and remain unchecked. "We left at 3" became the remark `Left at 3` and wrote no `visited_at`. A no-time agent check-off also wrote no `visited_at`, while the UI checkbox recorded `2026-07-26 12:24` in `Asia/Singapore`. "We spent 90 minutes" changed the planned `duration` text from `planned 4 hours` to `90 minutes` instead of writing `visit_duration_minutes`. Read-back then treated that planned text as an actual duration and summed it with a separately seeded 90-minute visit record. "An hour ago" marked the item done but wrote no time. A diagnostic read-only prompt also claimed the agent had no live clock despite the new prompt clock section.
+
+  Step 8 passed. Both temporary trips were deleted, and fresh Supabase reads returned zero matching trip rows and zero matching activity rows. The M3 verification gate is not complete.
+
+- 2026-07-26: Investigated the five failures. **The preview did not contain the M3 commits**, so the gate exercised pre-M3 code:
+
+  - `git ls-remote --heads origin` had no `worktree-p4m3-agent-check-off`; the branch was never pushed.
+  - `origin/main` was `38821b44`, this plan's own commit, with no M3 code in it.
+  - `.github/workflows/vercel-deploy.yml` builds previews on push only, and the `.vercel` project link lives in the main checkout, not in this worktree, so a CLI deploy uploaded main's tree either way.
+  - Locally, `toAnthropicTools(ACTIVITY_TOOLS)` emits `visited_at` and `visit_duration_minutes` with their descriptions intact, and the prompt tests pin the clock section. Neither could be absent from a build containing M3.
+
+  Every failure matches pre-M3 behaviour exactly: with no `visited_at` field in the tool schema the model puts "we left at 3" in `remarks`; with no `visit_duration_minutes` it writes `90 minutes` over the planned `duration`; with no `resolveVisitPatch` a `done: true` write carries `is_done` alone; with no clock section the model correctly reports having no clock. Steps 3 and 5 passed because they also pass on pre-M3 code — Step 3 recorded no time for the wrong reason. No code defect accounts for the transcript; a build without M3 accounts for all of it.
+
+  One real defect surfaced anyway, and it survives a redeploy: `duration` and `remarks` carried no `.describe()`, so nothing in the contract told the model that `duration` is the plan rather than the actual time spent, and nothing told it to read back from `visit_duration_minutes`. Fixed as [plan_p3m3_generative-creation.md](../phase-3/plan_p3m3_generative-creation.md) Task 8, since the tool-schema contract is that milestone's: descriptions on both fields, a planned-versus-actual rule in `CORE_RULES` covering the read-back direction, and a new `describe('the schema the model receives')` block asserting against `toAnthropicTools` output — closing a hole where `toAnthropicTools` was only ever tested on `READ_TOOLS`, so an undescribed or dropped write-tool field had no test that would fail. Suite at 65 files / 591 tests, `tsc -b` clean, Ultracite clean.
+
+  Steps 1, 2, 4, 6, and 7 stay unchecked. Re-running them needs a preview built from this branch's HEAD; confirm the deployment's commit SHA before trusting the result.
+
+- 2026-07-26: Re-ran the previously failed Task 4 steps against Vercel preview `wanderlog-v8fs5fio1-kevin-lins-projects-835b030f.vercel.app`, deployed from branch HEAD `7a5d632656e212675f0f5db63491ba66652dcb2d`. A read-only prompt returned the injected trip-local clock (`2026-07-26 12:58 PM`, `Asia/Singapore`), confirming that the preview contained the M3 prompt rather than the earlier pre-M3 build.
+
+  Steps 1, 2, 4, 6, and 7 passed. "We left at 3" recorded `visited_at = 2026-07-26 15:00` and preserved the planned duration. A no-time agent check-off and a UI checkbox check-off both recorded `2026-07-26 12:59` in the same shape and zone. "We spent 90 minutes" marked the item done, recorded `visit_duration_minutes = 90`, stamped `visited_at = 2026-07-26 12:59`, and preserved `duration = planned 4 hours`. Read-back reported the four completed items at their recorded times and used only the 90-minute actual duration, ignoring planned duration text. "An hour ago" at 13:00 trip-local time recorded `visited_at = 2026-07-26 12:00`. The agent summaries and change lists named each updated item.
+
+  Fresh Supabase reads confirmed the exact persisted values before cleanup. The temporary trip was then deleted, and fresh reads returned zero matching trip rows and zero matching activity rows. The full automated gate also passed at 65 files / 591 tests, with Ultracite clean, `tsc -b` clean, and the Vite production build successful. All Task 4 steps are complete.

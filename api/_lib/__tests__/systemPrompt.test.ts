@@ -57,3 +57,72 @@ describe('buildSystemPrompt', () => {
     expect(prompt).toContain('"trip_id": "t1"');
   });
 });
+
+// 2026-07-15T05:32:00Z is 14:32 in Tokyo and 05:32 UTC.
+const INSTANT = new Date('2026-07-15T05:32:00Z');
+
+const tokyoTrip: TripData = {
+  trip_id: 't2',
+  trip_name: 'Japan',
+  timezone: 'Asia/Tokyo',
+  start_date: '2026-07-12',
+  end_date: '2026-07-19',
+  stops: [
+    {
+      stop_id: 's1',
+      name: 'Tokyo',
+      date: { from: '2026-07-12', to: '2026-07-15' },
+      duration_days: 3,
+      location: { lat: 35.6, lng: 139.7 },
+      activities: [
+        {
+          activity_id: 'act-1',
+          activity_name: 'Museum',
+          status: { done: true },
+          visited_at: '2026-07-15 14:32',
+          visit_duration_minutes: 90,
+        },
+      ],
+    },
+  ],
+};
+
+describe('current time and trip range', () => {
+  it('states the current time in the open trip timezone and the trip range', () => {
+    const prompt = buildSystemPrompt({ trip: tokyoTrip }, INSTANT);
+    expect(prompt).toContain('2026-07-15 14:32');
+    expect(prompt).toContain('Asia/Tokyo');
+    expect(prompt).toContain('runs 2026-07-12 to 2026-07-19');
+  });
+
+  it('falls back to UTC on a library-scoped run', () => {
+    const prompt = buildSystemPrompt({ tripSummaries: [summaryFixture] }, INSTANT);
+    expect(prompt).toContain('2026-07-15 05:32 UTC');
+  });
+
+  it('omits the range when the trip carries no stored dates', () => {
+    const prompt = buildSystemPrompt({ trip: nzTripFixture }, INSTANT);
+    expect(prompt).toContain('Pacific/Auckland');
+    expect(prompt).not.toContain('undefined');
+  });
+
+  it('states the done-before-visit rule', () => {
+    const prompt = buildSystemPrompt({});
+    expect(prompt).toContain('visited_at');
+    expect(prompt).toContain('done: true in the same update call');
+  });
+
+  it('separates the planned estimate from what actually happened', () => {
+    const prompt = buildSystemPrompt({});
+    // The M3 gate caught the model overwriting `planned 4 hours` with
+    // `90 minutes`, then reading that text back as an actual duration.
+    expect(prompt).toContain('never overwrite duration');
+    expect(prompt).toContain('visit_duration_minutes');
+  });
+
+  it('carries recorded visit data in the embedded trip', () => {
+    const prompt = buildSystemPrompt({ trip: tokyoTrip }, INSTANT);
+    expect(prompt).toContain('"visited_at": "2026-07-15 14:32"');
+    expect(prompt).toContain('"visit_duration_minutes": 90');
+  });
+});
