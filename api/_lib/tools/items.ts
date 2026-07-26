@@ -3,7 +3,14 @@ import { z } from 'zod';
 // Relative imports with explicit .js extensions: the Vercel function runtime
 // is Node ESM, which neither rewrites tsconfig path aliases nor resolves
 // extensionless relative specifiers.
-import { ACTIVITY_COLUMNS, type ColumnDef, ITEM_DONE_COLUMN, patchRow, WAYPOINT_COLUMNS } from '../../../src/services/entityRows.js';
+import {
+  ACTIVITY_COLUMNS,
+  type ColumnDef,
+  ITEM_DONE_COLUMN,
+  patchRow,
+  VISIT_COLUMNS,
+  WAYPOINT_COLUMNS,
+} from '../../../src/services/entityRows.js';
 import {
   type ActivityInput,
   createActivity,
@@ -12,6 +19,7 @@ import {
   updateById,
   type WaypointInput,
 } from '../../../src/services/tripWrites.js';
+import { isValidTripLocal, stampIfDuringTrip } from '../../../src/services/visitRecord.js';
 import { ActivityType } from '../../../src/types/trip.js';
 import type { AgentTool } from './core.js';
 
@@ -36,6 +44,19 @@ const UPDATE_FIELDS = {
   ...CREATE_FIELDS,
   name: z.string().min(1).optional(),
   done: z.boolean().optional(),
+  visited_at: z
+    .string()
+    .refine(isValidTripLocal, { message: "must be 'YYYY-MM-DD HH:mm' in the trip's timezone" })
+    .nullable()
+    .optional()
+    .describe("When the item was actually done: 'YYYY-MM-DD HH:mm', local to the trip's timezone. null clears it."),
+  visit_duration_minutes: z
+    .number()
+    .int()
+    .nonnegative()
+    .nullable()
+    .optional()
+    .describe('How long the visit actually took, in whole minutes.'),
 };
 
 // The item's done state and the owning trip's zone and dates arrive through the
@@ -105,10 +126,35 @@ interface ItemToolsConfig {
   table: 'activities' | 'scenic_waypoints';
 }
 
+// remarks is deliberately not a visit key: it holds the planned note as well,
+// and the agent may edit that on an item that is not done.
+const VISIT_KEYS = ['visited_at', 'visit_duration_minutes'] as const;
+
+const setsVisitField = (patch: Record<string, unknown>): boolean => VISIT_KEYS.some((key) => patch[key] != null);
+
+// The same three rules the browser toggle applies, so an agent check-off and a
+// UI check-off are indistinguishable in the data: an untick clears the stamp,
+// a tick with no supplied time gets the shared stamp rule, and a supplied time
+// wins (Req 4.3, 4.4, and the untick half of Req 2.10).
+const resolveVisitPatch = (patch: Record<string, unknown>, context: ItemContext, now: Date): Record<string, unknown> => {
+  if (patch.is_done === false) {
+    return { ...patch, visited_at: null };
+  }
+  if (patch.is_done === true && patch.visited_at === undefined) {
+    return {
+      ...patch,
+      visited_at: stampIfDuringTrip({ now, timeZone: context.timeZone, startDate: context.startDate, endDate: context.endDate }),
+    };
+  }
+  return patch;
+};
+
 function buildItemTools({ columns, create, entity, hasType, idField, noun, table }: ItemToolsConfig): AgentTool[] {
   const typeField = hasType ? { type: activityTypeSchema.optional() } : {};
   // Sparse patch semantics: only provided fields, `done` mapped to is_done.
-  const patchDefs = [...columns, ITEM_DONE_COLUMN];
+  // VISIT_COLUMNS stays out of ACTIVITY_COLUMNS (the browser's dense form saves
+  // would null it), so the agent appends it here.
+  const patchDefs = [...columns, ITEM_DONE_COLUMN, ...VISIT_COLUMNS];
   const createSchema = z.object({ stop_id: z.string().min(1), ...CREATE_FIELDS, ...typeField }).strict();
   const updateSchema = z
     .object({ [idField]: z.string().min(1), ...UPDATE_FIELDS, ...typeField })
@@ -136,13 +182,21 @@ function buildItemTools({ columns, create, entity, hasType, idField, noun, table
     },
     {
       name: `update_${entity}`,
-      description: `Update an existing ${noun} by id. Only the fields you provide change; set done to true/false to mark completion. Read current data first to resolve the id.`,
+      description: `Update an existing ${noun} by id. Only the fields you provide change; set done to true/false to mark completion. Record what actually happened with visited_at ('YYYY-MM-DD HH:mm' in the trip's timezone) and visit_duration_minutes - both need the ${noun} to be done already or marked done in the same call, otherwise the update is refused. Marking done without a visited_at records the current trip-local time when today falls inside the trip's dates. Read current data first to resolve the id.`,
       schema: updateSchema,
       execute: async (client, input) => {
         const id = input[idField] as string;
         const context = await fetchItemContext(client, table, id, noun);
+        const patch = patchRow(patchDefs, input);
+        // A visit record may exist only on a done item (Req 4.5) - the same
+        // guarantee the UI gets by offering the form on ticked cards only.
+        if (setsVisitField(patch) && !(context.isDone || patch.is_done === true)) {
+          throw new Error(
+            `${noun} "${context.name}" is not marked done, so it cannot carry a visit record. Set done: true in the same call.`
+          );
+        }
         // Sparse update stays agent policy; the shared updateById does the write.
-        await updateById(client, table, id, patchRow(patchDefs, input));
+        await updateById(client, table, id, resolveVisitPatch(patch, context, new Date()));
         return { id, name: (input.name as string | undefined) ?? context.name };
       },
       toChanges: (_input, output) => {
