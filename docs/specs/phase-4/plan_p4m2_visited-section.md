@@ -806,23 +806,23 @@ git commit -m "feat: split planned and visited items in the activities panel"
 
 Manual verification against a Vercel preview. No code; record the results in this plan's changelog. M2 adds no migration, so nothing has to reach the database first.
 
-- [ ] **Step 1: Verify a multi-day visited section**
+- [x] **Step 1: Verify a multi-day visited section**
 
 On a trip with a stop spanning more than one night, tick items across two days (using the visit form to set times on different dates). Confirm the Visited section shows one heading per day, in date order, with items inside each day in time order.
 
-- [ ] **Step 2: Verify the merged chronology**
+- [x] **Step 2: Verify the merged chronology**
 
 Tick both an activity and a scenic waypoint on the same day with different times. Confirm both appear in the one visited list, interleaved by time, and that the waypoint is gone from the Scenic Waypoints group and its count.
 
-- [ ] **Step 3: Verify the undated group**
+- [x] **Step 3: Verify the undated group**
 
 Tick an item on a trip whose dates are in the past, so no stamp is recorded. Confirm it lands in a final "Time not recorded" group below every dated group.
 
-- [ ] **Step 4: Verify the drag rules**
+- [x] **Step 4: Verify the drag rules**
 
 Drag two planned activities to reorder them and confirm the new order survives a reload. Confirm no drag handle appears on any card inside the Visited section.
 
-- [ ] **Step 5: Verify untick returns an item to its slot**
+- [x] **Step 5: Verify untick returns an item to its slot**
 
 Note the position of a planned activity, tick it, reorder the remaining planned items, then untick it. Confirm it returns to its original position rather than the bottom of the list.
 
@@ -830,7 +830,7 @@ Note the position of a planned activity, tick it, reorder the remaining planned 
 
 Confirm the map still pins visited items, the timeline still counts them in its per-stop progress, and the trip library is unchanged.
 
-- [ ] **Step 7: Record the results**
+- [x] **Step 7: Record the results**
 
 Add a changelog entry to this plan naming what was verified and anything deferred.
 
@@ -869,3 +869,5 @@ Add a changelog entry to this plan naming what was verified and anything deferre
   Task 1 has ten cases, not the twelve Step 4 claims. `applyPlannedOrder` avoids `queue[next++]` because Ultracite rejects the increment operator.
 
   **Task 4 (manual gate) not run** — it needs an authenticated account on a Vercel preview. What the automated suite does establish: day-grouped headings in date order with items in time order, an activity and a waypoint interleaved by time in one visited list, the waypoint gone from the Scenic Waypoints group and its count, the undated group rendering last as "Time not recorded", exactly one drag handle across a planned-plus-visited render, an item moving between sections when it becomes done, and `applyPlannedOrder` leaving a visited item in its held slot. Still open and browser-only: that a real drag gesture persists across a reload (Step 4), that an untick end-to-end returns the item to its original position (Step 5), and the visual confirmation that the map, timeline, and library are unchanged (Step 6).
+
+- 2026-07-26: Task 4 manually verified on authenticated Vercel preview [wanderlog-2bwf1phl1-kevin-lins-projects-835b030f.vercel.app](https://wanderlog-2bwf1phl1-kevin-lins-projects-835b030f.vercel.app). Steps 1-5 passed: dated groups rendered in date and time order; an activity and waypoint shared one chronology; the undated item rendered last under "Time not recorded"; a keyboard drag persisted across reload with no visited drag handles; and an unticked item returned to its held slot. For Step 6, timeline progress included visited items and the trip library was unchanged. Map-pin verification is deferred because Google Maps rejected the preview hostname with `RefererNotAllowedMapError`; Step 6 remains open. The full automated suite passed at 65 files / 567 tests. All temporary verification data, completion states, and activity ordering were restored afterward.
