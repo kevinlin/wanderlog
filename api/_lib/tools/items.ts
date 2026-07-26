@@ -35,9 +35,22 @@ const CREATE_FIELDS = {
   lat: z.number().min(LAT_MIN).max(LAT_MAX).optional(),
   lng: z.number().min(LNG_MIN).max(LNG_MAX).optional(),
   address: z.string().optional(),
-  duration: z.string().optional(),
+  // Both fields read as generic to a model, so both say what they are not:
+  // duration is the plan and remarks is prose, and neither is where what
+  // actually happened belongs.
+  duration: z
+    .string()
+    .optional()
+    .describe(
+      'Planned time estimate, free text (e.g. "2-3 hours"). Never overwrite it with how long the visit actually took - that is visit_duration_minutes.'
+    ),
   url: z.string().optional(),
-  remarks: z.string().optional(),
+  remarks: z
+    .string()
+    .optional()
+    .describe(
+      'Free-text note. Not a place for a time or a duration: use visited_at and visit_duration_minutes for what actually happened.'
+    ),
 };
 
 const UPDATE_FIELDS = {

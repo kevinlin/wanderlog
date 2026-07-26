@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { dispatchTool } from '../tools';
+import { dispatchTool, toAnthropicTools } from '../tools';
 import { ACTIVITY_TOOLS, WAYPOINT_TOOLS } from '../tools/items';
 import { createFakeClient, type FakeCall } from './fakeSupabaseClient';
 
@@ -105,6 +105,35 @@ describe('delete_activity', () => {
     const result = await dispatchTool(ACTIVITY_TOOLS, client, 'delete_activity', { activity_id: 'act-2' });
     expect(calls.map((c) => c.method)).toEqual(['select', 'delete']);
     expect(result.changes).toEqual([{ type: 'change', op: 'deleted', entity: 'activity', id: 'act-2', name: 'Museum visit' }]);
+  });
+});
+
+// The JSON Schema is the only thing the model sees. A field the executor
+// handles but the conversion drops, or one whose purpose is undescribed, is
+// invisible to the model - which is how "we spent 90 minutes" landed on the
+// planned `duration` text during the M3 verification gate.
+describe('the schema the model receives', () => {
+  const updateSchema = () => {
+    const def = toAnthropicTools(ACTIVITY_TOOLS).find((tool) => tool.name === 'update_activity');
+    return def?.input_schema as { properties: Record<string, { description?: string }> };
+  };
+
+  it('carries both visit fields through the JSON Schema conversion', () => {
+    const { properties } = updateSchema();
+    expect(Object.keys(properties)).toEqual(expect.arrayContaining(['visited_at', 'visit_duration_minutes']));
+    expect(properties.visited_at.description).toContain('YYYY-MM-DD HH:mm');
+    expect(properties.visit_duration_minutes.description).toContain('minutes');
+  });
+
+  it('tells the model duration is the plan and not the actual time spent', () => {
+    const { properties } = updateSchema();
+    expect(properties.duration.description).toContain('Planned');
+    expect(properties.duration.description).toContain('visit_duration_minutes');
+  });
+
+  it('tells the model remarks is a note, not a time', () => {
+    const { properties } = updateSchema();
+    expect(properties.remarks.description).toContain('visited_at');
   });
 });
 

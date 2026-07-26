@@ -112,6 +112,14 @@ describe('current time and trip range', () => {
     expect(prompt).toContain('done: true in the same update call');
   });
 
+  it('separates the planned estimate from what actually happened', () => {
+    const prompt = buildSystemPrompt({});
+    // The M3 gate caught the model overwriting `planned 4 hours` with
+    // `90 minutes`, then reading that text back as an actual duration.
+    expect(prompt).toContain('never overwrite duration');
+    expect(prompt).toContain('visit_duration_minutes');
+  });
+
   it('carries recorded visit data in the embedded trip', () => {
     const prompt = buildSystemPrompt({ trip: tokyoTrip }, INSTANT);
     expect(prompt).toContain('"visited_at": "2026-07-15 14:32"');
