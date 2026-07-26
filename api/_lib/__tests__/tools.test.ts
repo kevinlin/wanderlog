@@ -40,6 +40,51 @@ const makeClient = (result: { data: unknown; error: { message: string } | null }
     }),
   }) as unknown as SupabaseClient;
 
+const visitedTripRow = {
+  ...tripRowNested,
+  stops: [
+    {
+      id: 's1',
+      trip_id: 't1',
+      name: 'Tokyo',
+      sort_order: 0,
+      date_from: '2026-07-12',
+      date_to: '2026-07-15',
+      duration_days: 3,
+      lat: 35.6,
+      lng: 139.7,
+      travel_time_from_previous: null,
+      created_at: 'c',
+      updated_at: 'u',
+      accommodations: null,
+      activities: [
+        {
+          id: 'act-1',
+          stop_id: 's1',
+          sort_order: 0,
+          name: 'Museum',
+          is_done: true,
+          visited_at: '2026-07-15 14:32',
+          visit_duration_minutes: 90,
+          address: null,
+          duration: null,
+          google_place_id: null,
+          lat: null,
+          lng: null,
+          remarks: null,
+          thumbnail_url: null,
+          travel_time_from_accommodation: null,
+          type: null,
+          url: null,
+          created_at: 'c',
+          updated_at: 'u',
+        },
+      ],
+      scenic_waypoints: [],
+    },
+  ],
+};
+
 const fakeClient = makeClient({ data: tripRowNested, error: null });
 const errorClient = makeClient({ data: null, error: { message: 'boom' } });
 
@@ -98,6 +143,14 @@ describe('dispatchTool', () => {
     const result = await dispatchTool(READ_TOOLS, errorClient, 'list_trips', {});
     expect(result.isError).toBe(true);
     expect(result.content).toContain('boom');
+  });
+
+  it('returns recorded visit fields so the model can answer what was done and when', async () => {
+    const client = makeClient({ data: visitedTripRow, error: null });
+    const result = await dispatchTool(READ_TOOLS, client, 'get_trip', { trip_id: 't1' });
+    const activity = JSON.parse(result.content).stops[0].activities[0];
+    expect(activity.visited_at).toBe('2026-07-15 14:32');
+    expect(activity.visit_duration_minutes).toBe(90);
   });
 });
 
