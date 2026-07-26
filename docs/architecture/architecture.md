@@ -70,6 +70,10 @@ Responses stream as NDJSON by default (one JSON event per line: `progress`, `cha
 
 **Loop control.** Each iteration calls Claude; if the response asks for tools, the handler runs them, emits a `change` event per mutation, feeds `tool_result` blocks back, and loops. It stops on a normal finish, on `max_tokens` (truncated tool calls are unsafe to run), or at the 16-iteration cap. The `create_trip` tool reuses the same bundle-insert pipeline as file import, so agent-created and imported trips are structurally identical.
 
+The flowchart below traces one request end to end — the validation gate and its early returns, the context prefetch, the loop with its three exits, and the two response transports.
+
+![Wanderlog — Agent Loop Logic Flow](assets/05a-agent-loop-flow.svg)
+
 **Guardrails.** The system prompt forbids acting on anything but trip data, forbids inventing ids/coordinates, and forbids deletes as a side effect. Trip content is treated as data, not instructions (prompt-injection defense). There is no undo — writes commit immediately, which is why the modal surfaces the change list.
 
 **Tool registry.** 16 tools, assembled by `buildAgentTools`: two reads (`list_trips`, `get_trip`), full CRUD over activities and scenic waypoints, `upsert_accommodation` and `update_trip_metadata`, stop create/update/delete plus `restructure_stops` (which recalculates the stop date chain), `geocode`, and `create_trip`. Each tool declares a zod input schema and a `toChanges` mapping, so the `change` events the client sees are derived from tool output rather than hand-written per call site.
@@ -97,6 +101,7 @@ Colour values and boundary dash patterns come from [light-theme-palette.md](ligh
 | Frontend Application | [03-frontend-application.svg](assets/03-frontend-application.svg) | [@2x PNG](assets/03-frontend-application@2x.png) |
 | Data Architecture | [04-data-architecture.svg](assets/04-data-architecture.svg) | [@2x PNG](assets/04-data-architecture@2x.png) |
 | AI Agent | [05-agent-architecture.svg](assets/05-agent-architecture.svg) | [@2x PNG](assets/05-agent-architecture@2x.png) |
+| Agent Loop Logic Flow | [05a-agent-loop-flow.svg](assets/05a-agent-loop-flow.svg) | [@2x PNG](assets/05a-agent-loop-flow@2x.png) |
 
 ---
 

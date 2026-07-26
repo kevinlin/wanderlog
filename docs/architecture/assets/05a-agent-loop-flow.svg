@@ -1,0 +1,541 @@
+<svg aria-label="Wanderlog agent loop logic flow" role="img" viewBox="0 0 1940 1744" xmlns="http://www.w3.org/2000/svg">
+  <title>Wanderlog — Agent Loop Logic Flow</title>
+  <defs>
+    <pattern height="40" id="grid" patternUnits="userSpaceOnUse" width="40">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#f1f5f9" stroke-width="1" />
+    </pattern>
+    <marker id="a-cyan" markerHeight="7" markerWidth="9" orient="auto" refX="8" refY="3.5">
+      <polygon fill="#0e7490" points="0 0, 9 3.5, 0 7" />
+    </marker>
+    <marker id="a-green" markerHeight="7" markerWidth="9" orient="auto" refX="8" refY="3.5">
+      <polygon fill="#15803d" points="0 0, 9 3.5, 0 7" />
+    </marker>
+    <marker id="a-orange" markerHeight="7" markerWidth="9" orient="auto" refX="8" refY="3.5">
+      <polygon fill="#c2410c" points="0 0, 9 3.5, 0 7" />
+    </marker>
+    <marker id="a-rose" markerHeight="7" markerWidth="9" orient="auto" refX="8" refY="3.5">
+      <polygon fill="#be123c" points="0 0, 9 3.5, 0 7" />
+    </marker>
+    <marker id="a-violet" markerHeight="7" markerWidth="9" orient="auto" refX="8" refY="3.5">
+      <polygon fill="#7c3aed" points="0 0, 9 3.5, 0 7" />
+    </marker>
+    <marker id="a-slate" markerHeight="7" markerWidth="9" orient="auto" refX="8" refY="3.5">
+      <polygon fill="#64748b" points="0 0, 9 3.5, 0 7" />
+    </marker>
+    <marker id="a-blue" markerHeight="7" markerWidth="9" orient="auto" refX="8" refY="3.5">
+      <polygon fill="#2563eb" points="0 0, 9 3.5, 0 7" />
+    </marker>
+    <style>
+    text {
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+      text-anchor: middle;
+    }
+    /* text roles */
+    .diagram-title {
+      font-size: 19px;
+      font-weight: 700;
+      text-anchor: start;
+      fill: #0f172a;
+    }
+    .diagram-subtitle {
+      font-size: 12px;
+      text-anchor: start;
+      fill: #475569;
+    }
+    .region-label {
+      font-size: 14px;
+      font-weight: 600;
+      text-anchor: start;
+    }
+    .region-label-right {
+      font-size: 14px;
+      font-weight: 600;
+      text-anchor: end;
+    }
+    .node-title {
+      font-size: 14px;
+      font-weight: 700;
+      fill: #0f172a;
+    }
+    .node-title-sm {
+      font-size: 12px;
+      font-weight: 700;
+      fill: #0f172a;
+    }
+    .node-detail {
+      font-size: 12px;
+      fill: #475569;
+    }
+    .edge-note {
+      font-size: 12px;
+      fill: #64748b;
+    }
+    .decision-text {
+      font-size: 12px;
+      font-weight: 700;
+      fill: #5c3a0f;
+    }
+    .decision-call {
+      font-size: 12px;
+      fill: #7c5410;
+    }
+    .label-yes {
+      font-size: 12px;
+      font-weight: 700;
+      fill: #15803d;
+    }
+    .label-no {
+      font-size: 12px;
+      font-weight: 700;
+      fill: #be123c;
+    }
+    .label-return {
+      font-size: 12px;
+      font-weight: 700;
+      fill: #475569;
+    }
+    .label-error {
+      font-size: 12px;
+      fill: #be123c;
+    }
+    /* text-anchor overrides, combined with a text role */
+    .align-left {
+      text-anchor: start;
+    }
+    .align-right {
+      text-anchor: end;
+    }
+    /* shape fills — semantic roles from light-theme-palette.md */
+    .node-client {
+      fill: #cdeff7;
+      stroke: #0e7490;
+      stroke-width: 1.5;
+    }
+    .node-server {
+      fill: #d6f0e0;
+      stroke: #15803d;
+      stroke-width: 1.5;
+    }
+    .node-event {
+      fill: #dbeafe;
+      stroke: #2563eb;
+      stroke-width: 1.6;
+    }
+    .node-database {
+      fill: #ebe1fb;
+      stroke: #7c3aed;
+      stroke-width: 1.5;
+    }
+    .node-llm {
+      fill: #ffe6d1;
+      stroke: #c2410c;
+      stroke-width: 1.5;
+    }
+    .node-decision {
+      fill: #fff2cc;
+      stroke: #b7860b;
+      stroke-width: 1.6;
+    }
+    .node-error {
+      fill: #fde0e4;
+      stroke: #be123c;
+      stroke-width: 1.5;
+    }
+    /* structure: dashed region outlines, arrows, and the opaque rect drawn
+       under every node so semi-transparent fills don't reveal arrows beneath */
+    .region-boundary {
+      fill: none;
+      stroke-width: 1.2;
+    }
+    .edge {
+      fill: none;
+      stroke-width: 1.6;
+    }
+    .backdrop {
+      fill: #ffffff;
+    }
+    </style>
+  </defs>
+
+  <rect fill="#ffffff" height="100%" width="100%" />
+  <rect fill="url(#grid)" height="100%" width="100%" />
+
+  <text class="diagram-title" x="40" y="42">Wanderlog — Agent Loop Logic Flow</text>
+  <text class="diagram-subtitle" x="40" y="64">
+    api/agent.ts validates and prefetches, api/_lib/loop.ts runs the tool-use loop. Every step below happens inside one Vercel function
+    invocation, as the signed-in caller.
+  </text>
+
+  <!-- ===== region boundaries ===== -->
+  <rect class="region-boundary" height="796" rx="12" stroke="#0e7490" stroke-dasharray="6 4" width="580" x="40" y="86" />
+  <text class="region-label" fill="#0e7490" x="54" y="106">1 · Request gate — handleAgent()</text>
+
+  <rect class="region-boundary" height="414" rx="12" stroke="#7c3aed" stroke-dasharray="6 4" width="580" x="40" y="908" />
+  <text class="region-label" fill="#7c3aed" x="54" y="928">2 · Context prefetch — under the caller's RLS</text>
+
+  <rect class="region-boundary" height="142" rx="12" stroke="#15803d" stroke-dasharray="6 4" width="580" x="40" y="1346" />
+  <text class="region-label" fill="#15803d" x="54" y="1366">3 · Setup</text>
+
+  <rect class="region-boundary" height="1094" rx="12" stroke="#b7860b" stroke-dasharray="6 4" width="1210" x="690" y="86" />
+  <text class="region-label" fill="#b7860b" x="704" y="106">4 · Agent loop — runAgentLoop() · api/_lib/loop.ts</text>
+  <text class="region-label-right" fill="#b7860b" x="1886" y="106">MAX_ITERATIONS = 16 · MAX_TOKENS_PER_CALL = 8192</text>
+
+  <rect class="region-boundary" height="400" rx="10" stroke="#2563eb" stroke-dasharray="4 3" width="575" x="1270" y="560" />
+  <text class="region-label" fill="#2563eb" x="1284" y="580">for each tool_use block — sequential</text>
+
+  <rect class="region-boundary" height="368" rx="12" stroke="#c2410c" stroke-dasharray="6 4" width="1210" x="690" y="1204" />
+  <text class="region-label" fill="#c2410c" x="704" y="1224">5 · Response — runToEvents() + transport</text>
+
+  <!-- ===== edges: region 1 ===== -->
+  <path class="edge" d="M200,168 V186" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M306,230 H380" marker-end="url(#a-rose)" stroke="#be123c" />
+  <path class="edge" d="M200,274 V304" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M306,348 H380" marker-end="url(#a-rose)" stroke="#be123c" />
+  <path class="edge" d="M200,392 V430" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M200,494 V534" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M306,578 H380" marker-end="url(#a-rose)" stroke="#be123c" />
+  <path class="edge" d="M200,622 V648" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M306,692 H380" marker-end="url(#a-rose)" stroke="#be123c" />
+  <path class="edge" d="M200,736 V762" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M306,806 H380" marker-end="url(#a-rose)" stroke="#be123c" />
+  <path class="edge" d="M200,850 L200,905 L330,905 L330,950" marker-end="url(#a-green)" stroke="#15803d" />
+
+  <text class="label-no" x="343" y="222">no</text>
+  <text class="label-no" x="343" y="340">no</text>
+  <text class="label-no" x="343" y="570">no</text>
+  <text class="label-no" x="343" y="684">no</text>
+  <text class="label-no" x="343" y="798">no</text>
+  <text class="label-yes align-left" x="208" y="296">yes</text>
+  <text class="label-yes align-left" x="208" y="416">yes</text>
+  <text class="label-yes align-left" x="208" y="641">yes</text>
+  <text class="label-yes align-left" x="208" y="755">yes</text>
+  <text class="label-yes align-left" x="208" y="872">yes</text>
+  <text class="edge-note align-left" x="338" y="898">validated · authenticated</text>
+
+  <!-- ===== edges: region 2 ===== -->
+  <path class="edge" d="M252,990 L175,990 L175,1072" marker-end="url(#a-violet)" stroke="#7c3aed" />
+  <path class="edge" d="M408,990 L475,990 L475,1072" marker-end="url(#a-violet)" stroke="#7c3aed" />
+  <path class="edge" d="M175,1154 V1182" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M243,1220 H335" marker-end="url(#a-rose)" stroke="#be123c" />
+  <path class="edge" d="M175,1258 L175,1300 L330,1300" stroke="#15803d" />
+  <path class="edge" d="M555,1154 L555,1300 L330,1300" stroke="#15803d" />
+  <path class="edge" d="M330,1300 V1380" marker-end="url(#a-green)" stroke="#15803d" />
+  <circle cx="330" cy="1300" fill="#15803d" r="3.5" />
+
+  <text class="label-yes" x="212" y="982">yes · one trip</text>
+  <text class="label-yes" x="452" y="982">no · library</text>
+  <text class="label-no" x="288" y="1212">no</text>
+  <text class="label-yes align-left" x="183" y="1284">yes</text>
+
+  <!-- ===== column hand-off: region 3 -> region 4 ===== -->
+  <path class="edge" d="M610,1423 L660,1423 L660,150 L770,150" marker-end="url(#a-cyan)" stroke="#0e7490" />
+  <text class="edge-note" transform="translate(652,780) rotate(-90)" x="0" y="0">runAgentLoop(deps, systemPrompt, userPrompt)</text>
+
+  <!-- ===== edges: region 4 main column ===== -->
+  <path class="edge" d="M985,182 V260" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M985,340 V384" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M985,476 V518" marker-end="url(#a-orange)" stroke="#c2410c" />
+  <path class="edge" d="M985,562 V608" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M985,692 V746" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M985,834 V874" marker-end="url(#a-green)" stroke="#15803d" />
+  <text class="label-yes align-left" x="995" y="366">yes</text>
+  <text class="label-no align-left" x="995" y="726">no</text>
+  <text class="label-yes align-left" x="995" y="860">yes</text>
+
+  <!-- exit channel (three ways out of the loop) -->
+  <path class="edge" d="M903,300 H725" stroke="#64748b" />
+  <path class="edge" d="M885,650 H725" stroke="#64748b" />
+  <path class="edge" d="M865,790 H725" stroke="#64748b" />
+  <path class="edge" d="M725,300 V1120 H740" marker-end="url(#a-slate)" stroke="#64748b" />
+  <circle cx="725" cy="300" fill="#64748b" r="3.5" />
+  <circle cx="725" cy="650" fill="#64748b" r="3.5" />
+  <circle cx="725" cy="790" fill="#64748b" r="3.5" />
+  <text class="label-return" x="812" y="292">no · cap hit</text>
+  <text class="label-return" x="805" y="642">yes</text>
+  <text class="label-error" x="836" y="688">truncated tool_use never executed</text>
+  <text class="label-return" x="795" y="782">no</text>
+  <text class="edge-note" x="795" y="812">model answered — done</text>
+
+  <!-- ===== edges: tool block ===== -->
+  <path class="edge" d="M1200,900 L1235,900 L1235,614 L1307,614" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M1557,652 V682" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M1557,764 V786" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M1557,838 V874" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M1450,926 L1450,942 L1292,942 L1292,640 L1307,640" marker-end="url(#a-slate)" stroke="#64748b" />
+  <path class="edge" d="M1620,926 L1620,985 L1245,985 L1245,1010 L1200,1010" marker-end="url(#a-green)" stroke="#15803d" />
+  <text class="edge-note" x="1372" y="935">more tool_use</text>
+  <text class="edge-note" x="1360" y="978">all tools done</text>
+
+  <!-- ===== loop-back ===== -->
+  <path class="edge" d="M985,1036 L985,1062 L1870,1062 L1870,300 L1067,300" marker-end="url(#a-slate)" stroke="#64748b" />
+  <text class="label-return" x="1440" y="1054">next iteration</text>
+
+  <!-- ===== hand-off: loop -> response ===== -->
+  <path class="edge" d="M940,1146 L940,1176 L800,1176 L800,1252" marker-end="url(#a-green)" stroke="#15803d" />
+
+  <!-- ===== edges: region 5 ===== -->
+  <path class="edge" d="M878,1290 H950" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M800,1328 L800,1368 L1150,1368 L1150,1336" marker-end="url(#a-rose)" stroke="#be123c" />
+  <path class="edge" d="M1350,1290 H1420" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M1520,1332 L1520,1400 L1050,1400 L1050,1442" marker-end="url(#a-green)" stroke="#15803d" />
+  <path class="edge" d="M1620,1290 L1700,1290 L1700,1442" marker-end="url(#a-green)" stroke="#15803d" />
+  <text class="label-no align-left" x="912" y="1282">no</text>
+  <text class="label-no align-right" x="792" y="1348">yes</text>
+  <text class="label-error align-left" x="828" y="1384">emit error · "Stopped after 16 steps without finishing."</text>
+  <text class="label-yes align-left" x="1532" y="1352">no · default</text>
+  <text class="label-yes align-left" x="1710" y="1350">yes</text>
+
+  <!-- ===== nodes: region 1 ===== -->
+  <rect class="backdrop" height="50" rx="25" width="290" x="55" y="118" />
+  <rect class="node-client" height="50" rx="25" width="290" x="55" y="118" />
+  <text class="node-title" x="200" y="138">POST /api/agent</text>
+  <text class="node-detail" x="200" y="155">Bearer JWT · { prompt ≤ 4000, tripId? }</text>
+
+  <g transform="translate(200,230)">
+    <polygon class="backdrop" points="0,-44 106,0 0,44 -106,0" />
+    <polygon class="node-decision" points="0,-44 106,0 0,44 -106,0" />
+    <text class="decision-call" y="-4">request.method</text>
+    <text class="decision-text" y="12">= POST ?</text>
+  </g>
+  <g transform="translate(200,348)">
+    <polygon class="backdrop" points="0,-44 106,0 0,44 -106,0" />
+    <polygon class="node-decision" points="0,-44 106,0 0,44 -106,0" />
+    <text class="decision-call" y="-4">extractBearerToken()</text>
+    <text class="decision-text" y="12">token present ?</text>
+  </g>
+
+  <rect class="backdrop" height="64" rx="6" width="290" x="55" y="430" />
+  <rect class="node-server" height="64" rx="6" width="290" x="55" y="430" />
+  <text class="node-title-sm" x="200" y="452">loadAgentEnv() · createUserClient()</text>
+  <text class="node-detail" x="200" y="470">Supabase client bound to the caller's JWT</text>
+  <text class="node-detail" x="200" y="484">— every later query runs under their RLS</text>
+
+  <g transform="translate(200,578)">
+    <polygon class="backdrop" points="0,-44 106,0 0,44 -106,0" />
+    <polygon class="node-decision" points="0,-44 106,0 0,44 -106,0" />
+    <text class="decision-call" y="-4">getAuthenticatedUserId()</text>
+    <text class="decision-text" y="12">session valid ?</text>
+  </g>
+  <g transform="translate(200,692)">
+    <polygon class="backdrop" points="0,-44 106,0 0,44 -106,0" />
+    <polygon class="node-decision" points="0,-44 106,0 0,44 -106,0" />
+    <text class="decision-call" y="-4">await request.json()</text>
+    <text class="decision-text" y="12">body is JSON ?</text>
+  </g>
+  <g transform="translate(200,806)">
+    <polygon class="backdrop" points="0,-44 106,0 0,44 -106,0" />
+    <polygon class="node-decision" points="0,-44 106,0 0,44 -106,0" />
+    <text class="decision-call" y="-4">bodySchema.safeParse()</text>
+    <text class="decision-text" y="12">schema valid ?</text>
+  </g>
+
+  <rect class="backdrop" height="48" rx="6" width="200" x="380" y="206" />
+  <rect class="node-error" height="48" rx="6" width="200" x="380" y="206" />
+  <text class="node-title" x="480" y="227">405</text>
+  <text class="node-detail" x="480" y="244">Method not allowed</text>
+
+  <rect class="backdrop" height="48" rx="6" width="200" x="380" y="324" />
+  <rect class="node-error" height="48" rx="6" width="200" x="380" y="324" />
+  <text class="node-title" x="480" y="345">401</text>
+  <text class="node-detail" x="480" y="362">Missing bearer token</text>
+
+  <rect class="backdrop" height="48" rx="6" width="200" x="380" y="554" />
+  <rect class="node-error" height="48" rx="6" width="200" x="380" y="554" />
+  <text class="node-title" x="480" y="575">401</text>
+  <text class="node-detail" x="480" y="592">Invalid or expired token</text>
+
+  <rect class="backdrop" height="48" rx="6" width="200" x="380" y="668" />
+  <rect class="node-error" height="48" rx="6" width="200" x="380" y="668" />
+  <text class="node-title" x="480" y="689">400</text>
+  <text class="node-detail" x="480" y="706">Body must be JSON</text>
+
+  <rect class="backdrop" height="48" rx="6" width="200" x="380" y="782" />
+  <rect class="node-error" height="48" rx="6" width="200" x="380" y="782" />
+  <text class="node-title" x="480" y="803">400</text>
+  <text class="node-detail" x="480" y="820">Invalid request: issues</text>
+
+  <!-- ===== nodes: region 2 ===== -->
+  <g transform="translate(330,990)">
+    <polygon class="backdrop" points="0,-40 78,0 0,40 -78,0" />
+    <polygon class="node-decision" points="0,-40 78,0 0,40 -78,0" />
+    <text class="decision-text" y="4">tripId given ?</text>
+  </g>
+
+  <rect class="backdrop" height="82" rx="6" width="250" x="50" y="1072" />
+  <rect class="node-database" height="82" rx="6" width="250" x="50" y="1072" />
+  <text class="node-title-sm" x="175" y="1094">trips.select(TRIP_SELECT)</text>
+  <text class="node-detail" x="175" y="1113">.eq('id', tripId).maybeSingle()</text>
+  <text class="node-detail" x="175" y="1130">whole trip tree in one query</text>
+  <text class="node-detail" x="175" y="1147">→ context.trip = toTripData(row)</text>
+
+  <rect class="backdrop" height="82" rx="6" width="260" x="345" y="1072" />
+  <rect class="node-database" height="82" rx="6" width="260" x="345" y="1072" />
+  <text class="node-title-sm" x="475" y="1094">trips.select(TRIP_SUMMARY_SELECT)</text>
+  <text class="node-detail" x="475" y="1113">.order('start_date', desc)</text>
+  <text class="node-detail" x="475" y="1130">library rows only</text>
+  <text class="node-detail" x="475" y="1147">→ context.tripSummaries[]</text>
+
+  <g transform="translate(175,1220)">
+    <polygon class="backdrop" points="0,-38 68,0 0,38 -68,0" />
+    <polygon class="node-decision" points="0,-38 68,0 0,38 -68,0" />
+    <text class="decision-text" y="4">row found ?</text>
+  </g>
+
+  <rect class="backdrop" height="48" rx="6" width="190" x="335" y="1196" />
+  <rect class="node-error" height="48" rx="6" width="190" x="335" y="1196" />
+  <text class="node-title" x="430" y="1217">400</text>
+  <text class="node-detail" x="430" y="1234">Unknown tripId</text>
+
+  <!-- ===== nodes: region 3 ===== -->
+  <rect class="backdrop" height="86" rx="6" width="560" x="50" y="1380" />
+  <rect class="node-server" height="86" rx="6" width="560" x="50" y="1380" />
+  <text class="node-title" x="330" y="1402">build the run</text>
+  <text class="node-detail" x="330" y="1420">systemPrompt = buildSystemPrompt(context) — trip context inlined</text>
+  <text class="node-detail" x="330" y="1436">tools = buildAgentTools(GOOGLE_GEOCODING_API_KEY)</text>
+  <text class="node-detail" x="330" y="1452">anthropic = new Anthropic({ ANTHROPIC_API_KEY, ANTHROPIC_BASE_URL })</text>
+
+  <!-- ===== nodes: region 4 main column ===== -->
+  <rect class="backdrop" height="64" rx="6" width="430" x="770" y="118" />
+  <rect class="node-server" height="64" rx="6" width="430" x="770" y="118" />
+  <text class="node-title" x="985" y="140">init loop state</text>
+  <text class="node-detail" x="985" y="158">toolDefs = toAnthropicTools(tools)</text>
+  <text class="node-detail" x="985" y="174">messages = [ { role: 'user', content: prompt } ]</text>
+
+  <g transform="translate(985,300)">
+    <polygon class="backdrop" points="0,-40 82,0 0,40 -82,0" />
+    <polygon class="node-decision" points="0,-40 82,0 0,40 -82,0" />
+    <text class="decision-text" y="4">iteration &lt; 16 ?</text>
+  </g>
+
+  <rect class="backdrop" height="92" rx="6" width="470" x="750" y="384" />
+  <rect class="node-llm" height="92" rx="6" width="470" x="750" y="384" />
+  <text class="node-title-sm" x="985" y="410">anthropic.messages.create()</text>
+  <text class="node-detail" x="985" y="430">model · max_tokens 8192 · system · tools · messages</text>
+  <text class="node-detail" x="985" y="446">{ signal: request.signal } — client abort kills the call</text>
+  <text class="node-detail" x="985" y="466">the only place the model gets to decide anything</text>
+  <text class="edge-note align-right" fill="#b45309" x="1208" y="402">● LLM</text>
+
+  <rect class="backdrop" height="44" rx="6" width="430" x="770" y="518" />
+  <rect class="node-server" height="44" rx="6" width="430" x="770" y="518" />
+  <text class="node-title-sm" x="985" y="536">lastText = finalTextOf(content) || lastText</text>
+  <text class="node-detail" x="985" y="552">keeps the last non-empty text as the answer</text>
+
+  <g transform="translate(985,650)">
+    <polygon class="backdrop" points="0,-42 100,0 0,42 -100,0" />
+    <polygon class="node-decision" points="0,-42 100,0 0,42 -100,0" />
+    <text class="decision-text" y="4">stop_reason = 'max_tokens' ?</text>
+  </g>
+
+  <g transform="translate(985,790)">
+    <polygon class="backdrop" points="0,-44 120,0 0,44 -120,0" />
+    <polygon class="node-decision" points="0,-44 120,0 0,44 -120,0" />
+    <text class="decision-text" y="-4">stop_reason = 'tool_use'</text>
+    <text class="decision-text" y="12">and toolUses.length &gt; 0 ?</text>
+  </g>
+
+  <rect class="backdrop" height="52" rx="6" width="430" x="770" y="874" />
+  <rect class="node-server" height="52" rx="6" width="430" x="770" y="874" />
+  <text class="node-title-sm" x="985" y="896">messages.push({ role: 'assistant', content })</text>
+  <text class="node-detail" x="985" y="913">echoes the tool_use blocks back with their ids</text>
+
+  <rect class="backdrop" height="52" rx="6" width="430" x="770" y="984" />
+  <rect class="node-server" height="52" rx="6" width="430" x="770" y="984" />
+  <text class="node-title-sm" x="985" y="1006">messages.push({ role: 'user', tool_result[] })</text>
+  <text class="node-detail" x="985" y="1023">one result per tool_use id, in call order</text>
+
+  <rect class="backdrop" height="52" rx="6" width="400" x="740" y="1094" />
+  <rect class="node-event" height="52" rx="6" width="400" x="740" y="1094" />
+  <text class="node-title-sm" x="940" y="1116">return { finalText, hitIterationCap }</text>
+  <text class="node-detail" x="940" y="1133">back to handleAgent() → runToEvents()</text>
+
+  <!-- ===== nodes: tool block ===== -->
+  <rect class="backdrop" height="52" rx="6" width="500" x="1307" y="600" />
+  <rect class="node-event" height="52" rx="6" width="500" x="1307" y="600" />
+  <text class="node-title-sm" x="1557" y="622">emit progress</text>
+  <text class="node-detail" x="1557" y="639">progressLabel(name, input) → 'Adding activity "…"…'</text>
+
+  <rect class="backdrop" height="82" rx="6" width="500" x="1307" y="682" />
+  <rect class="node-server" height="82" rx="6" width="500" x="1307" y="682" />
+  <text class="node-title-sm" x="1557" y="704">dispatchTool(tools, supabase, name, input)</text>
+  <text class="node-detail" x="1557" y="723">zod-validates the input against the tool schema</text>
+  <text class="node-detail" x="1557" y="740">runs on the caller's RLS-scoped client — no service role</text>
+  <text class="node-detail" x="1557" y="757">returns { content, changes[], isError }</text>
+
+  <rect class="backdrop" height="52" rx="6" width="500" x="1307" y="786" />
+  <rect class="node-event" height="52" rx="6" width="500" x="1307" y="786" />
+  <text class="node-title-sm" x="1557" y="808">emit change × N</text>
+  <text class="node-detail" x="1557" y="825">entity · op · id — the client's cache-invalidation list</text>
+
+  <rect class="backdrop" height="52" rx="6" width="500" x="1307" y="874" />
+  <rect class="node-server" height="52" rx="6" width="500" x="1307" y="874" />
+  <text class="node-title-sm" x="1557" y="896">results.push(tool_result)</text>
+  <text class="node-detail" x="1557" y="913">tool_use_id · content · is_error — a failure is fed back, not thrown</text>
+
+  <!-- ===== nodes: region 5 ===== -->
+  <g transform="translate(800,1290)">
+    <polygon class="backdrop" points="0,-38 78,0 0,38 -78,0" />
+    <polygon class="node-decision" points="0,-38 78,0 0,38 -78,0" />
+    <text class="decision-text" y="4">hitIterationCap ?</text>
+  </g>
+
+  <rect class="backdrop" height="86" rx="6" width="400" x="950" y="1250" />
+  <rect class="node-event" height="86" rx="6" width="400" x="950" y="1250" />
+  <text class="node-title-sm" x="1150" y="1274">emit result</text>
+  <text class="node-detail" x="1150" y="1293">{ summary, answer, tripId }</text>
+  <text class="node-detail" x="1150" y="1310">tripId ← the tracked create_trip change event</text>
+  <text class="node-detail" x="1150" y="1327">always the last event of the run</text>
+
+  <g transform="translate(1520,1290)">
+    <polygon class="backdrop" points="0,-42 100,0 0,42 -100,0" />
+    <polygon class="node-decision" points="0,-42 100,0 0,42 -100,0" />
+    <text class="decision-text" y="-4">Accept =</text>
+    <text class="decision-text" y="12">application/json ?</text>
+  </g>
+
+  <rect class="backdrop" height="106" rx="6" width="470" x="815" y="1442" />
+  <rect class="node-client" height="106" rx="6" width="470" x="815" y="1442" />
+  <text class="node-title" x="1050" y="1467">NDJSON stream</text>
+  <text class="node-detail" x="1050" y="1487">Content-Type: application/x-ndjson</text>
+  <text class="node-detail" x="1050" y="1504">one JSON per line — progress · change · error · result</text>
+  <text class="node-detail" x="1050" y="1521">events reach the UI while the loop is still running</text>
+  <text class="node-detail" x="1050" y="1538">throw → emit error event, then close()</text>
+
+  <rect class="backdrop" height="106" rx="6" width="470" x="1365" y="1442" />
+  <rect class="node-client" height="106" rx="6" width="470" x="1365" y="1442" />
+  <text class="node-title" x="1600" y="1467">200 buffered JSON</text>
+  <text class="node-detail" x="1600" y="1487">{ summary, answer, changes[], errors[], tripId }</text>
+  <text class="node-detail" x="1600" y="1504">events collected in memory, nothing sent until the end</text>
+  <text class="node-detail" x="1600" y="1521">throw → 502 with detail</text>
+  <text class="node-detail" x="1600" y="1538">emit() is picked before the loop starts</text>
+
+  <!-- ===== legend ===== -->
+  <rect fill="#f5f7fa" height="104" rx="8" stroke="#cbd5e1" stroke-width="1" width="1090" x="40" y="1600" />
+  <text class="region-label" fill="#475569" x="56" y="1622">Legend</text>
+
+  <rect class="node-client" height="14" rx="3" width="24" x="56" y="1638" />
+  <text class="node-detail align-left" x="88" y="1649">client-facing in / out</text>
+  <rect class="node-server" height="14" rx="3" width="24" x="320" y="1638" />
+  <text class="node-detail align-left" x="352" y="1649">server work · tool call</text>
+  <rect class="node-llm" height="14" rx="3" width="24" x="584" y="1638" />
+  <text class="node-detail align-left" x="616" y="1649">Anthropic Messages API</text>
+  <rect class="node-event" height="14" rx="3" width="24" x="848" y="1638" />
+  <text class="node-detail align-left" x="880" y="1649">emitted event · return value</text>
+
+  <rect class="node-decision" height="14" rx="3" width="24" x="56" y="1668" />
+  <text class="node-detail align-left" x="88" y="1679">decision</text>
+  <rect class="node-error" height="14" rx="3" width="24" x="320" y="1668" />
+  <text class="node-detail align-left" x="352" y="1679">early return — no LLM call</text>
+  <path class="edge" d="M584,1675 H608" marker-end="url(#a-green)" stroke="#15803d" />
+  <text class="node-detail align-left" x="616" y="1679">happy path</text>
+  <path class="edge" d="M848,1675 H872" marker-end="url(#a-slate)" stroke="#64748b" />
+  <text class="node-detail align-left" x="880" y="1679">loop-back · return channel</text>
+
+  <!-- ===== notes ===== -->
+  <rect fill="#f5f7fa" height="104" rx="8" stroke="#cbd5e1" stroke-width="1" width="740" x="1160" y="1600" />
+  <text class="region-label" fill="#475569" x="1176" y="1622">Notes</text>
+  <text class="node-detail align-left" x="1176" y="1646">
+    The loop has exactly three exits: 16-iteration cap, a max_tokens stop, and a reply with no tool_use.
+  </text>
+  <text class="node-detail align-left" x="1176" y="1666">A truncated response is never executed — its tool_use block may be incomplete.</text>
+  <text class="node-detail align-left" x="1176" y="1686">No undo. The client applies the change events by invalidating query keys.</text>
+</svg>
