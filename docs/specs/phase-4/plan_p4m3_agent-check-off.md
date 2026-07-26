@@ -731,7 +731,7 @@ Ask agent mode: "mark the museum done, we left at 3". Confirm the item becomes d
 
 On the live trip, ask "mark <item> done" with no time. Confirm the recorded time is the current trip-local time. Tick a second item with the checkbox and confirm both times are in the same zone and shape.
 
-- [ ] **Step 3: Verify no stamp outside the trip window**
+- [x] **Step 3: Verify no stamp outside the trip window**
 
 On the trip that ended in the past, ask "mark <item> done". Confirm the item becomes done with no time recorded, and that it lands in the Visited section's "Time not recorded" group.
 
@@ -739,7 +739,7 @@ On the trip that ended in the past, ask "mark <item> done". Confirm the item bec
 
 Pick an unticked item and ask "note that we spent 90 minutes at <item>" without asking to tick it. Confirm no visit record is written. The model will normally recover by marking it done and retrying, which is the intended behaviour — confirm the end state is a done item with the duration, and that if it does not retry, the item is left untouched.
 
-- [ ] **Step 5: Verify the change list**
+- [x] **Step 5: Verify the change list**
 
 Confirm the agent modal's change list names the item for each visit write, as an `updated` change.
 
@@ -751,7 +751,7 @@ Ask "what did we do on <date>, and how long did it take?". Confirm the answer us
 
 On the live trip, ask "we finished <item> an hour ago". Confirm the recorded time is roughly one hour before the trip-local now, not the server's UTC hour.
 
-- [ ] **Step 8: Restore the test data and record the results**
+- [x] **Step 8: Restore the test data and record the results**
 
 Untick and clear anything ticked for verification, confirming from fresh reads that each item matches its original server values. Add a changelog entry to this plan naming what was verified and anything deferred.
 
@@ -787,3 +787,22 @@ Untick and clear anything ticked for verification, confirming from fresh reads t
   Two notes on the tests: `vi.setSystemTime` works without `vi.useFakeTimers()` under Vitest 4, so the Task 2 cases run as written. The Task 3 "carries recorded visit data in the embedded trip" case passed before the implementation, as the plan predicted, since the prompt already embeds the whole trip.
 
   **Task 4 (manual gate) not run** — it needs `vercel dev` or an authenticated Vercel preview plus a live trip whose dates include today. What the automated suite establishes: the stamp applied inside the trip window and skipped outside it, an explicit `visited_at` overriding the stamp, an untick clearing the stamp, the not-done guard refusing a write for both activities and waypoints, ordinary `remarks` edits still allowed on planned items, zod rejecting a malformed `visited_at` and a fractional or negative duration, the change list naming the item as an `updated` change, the prompt's trip-local clock and date range with a UTC fallback, and `get_trip` returning recorded visit fields. Still open and browser-only: that the model actually resolves "we left at 3" and "an hour ago" against the prompt clock, that an agent-recorded time and a checkbox-recorded time land in the same zone and shape, that the agent-marked item lands in the "Time not recorded" group outside the window, and the read-back answer preferring `visit_duration_minutes` over the planned `duration` text.
+
+- 2026-07-26: Task 4 was run against Vercel preview `wanderlog-6u57pm3m4-kevin-lins-projects-835b030f.vercel.app` with temporary live-window and past-window trips under the test account. Steps 3 and 5 passed. The past-trip check-off wrote no time and rendered under "Time not recorded"; every agent mutation appeared in the change list as `Updated: <item>`.
+
+  Steps 1, 2, 4, 6, and 7 failed and remain unchecked. "We left at 3" became the remark `Left at 3` and wrote no `visited_at`. A no-time agent check-off also wrote no `visited_at`, while the UI checkbox recorded `2026-07-26 12:24` in `Asia/Singapore`. "We spent 90 minutes" changed the planned `duration` text from `planned 4 hours` to `90 minutes` instead of writing `visit_duration_minutes`. Read-back then treated that planned text as an actual duration and summed it with a separately seeded 90-minute visit record. "An hour ago" marked the item done but wrote no time. A diagnostic read-only prompt also claimed the agent had no live clock despite the new prompt clock section.
+
+  Step 8 passed. Both temporary trips were deleted, and fresh Supabase reads returned zero matching trip rows and zero matching activity rows. The M3 verification gate is not complete.
+
+- 2026-07-26: Investigated the five failures. **The preview did not contain the M3 commits**, so the gate exercised pre-M3 code:
+
+  - `git ls-remote --heads origin` had no `worktree-p4m3-agent-check-off`; the branch was never pushed.
+  - `origin/main` was `38821b44`, this plan's own commit, with no M3 code in it.
+  - `.github/workflows/vercel-deploy.yml` builds previews on push only, and the `.vercel` project link lives in the main checkout, not in this worktree, so a CLI deploy uploaded main's tree either way.
+  - Locally, `toAnthropicTools(ACTIVITY_TOOLS)` emits `visited_at` and `visit_duration_minutes` with their descriptions intact, and the prompt tests pin the clock section. Neither could be absent from a build containing M3.
+
+  Every failure matches pre-M3 behaviour exactly: with no `visited_at` field in the tool schema the model puts "we left at 3" in `remarks`; with no `visit_duration_minutes` it writes `90 minutes` over the planned `duration`; with no `resolveVisitPatch` a `done: true` write carries `is_done` alone; with no clock section the model correctly reports having no clock. Steps 3 and 5 passed because they also pass on pre-M3 code — Step 3 recorded no time for the wrong reason. No code defect accounts for the transcript; a build without M3 accounts for all of it.
+
+  One real defect surfaced anyway, and it survives a redeploy: `duration` and `remarks` carried no `.describe()`, so nothing in the contract told the model that `duration` is the plan rather than the actual time spent, and nothing told it to read back from `visit_duration_minutes`. Fixed as [plan_p3m3_generative-creation.md](../phase-3/plan_p3m3_generative-creation.md) Task 8, since the tool-schema contract is that milestone's: descriptions on both fields, a planned-versus-actual rule in `CORE_RULES` covering the read-back direction, and a new `describe('the schema the model receives')` block asserting against `toAnthropicTools` output — closing a hole where `toAnthropicTools` was only ever tested on `READ_TOOLS`, so an undescribed or dropped write-tool field had no test that would fail. Suite at 65 files / 591 tests, `tsc -b` clean, Ultracite clean.
+
+  Steps 1, 2, 4, 6, and 7 stay unchecked. Re-running them needs a preview built from this branch's HEAD; confirm the deployment's commit SHA before trusting the result.

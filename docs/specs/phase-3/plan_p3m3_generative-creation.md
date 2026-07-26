@@ -47,6 +47,19 @@ Implemented the "Open trip" button in the modal result view: renders when `resul
 
 Configured Vercel env vars (`GOOGLE_GEOCODING_API_KEY`). Provisioned the dedicated Hermes family-member account in Supabase Auth. Cross-checked the design doc's API contract section against the implementation (request body, four event shapes, buffered shape, status codes, `result.tripId` semantics). Verified end-to-end: Hermes-style buffered curl session with the Tokyo prompt (changes contains `created: trip`, `tripId` set, `errors: []`); 400 pre-model on empty body. In-app: agent creates a fully rendered trip (stops pinned, timeline navigable, activities listed, un-geocoded activities render without pins and are named in summary), appears in library with destination and date range, plausible IANA timezone. Negative test: "plan a trip to Atlantis" — geocoding fails, agent reports failure, no half-created trip.
 
+### Task 8: Field descriptions on the item tools (added 2026-07-26, from the Phase 4 M3 gate)
+
+The Phase 4 M3 verification gate ([plan_p4m3_agent-check-off.md](../phase-4/plan_p4m3_agent-check-off.md)) caught the model writing "we spent 90 minutes" into the planned `duration` text, overwriting `planned 4 hours`, then reading that text back as an actual duration. Root cause sits in this milestone's contract, not in Phase 4: `z.toJSONSchema` faithfully carries `.describe()` into `input_schema`, and `duration` and `remarks` had none. To a model both read as the generic place for "how long" and "what happened", so a field's *purpose* is only knowable if the schema states it.
+
+Fixed in `api/_lib/tools/items.ts` (`CREATE_FIELDS`, inherited by `UPDATE_FIELDS`, so both entities and both operations get it):
+
+- `duration` — "Planned time estimate, free text… Never overwrite it with how long the visit actually took - that is visit_duration_minutes."
+- `remarks` — "Free-text note. Not a place for a time or a duration…"
+
+`CORE_RULES` in `api/_lib/systemPrompt.ts` gained the matching planned-versus-actual rule, including the read-back direction: report from `visited_at` and `visit_duration_minutes`, ignore `duration`.
+
+`api/_lib/__tests__/items.test.ts` gained a `describe('the schema the model receives')` block asserting against `toAnthropicTools(ACTIVITY_TOOLS)` output rather than the zod schema. This closes a real coverage hole from Task 3: `toAnthropicTools` was only ever exercised on `READ_TOOLS`, so nothing would have caught a write-tool field that the JSON Schema conversion silently dropped or left undescribed.
+
 ---
 
 ## Design Decisions
