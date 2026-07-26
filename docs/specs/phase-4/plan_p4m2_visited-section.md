@@ -826,7 +826,7 @@ Drag two planned activities to reorder them and confirm the new order survives a
 
 Note the position of a planned activity, tick it, reorder the remaining planned items, then untick it. Confirm it returns to its original position rather than the bottom of the list.
 
-- [ ] **Step 6: Verify nothing else moved**
+- [x] **Step 6: Verify nothing else moved**
 
 Confirm the map still pins visited items, the timeline still counts them in its per-stop progress, and the trip library is unchanged.
 
@@ -871,3 +871,5 @@ Add a changelog entry to this plan naming what was verified and anything deferre
   **Task 4 (manual gate) not run** — it needs an authenticated account on a Vercel preview. What the automated suite does establish: day-grouped headings in date order with items in time order, an activity and a waypoint interleaved by time in one visited list, the waypoint gone from the Scenic Waypoints group and its count, the undated group rendering last as "Time not recorded", exactly one drag handle across a planned-plus-visited render, an item moving between sections when it becomes done, and `applyPlannedOrder` leaving a visited item in its held slot. Still open and browser-only: that a real drag gesture persists across a reload (Step 4), that an untick end-to-end returns the item to its original position (Step 5), and the visual confirmation that the map, timeline, and library are unchanged (Step 6).
 
 - 2026-07-26: Task 4 manually verified on authenticated Vercel preview [wanderlog-2bwf1phl1-kevin-lins-projects-835b030f.vercel.app](https://wanderlog-2bwf1phl1-kevin-lins-projects-835b030f.vercel.app). Steps 1-5 passed: dated groups rendered in date and time order; an activity and waypoint shared one chronology; the undated item rendered last under "Time not recorded"; a keyboard drag persisted across reload with no visited drag handles; and an unticked item returned to its held slot. For Step 6, timeline progress included visited items and the trip library was unchanged. Map-pin verification is deferred because Google Maps rejected the preview hostname with `RefererNotAllowedMapError`; Step 6 remains open. The full automated suite passed at 65 files / 567 tests. All temporary verification data, completion states, and activity ordering were restored afterward.
+
+- 2026-07-26: Step 6 completed on the production alias [wanderlog-xi.vercel.app](https://wanderlog-xi.vercel.app) after deployment of `63234b12`. Marking Red House Seafood Esplanade visited left its map pin present, changed Mandarin Oriental Singapore timeline progress from `0 of 7 done` to `1 of 7 done`, and left the five trip-library entries unchanged. The item was unticked afterward; timeline progress returned to `0 of 7 done` and the Visited section disappeared. Task 4's verification gate is complete.
