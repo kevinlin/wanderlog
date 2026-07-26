@@ -60,6 +60,7 @@ react-router in [src/App.tsx](src/App.tsx), pages in [src/pages/](src/pages/). E
 - No JSDoc. Comments explain *why* (see the existing ones in `api/_lib/loop.ts`, `entityRows.ts`), not what.
 - Tailwind 4; colors and type scale come from [DESIGN.md](DESIGN.md) tokens, not ad-hoc hex values.
 - Barrel `index.ts` exports per component folder.
+- Never create git worktrees inside `.claude/` (or any subdirectory of it). Put them under `.worktrees/`.
 
 ## Environment Variables
 
