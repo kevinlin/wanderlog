@@ -1,4 +1,5 @@
 import type { Activity, StopStatus, TripStop } from '@/types';
+import type { ScenicWaypoint } from '@/types/map';
 
 /**
  * Sort activities by manual order, falling back to original order
@@ -101,3 +102,100 @@ export const formatMinutes = (minutes: number): string => {
   }
   return rest ? `${hours}h ${rest}m` : `${hours}h`;
 };
+
+export type VisitedItem = { kind: 'activity'; order: number; item: Activity } | { kind: 'waypoint'; order: number; item: ScenicWaypoint };
+
+export interface VisitedGroup {
+  date: string | null;
+  items: VisitedItem[];
+}
+
+export interface VisitPartition {
+  planned: Activity[];
+  plannedWaypoints: ScenicWaypoint[];
+  visitedGroups: VisitedGroup[];
+}
+
+const isDone = (item: { status?: { done: boolean } }): boolean => item.status?.done ?? false;
+
+const byOrderThenId = (a: { activity_id: string; order?: number }, b: { activity_id: string; order?: number }): number =>
+  (a.order ?? 0) - (b.order ?? 0) || (a.activity_id < b.activity_id ? -1 : 1);
+
+// Total and deterministic (Req 3.6). visited_at has minute precision and the two
+// tables number sort_order independently, so an activity and a waypoint sharing
+// both a minute and an order value is routine - without the kind and id
+// tie-breaks the render would depend on how the two arrays were concatenated.
+// Undated entries compare equal on the first key and fall through to plan order.
+const compareVisited = (a: VisitedItem, b: VisitedItem): number => {
+  const timeA = a.item.visited_at ?? '';
+  const timeB = b.item.visited_at ?? '';
+  if (timeA !== timeB) {
+    return timeA < timeB ? -1 : 1;
+  }
+  if (a.order !== b.order) {
+    return a.order - b.order;
+  }
+  if (a.kind !== b.kind) {
+    return a.kind === 'activity' ? -1 : 1;
+  }
+  return a.item.activity_id < b.item.activity_id ? -1 : 1;
+};
+
+/**
+ * Split a stop's items into the planned halves and the merged visited groups
+ */
+export const partitionByVisit = (activities: Activity[], waypoints: ScenicWaypoint[]): VisitPartition => {
+  const visited: VisitedItem[] = [
+    ...activities.filter(isDone).map((item): VisitedItem => ({ kind: 'activity', order: item.order ?? 0, item })),
+    ...waypoints.filter(isDone).map((item): VisitedItem => ({ kind: 'waypoint', order: item.order ?? 0, item })),
+  ];
+
+  const dated = visited.filter((entry) => entry.item.visited_at).sort(compareVisited);
+  const undated = visited.filter((entry) => !entry.item.visited_at).sort(compareVisited);
+
+  const visitedGroups: VisitedGroup[] = [];
+  for (const entry of dated) {
+    const date = (entry.item.visited_at ?? '').slice(0, 10);
+    const last = visitedGroups.at(-1);
+    if (last?.date === date) {
+      last.items.push(entry);
+    } else {
+      visitedGroups.push({ date, items: [entry] });
+    }
+  }
+  if (undated.length > 0) {
+    visitedGroups.push({ date: null, items: undated });
+  }
+
+  return {
+    planned: activities.filter((activity) => !isDone(activity)).sort(byOrderThenId),
+    plannedWaypoints: waypoints.filter((waypoint) => !isDone(waypoint)).sort(byOrderThenId),
+    visitedGroups,
+  };
+};
+
+/**
+ * Fold a drag over the planned subset back into a full-list id order
+ */
+export const applyPlannedOrder = (currentOrderIds: string[], reorderedPlannedIds: string[]): string[] => {
+  // Filtering keeps the slot count and the queue length in step if an id was
+  // deleted between the render that started the drag and this call.
+  const queue = reorderedPlannedIds.filter((id) => currentOrderIds.includes(id));
+  const slots = new Set(queue);
+  let next = 0;
+  return currentOrderIds.map((id) => {
+    if (!slots.has(id)) {
+      return id;
+    }
+    const replacement = queue[next];
+    next += 1;
+    return replacement;
+  });
+};
+
+/**
+ * Render a visited-group heading ('2026-07-15' -> 'Wed 15 Jul')
+ */
+// Locale pinned so the heading keeps one shape whatever the device is set to.
+export const formatVisitDay = (date: string): string =>
+  new Date(`${date}T00:00:00`).toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });

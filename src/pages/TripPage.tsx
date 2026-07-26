@@ -23,7 +23,7 @@ import { getLastViewedBase, setCurrentTripId, setLastViewedBase } from '@/servic
 import { celebrateStopComplete, celebrateTripComplete } from '@/utils/celebrate';
 import { getCurrentStop } from '@/utils/dateUtils';
 import { runStopTransition } from '@/utils/stopTransition';
-import { sortActivitiesByOrder } from '@/utils/tripUtils';
+import { applyPlannedOrder, sortActivitiesByOrder } from '@/utils/tripUtils';
 
 export const TripPage = () => {
   const { tripId: tripIdParam } = useParams<{ tripId: string }>();
@@ -239,14 +239,18 @@ export const TripPage = () => {
     setIsActivitiesPanelVisible(false);
   };
 
-  const handleActivityReorder = (fromIndex: number, toIndex: number) => {
-    if (!state.currentBase || fromIndex === toIndex) {
+  const handleActivityReorder = (orderedPlannedIds: string[]) => {
+    if (!state.currentBase) {
       return;
     }
     const previousIds = sortedActivities.map((activity) => activity.activity_id);
-    const orderedIds = [...previousIds];
-    const [moved] = orderedIds.splice(fromIndex, 1);
-    orderedIds.splice(toIndex, 0, moved);
+    // Drag covers the planned half only. Substituting into the slots those items
+    // already held leaves every visited item's sort_order alone, so unticking
+    // one returns it to its original position.
+    const orderedIds = applyPlannedOrder(previousIds, orderedPlannedIds);
+    if (orderedIds.every((id, index) => id === previousIds[index])) {
+      return;
+    }
     const stopId = state.currentBase;
     reorderMutation.mutate({ stopId, orderedActivityIds: orderedIds });
     setToast({

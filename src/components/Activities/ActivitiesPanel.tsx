@@ -1,6 +1,7 @@
 import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { VisitedSection } from '@/components/Activities/VisitedSection';
 import { WaypointListItem } from '@/components/Activities/WaypointListItem';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
 import { POISearchResultCard } from '@/components/Cards/POISearchResultCard';
@@ -20,6 +21,7 @@ import type { Accommodation, Activity, TripData } from '@/types';
 import type { Coordinates, ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
 import { inferActivityType } from '@/utils/activityUtils';
+import { partitionByVisit } from '@/utils/tripUtils';
 import { DraggableActivitiesList } from './DraggableActivity';
 
 // Constants for mobile panel resize
@@ -38,7 +40,7 @@ interface ActivitiesPanelProps {
   onExportSuccess?: () => void;
   onHide?: () => void; // Legacy prop for mobile panel hiding (deprecated, kept for compatibility)
   onItemDone: (itemId: string) => void;
-  onReorder: (fromIndex: number, toIndex: number) => void;
+  onReorder: (orderedActivityIds: string[]) => void;
   scenicWaypoints?: ScenicWaypoint[];
   selectedActivityId?: string | null;
   stopName: string;
@@ -83,6 +85,11 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const [isAccommodationModalOpen, setIsAccommodationModalOpen] = useState(false);
   const [waypointModal, setWaypointModal] = useState<{ mode: 'create' } | { mode: 'edit'; waypoint: ScenicWaypoint } | null>(null);
   const [deletingWaypoint, setDeletingWaypoint] = useState<ScenicWaypoint | null>(null);
+
+  // Done items leave both planned lists and reappear in the Visited section,
+  // ordered by when they happened (Req 3.1). The full arrays stay untouched for
+  // the map, the timeline, and the sort orders new items are appended with.
+  const { planned, plannedWaypoints, visitedGroups } = partitionByVisit(activities, scenicWaypoints);
 
   // Screen size detection
   const { isMobile } = useScreenSize();
@@ -364,19 +371,19 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           )}
 
           {/* Scenic Waypoints Section */}
-          {scenicWaypoints.length > 0 && (
+          {plannedWaypoints.length > 0 && (
             <div className="px-3 pb-3">
               <button
                 className="mb-3 flex min-h-[30px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-violet-500/30 bg-violet-500/20 px-4 py-3 font-medium text-violet-700 transition-all duration-200 hover:bg-violet-500/30 hover:shadow-md active:bg-violet-500/40"
                 onClick={toggleScenicWaypoints}
               >
-                <span>🏞️ Scenic Waypoints ({scenicWaypoints.length})</span>
+                <span>🏞️ Scenic Waypoints ({plannedWaypoints.length})</span>
                 {isScenicWaypointsExpanded ? <ChevronUpIcon className="h-4 w-4" /> : <ChevronDownIcon className="h-4 w-4" />}
               </button>
 
               {isScenicWaypointsExpanded && (
                 <div className="space-y-3">
-                  {scenicWaypoints.map((waypoint) => (
+                  {plannedWaypoints.map((waypoint) => (
                     <WaypointListItem
                       accommodation={accommodation}
                       isSelected={selectedActivityId === waypoint.activity_id}
@@ -406,7 +413,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           )}
 
           {/* Add-waypoint affordance when the stop has none yet */}
-          {scenicWaypoints.length === 0 && isOnline && (
+          {plannedWaypoints.length === 0 && isOnline && (
             <div className="px-3 pb-3">
               <button
                 className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
@@ -426,7 +433,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                 className="flex min-h-[30px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-sky-500/30 bg-sky-500/20 px-4 py-3 font-medium text-sky-700 transition-all duration-200 hover:bg-sky-500/30 hover:shadow-md active:bg-sky-500/40"
                 onClick={toggleExpanded}
               >
-                <span>📋 Activities ({activities.length})</span>
+                <span>📋 Activities ({planned.length})</span>
                 <ChevronDownIcon className="h-4 w-4" />
               </button>
             </div>
@@ -438,7 +445,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               {/* Activities Header */}
               <div className="shrink-0 px-3 pb-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900 text-lg">📋 Activities ({activities.length})</h3>
+                  <h3 className="font-semibold text-gray-900 text-lg">📋 Activities ({planned.length})</h3>
                   <button
                     aria-label="Collapse activities panel"
                     className="min-h-[30px] min-w-[44px] touch-manipulation rounded-lg p-2 transition-colors hover:bg-orange-500/20 active:bg-orange-500/30"
@@ -458,7 +465,8 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               <div className="px-3 pb-3">
                 <DraggableActivitiesList
                   accommodation={accommodation}
-                  activities={activities}
+                  activities={planned}
+                  emptyMessage={activities.length > 0 ? 'Everything here is ticked off.' : undefined}
                   isDragDisabled={!isOnline}
                   key={baseId}
                   onActivitySelect={onActivitySelect}
@@ -487,6 +495,21 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               )}
             </>
           )}
+
+          {/* Visited Section — its own collapse state, so it stays reachable while activities are collapsed */}
+          <VisitedSection
+            accommodation={accommodation}
+            groups={visitedGroups}
+            onDeleteActivity={isOnline ? setDeletingActivity : undefined}
+            onDeleteWaypoint={isOnline ? setDeletingWaypoint : undefined}
+            onEditActivity={isOnline ? (activity) => setActivityModal({ mode: 'edit', activity }) : undefined}
+            onEditWaypoint={isOnline ? (waypoint) => setWaypointModal({ mode: 'edit', waypoint }) : undefined}
+            onItemDone={onItemDone}
+            onSelect={onActivitySelect}
+            selectedActivityId={selectedActivityId}
+            trip={tripData}
+            tripId={tripId}
+          />
 
           {/* POI Search Results */}
           {poiSearch.results.length > 0 && (
