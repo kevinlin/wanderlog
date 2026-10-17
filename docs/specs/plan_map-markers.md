@@ -1,0 +1,13 @@
+# Map Markers Redesign - Plan
+
+Design: [design_map-markers.md](design_map-markers.md). Branch: `feat/map-markers`. Run under agent-handoff: the driver keeps design, review, docs and the browser gate; `fast_worker` builds T1 and T2.
+
+| Task | Owner | Scope | Acceptance |
+|---|---|---|---|
+| T0 | driver | Design artifact (live scene, every state), design doc, spec review | deep_reasoner review at consensus; artifact published |
+| T1 | fast_worker | Foundation: deps, pnpm override, tsconfig types, lockfile, `mapsLoader` (`'marker'`, `MAP_ID`), `stopPalette.ts` + TimelineStrip refactor, `markerCategory.ts`, `getStopTimeStatus(stop, today)`, the three unit test files, `docs/architecture/map-style.json`, `.env.local.example` | `pnpm test:run && pnpm build && pnpm lint` pass; `pnpm why @types/google.maps` shows one version (3.66.x); `pnpm-lock.yaml` updated; the stopPalette, markerCategory and dateUtils test cases in the design exist and pass; `TripPage` tests pass |
+| T2 | fast_worker | Markers: `map-markers.css`, `MapMarker.tsx` + test, `MarkerFaces.tsx` + test, MapContainer swap (arrival gate, zoom dots, trip-local today) + test rewrite, PlaceHoverCard chip, deletions (`map-animations.css`, four activityUtils helpers and their tests) | `pnpm test:run && pnpm build && pnpm lint` pass; `rg -n "getActivityTypeColor|SvgPath|map-animations|google\.maps\.Animation|<Marker\b|setAnimation" src/` finds nothing; `MapContainer.tsx` no longer imports the `dateUtils` namespace or calls an NZ-clock helper (only the named `getStopTimeStatus` import); the only `new google.maps.Marker` left is the travel-viz dot and halo; every MapMarker, MarkerFaces and MapContainer case listed in the design exists and passes, including the arrival-gate and A → B → A cases |
+| T3 | driver | Docs: DESIGN.md "Map markers" section, `design_travel-journal-map.md` pin section, CLAUDE.md env line, spec index, CHANGELOG Unreleased | prose passes the declawed loop; links resolve |
+| T4 | driver | Final check: full diff review against the design, invariant-auditor, Impeccable detector, browser gate on a local Supabase stack (all marker kinds and states, the arrival sequence, done tick, zoom dots, POI click to modal, Tab/Enter, four map types, reduced motion) | all checks pass or findings fixed; browser gate run on a local Supabase stack with a seeded test trip, Chrome at desktop width and a phone-width emulation, on `DEMO_MAP_ID` (style parity is the owner's release check); evidence and receipt under `.handoff/` |
+
+Release prerequisite: the Map ID, its cloud style and the Vercel env var must exist **before** merging to `main` (push to `main` deploys production). Steps in the design doc.
