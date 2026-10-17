@@ -1,6 +1,6 @@
 import { ArrowDownTrayIcon, ChevronDownIcon, ChevronUpIcon, MagnifyingGlassIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import type React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { VisitedSection } from '@/components/Activities/VisitedSection';
 import { WaypointListItem } from '@/components/Activities/WaypointListItem';
 import { AccommodationCard } from '@/components/Cards/AccommodationCard';
@@ -10,10 +10,12 @@ import { AccommodationFormModal } from '@/components/Editing/AccommodationFormMo
 import { ActivityFormModal } from '@/components/Editing/ActivityFormModal';
 import { WaypointFormModal } from '@/components/Editing/WaypointFormModal';
 import { ConfirmDialog } from '@/components/Layout/ConfirmDialog';
+import { buildActivityTodoMap } from '@/components/Todos/todoSelectors';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useScreenSize } from '@/hooks/useScreenSize';
 import { useCreateActivity, useDeleteActivity, useDeleteWaypoint } from '@/hooks/useTripMutations';
+import { useTripToday } from '@/hooks/useTripToday';
 import { useWeather } from '@/hooks/useWeather';
 import { ExportService } from '@/services/exportService';
 import { PlacesService } from '@/services/placesService';
@@ -77,6 +79,11 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   // Editing state (M4): pencil/add open the form modal, trash opens a confirm
   const isOnline = useOnlineStatus();
   const tripId = tripData?.trip_id ?? '';
+
+  // Built once here and handed down, so every card judges its todos against the
+  // same trip-local day the badge and the list use.
+  const today = useTripToday(tripData.timezone);
+  const todoByActivity = useMemo(() => buildActivityTodoMap(tripData.todos, today), [tripData.todos, today]);
   const createActivityMutation = useCreateActivity(tripId);
   const deleteActivityMutation = useDeleteActivity(tripId);
   const deleteWaypointMutation = useDeleteWaypoint(tripId);
@@ -475,6 +482,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   onEditActivity={isOnline ? (activity) => setActivityModal({ mode: 'edit', activity }) : undefined}
                   onReorder={onReorder}
                   selectedActivityId={selectedActivityId}
+                  todoByActivity={todoByActivity}
                   trip={tripData}
                   tripId={tripId}
                 />
@@ -507,6 +515,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             onItemDone={onItemDone}
             onSelect={onActivitySelect}
             selectedActivityId={selectedActivityId}
+            todoByActivity={todoByActivity}
             trip={tripData}
             tripId={tripId}
           />

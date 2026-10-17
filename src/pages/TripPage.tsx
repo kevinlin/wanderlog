@@ -13,6 +13,7 @@ import { SyncIndicator } from '@/components/Layout/SyncIndicator';
 import { Toast, type ToastState } from '@/components/Layout/Toast';
 import { MapContainer } from '@/components/Map/MapContainer';
 import { TimelineStrip } from '@/components/Timeline/TimelineStrip';
+import { TodoControls } from '@/components/Todos';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { useScreenSize } from '@/hooks/useScreenSize';
@@ -147,6 +148,8 @@ export const TripPage = () => {
             />
           </div>
           <UserMenu />
+          {/* Trip-level todos (a train, a sale date) don't need a stop, so the list is reachable here too */}
+          <TodoControls tripData={tripData} tripId={tripId} />
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center p-4">
             <div className="threshold-enter pointer-events-auto max-w-md rounded-xl border border-gray-200 bg-white/95 p-8 text-center shadow-lg backdrop-blur-xs">
               <h1 className="font-bold text-gray-900 text-xl">{tripData.trip_name}</h1>
@@ -305,11 +308,10 @@ export const TripPage = () => {
           onEditTrip={isOnline && tripSummary ? () => setIsEditTripModalOpen(true) : undefined}
         />
 
-        {/* Floating agent button - sits left of the user menu, also corner-pinned.
-            Named so it keeps floating above the timeline snapshot during the stop page-turn. */}
-        <div className="fixed top-2 right-14 z-30 sm:top-4" style={{ viewTransitionName: 'agent-button' }}>
+        {/* Floating To do and agent buttons - share one corner-pinned container left of the user menu */}
+        <TodoControls tripData={tripData} tripId={tripId}>
           <AgentButton tripId={tripId} />
-        </div>
+        </TodoControls>
 
         {isEditTripModalOpen && tripSummary && (
           <TripMetadataFormModal isOpen onClose={() => setIsEditTripModalOpen(false)} trip={tripSummary} />

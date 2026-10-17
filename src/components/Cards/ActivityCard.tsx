@@ -6,6 +6,8 @@ import { useState } from 'react';
 import { DoneCheckbox } from '@/components/Cards/DoneCheckbox';
 import { ImageViewerModal } from '@/components/Layout/ImageViewerModal';
 import { LocationWarning } from '@/components/Layout/LocationWarning';
+import { TodoChip } from '@/components/Todos/TodoChip';
+import type { ActivityTodo } from '@/components/Todos/todoSelectors';
 import type { Accommodation, Activity } from '@/types';
 import { ActivityType } from '@/types/trip';
 import { getActivityTypeIcon } from '@/utils/activityUtils';
@@ -18,6 +20,8 @@ interface ActivityCardProps {
   isDone: boolean;
   isDraggable?: boolean;
   isSelected: boolean;
+  // The most urgent open todo linked to this activity, if any.
+  linkedTodo?: ActivityTodo;
   onDelete?: (activity: Activity) => void;
   onEdit?: (activity: Activity) => void;
   onLogVisit?: () => void;
@@ -30,6 +34,7 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
   accommodation,
   isSelected,
   isDone,
+  linkedTodo,
   onToggleDone,
   onSelect,
   onEdit,
@@ -141,6 +146,11 @@ export const ActivityCard: React.FC<ActivityCardProps> = ({
                         {activity.visited_at && activity.visit_duration_minutes ? ' · ' : ''}
                         {activity.visit_duration_minutes ? formatMinutes(activity.visit_duration_minutes) : ''}
                       </p>
+                    )}
+                    {linkedTodo && (
+                      <div className="mt-1">
+                        <TodoChip lead="🎟" today={linkedTodo.today} todo={linkedTodo.todo} />
+                      </div>
                     )}
                   </div>
 

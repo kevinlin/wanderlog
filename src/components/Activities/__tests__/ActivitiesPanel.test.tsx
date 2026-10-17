@@ -2,11 +2,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ReactNode } from 'react';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { registerMutationDefaults } from '@/lib/mutationDefaults';
 import { tripKeys } from '@/lib/queryClient';
 import type { ScenicWaypoint } from '@/types/map';
-import type { Activity, TripData } from '@/types/trip';
+import type { Activity, Todo, TripData } from '@/types/trip';
 import { ActivitiesPanel } from '../ActivitiesPanel';
 
 vi.mock('@/services/supabaseService', () => ({ writeVisitFields: vi.fn() }));
@@ -179,5 +179,86 @@ describe('ActivitiesPanel planned/visited split', () => {
     expect(screen.getByRole('heading', { name: /Activities \(0\)/ })).toBeInTheDocument();
     expect(screen.getByText('Everything here is ticked off.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Visited \(1\)/ })).toBeInTheDocument();
+  });
+});
+
+describe('ActivitiesPanel todo chips', () => {
+  // 12:00 on 5 Dec in Asia/Tokyo, the trip's timezone.
+  beforeEach(() => {
+    vi.setSystemTime(new Date('2026-12-05T03:00:00Z'));
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const todo = (id: string, over: Partial<Todo> = {}): Todo => ({ todo_id: id, title: id, done: false, activity_id: 'Ramen', ...over });
+  const withTodos = (todos: Todo[]): TripData => ({ ...trip, todos });
+
+  const openActivities = (user: ReturnType<typeof userEvent.setup>) =>
+    user.click(screen.getByRole('button', { name: /Activities \(\d+\)/ }));
+
+  it('shows the most urgent linked todo on the card: overdue before ready before upcoming', async () => {
+    const user = userEvent.setup();
+    renderPanel({
+      activities: [act('Ramen')],
+      tripData: withTodos([todo('soon', { opens_on: '2026-12-09' }), todo('open'), todo('late', { due_on: '2026-12-01' })]),
+    });
+
+    await openActivities(user);
+
+    expect(screen.getByText('Overdue · was due 1 Dec')).toBeInTheDocument();
+    expect(screen.queryByText('Ready now')).not.toBeInTheDocument();
+    expect(screen.queryByText(/^Opens/)).not.toBeInTheDocument();
+  });
+
+  it('prefers a ready todo to an upcoming one', async () => {
+    const user = userEvent.setup();
+    renderPanel({
+      activities: [act('Ramen')],
+      tripData: withTodos([todo('soon', { opens_on: '2026-12-09' }), todo('open', { due_on: '2026-12-20' })]),
+    });
+
+    await openActivities(user);
+
+    expect(screen.getByText('Ready · by 20 Dec')).toBeInTheDocument();
+    expect(screen.queryByText(/^Opens/)).not.toBeInTheDocument();
+  });
+
+  it('shows no chip when every linked todo is done', async () => {
+    const user = userEvent.setup();
+    renderPanel({
+      activities: [act('Ramen')],
+      tripData: withTodos([todo('a', { done: true }), todo('b', { done: true, due_on: '2026-12-01' })]),
+    });
+
+    await openActivities(user);
+
+    expect(screen.getByLabelText('Ramen')).toBeInTheDocument();
+    expect(screen.queryByText(/Ready|Overdue|^Opens/)).not.toBeInTheDocument();
+  });
+
+  it('chips only the activity the todo is linked to', async () => {
+    const user = userEvent.setup();
+    renderPanel({
+      activities: [act('Ramen'), act('Museum', { order: 1 })],
+      tripData: withTodos([todo('open')]),
+    });
+
+    await openActivities(user);
+
+    expect(screen.getAllByText('Ready now')).toHaveLength(1);
+  });
+
+  it('keeps the chip on a visited activity whose todo is still open', async () => {
+    const user = userEvent.setup();
+    renderPanel({
+      activities: [act('Ramen', { status: { done: true }, visited_at: '2026-12-05 11:00' })],
+      tripData: withTodos([todo('open')]),
+    });
+
+    await user.click(screen.getByRole('button', { name: /Visited \(1\)/ }));
+
+    expect(screen.getByText('Ready now')).toBeInTheDocument();
   });
 });

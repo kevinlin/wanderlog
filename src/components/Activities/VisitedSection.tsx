@@ -2,6 +2,7 @@ import { ChevronDownIcon, ChevronUpIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 import { ActivityListItem } from '@/components/Activities/ActivityListItem';
 import { WaypointListItem } from '@/components/Activities/WaypointListItem';
+import type { ActivityTodo } from '@/components/Todos/todoSelectors';
 import type { Accommodation, Activity } from '@/types';
 import type { ScenicWaypoint } from '@/types/map';
 import type { TripData } from '@/types/trip';
@@ -17,6 +18,7 @@ interface VisitedSectionProps {
   onItemDone: (itemId: string) => void;
   onSelect: (itemId: string) => void;
   selectedActivityId?: string | null;
+  todoByActivity?: Record<string, ActivityTodo>;
   trip: TripData;
   tripId: string;
 }
@@ -28,6 +30,7 @@ export const VisitedSection = ({
   groups,
   accommodation,
   selectedActivityId,
+  todoByActivity,
   trip,
   tripId,
   onSelect,
@@ -71,6 +74,7 @@ export const VisitedSection = ({
                       isDraggable={false}
                       isSelected={selectedActivityId === entry.item.activity_id}
                       key={entry.item.activity_id}
+                      linkedTodo={todoByActivity?.[entry.item.activity_id]}
                       onDelete={onDeleteActivity}
                       onDone={onItemDone}
                       onEdit={onEditActivity}

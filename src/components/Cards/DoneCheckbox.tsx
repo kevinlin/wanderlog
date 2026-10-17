@@ -7,6 +7,8 @@ interface DoneCheckboxProps {
   accent?: Accent;
   ariaLabel: string;
   checked: boolean;
+  // Offline, where a write can only fail. The box stays visible so the list still reads.
+  disabled?: boolean;
   onToggle: (done: boolean) => void;
 }
 
@@ -21,7 +23,7 @@ const ACCENT: Record<Accent, { fill: string; ring: string }> = {
  * intact) wrapped so the box springs and the tick draws in on toggle-on.
  * The pop is JS-gated so items that are already done don't all pop on mount.
  */
-export const DoneCheckbox: React.FC<DoneCheckboxProps> = ({ checked, onToggle, accent = 'emerald', ariaLabel }) => {
+export const DoneCheckbox: React.FC<DoneCheckboxProps> = ({ checked, onToggle, accent = 'emerald', ariaLabel, disabled = false }) => {
   const [pop, setPop] = useState(false);
   const colors = ACCENT[accent];
 
@@ -36,14 +38,21 @@ export const DoneCheckbox: React.FC<DoneCheckboxProps> = ({ checked, onToggle, a
 
   return (
     <label
-      className="relative -m-2.5 flex cursor-pointer touch-manipulation items-center justify-center p-3"
+      className={`relative -m-2.5 flex touch-manipulation items-center justify-center p-3 ${disabled ? 'cursor-not-allowed' : 'cursor-pointer'}`}
       onClick={(e) => e.stopPropagation()}
     >
-      <input aria-label={ariaLabel} checked={checked} className="peer sr-only" onChange={handleChange} type="checkbox" />
+      <input
+        aria-label={ariaLabel}
+        checked={checked}
+        className="peer sr-only"
+        disabled={disabled}
+        onChange={handleChange}
+        type="checkbox"
+      />
       <span
         className={`flex h-5 w-5 items-center justify-center rounded-md border-2 transition-colors duration-150 ${
           checked ? colors.fill : 'border-gray-300 bg-white'
-        } ${colors.ring} peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1 ${pop ? 'animate-check-pop' : ''}`}
+        } ${colors.ring} peer-focus-visible:ring-2 peer-focus-visible:ring-offset-1 peer-disabled:opacity-50 ${pop ? 'animate-check-pop' : ''}`}
         onAnimationEnd={() => setPop(false)}
       >
         <svg

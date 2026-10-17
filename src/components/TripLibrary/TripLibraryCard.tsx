@@ -1,6 +1,8 @@
 import { PencilIcon } from '@heroicons/react/24/outline';
 import { format, parseISO } from 'date-fns';
+import { useTripToday } from '@/hooks/useTripToday';
 import type { TripSummary } from '@/types/trip';
+import { countActiveTodos } from '@/utils/todoUtils';
 import type { TripStatus } from '@/utils/tripStatusUtils';
 
 interface TripLibraryCardProps {
@@ -30,6 +32,21 @@ const formatDateRange = (startDate: string, endDate: string): string => {
   return `${format(start, 'd')} - ${format(end, 'd MMM yyyy')}`;
 };
 
+// Its own component so the hook has a home: the library page may sit open past
+// trip-local midnight, and the day has to come from the hook, not the render.
+const TodoCount = ({ trip }: { trip: TripSummary }) => {
+  const today = useTripToday(trip.timezone);
+  const count = countActiveTodos(trip.todos, today, trip.end_date);
+  if (count === 0) {
+    return null;
+  }
+  return (
+    <span className="font-medium text-gray-700">
+      <span aria-hidden="true">🎟</span> {count} to do
+    </span>
+  );
+};
+
 export const TripLibraryCard = ({ trip, status, isHero, onOpen, onDelete, onEdit }: TripLibraryCardProps) => (
   <div
     className="group relative rounded-xl border border-gray-200 bg-white shadow-xs transition-all hover:border-alpine-teal hover:shadow-md"
@@ -45,6 +62,7 @@ export const TripLibraryCard = ({ trip, status, isHero, onOpen, onDelete, onEdit
       <div className={`mt-2 flex flex-col gap-1 text-gray-600 ${isHero ? 'text-base' : 'text-sm'}`}>
         {trip.destination && <span>{trip.destination}</span>}
         <span>{formatDateRange(trip.start_date, trip.end_date)}</span>
+        <TodoCount trip={trip} />
       </div>
     </button>
     {onEdit && (

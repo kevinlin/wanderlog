@@ -2,6 +2,7 @@ import { closestCenter, DndContext, type DragEndEvent, KeyboardSensor, PointerSe
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import type React from 'react';
 import { ActivityListItem } from '@/components/Activities/ActivityListItem';
+import type { ActivityTodo } from '@/components/Todos/todoSelectors';
 import type { Accommodation, Activity } from '@/types';
 import type { TripData } from '@/types/trip';
 
@@ -17,6 +18,7 @@ interface DraggableActivitiesListProps {
   onEditActivity?: (activity: Activity) => void;
   onReorder: (orderedActivityIds: string[]) => void;
   selectedActivityId?: string | null;
+  todoByActivity?: Record<string, ActivityTodo>;
   trip: TripData;
   tripId: string;
 }
@@ -26,6 +28,7 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
   accommodation,
   emptyMessage,
   selectedActivityId,
+  todoByActivity,
   isDragDisabled = false,
   onActivitySelect,
   onDone,
@@ -87,6 +90,7 @@ export const DraggableActivitiesList: React.FC<DraggableActivitiesListProps> = (
                 activity={activity}
                 isDraggable={!isDragDisabled}
                 isSelected={activity.activity_id === selectedActivityId}
+                linkedTodo={todoByActivity?.[activity.activity_id]}
                 onDelete={onDeleteActivity}
                 onDone={onDone}
                 onEdit={onEditActivity}

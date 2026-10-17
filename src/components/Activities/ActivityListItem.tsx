@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActivityCard } from '@/components/Cards/ActivityCard';
 import { VisitDetailsModal, type VisitFormValues } from '@/components/Editing/VisitDetailsModal';
+import type { ActivityTodo } from '@/components/Todos/todoSelectors';
 import { useVisitRecord } from '@/hooks/useVisitRecord';
 import { stampIfDuringTrip } from '@/services/visitRecord';
 import type { Accommodation, Activity } from '@/types';
@@ -11,6 +12,7 @@ interface ActivityListItemProps {
   activity: Activity;
   isDraggable: boolean;
   isSelected: boolean;
+  linkedTodo?: ActivityTodo;
   onDelete?: (activity: Activity) => void;
   onDone: (activityId: string) => void;
   onEdit?: (activity: Activity) => void;
@@ -26,6 +28,7 @@ export const ActivityListItem = ({
   accommodation,
   isDraggable,
   isSelected,
+  linkedTodo,
   onSelect,
   onDone,
   onEdit,
@@ -71,6 +74,7 @@ export const ActivityListItem = ({
         isDone={isDone}
         isDraggable={isDraggable}
         isSelected={isSelected}
+        linkedTodo={linkedTodo}
         onDelete={onDelete}
         onEdit={onEdit}
         // Offered only on done items, which is what keeps a visit record from
