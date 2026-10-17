@@ -37,7 +37,7 @@ Break these and things fail in non-obvious ways.
 
 **3. Persisted cache: `gcTime` ≥ `PERSIST_MAX_AGE_MS` (30 days)** or the IndexedDB cache is dropped on restore. Bump the `buster` string in `main.tsx` on any breaking cache-shape change. Sign-out purges the cache (`clearPersistedCache`).
 
-**4. Supabase access boundary.** `src/config/supabase.ts` creates the browser client; `supabaseService` is the browser's only data-access entry point (a thin adapter binding that client to the shared write modules). Rows ↔ domain types only via `supabaseMappers` (`TRIP_SELECT` pulls the whole trip tree in one nested select; `TRIP_SUMMARY_SELECT` for the library list).
+**4. Supabase access boundary.** `src/config/supabase.ts` creates the browser client; `supabaseService` is the browser's only data-access entry point (a thin adapter binding that client to the shared write modules). Rows ↔ domain types only via `supabaseMappers` (`TRIP_SELECT` pulls the whole trip tree in one nested select; `TRIP_SUMMARY_SELECT` for the library list). The browser uses `TRIP_DETAIL_SELECT` / `TRIP_LIBRARY_SELECT`, which add `todos`; `api/` keeps the shared originals so agent context does not change.
 
 **5. Modules shared between `src/` and `api/` obey Node ESM rules.** The Vercel function runtime resolves neither `@/` aliases nor extensionless specifiers, so any module reachable from `api/` uses **relative imports with explicit `.js` extensions**, takes an injected `SupabaseClient` instead of importing the browser singleton, and imports `supabase-js` types only. Currently shared: `entityRows`, `tripWrites`, `tripBundleInsert`, `supabaseMappers`, `tripImportService`, `schemas/*`, `types/*`. Adding an `@/` import to one of these breaks the deployed function, not the build.
 
@@ -45,7 +45,7 @@ Break these and things fail in non-obvious ways.
 
 ## Data Model
 
-`trip` → ordered `stops` → each with at most one `accommodation` plus many `activities` and `scenic_waypoints`. Deletes cascade down the tree. `is_done` is a canonical column shared by all users (no per-user modification concept). Schema and RLS live in `supabase/migrations/*.sql` (Supabase CLI).
+`trip` → ordered `stops` → each with at most one `accommodation` plus many `activities` and `scenic_waypoints`. Deletes cascade down the tree. `is_done` is a canonical column shared by all users (no per-user modification concept). A trip also has `todos` (booking tasks with an `opens_on`/`due_on` window, optional stop/activity links that set null on delete); the `active_todos` view and `src/utils/todoUtils.ts` hold the same active rule, so change both together. Hermes reads and writes todos over Supabase REST (contract in [docs/specs/design_trip-todos.md](docs/specs/design_trip-todos.md)). Schema and RLS live in `supabase/migrations/*.sql` (Supabase CLI).
 
 Domain types in [src/types/trip.ts](src/types/trip.ts): `TripData` (holds `stops: TripBase[]`), `TripBase`, `Activity`, `TripSummary` (library row). Import-file shapes are zod schemas in [src/schemas/](src/schemas/) (Wanderlog export + TripIt), converted by `tripImportService`.
 

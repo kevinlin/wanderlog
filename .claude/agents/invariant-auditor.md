@@ -40,7 +40,7 @@ Trip and weather data must be read from the query cache, never copied into React
 `gcTime` must stay `>= PERSIST_MAX_AGE_MS` (30 days) or IndexedDB restore silently drops the cache.
 
 - Flag any `gcTime` lowered below `PERSIST_MAX_AGE_MS` in `src/lib/queryClient.ts` or in a per-query override.
-- If the diff changes the **shape** of anything cached (domain types in `src/types/trip.ts`, mapper output in `supabaseMappers.ts`, query key structure), the `buster` string in `src/main.tsx` must change in the same diff. Currently `'phase2-v1'`. A shape change without a buster bump feeds stale-shaped data to new code on every returning user.
+- If the diff changes the **shape** of anything cached (domain types in `src/types/trip.ts`, mapper output in `supabaseMappers.ts`, query key structure), the `buster` string in `src/main.tsx` must change in the same diff. Currently `'phase5-v1'`. A shape change without a buster bump feeds stale-shaped data to new code on every returning user.
 - Sign-out must still call `clearPersistedCache`.
 
 ### 4. Supabase access boundary
@@ -49,7 +49,7 @@ Trip and weather data must be read from the query cache, never copied into React
 
 - Flag any component, hook, or page importing the Supabase client directly instead of going through `supabaseService`.
 - Rows map to domain types only via `supabaseMappers`. Flag hand-rolled row-to-domain mapping.
-- Flag a new column selected without being added to `TRIP_SELECT` / `TRIP_SUMMARY_SELECT`, and flag a mapper that reads a column those selects do not pull.
+- Flag a new column selected without being added to `TRIP_SELECT` / `TRIP_SUMMARY_SELECT`, or to the browser-only `TRIP_DETAIL_SELECT` / `TRIP_LIBRARY_SELECT` that extend them (todos live there so agent context stays unchanged), and flag a mapper that reads a column those selects do not pull.
 
 ### 5. Node ESM rules in shared modules
 

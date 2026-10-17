@@ -48,6 +48,8 @@ Provider order at the root (`main.tsx`): `PersistQueryClientProvider` → `AuthP
 
 One trip is a tree: a **trip** has ordered **stops**; each stop has at most one **accommodation** and many **activities** and **scenic_waypoints**. Deletes cascade down the tree. A single nested select (`TRIP_SELECT`) pulls the whole tree in one round trip; the library list uses a lighter `TRIP_SUMMARY_SELECT`.
 
+A trip also owns **todos** (Phase 5): booking tasks with an optional `opens_on`/`due_on` window in the trip's timezone and optional links to a stop or activity, which fall back to null when the stop or activity is deleted. The browser reads them through two browser-only selects, `TRIP_DETAIL_SELECT` and `TRIP_LIBRARY_SELECT`, which extend the shared ones, so the agent's selects and context are unchanged. The `active_todos` view (`security_invoker`) applies the same "actionable today" rule as `src/utils/todoUtils.ts`. It is the read surface for Hermes, which reads and writes todos over Supabase REST under its own account rather than through the agent endpoint.
+
 Done-status is a canonical `is_done` column shared by all users — there is no per-user modification concept. `updated_at` is maintained by a `moddatetime` trigger (last-write-wins).
 
 ![Wanderlog — Data Model & Cache Layers](assets/04-data-architecture.svg)

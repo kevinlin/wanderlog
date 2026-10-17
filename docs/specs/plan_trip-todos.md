@@ -6,9 +6,9 @@ Implements [requirements_trip-todos.md](requirements_trip-todos.md) per [design_
 
 | Milestone | Tasks | Status | Gate |
 |-----------|-------|--------|------|
-| M1 - Data and API | T1, T2 | Not started | Hermes-style curl session against a local Supabase stack (design §Verification Gates) |
-| M2 - In-app experience | T3 | Not started | Eight seed items render correctly at 375px and desktop; tick updates badge; offline disables controls |
-| M3 - Release | T4, T5 | Not started | Full suite, build, lint; invariant audit clean; hosted migration applied with owner go-ahead |
+| M1 - Data and API | T1, T2 | Done (2026-10-17) | Hermes-style curl session against a local Supabase stack (design §Verification Gates) |
+| M2 - In-app experience | T3 | Done (2026-10-17) | Eight seed items render correctly at 375px and desktop; tick updates badge; offline disables controls |
+| M3 - Release | T4, T5 | In progress: hosted migration waits for the owner | Full suite, build, lint; invariant audit clean; hosted migration applied with owner go-ahead |
 
 ## Tasks
 
@@ -79,5 +79,7 @@ Acceptance: the docs name every new table, view, and module. `spec-lint`'s namin
 
 ## Changelog
 
+- 2026-10-17: M2 shipped on the branch. T3 (fast_worker) passed review with no rework. The browser gate on the local stack covered the seeded Chongqing/Chengdu trip at 375×812 and 1440×900, with 3 ready, 6 coming up and 1 done, matching `active_todos`. It also covered the instant badge, the last-tick toast, Escape and focus return, the offline read-only state, an open form failing offline without queueing, and create with the Book-by pre-fill. Two existing layout bugs that the feature made worse were fixed: the offline banner blocked the top-right buttons (it now fades after 5s and passes taps through), and the expanded mobile timeline ran under them (it now drops below).
+- 2026-10-17: M1 shipped on the branch. The T1 gate passed 16/16 checks on the local stack. T2 (fast_worker) passed review with no rework: 720 tests, `api/` untouched.
 - 2026-10-17: Acceptance tightened after spec review round 1: relative-date gate fixtures, offline fail-fast, the clock hook, the ESM rule as the hook enforces it, the buster, the no-stops view and keyboard checks, and the release order.
 - 2026-10-17: Plan written after the brainstormed design. T1/T4/T5 kept by the driver (security-relevant SQL, release prose, acceptance). T2/T3 delegated to `fast_worker` in sequence because T3 builds on T2's types and hooks.
