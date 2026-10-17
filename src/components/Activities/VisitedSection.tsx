@@ -10,6 +10,8 @@ import { formatVisitDay, type VisitedGroup } from '@/utils/tripUtils';
 
 interface VisitedSectionProps {
   accommodation?: Accommodation;
+  // True for a moment right after a planned item is ticked into this section.
+  arrived?: boolean;
   groups: VisitedGroup[];
   onDeleteActivity?: (activity: Activity) => void;
   onDeleteWaypoint?: (waypoint: ScenicWaypoint) => void;
@@ -29,6 +31,7 @@ interface VisitedSectionProps {
 export const VisitedSection = ({
   groups,
   accommodation,
+  arrived = false,
   selectedActivityId,
   todoByActivity,
   trip,
@@ -43,65 +46,78 @@ export const VisitedSection = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const total = groups.reduce((count, group) => count + group.items.length, 0);
 
-  if (total === 0) {
-    return null;
-  }
-
+  // The live region sits first in both branches so it stays the same node when the
+  // first visited item mounts the section; a freshly mounted region isn't announced.
   return (
-    <div className="px-3 pb-3">
-      <button
-        className="flex min-h-[30px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/20 px-4 py-3 font-medium text-emerald-700 transition-all duration-200 hover:bg-emerald-500/30 hover:shadow-md active:bg-emerald-500/40"
-        onClick={() => setIsExpanded(!isExpanded)}
-        type="button"
-      >
-        <span>🗓️ Visited ({total})</span>
-        {isExpanded ? <ChevronUpIcon className="h-4 w-4" /> : <ChevronDownIcon className="h-4 w-4" />}
-      </button>
+    <>
+      <span aria-live="polite" className="sr-only">
+        {arrived ? `Moved to Visited, ${total} so far` : ''}
+      </span>
+      {total > 0 && (
+        <div className="px-3 pb-3">
+          <button
+            className={`flex min-h-[30px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/20 px-4 py-3 font-medium text-emerald-700 transition-all duration-200 hover:bg-emerald-500/30 hover:shadow-md active:bg-emerald-500/40 ${
+              arrived ? 'visited-arrive' : ''
+            }`}
+            onClick={() => setIsExpanded(!isExpanded)}
+            type="button"
+          >
+            <span>
+              🗓️ Visited (
+              <span className={`inline-block tabular-nums ${arrived ? 'visited-count-tick' : ''}`} key={total}>
+                {total}
+              </span>
+              )
+            </span>
+            {isExpanded ? <ChevronUpIcon className="h-4 w-4" /> : <ChevronDownIcon className="h-4 w-4" />}
+          </button>
 
-      {isExpanded && (
-        <div className="mt-3 space-y-4">
-          {groups.map((group) => (
-            <div key={group.date ?? 'undated'}>
-              <h4 className="mb-2 font-semibold text-emerald-800 text-xs">
-                {group.date ? formatVisitDay(group.date) : 'Time not recorded'}
-              </h4>
-              <div className="space-y-3">
-                {group.items.map((entry) =>
-                  entry.kind === 'activity' ? (
-                    <ActivityListItem
-                      accommodation={accommodation}
-                      activity={entry.item}
-                      isDraggable={false}
-                      isSelected={selectedActivityId === entry.item.activity_id}
-                      key={entry.item.activity_id}
-                      linkedTodo={todoByActivity?.[entry.item.activity_id]}
-                      onDelete={onDeleteActivity}
-                      onDone={onItemDone}
-                      onEdit={onEditActivity}
-                      onSelect={onSelect}
-                      trip={trip}
-                      tripId={tripId}
-                    />
-                  ) : (
-                    <WaypointListItem
-                      accommodation={accommodation}
-                      isSelected={selectedActivityId === entry.item.activity_id}
-                      key={entry.item.activity_id}
-                      onDelete={onDeleteWaypoint}
-                      onDone={onItemDone}
-                      onEdit={onEditWaypoint}
-                      onSelect={onSelect}
-                      trip={trip}
-                      tripId={tripId}
-                      waypoint={entry.item}
-                    />
-                  )
-                )}
-              </div>
+          {isExpanded && (
+            <div className="mt-3 space-y-4">
+              {groups.map((group) => (
+                <div key={group.date ?? 'undated'}>
+                  <h4 className="mb-2 font-semibold text-emerald-800 text-xs">
+                    {group.date ? formatVisitDay(group.date) : 'Time not recorded'}
+                  </h4>
+                  <div className="space-y-3">
+                    {group.items.map((entry) =>
+                      entry.kind === 'activity' ? (
+                        <ActivityListItem
+                          accommodation={accommodation}
+                          activity={entry.item}
+                          isDraggable={false}
+                          isSelected={selectedActivityId === entry.item.activity_id}
+                          key={entry.item.activity_id}
+                          linkedTodo={todoByActivity?.[entry.item.activity_id]}
+                          onDelete={onDeleteActivity}
+                          onDone={onItemDone}
+                          onEdit={onEditActivity}
+                          onSelect={onSelect}
+                          trip={trip}
+                          tripId={tripId}
+                        />
+                      ) : (
+                        <WaypointListItem
+                          accommodation={accommodation}
+                          isSelected={selectedActivityId === entry.item.activity_id}
+                          key={entry.item.activity_id}
+                          onDelete={onDeleteWaypoint}
+                          onDone={onItemDone}
+                          onEdit={onEditWaypoint}
+                          onSelect={onSelect}
+                          trip={trip}
+                          tripId={tripId}
+                          waypoint={entry.item}
+                        />
+                      )
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 };

@@ -98,6 +98,19 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   // the map, the timeline, and the sort orders new items are appended with.
   const { planned, plannedWaypoints, visitedGroups } = partitionByVisit(activities, scenicWaypoints);
 
+  // A ticked item vanishes from the planned list, so the Visited toggle takes it
+  // in visibly. A timer, not animationend, clears the flag: under reduced motion
+  // no animation runs, and a stale flag would misfire on the next stop.
+  const [visitedArrived, setVisitedArrived] = useState(false);
+  const arrivalTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  useEffect(() => () => clearTimeout(arrivalTimerRef.current), []);
+  const handleItemDone = (itemId: string) => {
+    clearTimeout(arrivalTimerRef.current);
+    setVisitedArrived(true);
+    arrivalTimerRef.current = setTimeout(() => setVisitedArrived(false), 700);
+    onItemDone(itemId);
+  };
+
   // Screen size detection
   const { isMobile } = useScreenSize();
 
@@ -396,7 +409,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                       isSelected={selectedActivityId === waypoint.activity_id}
                       key={waypoint.activity_id}
                       onDelete={isOnline ? setDeletingWaypoint : undefined}
-                      onDone={onItemDone}
+                      onDone={handleItemDone}
                       onEdit={isOnline ? (waypoint) => setWaypointModal({ mode: 'edit', waypoint }) : undefined}
                       onSelect={onActivitySelect}
                       trip={tripData}
@@ -478,7 +491,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   key={baseId}
                   onActivitySelect={onActivitySelect}
                   onDeleteActivity={isOnline ? setDeletingActivity : undefined}
-                  onDone={onItemDone}
+                  onDone={handleItemDone}
                   onEditActivity={isOnline ? (activity) => setActivityModal({ mode: 'edit', activity }) : undefined}
                   onReorder={onReorder}
                   selectedActivityId={selectedActivityId}
@@ -507,6 +520,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           {/* Visited Section — its own collapse state, so it stays reachable while activities are collapsed */}
           <VisitedSection
             accommodation={accommodation}
+            arrived={visitedArrived}
             groups={visitedGroups}
             onDeleteActivity={isOnline ? setDeletingActivity : undefined}
             onDeleteWaypoint={isOnline ? setDeletingWaypoint : undefined}

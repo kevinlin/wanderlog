@@ -180,6 +180,20 @@ describe('ActivitiesPanel planned/visited split', () => {
     expect(screen.getByText('Everything here is ticked off.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /Visited \(1\)/ })).toBeInTheDocument();
   });
+
+  it('shows and announces where a ticked item went, only on a tick', async () => {
+    const user = userEvent.setup();
+    const { rerender } = renderPanel({ activities: [act('Ramen'), act('Sushi', { status: { done: true } })] });
+
+    expect(screen.getByRole('button', { name: /Visited \(1\)/ })).not.toHaveClass('visited-arrive');
+
+    await user.click(screen.getByRole('button', { name: /Activities \(1\)/ }));
+    await user.click(screen.getByLabelText('Mark "Ramen" done'));
+    rerender({ activities: [act('Ramen', { status: { done: true } }), act('Sushi', { status: { done: true } })] });
+
+    expect(screen.getByRole('button', { name: /Visited \(2\)/ })).toHaveClass('visited-arrive');
+    expect(screen.getByText('Moved to Visited, 2 so far')).toBeInTheDocument();
+  });
 });
 
 describe('ActivitiesPanel todo chips', () => {
