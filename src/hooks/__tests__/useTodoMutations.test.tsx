@@ -1,4 +1,4 @@
-import { onlineManager, QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { dehydrate, onlineManager, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, renderHook, screen, waitFor } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -15,6 +15,7 @@ vi.mock('@/services/supabaseService', () => ({
 }));
 
 import { ToastProvider } from '@/components/Layout/Toast';
+import { shouldPersistMutation } from '@/lib/mutationDefaults';
 import { tripKeys } from '@/lib/queryClient';
 import type { TripData } from '@/types/trip';
 import { useCreateTodo, useDeleteTodo, useSetTodoDone, useUpdateTodo } from '../useTodoMutations';
@@ -349,6 +350,12 @@ describe('write order', () => {
     await waitFor(() => expect(todosOf(client)?.find((todo) => todo.todo_id === 'todo-new')?.done).toBe(true));
     await new Promise((resolve) => setTimeout(resolve, 20));
     expect(mockSetTodoDone).not.toHaveBeenCalled();
+
+    // A write queued behind its scope counts as paused, and the default rule
+    // would persist it with no way to run it again after a reload. The app's
+    // rule must leave it out.
+    expect(dehydrate(client).mutations).toHaveLength(1);
+    expect(dehydrate(client, { shouldDehydrateMutation: shouldPersistMutation }).mutations).toHaveLength(0);
 
     releaseCreate();
 
