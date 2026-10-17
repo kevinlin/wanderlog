@@ -116,12 +116,12 @@ export class ErrorBoundary extends Component<Props, State> {
                 </summary>
                 <div className="mt-3 space-y-3">
                   <div>
-                    <h4 className="font-semibold text-gray-600 text-xs uppercase tracking-wide">Error Message</h4>
+                    <h4 className="font-semibold text-gray-600 text-xs">Error Message</h4>
                     <pre className="mt-1 overflow-auto rounded-sm bg-red-50 p-2 text-red-600 text-xs">{this.state.error.message}</pre>
                   </div>
 
                   <div>
-                    <h4 className="font-semibold text-gray-600 text-xs uppercase tracking-wide">Stack Trace</h4>
+                    <h4 className="font-semibold text-gray-600 text-xs">Stack Trace</h4>
                     <pre className="mt-1 max-h-40 overflow-auto rounded-sm bg-red-50 p-2 text-red-600 text-xs">
                       {this.state.error.stack}
                     </pre>
@@ -129,7 +129,7 @@ export class ErrorBoundary extends Component<Props, State> {
 
                   {this.state.errorInfo && (
                     <div>
-                      <h4 className="font-semibold text-gray-600 text-xs uppercase tracking-wide">Component Stack</h4>
+                      <h4 className="font-semibold text-gray-600 text-xs">Component Stack</h4>
                       <pre className="mt-1 max-h-40 overflow-auto rounded-sm bg-gray-50 p-2 text-gray-600 text-xs">
                         {this.state.errorInfo.componentStack}
                       </pre>

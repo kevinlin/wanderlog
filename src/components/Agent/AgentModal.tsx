@@ -179,7 +179,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
           {phase === 'done' && (
             <>
               {lines.length > 0 && (
-                <ul className="flex flex-col gap-1 text-gray-400 text-xs">
+                <ul className="flex flex-col gap-1 text-gray-600 text-xs">
                   {lines.map((line, index) => (
                     <li key={`${index}-${line}`}>{line}</li>
                   ))}

@@ -62,7 +62,7 @@ export const VisitedSection = ({
         <div className="mt-3 space-y-4">
           {groups.map((group) => (
             <div key={group.date ?? 'undated'}>
-              <h4 className="mb-2 font-semibold text-emerald-800 text-xs uppercase tracking-wide">
+              <h4 className="mb-2 font-semibold text-emerald-800 text-xs">
                 {group.date ? formatVisitDay(group.date) : 'Time not recorded'}
               </h4>
               <div className="space-y-3">
