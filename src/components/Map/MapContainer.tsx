@@ -1,29 +1,28 @@
-import { DirectionsRenderer, GoogleMap, Marker, Polyline, useJsApiLoader } from '@react-google-maps/api';
+import { DirectionsRenderer, GoogleMap, Polyline, useJsApiLoader } from '@react-google-maps/api';
 import type React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { LoadingSpinner } from '@/components/Layout/LoadingSpinner';
 import { MapLayerPicker, type MapTypeId, type OverlayLayers } from '@/components/Map/MapLayerPicker';
+import { MapMarker } from '@/components/Map/MapMarker';
+import { ActivityFace, DotFace, PoiFace, StopFace, WaypointFace } from '@/components/Map/MarkerFaces';
+import { getActivityMarker, WAYPOINT_MARKER } from '@/components/Map/markerCategory';
 import { PlaceHoverCard } from '@/components/Map/PlaceHoverCard';
 import { POIModal } from '@/components/Map/POIModal';
-import { MAPS_LOADER_OPTIONS } from '@/config/mapsLoader';
+import { MAP_ID, MAPS_LOADER_OPTIONS } from '@/config/mapsLoader';
 import { useAppStateContext } from '@/contexts/AppStateContext';
 import { useCreateActivity, useCreateWaypoint } from '@/hooks/useTripMutations';
+import { useTripToday } from '@/hooks/useTripToday';
 import { PlacesService } from '@/services/placesService';
 import { getMapLayerPreferences, saveMapType, saveOverlayLayers } from '@/services/viewStateStorage';
 import type { ScenicWaypoint } from '@/types/map';
 import type { POIDetails } from '@/types/poi';
-import { type Accommodation, type Activity, ActivityType, type TripBase, type TripData } from '@/types/trip';
-import {
-  enrichActivityWithType,
-  getAccommodationSvgPath,
-  getActivityTypeColor,
-  getActivityTypeSvgPath,
-  getScenicWaypointSvgPath,
-  inferActivityType,
-} from '@/utils/activityUtils';
-import * as dateUtils from '@/utils/dateUtils';
+import type { Accommodation, Activity, TripData } from '@/types/trip';
+import { enrichActivityWithType, inferActivityType, inferActivityTypeFromGooglePlaces } from '@/utils/activityUtils';
+import { getStopTimeStatus } from '@/utils/dateUtils';
 import { flyCamera, type LatLng } from '@/utils/mapCamera';
-import '@/assets/styles/map-animations.css';
+import { getStopColor, getStopInitials } from '@/utils/stopPalette';
+import { partitionByVisit } from '@/utils/tripUtils';
+import '@/assets/styles/map-markers.css';
 
 // The travelling pulse + trail drawn along a leg while the camera flies to the next stop.
 const TRAVEL_COLOR = '#4a9e9e'; // Alpine teal — reads as "this trip", matches the route line.
@@ -36,6 +35,7 @@ interface HoverState {
   isDone?: boolean;
   position: { x: number; y: number };
   scenicWaypoint?: ScenicWaypoint;
+  stopColor?: string;
   stopName?: string;
   type: 'accommodation' | 'activity' | 'scenic_waypoint';
 }
@@ -59,41 +59,13 @@ const center = {
   lng: 170.0,
 };
 
-// Travel journal map styling with pastel colors and reduced POI clutter
-const customMapStyle = [
-  {
-    featureType: 'poi',
-    stylers: [{ visibility: 'simplified' }],
-  },
-  {
-    featureType: 'poi.business',
-    stylers: [{ visibility: 'off' }],
-  },
-  {
-    featureType: 'transit',
-    stylers: [{ visibility: 'off' }],
-  },
-  {
-    featureType: 'road',
-    elementType: 'geometry',
-    stylers: [{ color: '#f5f1e8' }],
-  },
-  {
-    featureType: 'water',
-    elementType: 'geometry',
-    stylers: [{ color: '#c8e6f5' }],
-  },
-  {
-    featureType: 'landscape',
-    elementType: 'geometry',
-    stylers: [{ color: '#f9f7ed' }],
-  },
-  {
-    featureType: 'landscape.natural',
-    elementType: 'geometry',
-    stylers: [{ color: '#e8f5e8' }],
-  },
-];
+// Below this zoom the overview shows dots instead of full markers.
+const ZOOM_DOTS_BELOW = 11;
+
+type Located<T> = T & { location: { lat: number; lng: number } };
+
+const hasLocation = <T extends { location?: { lat?: number; lng?: number } }>(item: T): item is Located<T> =>
+  Boolean(item.location?.lat && item.location?.lng);
 
 export const MapContainer: React.FC<MapContainerProps> = ({
   tripData,
@@ -113,6 +85,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const [isMapLoaded, setIsMapLoaded] = useState(false);
   const [routeError, setRouteError] = useState<string | null>(null);
   const [hoverState, setHoverState] = useState<HoverState | null>(null);
+  // The stop whose camera hop has landed. Its activities and waypoints are drawn only then,
+  // so a stop arrives first and its places follow.
+  const [landedStopId, setLandedStopId] = useState<string | null>(null);
+  const [isZoomedOut, setIsZoomedOut] = useState(false);
+  const today = useTripToday(tripData.timezone);
   const placesServiceRef = useRef<PlacesService | null>(null);
 
   // Map layer state - initialize from localStorage
@@ -135,10 +112,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   const transitLayerRef = useRef<google.maps.TransitLayer | null>(null);
   const bicyclingLayerRef = useRef<google.maps.BicyclingLayer | null>(null);
 
-  // Refs to store marker instances for animation
-  const accommodationMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
-  const activityMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
-  const scenicWaypointMarkersRef = useRef<Map<string, google.maps.Marker>>(new Map());
   const previousSelectedActivityRef = useRef<string | null>(null);
   const previousCurrentBaseRef = useRef<string | null>(null);
 
@@ -260,12 +233,18 @@ export const MapContainer: React.FC<MapContainerProps> = ({
   // The signature "reaching the next stop" moment: ease the camera along the
   // leg (pulling back for long legs), tracing a pulse + growing trail from the
   // previous stop to the new one. Reduced motion settles instantly with no viz.
+  // Every path publishes the landing; a cancelled hop never reaches onDone, so only the
+  // active hop can, and going A -> B -> A before B lands still waits for A's own landing.
   const animateStopHop = useCallback(
-    (from: LatLng | null, to: LatLng) => {
-      if (!mapInstance) return;
+    (from: LatLng | null, to: LatLng, stopId: string) => {
+      if (!mapInstance) {
+        setLandedStopId(stopId);
+        return;
+      }
 
       if (prefersReducedMotion) {
         applyCamera(to, PLACE_ZOOM_LEVEL);
+        setLandedStopId(stopId);
         return;
       }
 
@@ -336,6 +315,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           }
         },
         onDone: () => {
+          setLandedStopId(stopId);
           if (travelVizRef.current) {
             fadeOutTravelViz();
           } else {
@@ -347,100 +327,11 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     [mapInstance, applyCamera, clearTravelViz, fadeOutTravelViz]
   );
 
-  // Convert lat/lng to screen position for hover card placement
-  const getScreenPosition = useCallback(
-    (lat: number, lng: number): { x: number; y: number } => {
-      if (!mapInstance) return { x: 0, y: 0 };
-
-      const projection = mapInstance.getProjection();
-      if (!projection) return { x: 0, y: 0 };
-
-      const bounds = mapInstance.getBounds();
-      const ne = bounds?.getNorthEast();
-      const sw = bounds?.getSouthWest();
-
-      if (!(ne && sw)) return { x: 0, y: 0 };
-
-      const mapDiv = mapInstance.getDiv();
-      const mapWidth = mapDiv.offsetWidth;
-      const mapHeight = mapDiv.offsetHeight;
-
-      const latRange = ne.lat() - sw.lat();
-      const lngRange = ne.lng() - sw.lng();
-
-      const x = ((lng - sw.lng()) / lngRange) * mapWidth;
-      const y = ((ne.lat() - lat) / latRange) * mapHeight;
-
-      return { x, y };
-    },
-    [mapInstance]
-  );
-
-  // Hover handlers for markers
-  const handleAccommodationHover = useCallback(
-    (base: TripBase, isEntering: boolean) => {
-      if (!isEntering) {
-        setHoverState(null);
-        return;
-      }
-
-      const position = base.accommodation?.location || base.location;
-      const screenPos = getScreenPosition(position.lat, position.lng);
-
-      setHoverState({
-        type: 'accommodation',
-        id: base.stop_id,
-        position: screenPos,
-        accommodation: base.accommodation,
-        stopName: base.name,
-      });
-    },
-    [getScreenPosition]
-  );
-
-  const handleActivityHover = useCallback(
-    (activity: Activity, isEntering: boolean) => {
-      if (!isEntering) {
-        setHoverState(null);
-        return;
-      }
-
-      if (!(activity.location?.lat && activity.location?.lng)) return;
-
-      const screenPos = getScreenPosition(activity.location.lat, activity.location.lng);
-
-      setHoverState({
-        type: 'activity',
-        id: activity.activity_id,
-        position: screenPos,
-        activity,
-        isDone: activityStatus[activity.activity_id],
-      });
-    },
-    [getScreenPosition, activityStatus]
-  );
-
-  const handleScenicWaypointHover = useCallback(
-    (waypoint: ScenicWaypoint, isEntering: boolean) => {
-      if (!isEntering) {
-        setHoverState(null);
-        return;
-      }
-
-      if (!(waypoint.location?.lat && waypoint.location?.lng)) return;
-
-      const screenPos = getScreenPosition(waypoint.location.lat, waypoint.location.lng);
-
-      setHoverState({
-        type: 'scenic_waypoint',
-        id: waypoint.activity_id,
-        position: screenPos,
-        scenicWaypoint: waypoint,
-        isDone: activityStatus[waypoint.activity_id] || waypoint.status?.done,
-      });
-    },
-    [getScreenPosition, activityStatus]
-  );
+  // MapMarker reports the hovered marker's viewport rect (mouse only). The card is
+  // position: fixed, so the rect's bottom centre is exactly what it needs.
+  const showHoverCard = useCallback((rect: DOMRect | null, state: Omit<HoverState, 'position'>) => {
+    setHoverState(rect ? { ...state, position: { x: rect.left + rect.width / 2, y: rect.bottom } } : null);
+  }, []);
 
   // Route fetching effect
   useEffect(() => {
@@ -529,59 +420,25 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     fetchRoute();
   }, [isMapLoaded, tripData?.stops]);
 
-  // Animation effects for pin highlighting
+  // The only caller of animateStopHop: switching stops reads as a journey rather than a jump.
   useEffect(() => {
-    // Animate accommodation pin and scenic waypoints when base selection changes
     if (currentBaseId && currentBaseId !== previousCurrentBaseRef.current && isMapLoaded) {
-      // Fly from the stop we came from to the one just selected, so switching
-      // stops reads as a journey rather than a jump.
+      // Fly from the stop we came from to the one just selected.
       const previousStop = tripData?.stops?.find((stop) => stop.stop_id === previousCurrentBaseRef.current);
       const currentStop = tripData?.stops?.find((stop) => stop.stop_id === currentBaseId);
       if (currentStop) {
         const target = currentStop.accommodation?.location || currentStop.location;
         const origin = previousStop ? previousStop.accommodation?.location || previousStop.location : null;
-        animateStopHop(origin ? { lat: origin.lat, lng: origin.lng } : null, { lat: target.lat, lng: target.lng });
-      }
-
-      // Animate the accommodation marker
-      const accommodationMarker = accommodationMarkersRef.current.get(currentBaseId);
-      if (accommodationMarker && window.google?.maps?.Animation && !prefersReducedMotion) {
-        // Use Google Maps DROP animation
-        accommodationMarker.setAnimation(window.google.maps.Animation.DROP);
-        // Stop animation after duration
-        setTimeout(() => {
-          if (accommodationMarker.getAnimation()) {
-            accommodationMarker.setAnimation(null);
-          }
-        }, 600);
-      }
-
-      // Animate all scenic waypoints for the current base
-      if (currentStop?.scenic_waypoints) {
-        currentStop.scenic_waypoints.forEach((waypoint, index) => {
-          const marker = scenicWaypointMarkersRef.current.get(waypoint.activity_id);
-          if (marker && window.google?.maps?.Animation) {
-            // Stagger the animations slightly for visual effect
-            setTimeout(() => {
-              if (!prefersReducedMotion) {
-                marker.setAnimation(window.google.maps.Animation.DROP);
-                setTimeout(() => {
-                  if (marker.getAnimation()) {
-                    marker.setAnimation(null);
-                  }
-                }, 600);
-              }
-            }, index * 100); // 100ms delay between each waypoint animation
-          }
-        });
+        setLandedStopId(null);
+        animateStopHop(origin ? { lat: origin.lat, lng: origin.lng } : null, { lat: target.lat, lng: target.lng }, currentBaseId);
       }
 
       previousCurrentBaseRef.current = currentBaseId;
     }
-  }, [currentBaseId, isMapLoaded, tripData?.stops, prefersReducedMotion, animateStopHop]);
+  }, [currentBaseId, isMapLoaded, tripData?.stops, animateStopHop]);
 
   useEffect(() => {
-    // Animate activity pin and center/zoom when activity selection changes
+    // Center and zoom when activity selection changes
     if (selectedActivityId && selectedActivityId !== previousSelectedActivityRef.current && isMapLoaded) {
       // Find the current base from tripData
       const currentStop = tripData?.stops?.find((stop) => stop.stop_id === currentBaseId);
@@ -596,24 +453,20 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       } else if (scenicWaypoint?.location?.lat && scenicWaypoint?.location?.lng) {
         centerAndZoomOnLocation(scenicWaypoint.location.lat, scenicWaypoint.location.lng);
       }
-
-      // Animate the marker
-      const marker = activityMarkersRef.current.get(selectedActivityId) || scenicWaypointMarkersRef.current.get(selectedActivityId);
-      if (marker && window.google?.maps?.Animation && !prefersReducedMotion) {
-        // Use Google Maps DROP animation
-        marker.setAnimation(window.google.maps.Animation.DROP);
-        // Stop animation after duration
-        setTimeout(() => {
-          if (marker.getAnimation()) {
-            marker.setAnimation(null);
-          }
-        }, 600);
-      }
       previousSelectedActivityRef.current = selectedActivityId;
     } else if (!selectedActivityId) {
       previousSelectedActivityRef.current = null;
     }
-  }, [selectedActivityId, isMapLoaded, currentBaseId, tripData?.stops, centerAndZoomOnLocation, prefersReducedMotion]);
+  }, [selectedActivityId, isMapLoaded, currentBaseId, tripData?.stops, centerAndZoomOnLocation]);
+
+  // A boolean, so React skips the re-render on the fractional-zoom frames of a hop.
+  useEffect(() => {
+    if (!mapInstance) return;
+    const readZoom = () => setIsZoomedOut((mapInstance.getZoom() ?? 0) < ZOOM_DOTS_BELOW);
+    readZoom();
+    const listener = mapInstance.addListener('zoom_changed', readZoom);
+    return () => listener.remove();
+  }, [mapInstance]);
 
   // Map type change handler
   const handleMapTypeChange = useCallback(
@@ -689,174 +542,6 @@ export const MapContainer: React.FC<MapContainerProps> = ({
     },
     []
   );
-
-  // Determine base status for styling
-  const getBaseStatus = (baseId: string): 'past' | 'current' | 'upcoming' => {
-    if (!tripData) return 'upcoming';
-
-    const base = tripData.stops.find((s) => s.stop_id === baseId);
-    if (!base) return 'upcoming';
-
-    const today = dateUtils.getCurrentNZDate();
-    const baseFromDate = dateUtils.parseDate(base.date.from);
-    const baseToDate = dateUtils.parseDate(base.date.to);
-
-    if (today < baseFromDate) return 'upcoming';
-    if (today > baseToDate) return 'past';
-    return 'current';
-  };
-
-  // Accommodation pin (lodge-style)
-  const getAccommodationPinIcon = (baseId: string, isSelected: boolean, isHovered = false) => {
-    const status = getBaseStatus(baseId);
-    const color = '#f97316'; // Orange-500 for active states
-    const strokeColor = '#ea580c'; // Orange-600 for outline
-    let opacity = 1.0;
-
-    if (status === 'past') {
-      opacity = 0.3;
-    } else if (status === 'upcoming') {
-      opacity = 0.7;
-    }
-
-    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
-    const selectedSize = 33; // 1.1x hover scaling
-    const size = isSelected || isHovered ? selectedSize : baseSize;
-    const svgPath = getAccommodationSvgPath();
-
-    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-            <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
-          </filter>
-        </defs>
-        <path d="${svgPath}" 
-              fill="${color}" 
-              fill-opacity="${opacity}"
-              stroke="${strokeColor}" 
-              stroke-width="1" 
-              filter="url(#shadow)"/>
-      </svg>
-    `)}`;
-
-    return {
-      url: iconUrl,
-      scaledSize: new window.google.maps.Size(size, size),
-      anchor: new window.google.maps.Point(size / 2, size),
-    };
-  };
-
-  // Activity pin with type-specific colors
-  const getActivityPinIcon = (activityType: ActivityType, isSelected: boolean, isVisited = false, isHovered = false) => {
-    // Use activity type-specific color from activityUtils, green for visited
-    const color = isVisited ? '#10b981' : getActivityTypeColor(activityType); // Emerald-500 for visited, type-specific for unvisited
-    const svgPath = getActivityTypeSvgPath(activityType);
-
-    // Calculate stroke color (darker version of fill color)
-    const strokeHex =
-      color.length === 7
-        ? '#' +
-            color
-              .slice(1)
-              .match(/.{2}/g)
-              ?.map((hex) =>
-                Math.max(0, Number.parseInt(hex, 16) - 40)
-                  .toString(16)
-                  .padStart(2, '0')
-              )
-              .join('') || color
-        : color;
-
-    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
-    const selectedSize = 33; // 1.1x hover scaling
-    const size = isSelected || isHovered ? selectedSize : baseSize;
-
-    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="${svgPath}" 
-              fill="${color}" 
-              stroke="${strokeHex}" 
-              stroke-width="1"/>
-      </svg>
-    `)}`;
-
-    return {
-      url: iconUrl,
-      scaledSize: new window.google.maps.Size(size, size),
-      anchor: new window.google.maps.Point(size / 2, size),
-    };
-  };
-
-  // Scenic waypoint pin with distinctive violet styling
-  const getScenicWaypointPinIconFn = (isSelected: boolean, isVisited = false, isHovered = false) => {
-    // Violet color scheme for scenic waypoints
-    const color = isVisited ? '#10b981' : '#8b5cf6'; // Emerald-500 for visited, Violet-500 for unvisited
-    const svgPath = getScenicWaypointSvgPath();
-
-    // Calculate stroke color (darker version of fill color)
-    const strokeHex =
-      color.length === 7
-        ? '#' +
-            color
-              .slice(1)
-              .match(/.{2}/g)
-              ?.map((hex) =>
-                Math.max(0, Number.parseInt(hex, 16) - 40)
-                  .toString(16)
-                  .padStart(2, '0')
-              )
-              .join('') || color
-        : color;
-
-    const baseSize = 30; // 1.5x larger than Google Maps default (20px)
-    const selectedSize = 33; // 1.1x hover scaling
-    const size = isSelected || isHovered ? selectedSize : baseSize;
-
-    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="${svgPath}" 
-              fill="${color}" 
-              stroke="${strokeHex}" 
-              stroke-width="1"/>
-      </svg>
-    `)}`;
-
-    return {
-      url: iconUrl,
-      scaledSize: new window.google.maps.Size(size, size),
-      anchor: new window.google.maps.Point(size / 2, size),
-    };
-  };
-
-  // POI search result pin with distinctive rose/coral styling
-  const getSearchResultPinIcon = (isHovered = false) => {
-    const color = '#f43f5e'; // Rose-500 for search results
-    const strokeColor = '#e11d48'; // Rose-600 for outline
-
-    // Search result icon: magnifying glass / location marker combo
-    const svgPath =
-      'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z';
-
-    const baseSize = 28;
-    const selectedSize = 31;
-    const size = isHovered ? selectedSize : baseSize;
-
-    const iconUrl = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
-      <svg width="${size}" height="${size}" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="${svgPath}" 
-              fill="${color}" 
-              stroke="${strokeColor}" 
-              stroke-width="1"/>
-      </svg>
-    `)}`;
-
-    return {
-      url: iconUrl,
-      scaledSize: new window.google.maps.Size(size, size),
-      anchor: new window.google.maps.Point(size / 2, size),
-    };
-  };
 
   // POI click handler
   const handlePOIClick = useCallback(
@@ -941,6 +626,12 @@ export const MapContainer: React.FC<MapContainerProps> = ({
 
   const currentBase = tripData?.stops?.find((stop) => stop.stop_id === currentBaseId);
 
+  // Enriched first, so the marker, its title and the hover card all use the inferred type.
+  const placedActivities = (currentBase?.activities ?? []).filter(hasLocation).map(enrichActivityWithType).filter(hasLocation);
+  const placedWaypoints = (currentBase?.scenic_waypoints ?? []).filter(hasLocation);
+  const nextActivityId = partitionByVisit(placedActivities, placedWaypoints).planned[0]?.activity_id;
+  const showPlaces = Boolean(currentBase) && landedStopId === currentBaseId;
+
   const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || process.env.VITE_GOOGLE_MAPS_API_KEY;
 
   if (!apiKey) {
@@ -973,7 +664,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       onLoad={onLoad}
       onUnmount={onUnmount}
       options={{
-        styles: mapType === 'roadmap' ? customMapStyle : undefined, // Only apply custom styles to roadmap
+        mapId: MAP_ID, // Required by AdvancedMarkerElement; the JSON `styles` option cannot coexist with it
         mapTypeId: mapType,
         disableDefaultUI: false,
         zoomControl: true,
@@ -996,100 +687,140 @@ export const MapContainer: React.FC<MapContainerProps> = ({
       {/* Only render markers after map is loaded */}
       {isMapLoaded && tripData?.stops && (
         <>
-          {/* Accommodation markers (lodge-style pins) */}
-          {tripData.stops.map((base) => {
-            const isHovered = hoverState?.type === 'accommodation' && hoverState?.id === base.stop_id;
-            const position = base.accommodation?.location || base.location;
-            const title = base.accommodation ? `${base.name} - ${base.accommodation.name}` : base.name;
+          {tripData.stops.map((stop, index) => {
+            const status = getStopTimeStatus(stop, today);
+            const statusLabel = status === 'current' ? 'today' : status;
+            const isViewing = stop.stop_id === currentBaseId;
+            const color = getStopColor(index).color;
+            const position = stop.accommodation?.location || stop.location;
+            const title = stop.accommodation ? `${stop.name} - ${stop.accommodation.name}, ${statusLabel}` : `${stop.name}, ${statusLabel}`;
             return (
-              <Marker
-                icon={getAccommodationPinIcon(base.stop_id, base.stop_id === currentBaseId, isHovered)}
-                key={`accommodation-${base.stop_id}`}
-                onClick={() => onBaseSelect(base.stop_id)}
-                onLoad={(marker) => {
-                  accommodationMarkersRef.current.set(base.stop_id, marker);
-                }}
-                onMouseOut={() => handleAccommodationHover(base, false)}
-                onMouseOver={() => handleAccommodationHover(base, true)}
-                onUnmount={() => {
-                  accommodationMarkersRef.current.delete(base.stop_id);
-                }}
-                position={position}
+              <MapMarker
+                key={`stop-${stop.stop_id}`}
+                onClick={() => onBaseSelect(stop.stop_id)}
+                onHoverChange={(rect) =>
+                  showHoverCard(rect, {
+                    type: 'accommodation',
+                    id: stop.stop_id,
+                    accommodation: stop.accommodation,
+                    stopName: stop.name,
+                    stopColor: color,
+                  })
+                }
+                position={{ lat: position.lat, lng: position.lng }}
                 title={title}
-              />
+                zIndex={isViewing ? 30 : 10}
+              >
+                {/* Keyed on the landing so the drop replays each time the stop is reached */}
+                <StopFace
+                  color={color}
+                  initials={getStopInitials(stop.name)}
+                  isLanding={isViewing && landedStopId === stop.stop_id}
+                  isViewing={isViewing}
+                  key={`${stop.stop_id}-${landedStopId}`}
+                  name={stop.name}
+                  showLabel={isViewing && isZoomedOut}
+                  status={status}
+                />
+              </MapMarker>
             );
           })}
 
-          {/* Activity markers for current base with standardized visited/unvisited colors */}
-          {currentBase?.activities
-            .filter((activity) => activity.location?.lat && activity.location?.lng)
-            .map((activity) => {
-              // TypeScript safety: we know location exists due to filter above
-              const location = activity.location!;
-              const enrichedActivity = enrichActivityWithType(activity);
-              const activityType = enrichedActivity.activity_type || ActivityType.OTHER;
-              const isVisited = activityStatus[activity.activity_id];
-              const isHovered = hoverState?.type === 'activity' && hoverState?.id === activity.activity_id;
+          {/* Activities and scenic waypoints of the viewed stop, once the camera has landed */}
+          {showPlaces &&
+            placedActivities.map((activity, index) => {
+              const { lat, lng } = activity.location;
+              const isDone = Boolean(activityStatus[activity.activity_id]);
+              const isSelected = activity.activity_id === selectedActivityId;
+              const isNext = activity.activity_id === nextActivityId;
+              const { color, Glyph } = getActivityMarker(activity.activity_type);
+              const asDot = isZoomedOut && !isSelected;
+              let zIndex = 20;
+              if (isSelected) zIndex = 40;
+              else if (isDone) zIndex = 15;
+              let suffix = '';
+              if (isDone) suffix = ', done';
+              else if (isNext) suffix = ', next up';
 
               return (
-                <Marker
-                  icon={getActivityPinIcon(activityType, activity.activity_id === selectedActivityId, isVisited, isHovered)}
+                <MapMarker
+                  centred={asDot}
                   key={`activity-${activity.activity_id}`}
                   onClick={() => onActivitySelect(activity.activity_id)}
-                  onLoad={(marker) => {
-                    activityMarkersRef.current.set(activity.activity_id, marker);
-                  }}
-                  onMouseOut={() => handleActivityHover(activity, false)}
-                  onMouseOver={() => handleActivityHover(activity, true)}
-                  onUnmount={() => {
-                    activityMarkersRef.current.delete(activity.activity_id);
-                  }}
-                  position={{ lat: location.lat!, lng: location.lng! }}
-                  title={activity.activity_name}
-                />
+                  onHoverChange={(rect) => showHoverCard(rect, { type: 'activity', id: activity.activity_id, activity, isDone })}
+                  position={{ lat, lng }}
+                  title={`${activity.activity_name}${suffix}`}
+                  zIndex={zIndex}
+                >
+                  {asDot ? (
+                    <DotFace color={color} isDone={isDone} kind="activity" />
+                  ) : (
+                    <ActivityFace
+                      color={color}
+                      enterIndex={index}
+                      Glyph={Glyph}
+                      isDone={isDone}
+                      isNext={isNext}
+                      isSelected={isSelected}
+                      name={activity.activity_name}
+                    />
+                  )}
+                </MapMarker>
               );
             })}
 
-          {/* Scenic waypoint markers for current base with violet styling */}
-          {currentBase?.scenic_waypoints
-            ?.filter((waypoint) => waypoint.location?.lat && waypoint.location?.lng)
-            .map((waypoint) => {
-              // TypeScript safety: we know location exists due to filter above
-              const location = waypoint.location!;
-              const isVisited = activityStatus[waypoint.activity_id] || waypoint.status?.done;
-              const isHovered = hoverState?.type === 'scenic_waypoint' && hoverState?.id === waypoint.activity_id;
+          {showPlaces &&
+            placedWaypoints.map((waypoint, index) => {
+              const { lat, lng } = waypoint.location;
+              const isDone = Boolean(activityStatus[waypoint.activity_id] || waypoint.status?.done);
+              const isSelected = waypoint.activity_id === selectedActivityId;
+              const asDot = isZoomedOut && !isSelected;
+              let zIndex = 20;
+              if (isSelected) zIndex = 40;
+              else if (isDone) zIndex = 15;
 
               return (
-                <Marker
-                  icon={getScenicWaypointPinIconFn(waypoint.activity_id === selectedActivityId, isVisited, isHovered)}
+                <MapMarker
+                  centred
                   key={`scenic-waypoint-${waypoint.activity_id}`}
                   onClick={() => onActivitySelect(waypoint.activity_id)}
-                  onLoad={(marker) => {
-                    scenicWaypointMarkersRef.current.set(waypoint.activity_id, marker);
-                  }}
-                  onMouseOut={() => handleScenicWaypointHover(waypoint, false)}
-                  onMouseOver={() => handleScenicWaypointHover(waypoint, true)}
-                  onUnmount={() => {
-                    scenicWaypointMarkersRef.current.delete(waypoint.activity_id);
-                  }}
-                  position={{ lat: location.lat!, lng: location.lng! }}
-                  title={waypoint.activity_name}
-                />
+                  onHoverChange={(rect) =>
+                    showHoverCard(rect, { type: 'scenic_waypoint', id: waypoint.activity_id, scenicWaypoint: waypoint, isDone })
+                  }
+                  position={{ lat, lng }}
+                  title={`${waypoint.activity_name}${isDone ? ', done' : ''}`}
+                  zIndex={zIndex}
+                >
+                  {asDot ? (
+                    <DotFace color={WAYPOINT_MARKER.color} isDone={isDone} kind="waypoint" />
+                  ) : (
+                    <WaypointFace
+                      enterIndex={placedActivities.length + index}
+                      isDone={isDone}
+                      isSelected={isSelected}
+                      name={waypoint.activity_name}
+                    />
+                  )}
+                </MapMarker>
               );
             })}
 
-          {/* POI Search Result markers with rose styling */}
+          {/* POI search results: a quiet disc that never competes with the trip's own markers */}
           {state.poiSearch.results.map((poi) => (
-            <Marker
-              icon={getSearchResultPinIcon()}
+            <MapMarker
+              centred
+              collisionBehavior={google.maps.CollisionBehavior.OPTIONAL_AND_HIDES_LOWER_PRIORITY}
               key={`search-result-${poi.place_id}`}
               onClick={() => {
                 handlePOIClick(poi.place_id);
                 centerAndZoomOnLocation(poi.location.lat, poi.location.lng);
               }}
               position={{ lat: poi.location.lat, lng: poi.location.lng }}
-              title={poi.name}
-            />
+              title={`${poi.name}, search result`}
+              zIndex={25}
+            >
+              <PoiFace Glyph={getActivityMarker(inferActivityTypeFromGooglePlaces(poi.types ?? [])).Glyph} name={poi.name} />
+            </MapMarker>
           ))}
         </>
       )}
@@ -1100,6 +831,9 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           directions={directionsResponse}
           options={{
             suppressMarkers: true,
+            // Every trip edit re-fetches the route; without this each new result re-fits the
+            // map to the whole trip, so a check-off would throw the camera out to the overview.
+            preserveViewport: true,
             polylineOptions: {
               strokeColor: '#4A9E9E',
               strokeOpacity: 0.8,
@@ -1150,6 +884,7 @@ export const MapContainer: React.FC<MapContainerProps> = ({
           placeType={hoverState.type}
           position={hoverState.position}
           scenicWaypoint={hoverState.scenicWaypoint}
+          stopColor={hoverState.stopColor}
           stopName={hoverState.stopName}
         />
       )}

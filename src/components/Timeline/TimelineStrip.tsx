@@ -3,6 +3,7 @@ import type React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { TripBase } from '@/types';
 import { getCurrentStop } from '@/utils/dateUtils';
+import { getStopColor, getStopInitials } from '@/utils/stopPalette';
 
 interface StopProgress {
   done: number;
@@ -43,35 +44,6 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
     () => stops.find((stop) => stop.stop_id === currentStopId) || getCurrentStop(stops) || stops[0],
     [stops, currentStopId]
   );
-
-  // Get stop initials for mobile collapsed view
-  const getInitials = (name: string): string => {
-    return name
-      .split(' ')
-      .map((word) => word[0])
-      .join('')
-      .toUpperCase()
-      .slice(0, 2); // Max 2 letters
-  };
-
-  // Colorful palette from Tailwind Colors - cycling through vibrant colors
-  const colorPalette = [
-    { base: 'bg-blue-700', text: 'text-white', selected: 'bg-blue-800', ring: 'ring-blue-500' },
-    { base: 'bg-emerald-700', text: 'text-white', selected: 'bg-emerald-800', ring: 'ring-emerald-500' },
-    { base: 'bg-violet-700', text: 'text-white', selected: 'bg-violet-800', ring: 'ring-violet-500' },
-    { base: 'bg-orange-700', text: 'text-white', selected: 'bg-orange-800', ring: 'ring-orange-500' },
-    { base: 'bg-rose-700', text: 'text-white', selected: 'bg-rose-800', ring: 'ring-rose-500' },
-    { base: 'bg-cyan-700', text: 'text-white', selected: 'bg-cyan-800', ring: 'ring-cyan-500' },
-    { base: 'bg-amber-700', text: 'text-white', selected: 'bg-amber-800', ring: 'ring-amber-500' },
-    { base: 'bg-pink-700', text: 'text-white', selected: 'bg-pink-800', ring: 'ring-pink-500' },
-    { base: 'bg-indigo-700', text: 'text-white', selected: 'bg-indigo-800', ring: 'ring-indigo-500' },
-    { base: 'bg-teal-700', text: 'text-white', selected: 'bg-teal-800', ring: 'ring-teal-500' },
-    { base: 'bg-lime-700', text: 'text-white', selected: 'bg-lime-800', ring: 'ring-lime-500' },
-    { base: 'bg-fuchsia-700', text: 'text-white', selected: 'bg-fuchsia-800', ring: 'ring-fuchsia-500' },
-  ];
-
-  // Function to get color for a stop based on its index
-  const getStopColor = (index: number) => colorPalette[index % colorPalette.length];
 
   // Calculate proportional width based on stay period with minimum 0.5 days
   const getStopWidth = (stop: TripBase) => {
@@ -226,7 +198,7 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
               onClick={() => onStopSelect(currentStop.stop_id)}
               type="button"
             >
-              {getInitials(currentStop.name)}
+              {getStopInitials(currentStop.name)}
             </button>
           </div>
 

@@ -19,6 +19,15 @@ colors:
   surface: "#ffffff"
   surface-subtle: "#f9fafb"
   page-bg: "#f8fafc"
+  marker-food: "#db2777"
+  marker-sights: "#7c3aed"
+  marker-nature: "#5b8c5a"
+  marker-water: "#0e7490"
+  marker-shopping: "#4f46e5"
+  marker-transport: "#475569"
+  marker-other: "#6b7280"
+  marker-select: "#0284c7"
+  marker-done: "#059669"
 typography:
   display:
     fontFamily: "Inter, system-ui, sans-serif"
@@ -128,6 +137,18 @@ Meaning-bearing colors used consistently across cards, panels, and the map. This
 - **Active Orange** (#f97316): Press / active feedback. The momentary tint while a card is being tapped (`active:bg-orange-500/10`). Orange is touch, not state.
 - **Warning Amber** (#f59e0b): Needs attention now. The ready-todo count badge on the To do button (solid amber-500, gray-900 numerals), Ready todo chips (`amber-100` fill, `amber-900` text, `amber-300` ring), location warnings and other non-blocking alerts. Amber is the nudge color: it marks what can be acted on today, so spend it on nothing else.
 
+### Map Marker Families
+Seven colors for activity markers on the map, and nowhere else. None of them is a functional color. A marker's color tells you the sort of place; state has its own colors. Every family carries a white glyph at 3.9:1 or better.
+- **Food** (#db2777): restaurants and cafés.
+- **Sights** (#7c3aed): attractions, culture, fun and playgrounds. Scenic waypoints use it too, because the panel already shows waypoints in violet.
+- **Nature** (#5b8c5a): walks and viewpoints. This is Fern Green in its scenic role.
+- **Water** (#0e7490): beaches.
+- **Shopping** (#4f46e5): shops and groceries.
+- **Transport** (#475569): buses, cars and transfers.
+- **Other** (#6b7280): anything the type rules cannot place.
+
+The tokens are the `--marker-*` custom properties in `src/assets/styles/map-markers.css`.
+
 ### Neutral
 - **Ink** (#111827, gray-900): Headings and high-emphasis text.
 - **Body Text** (#374151, gray-700): Default body copy and labels.
@@ -139,7 +160,7 @@ Meaning-bearing colors used consistently across cards, panels, and the map. This
 ### Named Rules
 **The One Meaning Per Color Rule.** Sky is selection, emerald is done, orange is press, red is danger or overdue, amber is needs-attention. Never reassign these. A card can be selected (sky ring) and done (emerald fill) at once, and the two colors must stay legible together.
 
-**The Rainbow Timeline Rule.** Trip stops cycle through a fixed 12-color palette (blue, emerald, violet, orange, rose, cyan, amber, pink, indigo, teal, lime, fuchsia) by index, giving each stop its own bright identity. This is the one place the app is deliberately, joyfully saturated. Everywhere else, color is rationed to meaning.
+**The Rainbow Timeline Rule.** Trip stops cycle through a fixed 12-color palette (blue, emerald, violet, orange, rose, cyan, amber, pink, indigo, teal, lime, fuchsia) by index, giving each stop its own bright identity. This is the one place the app is deliberately, joyfully saturated. Everywhere else, color is rationed to meaning; on the map, the Map Marker Families carry an activity's category, never its state.
 
 ## 3. Typography
 
@@ -212,6 +233,20 @@ The defining component and the clearest expression of "the plan is alive."
 - **Tactile motion:** `hover:scale-105`, `active:scale-95`, 300ms `ease-in-out`.
 - **Mobile:** horizontal swipe advances stops; collapses to a single circular initials avatar in the current stop's color; expand/collapse state persists in localStorage.
 - Floats over the map as glass chrome (`bg-white/30 backdrop-blur-sm`, rounded-xl on desktop).
+
+### Map Markers
+Each place on the map gets a marker from one family. A marker shows three things without color alone: its kind by shape, its category by glyph, and its state by outline, check or fill. The spec and the CSS are in [docs/specs/design_map-markers.md](docs/specs/design_map-markers.md).
+- **Stops:** a 32px rounded square with a short tail, in the stop's timeline color, with its initials. Its timeline chip has the same color and initials. A stop still ahead is hollow. Today's stop is filled and has a slow halo; under reduced motion the halo is a still ring. A stop behind you is muted, with dark initials. The stop you are viewing is a little larger, and it shows its name when the map is zoomed out.
+- **Activities:** a 30px circle with a short tail and a white Phosphor glyph (fill weight), in its family color.
+- **Scenic waypoints:** an 18px violet diamond with a mountains glyph, centred on the route.
+- **Search results:** a 26px white disc with a teal glyph. White means the place is not in the plan yet.
+- **Zoomed out (below zoom 11):** activities become small circles and waypoints small diamonds. A done one is hollow.
+- **Selected:** a sky-600 outline that follows the shape, 1.15x scale and a white name pill. One marker at a time.
+- **Done:** a muted fill, a dark glyph and an emerald-600 check.
+- **Next:** the first planned activity of the viewed stop has a small teal "Next" tab.
+- **Motion:** when you pick a stop, its places wait for the camera to land. The stop then drops into place, and its places appear one after another. A tick plays the same check pop as the panel, plus one ripple. Hover lifts a marker 2px, for a mouse only.
+
+**The Marker Shade Rule.** On the map, the functional colors use their -600 shade: sky-600 for selection and emerald-600 for done. The -500 shades measure under 3:1 against white and against the map, so they fail as markers. The meaning does not change.
 
 ### Visit Records
 Ticking is the core gesture and stays one tap; details are opt-in.

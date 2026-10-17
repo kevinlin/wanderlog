@@ -1,0 +1,434 @@
+/* Map markers: faces rendered into AdvancedMarkerElement content. Each face's
+   box is sized so the marker's anchor lands on the pin tip (pins) or the
+   centre (diamonds, discs, dots). Pills, badges and tabs sit outside the box,
+   so a growing label never moves the anchor. */
+:root {
+  --marker-food: #db2777;
+  --marker-sights: #7c3aed;
+  --marker-nature: #5b8c5a;
+  --marker-water: #0e7490;
+  --marker-shopping: #4f46e5;
+  --marker-transport: #475569;
+  --marker-other: #6b7280;
+  --marker-select: #0284c7; /* sky-600: -500 is under 3:1 on the map */
+  --marker-done: #059669; /* emerald-600, same reason */
+  --marker-next: #2b7070;
+  --marker-muted: #d6dbe3;
+  --marker-ink-muted: #1f2937; /* gray-800: white on the muted fill is ~2:1 */
+  --marker-shadow: drop-shadow(0 1px 1.5px rgb(15 23 42 / 0.35))
+    drop-shadow(0 2px 4px rgb(15 23 42 / 0.16));
+  --marker-shadow-lift: drop-shadow(0 2px 2px rgb(15 23 42 / 0.3))
+    drop-shadow(0 7px 10px rgb(15 23 42 / 0.22));
+  --marker-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --marker-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.mk {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  transition:
+    transform 200ms var(--marker-ease),
+    translate 200ms var(--marker-ease);
+}
+/* Invisible hit area: every face reaches at least 44px for touch. */
+.mk::after {
+  position: absolute;
+  inset: -4px;
+  content: "";
+}
+.mk-pin {
+  width: 38px;
+  height: 39px;
+  transform-origin: 19px 39px;
+}
+.mk-stop {
+  width: 44px;
+  height: 44px;
+  transform-origin: 22px 44px;
+}
+.mk-wp,
+.mk-poi {
+  width: 26px;
+  height: 26px;
+  transform-origin: 13px 13px;
+}
+.mk-wp::after,
+.mk-poi::after {
+  inset: -9px;
+}
+.mk-dot {
+  width: 11px;
+  height: 11px;
+  background: var(--c);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.35);
+}
+.mk-dot.is-wp {
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+/* 24px target (WCAG 2.5.8 AA): wide enough to hit, narrow enough not to cover a stop marker. */
+.mk-dot::after {
+  inset: -6.5px;
+}
+.mk-dot.is-wp::after {
+  inset: -7.5px;
+}
+.mk-dot.is-done {
+  background: #fff;
+  border-color: var(--c);
+}
+
+.mk-shape {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  filter: var(--marker-shadow);
+  transition: filter 200ms var(--marker-ease);
+}
+.mk-body {
+  fill: var(--c);
+  stroke: #fff;
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  transition: fill 200ms var(--marker-ease);
+}
+.mk-sel {
+  opacity: 0;
+  fill: none;
+  stroke: var(--marker-select);
+  stroke-width: 7;
+  stroke-linejoin: round;
+  transition: opacity 160ms var(--marker-ease);
+}
+.mk-glyph {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  color: #fff;
+  pointer-events: none;
+}
+.mk-pin .mk-glyph {
+  top: 11px;
+  left: 11px;
+  width: 16px;
+  height: 16px;
+}
+.mk-stop .mk-glyph {
+  top: 6px;
+  left: 6px;
+  width: 32px;
+  height: 32px;
+  font:
+    700 13px / 1 Inter,
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+}
+.mk-wp .mk-glyph {
+  top: 7px;
+  left: 7px;
+  width: 12px;
+  height: 12px;
+}
+.mk-poi .mk-glyph {
+  top: 6px;
+  left: 6px;
+  width: 14px;
+  height: 14px;
+  color: var(--marker-next);
+}
+
+.mk-stop.is-upcoming .mk-body {
+  fill: #fff;
+  stroke: var(--c);
+}
+.mk-stop.is-upcoming .mk-glyph {
+  color: var(--c);
+}
+.mk-halo {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 32px;
+  height: 32px;
+  pointer-events: none;
+  background: var(--c);
+  border-radius: 10px;
+  opacity: 0;
+}
+.mk-stop.is-today .mk-halo {
+  animation: mk-halo 2.4s ease-out infinite;
+}
+
+.mk-dia {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  width: 18px;
+  height: 18px;
+  background: var(--c);
+  border: 2px solid #fff;
+  border-radius: 5px;
+  filter: var(--marker-shadow);
+  transform: rotate(45deg);
+  transition: background-color 200ms var(--marker-ease);
+}
+.mk-disc {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 50%;
+  filter: var(--marker-shadow);
+}
+
+/* Done and past: muted fill with a dark glyph; done items also get the emerald check. */
+.mk.is-done .mk-body,
+.mk-stop.is-past .mk-body {
+  fill: color-mix(in oklab, var(--c) 38%, var(--marker-muted));
+  stroke: #fff;
+}
+.mk-wp.is-done .mk-dia {
+  background: color-mix(in oklab, var(--c) 38%, var(--marker-muted));
+}
+.mk.is-done .mk-glyph,
+.mk-stop.is-past .mk-glyph {
+  color: var(--marker-ink-muted);
+}
+.mk-check {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  color: #fff;
+  pointer-events: none;
+  background: var(--marker-done);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.3);
+}
+.mk-pin .mk-check {
+  top: -1px;
+  left: 25px;
+}
+.mk-wp .mk-check {
+  top: -4px;
+  left: 15px;
+  width: 13px;
+  height: 13px;
+}
+.mk-ripple {
+  position: absolute;
+  pointer-events: none;
+  border: 2px solid var(--marker-done);
+  border-radius: 50%;
+  opacity: 0;
+  animation: mk-ripple 520ms var(--marker-ease);
+}
+.mk-pin .mk-ripple {
+  top: 2px;
+  left: 2px;
+  width: 34px;
+  height: 34px;
+}
+.mk-wp .mk-ripple {
+  top: -2px;
+  left: -2px;
+  width: 30px;
+  height: 30px;
+}
+
+/* Hover lifts, for a mouse only; touch selects instead. */
+@media (hover: hover) {
+  .mk:hover {
+    translate: 0 -2px;
+  }
+  .mk:hover .mk-shape,
+  .mk:hover .mk-dia,
+  .mk:hover .mk-disc {
+    filter: var(--marker-shadow-lift);
+  }
+}
+
+.mk.is-selected {
+  transform: scale(1.15);
+}
+.mk-stop.is-viewing {
+  transform: scale(1.12);
+}
+.mk.is-selected .mk-sel {
+  opacity: 1;
+}
+.mk-wp.is-selected .mk-dia {
+  box-shadow: 0 0 0 2.5px var(--marker-select);
+}
+
+.mk-pill {
+  position: absolute;
+  z-index: -1;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  max-width: 190px;
+  height: 24px;
+  padding: 0 10px 0 14px;
+  font:
+    600 12px / 1 Inter,
+    system-ui,
+    sans-serif;
+  color: #111827;
+  white-space: nowrap;
+  pointer-events: none;
+  background: #fff;
+  border-radius: 9999px;
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.25),
+    0 3px 8px rgb(15 23 42 / 0.12);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition:
+    opacity 180ms var(--marker-ease),
+    transform 220ms var(--marker-ease);
+}
+.mk-pill > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mk-pill > em {
+  font-style: normal;
+  font-weight: 500;
+  color: #6b7280;
+}
+.mk-pill > svg {
+  flex: none;
+  color: var(--c);
+}
+.mk-pin .mk-pill {
+  top: 7px;
+  left: 26px;
+}
+.mk-stop .mk-pill {
+  top: 10px;
+  left: 32px;
+  padding-left: 16px;
+}
+.mk-wp .mk-pill {
+  top: 1px;
+  left: 20px;
+}
+.mk.is-selected .mk-pill,
+.mk.has-label .mk-pill {
+  opacity: 1;
+  transform: none;
+}
+
+.mk-next {
+  position: absolute;
+  top: -13px;
+  left: 19px;
+  padding: 3px 6px;
+  font:
+    600 10px / 1 Inter,
+    system-ui,
+    sans-serif;
+  color: #fff;
+  white-space: nowrap;
+  pointer-events: none;
+  background: var(--marker-next);
+  border-radius: 9999px;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.3);
+  transform: translateX(-50%);
+}
+
+/* Entrances animate the individual translate/scale properties, so they never
+   fight the selected-state transform; fill-mode backwards drops them after. */
+.mk.mk-drop {
+  animation: mk-drop 420ms var(--marker-ease) backwards;
+}
+.mk.mk-enter {
+  animation: mk-pop 320ms var(--marker-spring) backwards;
+  animation-delay: calc(min(var(--enter-index, 0), 10) * 45ms);
+}
+/* Selecting an overview dot mounts the full face; it answers the click with no stagger. */
+.mk.mk-enter.is-selected {
+  animation-delay: 0ms;
+}
+
+/* The global reduced-motion rule in index.css shortens durations but keeps
+   delays, so drop the stagger; and keep "today" readable without the loop. */
+@media (prefers-reduced-motion: reduce) {
+  .mk.mk-enter {
+    animation-delay: 0ms;
+  }
+  .mk-stop.is-today .mk-halo {
+    opacity: 0.3;
+    transform: scale(1.35);
+    animation: none;
+  }
+}
+
+/* Glyph chip for the hover card: the marker's face in miniature. */
+.mk-chip {
+  display: inline-grid;
+  flex: none;
+  place-items: center;
+  width: 20px;
+  height: 20px;
+  color: #fff;
+  background: var(--c);
+  border-radius: 50%;
+}
+
+@keyframes mk-drop {
+  0% {
+    translate: 0 -22px;
+    scale: 0.92;
+    opacity: 0;
+  }
+  55% {
+    translate: 0 2px;
+    scale: 1.04;
+    opacity: 1;
+  }
+  100% {
+    translate: 0 0;
+    scale: 1;
+    opacity: 1;
+  }
+}
+@keyframes mk-pop {
+  from {
+    scale: 0.4;
+    opacity: 0;
+  }
+  to {
+    scale: 1;
+    opacity: 1;
+  }
+}
+@keyframes mk-halo {
+  0% {
+    transform: scale(0.95);
+    opacity: 0.45;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}
+@keyframes mk-ripple {
+  0% {
+    transform: scale(0.7);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.9);
+    opacity: 0;
+  }
+}

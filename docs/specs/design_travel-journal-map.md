@@ -180,15 +180,14 @@ interface MapContainerProps {
 **Key Features**:
 - Google Maps integration with custom styling
 - Route polylines with scenic waypoints
-- Location-specific pin icons:
-
-  - Accommodation locations: Lodge-style pins (uses accommodation location if available, otherwise falls back to base location)
-  - Activity locations: Activity pins with location pin and color differentiation by visited status
-  - Scenic waypoint locations: Violet-styled pins with landscape/mountain icons (violet for unvisited, green for visited)
-- Pin status-based styling and interactions
+- Map markers (redesigned; see [design_map-markers.md](design_map-markers.md)):
+  - Stops: a rounded-square marker in the stop's timeline color with its initials, placed at the accommodation location if available, otherwise the stop location
+  - Activities: a circle-and-tail marker with a category glyph in one of seven color families; done items go muted with an emerald check
+  - Scenic waypoints: a small violet diamond with a mountains glyph
+- Marker state styling (selected, done, next, today) and interactions
 - **Marker Titles**: Displays "Stop Name - Accommodation Name" when accommodation exists, or just "Stop Name" when accommodation is not provided
 - Click handlers for pin selection and map interaction
-- Coordinated drop pin animations for accommodation and scenic waypoints when stops are selected
+- Arrival motion when a stop is selected: once the camera lands, the stop marker drops in and that stop's activities and waypoints pop in, staggered
 - Map layer picker integration for changing map types and toggling overlay layers
 - **Place click centering and zooming**: When any place pin is clicked, the map automatically pans and zooms to center on the location
 
@@ -623,69 +622,10 @@ interface ImageViewerModalProps {
 - Uses local state in parent card components (not global state)
 - Renders via React Portal to escape parent container hierarchy and display over entire app
 
-#### 10. Pin Components
-**Purpose**: Map marker components with enhanced visibility, glow animations, and location-specific styling using polished Material Design icons.
+#### 10. Map Markers
+**Purpose**: Every place on the map (stops, activities, scenic waypoints, search results) as one marker family.
 
-**Pin Icon Specifications**:
-- **Size**: All pins SHALL be sized 1.5x larger than Google Maps default built-in icons for enhanced visibility (30px base, 33px hovered/selected)
-- **Colors**: All pins SHALL use vibrant colors from the application's color palette for maximum visual prominence
-- **Icons**: Polished Material Design filled SVG icons for modern, sleek appearance
-
-- **Accommodation Pins**: Material Design home icon with status-based coloring using Orange-500 for active states
-- **Activity Pins**: Material Design location pin icon with color differentiation by visited status:
-  - All unvisited activities: Color varies by activity type (see getActivityTypeColor() in activityUtils.ts)
-  - All visited activities: Emerald-500 (#10b981) green color
-- **Scenic Waypoint Pins**: Material Design landscape icon with Violet-500 (#8b5cf6) for unvisited, Emerald-500 for visited
-
-**Glow Animation Effects**:
-- **Continuous Glow**: Subtle pulsing glow animation that runs continuously on all pins
-  - Uses SVG feGaussianBlur filter with stdDeviation of 2
-  - Glow color matches pin color with 60% opacity
-  - Pulse animation cycles every 2 seconds with ease-in-out timing
-- **Hover Enhanced Glow**: Brighter, more prominent glow when hovering over pins
-  - Filter stdDeviation increases to 4 for wider glow radius
-  - Glow opacity increases to 90% for more vibrant effect
-  - Pin size increases from 30px to 33px for visual feedback
-
-**Enhanced Visibility Features**:
-- Pin shadows using SVG drop-shadow filter for better contrast against map backgrounds
-- Hover state scaling (1.1x) with smooth transitions
-- Selection state highlighting with enhanced glow
-- Consistent stroke width and color for icon outlines
-- Drop pin animation for highlighted pins when locations are selected
-
-#### 8.1. Scenic Waypoint Pin Components
-**Purpose**: Map marker components for scenic waypoints with distinctive violet styling and enhanced visibility.
-
-**Scenic Waypoint Pin Specifications**:
-- **Size**: All scenic waypoint pins SHALL be sized 1.5x larger than Google Maps default built-in icons for enhanced visibility (30px base, 33px selected)
-- **Colors**: Violet-500 (#8b5cf6) for unvisited waypoints, Emerald-500 (#10b981) for visited waypoints
-- **Icon**: Landscape/mountain SVG path for scenic waypoint identification
-- **Visual Effects**: Same enhanced visibility features as activity pins (shadows, hover scaling, stroke outlines)
-
-**Drop Pin Animation for Scenic Waypoints**:
-- **Trigger Condition**: When a trip stop is selected from the timeline, all scenic waypoints for that stop animate simultaneously
-- **Animation Timing**: Staggered animation with 100ms delay between each waypoint for visual effect
-- **Animation Type**: Google Maps DROP animation (600ms duration)
-- **Coordination**: Scenic waypoint animations occur simultaneously with accommodation pin animation
-
-**Drop Pin Animation Specifications**:
-- **Animation Type**: CSS-based keyframe animation that simulates a pin dropping from above
-- **Duration**: 600ms total animation duration for smooth, noticeable effect
-- **Easing**: Cubic-bezier easing that mimics natural drop physics (fast start, bounce at end)
-- **Visual Elements**:
-  - Pin scales from 0.3x to 1.2x then settles to 1x size
-  - Pin translates from -20px Y-offset to final position
-  - Subtle bounce effect at the end using transform scale
-  - Optional shadow animation that grows as pin "lands"
-- **Trigger Conditions**:
-  - When a trip stop is selected (accommodation pin animation)
-  - When an activity is selected (activity pin animation)
-  - Animation only triggers for pins that are currently visible on the map
-- **Performance Considerations**:
-  - Uses CSS transforms for hardware acceleration
-  - Animation is non-blocking and doesn't interfere with map interactions
-  - Only one animation plays at a time to avoid visual confusion
+The original pin spec (Material glyphs at 30px, glow pulses, Google's DROP animation) was replaced in October 2026. The current design is [design_map-markers.md](design_map-markers.md): `google.maps.marker.AdvancedMarkerElement` with a Map ID, faces rendered from React (`MapMarker`, `MarkerFaces`), category glyphs from Phosphor, and the motion and state rules (selected, done, next, today, zoomed-out dots). The visual system is summarised in DESIGN.md under Map Markers.
 
 #### 9. LocationWarning Component
 **Purpose**: Warning indicator for activities and accommodations with invalid or missing location data.
@@ -1177,8 +1117,8 @@ Consistent styling applied to all floating panels:
 - **Mobile Panel Resize**: Real-time height adjustment during drag (no transition for responsiveness)
 - **Timeline Selection**: Triggers ActivitiesPanel slide-out on mobile with 100ms delay
 - **Hover Effects**: 150ms ease-out transition
-- **Pin Highlighting**: 200ms ease-in-out scale and color transitions
-- **Drop Pin Animation**: 600ms cubic-bezier animation with bounce effect for location highlighting
+- **Marker Selection**: 200ms scale and outline transition ([design_map-markers.md](design_map-markers.md))
+- **Marker Arrival**: 420ms stop drop after the camera lands, then a 320ms staggered pop for the stop's activities and waypoints
 - **Activity Status Changes**: 250ms fade transition
 - **Touch Feedback**: 200ms transition for active states and scale effects
 - **Drag and Drop**: 200ms transform transition with scale effects during dragging

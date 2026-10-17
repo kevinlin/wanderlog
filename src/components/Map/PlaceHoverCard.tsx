@@ -1,9 +1,10 @@
 import { CheckCircleIcon, ClockIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { CheckCircleIcon as CheckCircleSolidIcon } from '@heroicons/react/24/solid';
+import { BedIcon, type Icon } from '@phosphor-icons/react';
 import type React from 'react';
+import { getActivityMarker, WAYPOINT_MARKER } from '@/components/Map/markerCategory';
 import type { ScenicWaypoint } from '@/types/map';
-import type { Accommodation, Activity, ActivityType } from '@/types/trip';
-import { getActivityTypeIcon } from '@/utils/activityUtils';
+import type { Accommodation, Activity } from '@/types/trip';
 
 type PlaceType = 'accommodation' | 'activity' | 'scenic_waypoint';
 
@@ -15,6 +16,7 @@ interface PlaceHoverCardProps {
   placeType: PlaceType;
   position: { x: number; y: number };
   scenicWaypoint?: ScenicWaypoint;
+  stopColor?: string;
   stopName?: string;
 }
 
@@ -23,6 +25,7 @@ export const PlaceHoverCard: React.FC<PlaceHoverCardProps> = ({
   accommodation,
   activity,
   scenicWaypoint,
+  stopColor = 'var(--marker-other)',
   stopName,
   isDone = false,
   position,
@@ -81,16 +84,17 @@ export const PlaceHoverCard: React.FC<PlaceHoverCardProps> = ({
     }
   };
 
-  const getTypeIcon = (): string => {
+  // The marker's face in miniature, so the card and the pin read as the same place.
+  const getChip = (): { color: string; Glyph: Icon } => {
     switch (placeType) {
       case 'accommodation':
-        return '🏨';
+        return { color: stopColor, Glyph: BedIcon };
       case 'activity':
-        return activity?.activity_type ? getActivityTypeIcon(activity.activity_type as ActivityType) : '📍';
+        return getActivityMarker(activity?.activity_type);
       case 'scenic_waypoint':
-        return '🏞️';
+        return WAYPOINT_MARKER;
       default:
-        return '📍';
+        return getActivityMarker(undefined);
     }
   };
 
@@ -137,7 +141,7 @@ export const PlaceHoverCard: React.FC<PlaceHoverCardProps> = ({
   const address = getAddress();
   const thumbnailUrl = getThumbnailUrl();
   const duration = getDuration();
-  const typeIcon = getTypeIcon();
+  const { color: chipColor, Glyph: ChipGlyph } = getChip();
   const typeLabel = getTypeLabel();
   const glowColor = getGlowColor();
   const borderColor = getBorderColor();
@@ -169,7 +173,9 @@ export const PlaceHoverCard: React.FC<PlaceHoverCardProps> = ({
         <div className="min-w-0 flex-1">
           {/* Type badge */}
           <div className="mb-1 flex items-center gap-1">
-            <span className="text-sm">{typeIcon}</span>
+            <span className="mk-chip" style={{ '--c': chipColor } as React.CSSProperties}>
+              <ChipGlyph size={12} weight="fill" />
+            </span>
             <span className="text-gray-500 text-xs">{typeLabel}</span>
             {placeType !== 'accommodation' && (
               <span className="ml-auto">

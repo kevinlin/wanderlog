@@ -38,21 +38,13 @@ export const getCurrentStop = (stops: TripStop[]): TripStop | null => {
   );
 };
 
-/**
- * Get stop status relative to today
- */
-export const getStopTimeStatus = (stop: TripStop): 'past' | 'current' | 'upcoming' => {
-  const today = getCurrentNZDate();
-  const todayString = formatDate(today);
-  const currentDate = parseDate(todayString);
-
-  const fromDate = parseDate(stop.date.from);
-  const toDate = parseDate(stop.date.to);
-
-  if (currentDate < fromDate) {
+// YYYY-MM-DD strings sort lexicographically, so no Date (and no timezone) is involved.
+// `today` is the trip-local date from useTripToday.
+export const getStopTimeStatus = (stop: TripStop, today: string): 'past' | 'current' | 'upcoming' => {
+  if (today < stop.date.from) {
     return 'upcoming';
   }
-  if (currentDate > toDate) {
+  if (today > stop.date.to) {
     return 'past';
   }
   return 'current';

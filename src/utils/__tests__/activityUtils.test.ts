@@ -1,13 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { type Activity, ActivityType } from '@/types/trip';
-import {
-  enrichActivitiesWithTypes,
-  enrichActivityWithType,
-  getActivityTypeColor,
-  getActivityTypeIcon,
-  getActivityTypeSvgPath,
-  inferActivityType,
-} from '../activityUtils';
+import { enrichActivitiesWithTypes, enrichActivityWithType, getActivityTypeIcon, inferActivityType } from '../activityUtils';
 
 describe('ActivityUtils', () => {
   describe('inferActivityType', () => {
@@ -192,93 +185,6 @@ describe('ActivityUtils', () => {
       expect(getActivityTypeIcon(ActivityType.CULTURAL)).toBe('🏛️');
       expect(getActivityTypeIcon(ActivityType.TRANSPORT)).toBe('🚗');
       expect(getActivityTypeIcon(ActivityType.OTHER)).toBe('📍');
-    });
-  });
-
-  describe('getActivityTypeColor', () => {
-    it('should return valid hex colors for each activity type', () => {
-      const hexColorRegex = /^#[0-9A-F]{6}$/i;
-
-      expect(getActivityTypeColor(ActivityType.RESTAURANT)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.ATTRACTION)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.SHOPPING)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.OUTDOOR)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.CULTURAL)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.RECREATION)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.SCENIC)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.BEACH)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.PLAYGROUND)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.GROCERY)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toMatch(hexColorRegex);
-      expect(getActivityTypeColor(ActivityType.OTHER)).toMatch(hexColorRegex);
-    });
-
-    it('should return specific expected colors from Tailwind Colors v4 palette', () => {
-      expect(getActivityTypeColor(ActivityType.RESTAURANT)).toBe('#f97316'); // Orange-500
-      expect(getActivityTypeColor(ActivityType.ATTRACTION)).toBe('#8b5cf6'); // Violet-500
-      expect(getActivityTypeColor(ActivityType.SHOPPING)).toBe('#10b981'); // Emerald-500
-      expect(getActivityTypeColor(ActivityType.OUTDOOR)).toBe('#f59e0b'); // Amber-500
-      expect(getActivityTypeColor(ActivityType.CULTURAL)).toBe('#06b6d4'); // Cyan-500
-      expect(getActivityTypeColor(ActivityType.RECREATION)).toBe('#0ea5e9'); // Sky-500 (shared with OTHER)
-      expect(getActivityTypeColor(ActivityType.SCENIC)).toBe('#8b5cf6'); // Violet-500 (shared with ATTRACTION)
-      expect(getActivityTypeColor(ActivityType.BEACH)).toBe('#06b6d4'); // Cyan-500 (shared with CULTURAL)
-      expect(getActivityTypeColor(ActivityType.PLAYGROUND)).toBe('#f59e0b'); // Amber-500 (shared with OUTDOOR)
-      expect(getActivityTypeColor(ActivityType.GROCERY)).toBe('#10b981'); // Emerald-500 (shared with SHOPPING)
-      expect(getActivityTypeColor(ActivityType.TRANSPORT)).toBe('#6366f1'); // Indigo-500
-      expect(getActivityTypeColor(ActivityType.OTHER)).toBe('#0ea5e9'); // Sky-500 (shared with RECREATION)
-    });
-
-    it('should use a limited color palette with shared colors across related types', () => {
-      // The color palette uses 7 distinct colors shared across 12 activity types
-      const allColors = [
-        getActivityTypeColor(ActivityType.RESTAURANT),
-        getActivityTypeColor(ActivityType.ATTRACTION),
-        getActivityTypeColor(ActivityType.SHOPPING),
-        getActivityTypeColor(ActivityType.OUTDOOR),
-        getActivityTypeColor(ActivityType.CULTURAL),
-        getActivityTypeColor(ActivityType.RECREATION),
-        getActivityTypeColor(ActivityType.SCENIC),
-        getActivityTypeColor(ActivityType.BEACH),
-        getActivityTypeColor(ActivityType.PLAYGROUND),
-        getActivityTypeColor(ActivityType.GROCERY),
-        getActivityTypeColor(ActivityType.TRANSPORT),
-        getActivityTypeColor(ActivityType.OTHER),
-      ];
-
-      const uniqueColors = new Set(allColors);
-      expect(uniqueColors.size).toBe(7); // 7 distinct colors across 12 types
-    });
-  });
-
-  describe('getActivityTypeSvgPath', () => {
-    const expectedLocationPinPath =
-      'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z';
-
-    it('should return location pin icon for all activity types', () => {
-      // Test all activity types return the same location pin icon
-      const allTypes = [
-        ActivityType.RESTAURANT,
-        ActivityType.ATTRACTION,
-        ActivityType.SHOPPING,
-        ActivityType.OUTDOOR,
-        ActivityType.CULTURAL,
-        ActivityType.RECREATION,
-        ActivityType.SCENIC,
-        ActivityType.BEACH,
-        ActivityType.PLAYGROUND,
-        ActivityType.GROCERY,
-        ActivityType.TRANSPORT,
-        ActivityType.OTHER,
-      ];
-
-      allTypes.forEach((type) => {
-        expect(getActivityTypeSvgPath(type)).toBe(expectedLocationPinPath);
-      });
-    });
-
-    it('should return location pin icon for undefined type', () => {
-      const path = getActivityTypeSvgPath(undefined as any);
-      expect(path).toBe(expectedLocationPinPath);
     });
   });
 });

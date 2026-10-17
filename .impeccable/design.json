@@ -168,6 +168,141 @@
           "#d1d5db",
           "#f3f4f6"
         ]
+      },
+      "marker-food": {
+        "role": "tertiary",
+        "displayName": "Marker Food",
+        "canonical": "#db2777",
+        "tonalRamp": [
+          "oklch(40.8% 0.153 2.432)",
+          "oklch(45.9% 0.187 3.815)",
+          "oklch(52.5% 0.223 3.958)",
+          "oklch(59.2% 0.249 0.584)",
+          "oklch(65.6% 0.241 354.308)",
+          "oklch(71.8% 0.202 349.761)",
+          "oklch(82.3% 0.12 346.018)",
+          "oklch(89.9% 0.061 343.231)"
+        ]
+      },
+      "marker-sights": {
+        "role": "tertiary",
+        "displayName": "Marker Sights",
+        "canonical": "#7c3aed",
+        "tonalRamp": [
+          "oklch(38% 0.189 293.745)",
+          "oklch(43.2% 0.232 292.759)",
+          "oklch(49.1% 0.27 292.581)",
+          "oklch(54.1% 0.281 293.009)",
+          "oklch(60.6% 0.25 292.717)",
+          "oklch(70.2% 0.183 293.541)",
+          "oklch(81.1% 0.111 293.571)",
+          "oklch(89.4% 0.057 293.283)"
+        ]
+      },
+      "marker-nature": {
+        "role": "tertiary",
+        "displayName": "Marker Nature",
+        "canonical": "#5b8c5a",
+        "tonalRamp": [
+          "oklch(0.32 0.07 145)",
+          "oklch(0.41 0.08 145)",
+          "oklch(0.50 0.09 145)",
+          "oklch(0.58 0.09 145)",
+          "oklch(0.67 0.085 145)",
+          "oklch(0.77 0.07 145)",
+          "oklch(0.86 0.05 145)",
+          "oklch(0.93 0.03 145)"
+        ]
+      },
+      "marker-water": {
+        "role": "tertiary",
+        "displayName": "Marker Water",
+        "canonical": "#0e7490",
+        "tonalRamp": [
+          "oklch(39.8% 0.07 227.392)",
+          "oklch(45% 0.085 224.283)",
+          "oklch(52% 0.105 223.128)",
+          "oklch(60.9% 0.126 221.723)",
+          "oklch(71.5% 0.143 215.221)",
+          "oklch(78.9% 0.154 211.53)",
+          "oklch(86.5% 0.127 207.078)",
+          "oklch(91.7% 0.08 205.041)"
+        ]
+      },
+      "marker-shopping": {
+        "role": "tertiary",
+        "displayName": "Marker Shopping",
+        "canonical": "#4f46e5",
+        "tonalRamp": [
+          "oklch(35.9% 0.144 278.697)",
+          "oklch(39.8% 0.195 277.366)",
+          "oklch(45.7% 0.24 277.023)",
+          "oklch(51.1% 0.262 276.966)",
+          "oklch(58.5% 0.233 277.117)",
+          "oklch(67.3% 0.182 276.935)",
+          "oklch(78.5% 0.115 274.713)",
+          "oklch(87% 0.065 274.039)"
+        ]
+      },
+      "marker-transport": {
+        "role": "tertiary",
+        "displayName": "Marker Transport",
+        "canonical": "#475569",
+        "tonalRamp": [
+          "oklch(20.8% 0.042 265.755)",
+          "oklch(27.9% 0.041 260.031)",
+          "oklch(37.2% 0.044 257.287)",
+          "oklch(44.6% 0.043 257.281)",
+          "oklch(55.4% 0.046 257.417)",
+          "oklch(70.4% 0.04 256.788)",
+          "oklch(86.9% 0.022 252.894)",
+          "oklch(92.9% 0.013 255.508)"
+        ]
+      },
+      "marker-other": {
+        "role": "tertiary",
+        "displayName": "Marker Other",
+        "canonical": "#6b7280",
+        "tonalRamp": [
+          "oklch(21% 0.034 264.665)",
+          "oklch(27.8% 0.033 256.848)",
+          "oklch(37.3% 0.034 259.733)",
+          "oklch(44.6% 0.03 256.802)",
+          "oklch(55.1% 0.027 264.364)",
+          "oklch(70.7% 0.022 261.325)",
+          "oklch(87.2% 0.01 258.338)",
+          "oklch(92.8% 0.006 264.531)"
+        ]
+      },
+      "marker-select": {
+        "role": "tertiary",
+        "displayName": "Marker Selected Ring",
+        "canonical": "#0284c7",
+        "tonalRamp": [
+          "oklch(39.1% 0.09 240.876)",
+          "oklch(44.3% 0.11 240.79)",
+          "oklch(50% 0.134 242.749)",
+          "oklch(58.8% 0.158 241.966)",
+          "oklch(68.5% 0.169 237.323)",
+          "oklch(74.6% 0.16 232.661)",
+          "oklch(82.8% 0.111 230.318)",
+          "oklch(90.1% 0.058 230.902)"
+        ]
+      },
+      "marker-done": {
+        "role": "tertiary",
+        "displayName": "Marker Done Badge",
+        "canonical": "#059669",
+        "tonalRamp": [
+          "oklch(37.8% 0.077 168.94)",
+          "oklch(43.2% 0.095 166.913)",
+          "oklch(50.8% 0.118 165.612)",
+          "oklch(59.6% 0.145 163.225)",
+          "oklch(69.6% 0.17 162.48)",
+          "oklch(76.5% 0.177 163.223)",
+          "oklch(84.5% 0.143 164.978)",
+          "oklch(90.5% 0.093 164.15)"
+        ]
       }
     },
     "typographyMeta": {
@@ -315,6 +450,14 @@
       "description": "Todo state as words first, tint second. Ready is amber, overdue red, upcoming gray. Never a bare dot.",
       "html": "<span class=\"ds-chip ds-chip-ready\">Ready · by 27 Nov</span> <span class=\"ds-chip ds-chip-overdue\">Overdue · was due 3 Dec</span> <span class=\"ds-chip ds-chip-upcoming\">Opens 13 Nov</span>",
       "css": ".ds-chip { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font: 500 0.75rem/1.4 Inter, system-ui, sans-serif; } .ds-chip-ready { background: #fef3c7; color: #78350f; box-shadow: inset 0 0 0 1px #fcd34d; } .ds-chip-overdue { background: #fef2f2; color: #991b1b; box-shadow: inset 0 0 0 1px #fca5a5; } .ds-chip-upcoming { background: #f3f4f6; color: #374151; box-shadow: inset 0 0 0 1px #d1d5db; }"
+    },
+    {
+      "name": "Map Marker",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "One family on the map. Shape says the kind (rounded-square stop, round activity pin, diamond waypoint), glyph and family color say the sort of place, and state uses only the functional colors: sky-600 outline for selected, emerald-600 check and a muted fill for done. Shipping CSS: src/assets/styles/map-markers.css.",
+      "html": "<div class=\"ds-mk-row\"><span class=\"ds-mk ds-mk-stop\" style=\"--c:#1d4ed8\"><svg class=\"ds-mk-shape\" width=\"44\" height=\"44\" viewBox=\"-4 -4 44 44\"><path class=\"ds-mk-body\" d=\"M12 2H24A10 10 0 0 1 34 12V24A10 10 0 0 1 24 34H22L18 40L14 34H12A10 10 0 0 1 2 24V12A10 10 0 0 1 12 2Z\"/></svg><span class=\"ds-mk-glyph ds-mk-initials\">Q</span></span><span class=\"ds-mk ds-mk-pin \" style=\"--c:#db2777\"><svg class=\"ds-mk-shape\" width=\"38\" height=\"39\" viewBox=\"-4 -4 38 39\"><path class=\"ds-mk-body\" d=\"M15 35L10.9 27.4A13 13 0 1 1 19.1 27.4Z\"/></svg><span class=\"ds-mk-glyph\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M216,40V224a8,8,0,0,1-16,0V176H152a8,8,0,0,1-8-8,268.75,268.75,0,0,1,7.22-56.88c9.78-40.49,28.32-67.63,53.63-78.47A8,8,0,0,1,216,40Zm-96.11-1.31a8,8,0,1,0-15.78,2.63L111.89,88H88V40a8,8,0,0,0-16,0V88H48.11l7.78-46.68a8,8,0,1,0-15.78-2.63l-8,48A8.17,8.17,0,0,0,32,88a48.07,48.07,0,0,0,40,47.32V224a8,8,0,0,0,16,0V135.32A48.07,48.07,0,0,0,128,88a8.17,8.17,0,0,0-.11-1.31Z\"/></svg></span></span><span class=\"ds-mk ds-mk-pin \" style=\"--c:#7c3aed\"><svg class=\"ds-mk-shape\" width=\"38\" height=\"39\" viewBox=\"-4 -4 38 39\"><path class=\"ds-mk-body\" d=\"M15 35L10.9 27.4A13 13 0 1 1 19.1 27.4Z\"/></svg><span class=\"ds-mk-glyph\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M208,56H180.28L166.65,35.56A8,8,0,0,0,160,32H96a8,8,0,0,0-6.65,3.56L75.71,56H48A24,24,0,0,0,24,80V192a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V80A24,24,0,0,0,208,56Zm-44,76a36,36,0,1,1-36-36A36,36,0,0,1,164,132Z\"/></svg></span><span class=\"ds-mk-next\">Next</span></span><span class=\"ds-mk ds-mk-pin is-done\" style=\"--c:#5b8c5a\"><svg class=\"ds-mk-shape\" width=\"38\" height=\"39\" viewBox=\"-4 -4 38 39\"><path class=\"ds-mk-body\" d=\"M15 35L10.9 27.4A13 13 0 1 1 19.1 27.4Z\"/></svg><span class=\"ds-mk-glyph\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M120,48a32,32,0,1,1,32,32A32,32,0,0,1,120,48Zm72,88c-23.37,0-28.92-8.56-36.6-20.4-3.65-5.64-7.79-12-14.16-17.55a40.92,40.92,0,0,0-8-5.47,8,8,0,0,0-11,3.92L64.66,228.81a8,8,0,0,0,4.15,10.52A7.84,7.84,0,0,0,72,240a8,8,0,0,0,7.34-4.81l33.59-77.27L144,180.12V232a8,8,0,0,0,16,0V176a8,8,0,0,0-3.35-6.51l-37.2-26.57,13.4-30.81c3.57,3.62,6.28,7.8,9.13,12.19,7.67,11.84,16.27,25.11,42,27.36V232a8,8,0,0,0,16,0V144A8,8,0,0,0,192,136ZM72,152a8,8,0,0,0,7.36-4.85l24-56a8,8,0,0,0-4.2-10.5l-28-12a8,8,0,0,0-10.5,4.2l-24,56a8,8,0,0,0,4.2,10.5l28,12A8,8,0,0,0,72,152Z\"/></svg></span><span class=\"ds-mk-check\"><svg width=\"8\" height=\"8\" viewBox=\"0 0 256 256\" fill=\"currentColor\"><path d=\"M243.31,90.91l-128.4,128.4a16,16,0,0,1-22.62,0l-71.62-72a16,16,0,0,1,0-22.61l20-20a16,16,0,0,1,22.58,0L104,144.22l96.76-95.57a16,16,0,0,1,22.59,0l19.95,19.54A16,16,0,0,1,243.31,90.91Z\"/></svg></span></span></div>",
+      "css": ".ds-mk-row { display: flex; align-items: flex-end; gap: 20px; padding: 24px 8px 8px; } .ds-mk { position: relative; display: inline-block; filter: drop-shadow(0 1px 1.5px rgb(15 23 42 / 0.35)) drop-shadow(0 2px 4px rgb(15 23 42 / 0.16)); } .ds-mk-pin { width: 38px; height: 39px; } .ds-mk-stop { width: 44px; height: 44px; } .ds-mk-shape { position: absolute; inset: 0; } .ds-mk-body { fill: var(--c); stroke: #fff; stroke-width: 2.5; } .ds-mk-glyph { position: absolute; display: grid; place-items: center; color: #fff; } .ds-mk-pin .ds-mk-glyph { left: 4px; top: 4px; width: 30px; height: 26px; } .ds-mk-stop .ds-mk-glyph { left: 6px; top: 6px; width: 32px; height: 32px; font: 700 13px/1 Inter, system-ui, sans-serif; } .ds-mk-pin.is-done .ds-mk-body { fill: #d6dbe3; } .ds-mk-pin.is-done .ds-mk-glyph { color: #1f2937; } .ds-mk-check { position: absolute; top: 0; right: 0; display: grid; place-items: center; width: 14px; height: 14px; border: 2px solid #fff; border-radius: 50%; background: #059669; color: #fff; } .ds-mk-next { position: absolute; bottom: 100%; left: 50%; translate: -50% 2px; padding: 1px 6px; border-radius: 9999px; background: #2b7070; color: #fff; font: 600 10px/1.4 Inter, system-ui, sans-serif; white-space: nowrap; }"
     }
   ],
   "narrative": {

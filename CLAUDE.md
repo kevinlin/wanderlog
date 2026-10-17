@@ -64,7 +64,7 @@ react-router in [src/App.tsx](src/App.tsx), pages in [src/pages/](src/pages/). E
 
 ## Environment Variables
 
-`.env.local` for local dev (see `.env.local.example`). Client-visible (`VITE_*`): `VITE_GOOGLE_MAPS_API_KEY`, `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Server-only, never in the client bundle: `SUPABASE_SERVICE_ROLE_KEY` (migration script), `ANTHROPIC_API_KEY` / `ANTHROPIC_BASE_URL` / `ANTHROPIC_MODEL` and `GOOGLE_GEOCODING_API_KEY` (agent function; the geocoding key is a separate server key, not the referrer-restricted browser Maps key).
+`.env.local` for local dev (see `.env.local.example`). Client-visible (`VITE_*`): `VITE_GOOGLE_MAPS_API_KEY`, `VITE_GOOGLE_MAPS_MAP_ID` (the Map ID that carries the cloud map style; advanced markers need one, and unset falls back to the unstyled `DEMO_MAP_ID`, development only), `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`. Server-only, never in the client bundle: `SUPABASE_SERVICE_ROLE_KEY` (migration script), `ANTHROPIC_API_KEY` / `ANTHROPIC_BASE_URL` / `ANTHROPIC_MODEL` and `GOOGLE_GEOCODING_API_KEY` (agent function; the geocoding key is a separate server key, not the referrer-restricted browser Maps key).
 
 ## Deployment
 

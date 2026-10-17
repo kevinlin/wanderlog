@@ -2,6 +2,24 @@
 
 Notable changes to Wanderlog, newest first. The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and versions follow [Semantic Versioning](https://semver.org/). Releases before 3.2.0 are recorded only in the git history.
 
+## [Unreleased]
+
+### Changed
+
+- **New map markers.** Each kind of place on the map now has its own marker. A stop shows its initials in the same color as its timeline chip. Its look tells you whether it's behind you, today or still ahead. An activity's icon shows what it is: a fork and knife for food, a hiker for a walk. Its marker comes in one of seven colors. Once it's done, it turns muted and gets a green check. Scenic waypoints are small violet diamonds, and search results are white discs until you add them. The first activity you haven't done yet has a "Next" tab.
+- **Arriving at a stop.** When you pick a stop, the map flies there first. Then the stop drops into place, and its places appear one after another.
+- **Zoomed out**, a stop's places shrink to small dots, so the stops stay easy to read.
+- The hover card shows the same icon as the marker.
+
+### Fixed
+
+- A stop no longer looks finished on its last day. "Today" now follows the trip's own timezone instead of New Zealand time.
+- Ticking off an activity no longer zooms the map out to the whole trip.
+
+### Upgrade notes
+
+- The map now needs a Google Maps Map ID with a cloud map style. Do this before you deploy: create the Map ID in Google Cloud Console and import `docs/architecture/map-style.json` as its style. Then set `VITE_GOOGLE_MAPS_MAP_ID` in Vercel for Preview and Production. Without it, the map loads unstyled on Google's demo ID.
+
 ## [3.2.0] - 2026-10-17
 
 ### Added

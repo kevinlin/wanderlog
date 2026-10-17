@@ -6,8 +6,8 @@
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
-    /* TS 6 defaults "types" to []; node is needed for process.env globals */
-    "types": ["node"],
+    /* TS 6 defaults "types" to []; node is needed for process.env globals, google.maps for the global google.maps namespace */
+    "types": ["node", "google.maps"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
