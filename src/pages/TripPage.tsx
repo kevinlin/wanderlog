@@ -122,7 +122,7 @@ export const TripPage = () => {
           <h1 className="font-bold text-gray-900 text-xl">This trip no longer exists</h1>
           <p className="mt-2 text-gray-600 text-sm">It may have been deleted. Head back to the library to pick another one.</p>
           <Link
-            className="mt-6 inline-block rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90"
+            className="mt-6 inline-block rounded-xl bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90"
             to="/trips"
           >
             Back to trips
@@ -163,7 +163,7 @@ export const TripPage = () => {
                 </Link>
                 {isOnline && (
                   <button
-                    className="rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 active:bg-alpine-teal/80"
+                    className="rounded-xl bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90 active:bg-alpine-teal-deep"
                     onClick={() => setIsStopsEditorOpen(true)}
                     type="button"
                   >

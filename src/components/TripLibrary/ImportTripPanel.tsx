@@ -47,7 +47,7 @@ const PreviewPanel = ({ preview }: { preview: ImportPreview }) => (
   <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
     <div className="mb-2 flex items-center gap-2">
       <h3 className="font-semibold text-gray-900">{preview.tripData.trip_name}</h3>
-      <span className="rounded-full bg-alpine-teal/10 px-2 py-0.5 font-medium text-alpine-teal text-xs">
+      <span className="rounded-full bg-alpine-teal/10 px-2 py-0.5 font-medium text-alpine-teal-deep text-xs">
         {FORMAT_LABELS[preview.format]}
       </span>
     </div>
@@ -157,7 +157,7 @@ export const ImportTripPanel = () => {
 
       {state.phase === 'preview' && (
         <button
-          className="min-h-[44px] rounded-lg bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 active:bg-alpine-teal/80 disabled:opacity-50"
+          className="min-h-[44px] rounded-lg bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90 active:bg-alpine-teal-deep disabled:opacity-50"
           disabled={isPending}
           onClick={() => mutate(state.preview.tripData)}
           type="button"

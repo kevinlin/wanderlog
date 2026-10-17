@@ -68,7 +68,7 @@ export const TripLibraryCard = ({ trip, status, isHero, onOpen, onDelete, onEdit
     {onEdit && (
       <button
         aria-label={`Edit ${trip.trip_name}`}
-        className="absolute right-12 bottom-3 rounded-lg p-2 text-gray-400 opacity-0 transition-opacity hover:bg-alpine-teal/10 hover:text-alpine-teal focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100"
+        className="absolute right-12 bottom-3 rounded-lg p-2 text-gray-400 opacity-0 transition-opacity hover:bg-alpine-teal/10 hover:text-alpine-teal-deep focus:opacity-100 group-focus-within:opacity-100 group-hover:opacity-100"
         onClick={(event) => {
           event.stopPropagation();
           onEdit();

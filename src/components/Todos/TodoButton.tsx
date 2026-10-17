@@ -17,7 +17,7 @@ export function TodoButton({ count, isOpen, onClick, ref }: TodoButtonProps): Re
       aria-haspopup="dialog"
       aria-label={count > 0 ? `To do, ${count} ready` : 'To do'}
       className={`relative flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-xl border px-3 font-medium shadow-lg backdrop-blur-md transition-all focus-visible:outline-2 focus-visible:outline-alpine-teal focus-visible:outline-offset-2 motion-safe:active:scale-95 motion-safe:hover:scale-105 sm:px-4 ${
-        isOpen ? 'border-alpine-teal bg-alpine-teal text-white' : 'border-white/30 bg-white/90 text-gray-700 hover:bg-white'
+        isOpen ? 'border-alpine-teal-deep bg-alpine-teal-deep text-white' : 'border-white/30 bg-white/90 text-gray-700 hover:bg-white'
       }`}
       onClick={onClick}
       ref={ref}

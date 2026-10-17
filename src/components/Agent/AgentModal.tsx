@@ -140,7 +140,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
               </p>
               <div className="flex justify-end">
                 <button
-                  className="rounded-lg bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 disabled:opacity-50"
+                  className="rounded-lg bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90 disabled:opacity-50"
                   disabled={!prompt.trim()}
                   onClick={handleSubmit}
                   type="button"
@@ -218,7 +218,7 @@ export function AgentModal({ isOpen, onClose, tripId }: AgentModalProps): ReactE
               <div className="flex justify-end gap-3">
                 {result?.tripId && (
                   <button
-                    className="rounded-lg bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90"
+                    className="rounded-lg bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90"
                     onClick={() => {
                       const target = result.tripId;
                       handleClose();

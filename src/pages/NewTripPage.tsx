@@ -158,7 +158,7 @@ export const NewTripPage = () => {
           )}
 
           <button
-            className="flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 active:bg-alpine-teal/80 disabled:opacity-50"
+            className="flex min-h-[44px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90 active:bg-alpine-teal-deep disabled:opacity-50"
             disabled={createMutation.isPending || !isOnline}
             type="submit"
           >

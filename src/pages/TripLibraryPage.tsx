@@ -41,7 +41,7 @@ export const TripLibraryPage = () => {
           <div className="flex items-center gap-3">
             <AgentButton />
             <Link
-              className="rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white shadow-xs transition-colors hover:bg-alpine-teal/90 active:bg-alpine-teal/80"
+              className="rounded-xl bg-alpine-teal-deep px-4 py-2 font-medium text-white shadow-xs transition-colors hover:bg-alpine-teal-deep/90 active:bg-alpine-teal-deep"
               to="/trips/new"
             >
               New trip
@@ -54,7 +54,7 @@ export const TripLibraryPage = () => {
             <p className="font-medium text-gray-900 text-lg">No trips yet. Where to first?</p>
             <p className="mt-1 text-gray-600 text-sm">Name a trip, give it dates, and start filling in the map.</p>
             <Link
-              className="mt-6 inline-block rounded-xl bg-alpine-teal px-4 py-2 font-medium text-white shadow-xs transition-colors hover:bg-alpine-teal/90 active:bg-alpine-teal/80"
+              className="mt-6 inline-block rounded-xl bg-alpine-teal-deep px-4 py-2 font-medium text-white shadow-xs transition-colors hover:bg-alpine-teal-deep/90 active:bg-alpine-teal-deep"
               to="/trips/new"
             >
               Create your first trip

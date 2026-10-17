@@ -134,7 +134,7 @@ export const UserMenu = ({ className = '', onEditTrip, onEditStops }: UserMenuPr
         aria-expanded={isOpen}
         aria-label="User menu"
         className={`flex h-10 w-10 items-center justify-center rounded-xl border font-semibold shadow-lg backdrop-blur-md transition-all hover:scale-105 active:scale-95 ${
-          isOpen ? 'border-alpine-teal bg-alpine-teal text-white' : 'border-white/30 bg-white/90 text-gray-700 hover:bg-white'
+          isOpen ? 'border-alpine-teal-deep bg-alpine-teal-deep text-white' : 'border-white/30 bg-white/90 text-gray-700 hover:bg-white'
         }`}
         onClick={() => setIsOpen((prev) => !prev)}
         title={email}

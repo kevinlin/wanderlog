@@ -71,7 +71,7 @@ const StopRow = ({ stop, index, isFirst, isLast, onEdit, onDelete, onMove }: Sto
         </button>
         <button
           aria-label={`Edit ${stop.name}`}
-          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-alpine-teal/10 hover:text-alpine-teal"
+          className="rounded-md p-1.5 text-gray-400 transition-colors hover:bg-alpine-teal/10 hover:text-alpine-teal-deep"
           onClick={onEdit}
           type="button"
         >
@@ -196,7 +196,7 @@ export const StopsEditor = ({ tripData, onClose }: StopsEditorProps) => {
 
         <div className="flex-1 overflow-y-auto p-6">
           {isDirty && (
-            <p className="mb-3 rounded-lg bg-alpine-teal/10 px-3 py-2 text-alpine-teal text-xs">
+            <p className="mb-3 rounded-lg bg-alpine-teal/10 px-3 py-2 text-alpine-teal-deep text-xs">
               Dates below preview the cascade: each stop keeps its nights and the chain re-anchors at {anchorDate}. Saving updates the
               trip's date span.
             </p>
@@ -221,7 +221,7 @@ export const StopsEditor = ({ tripData, onClose }: StopsEditorProps) => {
           </DndContext>
 
           <button
-            className="mt-3 flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/40 border-dashed bg-alpine-teal/5 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/10"
+            className="mt-3 flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/40 border-dashed bg-alpine-teal/5 px-4 py-2 font-medium text-alpine-teal-deep text-sm transition-all duration-200 hover:bg-alpine-teal/10"
             onClick={() => setStopModal({ mode: 'create' })}
             type="button"
           >
@@ -241,7 +241,7 @@ export const StopsEditor = ({ tripData, onClose }: StopsEditorProps) => {
               Cancel
             </button>
             <button
-              className="rounded-lg bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 disabled:opacity-50"
+              className="rounded-lg bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90 disabled:opacity-50"
               disabled={!isDirty || applyMutation.isPending || previewStops.length === 0}
               onClick={handleSave}
               type="button"

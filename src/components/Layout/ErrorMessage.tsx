@@ -111,7 +111,7 @@ export const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry, fu
         <div className="flex flex-col gap-3 sm:flex-row">
           {onRetry && (
             <button
-              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-alpine-teal px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-alpine-teal/90"
+              className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-alpine-teal-deep px-6 py-3 font-medium text-white transition-all duration-200 hover:bg-alpine-teal-deep/90"
               onClick={onRetry}
             >
               <span>🔄</span>

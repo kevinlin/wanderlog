@@ -162,7 +162,7 @@ export const POISearchResultCard: React.FC<POISearchResultCardProps> = ({ poi, o
 
         {/* Add to Activities Button */}
         <button
-          className="min-h-[36px] w-full touch-manipulation rounded-lg border border-alpine-teal/30 bg-alpine-teal/10 px-3 py-2 font-medium text-alpine-teal text-sm transition-all hover:bg-alpine-teal/20 hover:shadow-xs active:bg-alpine-teal/30"
+          className="min-h-[36px] w-full touch-manipulation rounded-lg border border-alpine-teal/30 bg-alpine-teal/10 px-3 py-2 font-medium text-alpine-teal-deep text-sm transition-all hover:bg-alpine-teal/20 hover:shadow-xs active:bg-alpine-teal/30"
           onClick={() => onAddToActivities(poi)}
         >
           ➕ Add to Activities

@@ -56,7 +56,7 @@ export const ItemModalShell = ({ title, isOpen, onClose, onSubmit, isPending = f
               Cancel
             </button>
             <button
-              className="rounded-lg bg-alpine-teal px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal/90 disabled:opacity-50"
+              className="rounded-lg bg-alpine-teal-deep px-4 py-2 font-medium text-white transition-colors hover:bg-alpine-teal-deep/90 disabled:opacity-50"
               disabled={isPending}
               type="submit"
             >

@@ -125,7 +125,7 @@ export const WaypointFormModal = ({ waypoint, isOpen, onClose, searchLocation, s
             value={address}
           />
           <button
-            className="flex shrink-0 items-center gap-1 rounded-lg border border-alpine-teal/40 bg-alpine-teal/10 px-3 py-2 font-medium text-alpine-teal text-sm transition-colors hover:bg-alpine-teal/20 disabled:opacity-50"
+            className="flex shrink-0 items-center gap-1 rounded-lg border border-alpine-teal/40 bg-alpine-teal/10 px-3 py-2 font-medium text-alpine-teal-deep text-sm transition-colors hover:bg-alpine-teal/20 disabled:opacity-50"
             disabled={isSearching || !(address.trim() || name.trim())}
             onClick={handleFindPlace}
             type="button"

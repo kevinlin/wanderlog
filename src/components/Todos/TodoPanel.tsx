@@ -23,7 +23,7 @@ type FormState = { mode: 'create' } | { mode: 'edit'; todo: Todo };
 const CELEBRATION = 'All booked. Now the fun part. 🎉';
 
 const ADD_BUTTON =
-  'flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-alpine-teal/40 bg-alpine-teal/10 px-3 font-medium text-alpine-teal text-sm transition-colors hover:bg-alpine-teal/20 disabled:cursor-not-allowed disabled:opacity-50';
+  'flex min-h-11 items-center justify-center gap-1.5 rounded-lg border border-alpine-teal/40 bg-alpine-teal/10 px-3 font-medium text-alpine-teal-deep text-sm transition-colors hover:bg-alpine-teal/20 disabled:cursor-not-allowed disabled:opacity-50';
 
 export function TodoPanel({ onClose, today, tripData, tripId }: TodoPanelProps): ReactElement {
   const isOnline = useOnlineStatus();

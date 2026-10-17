@@ -3,6 +3,7 @@ name: Wanderlog
 description: An interactive map-based travel journal — a living plan you track as you go.
 colors:
   primary: "#4a9e9e"
+  primary-deep: "#2b7070"
   lake-blue: "#6bb6d6"
   fern-green: "#5b8c5a"
   sandy-beige: "#f2e7d5"
@@ -63,7 +64,7 @@ spacing:
   xl: "24px"
 components:
   button-primary:
-    backgroundColor: "{colors.primary}"
+    backgroundColor: "{colors.primary-deep}"
     textColor: "{colors.surface}"
     rounded: "{rounded.lg}"
     padding: "8px 16px"
@@ -110,7 +111,8 @@ The system explicitly rejects every anti-reference in PRODUCT.md: the cold gray 
 A calm teal identity over a bright, high-signal functional palette; neutrals are a cool Tailwind gray scale that keeps the color meaningful by staying quiet.
 
 ### Primary
-- **Fresh Alpine Teal** (#4a9e9e): The brand voice and the app's chrome. Crisp and outdoorsy — a brighter, more energetic read of teal. Used on primary buttons, links, input focus (border plus a `#4a9e9e` ring at 30% opacity), and any control that represents the main action. Tints of teal (`/10`, `/20`, `/40`) form secondary/ghost buttons and quiet hover fills.
+- **Fresh Alpine Teal** (#4a9e9e): The brand voice and the app's chrome. Crisp and outdoorsy — a brighter, more energetic read of teal. Used for input focus (border plus a `#4a9e9e` ring at 30% opacity), focus outlines, borders, the map route, and tints (`/10`, `/20`, `/40`) that form secondary/ghost buttons and quiet hover fills. It only reaches 3.2:1 on white, so it never carries text.
+- **Deep Alpine Teal** (#2b7070, `alpine-teal-deep`): The same teal deepened to pass AA, for anything that carries text. Teal text and links (5.8:1 on white, 5.2:1 on a `/10` tint) and solid primary-button fills under white labels.
 
 ### Secondary
 - **Lake Blue** (#6bb6d6): An atmospheric accent, not a workhorse. Appears in the auth-screen gradient and occasional soft backgrounds. Do not press it into service as a second interactive color; selection already belongs to Selection Sky.
@@ -178,8 +180,8 @@ Floating chrome, flat content. Content surfaces (cards, panels, modals) are esse
 
 ### Buttons
 - **Shape:** Gently rounded (rounded-lg, 8px); the floating agent button is more pill-like (rounded-xl, 12px). Touch targets are ≥44px tall.
-- **Primary:** Alpine-teal fill, white text, `font-medium`, padding 8px 16px. Hover deepens to teal at 90% opacity, active to 80%; disabled drops to 50% opacity. This is the main-action button everywhere (sign in, confirm, send).
-- **Secondary / Tinted:** Teal-tint fill (`bg-alpine-teal/10`) with a teal border (`/40`) and teal text — the quieter "add" and toolbar action.
+- **Primary:** Deep-teal fill (`bg-alpine-teal-deep`), white text, `font-medium`, padding 8px 16px. Hover lightens to 90% opacity (still 4.7:1), active returns to the solid fill; disabled drops to 50% opacity. This is the main-action button everywhere (sign in, confirm, send).
+- **Secondary / Tinted:** Teal-tint fill (`bg-alpine-teal/10`) with a teal border (`/40`) and deep-teal text (`text-alpine-teal-deep`) — the quieter "add" and toolbar action.
 - **In-card action links:** Small (min-h 30px, rounded-sm), sky border and text, used for Details / Maps / Direction rows. The Direction button is a solid sky fill.
 - **Icon buttons:** `p-1.5 rounded-md`, gray-400 at rest, tinting to the relevant meaning color on hover (sky for edit, red for delete).
 - **Hover / Focus:** `transition-colors`, ~200ms. Focus-visible must show a ring; keyboard users never lose the focused control.

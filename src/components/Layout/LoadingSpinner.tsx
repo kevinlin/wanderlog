@@ -41,7 +41,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
               <div className="absolute inset-0 animate-spin rounded-full border-2 border-alpine-teal border-t-transparent" />
               <div className="absolute inset-2 rounded-full bg-linear-to-br from-alpine-teal to-lake-blue opacity-20" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <div className="font-bold text-alpine-teal" style={{ fontSize: size === 'lg' ? '8px' : '6px' }}>
+                <div className="font-bold text-alpine-teal-deep" style={{ fontSize: size === 'lg' ? '8px' : '6px' }}>
                   N
                 </div>
               </div>

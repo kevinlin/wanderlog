@@ -366,7 +366,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             isOnline && (
               <div className="px-3 py-3">
                 <button
-                  className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
+                  className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal-deep text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                   onClick={() => setIsAccommodationModalOpen(true)}
                   type="button"
                 >
@@ -406,7 +406,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   ))}
                   {isOnline && (
                     <button
-                      className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
+                      className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal-deep text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                       onClick={() => setWaypointModal({ mode: 'create' })}
                       type="button"
                     >
@@ -423,7 +423,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
           {plannedWaypoints.length === 0 && isOnline && (
             <div className="px-3 pb-3">
               <button
-                className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
+                className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal-deep text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                 onClick={() => setWaypointModal({ mode: 'create' })}
                 type="button"
               >
@@ -492,7 +492,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
               {isOnline && (
                 <div className="px-3 pb-3">
                   <button
-                    className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal text-sm transition-all duration-200 hover:bg-alpine-teal/20"
+                    className="flex min-h-[36px] w-full touch-manipulation items-center justify-center gap-2 rounded-lg border border-alpine-teal/30 border-dashed bg-alpine-teal/10 px-4 py-2 font-medium text-alpine-teal-deep text-sm transition-all duration-200 hover:bg-alpine-teal/20"
                     onClick={() => setActivityModal({ mode: 'create' })}
                     type="button"
                   >
@@ -567,7 +567,7 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
             </div>
             <button
               aria-label="Search"
-              className="flex h-9 w-9 touch-manipulation items-center justify-center rounded-lg border border-alpine-teal/30 bg-alpine-teal/10 text-alpine-teal transition-all hover:bg-alpine-teal/20 active:bg-alpine-teal/30 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex h-9 w-9 touch-manipulation items-center justify-center rounded-lg border border-alpine-teal/30 bg-alpine-teal/10 text-alpine-teal-deep transition-all hover:bg-alpine-teal/20 active:bg-alpine-teal/30 disabled:cursor-not-allowed disabled:opacity-50"
               disabled={!searchInputValue.trim() || poiSearch.loading}
               onClick={handleSearch}
             >
