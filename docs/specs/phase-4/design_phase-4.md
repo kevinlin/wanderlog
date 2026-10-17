@@ -173,7 +173,7 @@ Changes to [api/_lib/tools/items.ts](../../../api/_lib/tools/items.ts), [api/_li
 
 ## Milestones
 
-Matching the requirements doc. Detailed plans written just-in-time as `plan_p4m<N>_<topic>.md`.
+Matching the requirements doc. Detailed plans were written just-in-time per milestone and are now sections of [plan_phase-4.md](plan_phase-4.md).
 
 1. **M1 - Data model and capture.** Migration, mappers including the trip's stored dates and waypoint order, `visitRecord.ts`, timezone correction in trip metadata, the module-scope visit mutation with resume wiring, `VisitDetailsModal`, `DurationInput`, card rendering, `buster` bump. *Verify: a tick during a live trip stamps trip-local time and a tick outside the window does not; a trip whose timezone differs from the device stamps in the trip's zone; the form saves an out-of-range date with a warning; a note typed offline survives a tab restart, and a failure after that restart rolls back and offers retry.*
 2. **M2 - Visited section.** `partitionByVisit`, `applyPlannedOrder`, panel restructuring, id-based reorder. *Verify: a multi-night stop renders visited items grouped by day in visit order; ticking moves an item between sections; dragging works in planned and is absent in visited; unticking returns an item to its original slot; colliding order values render deterministically.*
