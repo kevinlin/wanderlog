@@ -9,6 +9,8 @@ import {
   nightsBetween,
   patchRow,
   STOP_COLUMNS,
+  TODO_COLUMNS,
+  TODO_DONE_COLUMN,
   TRIP_METADATA_COLUMNS,
   VISIT_COLUMNS,
   WAYPOINT_COLUMNS,
@@ -149,6 +151,33 @@ describe('trip metadata columns', () => {
 
   it('passes an explicit null through (clearing a description)', () => {
     expect(patchRow(TRIP_METADATA_COLUMNS, { description: null })).toEqual({ description: null });
+  });
+});
+
+describe('todo columns', () => {
+  it('denseRow maps the camelCase window and link keys to columns, nulling absent fields', () => {
+    expect(denseRow(TODO_COLUMNS, { title: 'Book train', opensOn: '2026-12-01', dueOn: '2026-12-10', stopId: 'chongqing' })).toEqual({
+      title: 'Book train',
+      notes: null,
+      url: null,
+      opens_on: '2026-12-01',
+      due_on: '2026-12-10',
+      stop_id: 'chongqing',
+      activity_id: null,
+    });
+  });
+
+  it('denseRow accepts snake_case input keys', () => {
+    const row = denseRow(TODO_COLUMNS, { title: 'Book train', opens_on: '2026-12-01', due_on: '2026-12-10', activity_id: 'act-1' });
+    expect(row).toMatchObject({ opens_on: '2026-12-01', due_on: '2026-12-10', activity_id: 'act-1' });
+  });
+
+  // Same reason as the item editors: a full-form save must not un-tick a todo.
+  it('keeps done out of the dense column set and writes it sparsely through its own def', () => {
+    expect(denseRow(TODO_COLUMNS, { title: 'Book train', done: true })).not.toHaveProperty('is_done');
+    expect(patchRow([TODO_DONE_COLUMN], { done: true })).toEqual({ is_done: true });
+    expect(patchRow([TODO_DONE_COLUMN], { done: false })).toEqual({ is_done: false });
+    expect(patchRow([TODO_DONE_COLUMN], {})).toEqual({});
   });
 });
 

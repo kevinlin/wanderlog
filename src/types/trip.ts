@@ -8,6 +8,9 @@ export interface TripSummary {
   end_date: string; // YYYY-MM-DD
   start_date: string; // YYYY-MM-DD
   timezone: string;
+  // Only the browser's library select embeds these, so the agent's list_trips
+  // output carries no key.
+  todos?: TodoWindow[];
   trip_id: string;
   trip_name: string;
   updated_at?: string;
@@ -20,6 +23,9 @@ export interface TripData {
   start_date?: string; // YYYY-MM-DD, from the stored trip row
   stops: TripBase[];
   timezone: string;
+  // Optional: only the browser's detail select embeds them, and a cache
+  // persisted before Phase 5 has none.
+  todos?: Todo[];
   // Legacy fields for backward compatibility
   travellers?: string[];
   trip_id?: string;
@@ -61,6 +67,21 @@ export interface Accommodation {
   thumbnail_url?: string;
   url?: string;
 }
+
+export interface Todo {
+  activity_id?: string;
+  done: boolean;
+  due_on?: string; // YYYY-MM-DD, trip timezone
+  notes?: string;
+  opens_on?: string; // YYYY-MM-DD, trip timezone
+  stop_id?: string;
+  title: string;
+  todo_id: string;
+  url?: string;
+}
+
+// The fields the active count needs; what the library summary carries.
+export type TodoWindow = Pick<Todo, 'opens_on' | 'done'>;
 
 export const ActivityType = {
   RESTAURANT: 'restaurant',

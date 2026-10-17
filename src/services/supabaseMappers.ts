@@ -1,9 +1,16 @@
 import type { ScenicWaypoint } from '@/types/map';
-import type { Accommodation, Activity, TripBase, TripData, TripSummary } from '@/types/trip';
+import type { Accommodation, Activity, Todo, TodoWindow, TripBase, TripData, TripSummary } from '@/types/trip';
 
 export const TRIP_SELECT = '*, stops(*, accommodations(*), activities(*), scenic_waypoints(*))';
 
 export const TRIP_SUMMARY_SELECT = 'id, name, description, destination, start_date, end_date, timezone, created_at, updated_at';
+
+// Browser-only: api/ keeps the two selects above, so the agent prefetch and
+// get_trip/list_trips output gain no todos key. The mappers below map todos
+// only when the row carries them.
+export const TRIP_DETAIL_SELECT = `${TRIP_SELECT}, todos(*)`;
+
+export const TRIP_LIBRARY_SELECT = `${TRIP_SUMMARY_SELECT}, todos(opens_on, is_done)`;
 
 export interface TripRow {
   created_at: string;
@@ -80,8 +87,24 @@ export interface StopRowNested extends StopRow {
   scenic_waypoints: ScenicWaypointRow[];
 }
 
+export interface TodoRow {
+  activity_id: string | null;
+  created_at: string;
+  due_on: string | null;
+  id: string;
+  is_done: boolean;
+  notes: string | null;
+  opens_on: string | null;
+  stop_id: string | null;
+  title: string;
+  trip_id: string;
+  updated_at: string;
+  url: string | null;
+}
+
 export interface TripRowNested extends TripRow {
   stops: StopRowNested[];
+  todos?: TodoRow[];
 }
 
 export interface TripSummaryRow {
@@ -93,6 +116,7 @@ export interface TripSummaryRow {
   name: string;
   start_date: string;
   timezone: string;
+  todos?: Pick<TodoRow, 'opens_on' | 'is_done'>[];
   updated_at: string;
 }
 
@@ -107,6 +131,9 @@ export function toTripSummary(row: TripSummaryRow): TripSummary {
     timezone: row.timezone,
     created_at: row.created_at,
     updated_at: row.updated_at,
+    // Spread only when the row carries them: the agent's summary select does
+    // not, and its output must not gain a key.
+    ...(row.todos ? { todos: row.todos.map(toTodoWindow) } : {}),
   };
 }
 
@@ -149,6 +176,23 @@ const toActivity = (row: ActivityRow): Activity => ({
   status: { done: row.is_done },
   visited_at: orNothing(row.visited_at),
   visit_duration_minutes: orNothing(row.visit_duration_minutes),
+});
+
+export const toTodo = (row: TodoRow): Todo => ({
+  todo_id: row.id,
+  title: row.title,
+  notes: orNothing(row.notes),
+  url: orNothing(row.url),
+  opens_on: orNothing(row.opens_on),
+  due_on: orNothing(row.due_on),
+  stop_id: orNothing(row.stop_id),
+  activity_id: orNothing(row.activity_id),
+  done: row.is_done,
+});
+
+export const toTodoWindow = (row: Pick<TodoRow, 'opens_on' | 'is_done'>): TodoWindow => ({
+  opens_on: orNothing(row.opens_on),
+  done: row.is_done,
 });
 
 const toScenicWaypoint = (row: ScenicWaypointRow): ScenicWaypoint => ({
@@ -214,6 +258,9 @@ export const toTripData = (row: TripRowNested): TripData => ({
   stops: [...row.stops].sort(bySortOrder).map(toTripBase),
   created_at: row.created_at,
   updated_at: row.updated_at,
+  // Spread only when the row carries them: the agent's TRIP_SELECT does not,
+  // and get_trip's output must not gain a key.
+  ...(row.todos ? { todos: row.todos.map(toTodo) } : {}),
 });
 
 export const buildRows = (trip: TripData, tripId: string): RowBundle => {

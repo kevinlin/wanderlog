@@ -9,6 +9,8 @@ import {
   nightsBetween,
   patchRow,
   STOP_COLUMNS,
+  TODO_COLUMNS,
+  TODO_DONE_COLUMN,
   TRIP_METADATA_COLUMNS,
   WAYPOINT_COLUMNS,
 } from './entityRows.js';
@@ -54,6 +56,16 @@ export interface AccommodationInput {
   lng?: number;
   name: string;
   remarks?: string;
+  url?: string;
+}
+
+export interface TodoInput {
+  activityId?: string;
+  dueOn?: string; // YYYY-MM-DD, trip timezone
+  notes?: string;
+  opensOn?: string; // YYYY-MM-DD, trip timezone
+  stopId?: string;
+  title: string;
   url?: string;
 }
 
@@ -170,6 +182,18 @@ export async function createWaypoint(client: SupabaseClient, stopId: string, sor
 
 export const updateWaypoint = (client: SupabaseClient, waypointId: string, input: WaypointInput): Promise<void> =>
   updateById(client, 'scenic_waypoints', waypointId, denseRow(WAYPOINT_COLUMNS, input));
+
+// The caller supplies the id, unlike the other creates: the app generates its
+// own uuid so the optimistic row and the stored row share it and nothing
+// flickers on settle. Deletion goes through deleteById(client, 'todos', id).
+export const createTodo = (client: SupabaseClient, tripId: string, id: string, input: TodoInput): Promise<void> =>
+  insertRow(client, 'todos', { id, trip_id: tripId, ...CREATE_DEFAULTS, ...denseRow(TODO_COLUMNS, input) });
+
+export const updateTodo = (client: SupabaseClient, id: string, input: TodoInput): Promise<void> =>
+  updateById(client, 'todos', id, denseRow(TODO_COLUMNS, input));
+
+export const setTodoDone = (client: SupabaseClient, id: string, done: boolean): Promise<void> =>
+  updateById(client, 'todos', id, patchRow([TODO_DONE_COLUMN], { done }));
 
 // Upsert (not update) because a stop may have no accommodation yet - the same
 // edit modal covers add and edit. The id is deterministic, matching the

@@ -1,5 +1,18 @@
 import { describe, expect, it } from 'vitest';
-import { buildRows, type TripRowNested, toTripData, toTripSummary } from '../supabaseMappers';
+import {
+  buildRows,
+  type TodoRow,
+  TRIP_DETAIL_SELECT,
+  TRIP_LIBRARY_SELECT,
+  TRIP_SELECT,
+  TRIP_SUMMARY_SELECT,
+  type TripRowNested,
+  type TripSummaryRow,
+  toTodo,
+  toTodoWindow,
+  toTripData,
+  toTripSummary,
+} from '../supabaseMappers';
 
 const tripRow: TripRowNested = {
   id: '202512_NZ',
@@ -93,6 +106,97 @@ const tripRow: TripRowNested = {
   ],
 };
 
+const todoRow: TodoRow = {
+  id: 'todo-1',
+  trip_id: '202512_NZ',
+  stop_id: 'queenstown',
+  activity_id: 'act-1',
+  title: 'Book the gondola',
+  notes: 'Morning slot',
+  url: 'https://example.com/gondola',
+  opens_on: '2025-12-01',
+  due_on: '2025-12-10',
+  is_done: false,
+  created_at: '2025-11-01T00:00:00Z',
+  updated_at: '2025-11-01T00:00:00Z',
+};
+
+const bareTodoRow: TodoRow = {
+  ...todoRow,
+  id: 'todo-2',
+  stop_id: null,
+  activity_id: null,
+  title: 'Check the drone show',
+  notes: null,
+  url: null,
+  opens_on: null,
+  due_on: null,
+  is_done: true,
+};
+
+describe('select strings', () => {
+  // The agent prefetch and get_trip/list_trips select these two, so their output
+  // must not gain a todos key. Browser-only selects stand in for the additions.
+  it('keeps the shared selects byte-identical', () => {
+    expect(TRIP_SELECT).toBe('*, stops(*, accommodations(*), activities(*), scenic_waypoints(*))');
+    expect(TRIP_SUMMARY_SELECT).toBe('id, name, description, destination, start_date, end_date, timezone, created_at, updated_at');
+  });
+
+  it('adds todos only in the browser selects', () => {
+    expect(TRIP_DETAIL_SELECT).toBe('*, stops(*, accommodations(*), activities(*), scenic_waypoints(*)), todos(*)');
+    expect(TRIP_LIBRARY_SELECT).toBe(
+      'id, name, description, destination, start_date, end_date, timezone, created_at, updated_at, todos(opens_on, is_done)'
+    );
+  });
+});
+
+describe('toTodo', () => {
+  it('maps every column to the domain shape, is_done becoming done', () => {
+    expect(toTodo(todoRow)).toEqual({
+      todo_id: 'todo-1',
+      title: 'Book the gondola',
+      notes: 'Morning slot',
+      url: 'https://example.com/gondola',
+      opens_on: '2025-12-01',
+      due_on: '2025-12-10',
+      stop_id: 'queenstown',
+      activity_id: 'act-1',
+      done: false,
+    });
+  });
+
+  it('turns null columns into absent values, never null', () => {
+    const todo = toTodo(bareTodoRow);
+    expect(todo).toEqual({ todo_id: 'todo-2', title: 'Check the drone show', done: true });
+    expect(Object.values(todo)).not.toContain(null);
+    expect(todo.notes).toBeUndefined();
+    expect(todo.url).toBeUndefined();
+    expect(todo.opens_on).toBeUndefined();
+    expect(todo.due_on).toBeUndefined();
+    expect(todo.stop_id).toBeUndefined();
+    expect(todo.activity_id).toBeUndefined();
+  });
+
+  it('keeps the row-only columns off the domain object', () => {
+    const todo = toTodo(todoRow);
+    expect(todo).not.toHaveProperty('trip_id');
+    expect(todo).not.toHaveProperty('created_at');
+    expect(todo).not.toHaveProperty('is_done');
+  });
+});
+
+describe('toTodoWindow', () => {
+  it('keeps only opens_on and done', () => {
+    expect(toTodoWindow({ opens_on: '2025-12-02', is_done: false })).toEqual({ opens_on: '2025-12-02', done: false });
+  });
+
+  it('turns a null opens_on into an absent value', () => {
+    const window = toTodoWindow({ opens_on: null, is_done: true });
+    expect(window).toEqual({ done: true });
+    expect(window.opens_on).toBeUndefined();
+  });
+});
+
 describe('toTripData', () => {
   it('maps rows to the domain TripData shape', () => {
     const trip = toTripData(tripRow);
@@ -162,6 +266,28 @@ describe('toTripData', () => {
     expect(trip.end_date).toBe('2025-12-29');
   });
 
+  describe('todos', () => {
+    it('adds no todos key when the row does not carry them (agent output stays unchanged)', () => {
+      expect(toTripData(tripRow)).not.toHaveProperty('todos');
+    });
+
+    it('maps the embedded todos when the row carries them', () => {
+      const trip = toTripData({ ...tripRow, todos: [todoRow, bareTodoRow] });
+      expect(trip.todos).toEqual([toTodo(todoRow), toTodo(bareTodoRow)]);
+      expect(trip.todos?.[0].todo_id).toBe('todo-1');
+      expect(trip.todos?.[1].done).toBe(true);
+    });
+
+    it('keeps an empty todos array, since the row did carry it', () => {
+      expect(toTripData({ ...tripRow, todos: [] }).todos).toEqual([]);
+    });
+
+    it('leaves the rest of the mapping untouched when todos ride along', () => {
+      const { todos: _todos, ...withTodos } = toTripData({ ...tripRow, todos: [todoRow] });
+      expect(withTodos).toEqual(toTripData(tripRow));
+    });
+  });
+
   it('omits activity location when no coordinates or address exist', () => {
     const bare = { ...tripRow.stops[0].activities[0], lat: null, lng: null, address: null };
     const trip = toTripData({ ...tripRow, stops: [{ ...tripRow.stops[0], activities: [bare] }] });
@@ -218,6 +344,39 @@ describe('toTripSummary', () => {
       timezone: 'Pacific/Auckland',
       created_at: 'c',
       updated_at: 'u',
+    });
+  });
+
+  describe('todos', () => {
+    const summaryRow: TripSummaryRow = {
+      id: 't1',
+      name: 'Chengdu',
+      description: null,
+      destination: null,
+      start_date: '2026-12-10',
+      end_date: '2026-12-18',
+      timezone: 'Asia/Shanghai',
+      created_at: 'c',
+      updated_at: 'u',
+    };
+
+    it('adds no todos key when the row does not carry them', () => {
+      expect(toTripSummary(summaryRow)).not.toHaveProperty('todos');
+    });
+
+    it('maps the embedded windows, is_done becoming done', () => {
+      const summary = toTripSummary({
+        ...summaryRow,
+        todos: [
+          { opens_on: null, is_done: false },
+          { opens_on: '2026-12-02', is_done: true },
+        ],
+      });
+      expect(summary.todos).toEqual([{ done: false }, { opens_on: '2026-12-02', done: true }]);
+    });
+
+    it('keeps an empty todos array, since the row did carry it', () => {
+      expect(toTripSummary({ ...summaryRow, todos: [] }).todos).toEqual([]);
     });
   });
 });

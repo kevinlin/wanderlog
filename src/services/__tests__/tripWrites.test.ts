@@ -4,11 +4,14 @@ import {
   applyStopStructure,
   createActivity,
   createStop,
+  createTodo,
   createWaypoint,
   deleteById,
   reorderActivities,
+  setTodoDone,
   updateActivity,
   updateStop,
+  updateTodo,
   updateTripMetadata,
   upsertAccommodation,
   writeVisitFields,
@@ -154,6 +157,103 @@ describe('stop writes', () => {
     expect(stopUpdates).toContainEqual({ sort_order: 0, date_from: '2025-12-13', date_to: '2025-12-15', duration_days: 2 });
     expect(stopUpdates).toContainEqual({ sort_order: 1, date_from: '2025-12-15', date_to: '2025-12-18', duration_days: 3 });
     expect(calls.at(-1)).toMatchObject({ table: 'trips', payload: { start_date: '2025-12-13', end_date: '2025-12-18' } });
+  });
+});
+
+describe('todo writes', () => {
+  // The hook generates the id so the optimistic row and the stored row share it.
+  it('createTodo inserts the dense row under the given id and trip id, with is_done false', async () => {
+    const { calls, client } = createFakeClient([{ table: 'todos', method: 'insert' }]);
+    await createTodo(client, 'trip-1', 'todo-1', {
+      title: 'Book 12/16 panda base tickets',
+      notes: 'Go early',
+      opensOn: '2026-12-02',
+      dueOn: '2026-12-15',
+      stopId: 'chengdu',
+      activityId: 'panda-base',
+    });
+    expect(calls[0]).toMatchObject({ table: 'todos', method: 'insert' });
+    expect(calls[0].payload).toEqual({
+      id: 'todo-1',
+      trip_id: 'trip-1',
+      is_done: false,
+      title: 'Book 12/16 panda base tickets',
+      notes: 'Go early',
+      url: null,
+      opens_on: '2026-12-02',
+      due_on: '2026-12-15',
+      stop_id: 'chengdu',
+      activity_id: 'panda-base',
+    });
+  });
+
+  it('createTodo nulls the optional columns it was not given', async () => {
+    const { calls, client } = createFakeClient([{ table: 'todos', method: 'insert' }]);
+    await createTodo(client, 'trip-1', 'todo-1', { title: 'Check the drone show' });
+    expect(calls[0].payload).toEqual({
+      id: 'todo-1',
+      trip_id: 'trip-1',
+      is_done: false,
+      title: 'Check the drone show',
+      notes: null,
+      url: null,
+      opens_on: null,
+      due_on: null,
+      stop_id: null,
+      activity_id: null,
+    });
+  });
+
+  it('createTodo throws the normalized supabase error', async () => {
+    const { client } = createFakeClient([{ table: 'todos', method: 'insert', error: { message: 'violates check constraint' } }]);
+    await expect(createTodo(client, 'trip-1', 'todo-1', { title: 'X' })).rejects.toThrow('violates check constraint');
+  });
+
+  it('updateTodo writes a dense row, clearing every absent field, and never names is_done', async () => {
+    const { calls, client } = createFakeClient([{ table: 'todos', method: 'update' }]);
+    await updateTodo(client, 'todo-1', { title: 'Renamed' });
+    expect(calls[0]).toMatchObject({ table: 'todos', method: 'update' });
+    expect(calls[0].payload).toEqual({
+      title: 'Renamed',
+      notes: null,
+      url: null,
+      opens_on: null,
+      due_on: null,
+      stop_id: null,
+      activity_id: null,
+    });
+  });
+
+  it('updateTodo treats a zero-row update as success, like every other entity', async () => {
+    const { client } = createFakeClient([{ table: 'todos', method: 'update', data: [] }]);
+    await expect(updateTodo(client, 'gone', { title: 'X' })).resolves.toBeUndefined();
+  });
+
+  it('updateTodo throws the normalized supabase error', async () => {
+    const { client } = createFakeClient([{ table: 'todos', method: 'update', error: { message: 'todos_window' } }]);
+    await expect(updateTodo(client, 'todo-1', { title: 'X' })).rejects.toThrow('todos_window');
+  });
+
+  it('setTodoDone writes only is_done', async () => {
+    const { calls, client } = createFakeClient([
+      { table: 'todos', method: 'update' },
+      { table: 'todos', method: 'update' },
+    ]);
+    await setTodoDone(client, 'todo-1', true);
+    await setTodoDone(client, 'todo-1', false);
+    expect(calls[0]).toMatchObject({ table: 'todos', method: 'update', payload: { is_done: true } });
+    expect(calls[1].payload).toEqual({ is_done: false });
+  });
+
+  it('setTodoDone throws the normalized supabase error', async () => {
+    const { client } = createFakeClient([{ table: 'todos', method: 'update', error: { message: 'denied' } }]);
+    await expect(setTodoDone(client, 'todo-1', true)).rejects.toThrow('denied');
+  });
+
+  it('deletes a todo through the shared deleteById', async () => {
+    const { calls, client } = createFakeClient([{ table: 'todos', method: 'delete' }]);
+    await deleteById(client, 'todos', 'todo-1');
+    expect(calls[0]).toMatchObject({ table: 'todos', method: 'delete' });
   });
 });
 

@@ -37,17 +37,21 @@ import {
   applyStopStructure,
   createActivity,
   createStop,
+  createTodo,
   createWaypoint,
   deleteActivity,
   deleteStop,
+  deleteTodo,
   deleteTrip,
   deleteWaypoint,
   fetchTripById,
   fetchTripSummaries,
   importTrip,
   reorderActivities,
+  setTodoDone,
   updateActivity,
   updateStop,
+  updateTodo,
   updateTripMetadata,
   updateWaypoint,
   upsertAccommodation,
@@ -135,7 +139,71 @@ describe('supabaseService reads', () => {
       created_at: 'c',
       updated_at: 'u',
     });
-    expect(chain.select).toHaveBeenCalledWith('id, name, description, destination, start_date, end_date, timezone, created_at, updated_at');
+    expect(chain.select).toHaveBeenCalledWith(
+      'id, name, description, destination, start_date, end_date, timezone, created_at, updated_at, todos(opens_on, is_done)'
+    );
+  });
+
+  it('fetchTripSummaries maps the embedded todo windows', async () => {
+    mockOrder.mockResolvedValue({
+      data: [
+        {
+          id: 't1',
+          name: 'Trip 1',
+          description: null,
+          destination: null,
+          start_date: '2026-12-10',
+          end_date: '2026-12-18',
+          timezone: 'Asia/Shanghai',
+          created_at: 'c',
+          updated_at: 'u',
+          todos: [
+            { opens_on: null, is_done: false },
+            { opens_on: '2026-12-02', is_done: true },
+          ],
+        },
+      ],
+      error: null,
+    });
+    const trips = await fetchTripSummaries();
+    expect(trips[0].todos).toEqual([{ done: false }, { opens_on: '2026-12-02', done: true }]);
+  });
+
+  it('fetchTripById selects the todos alongside the trip tree and maps them', async () => {
+    mockMaybeSingle.mockResolvedValue({
+      data: {
+        id: 't1',
+        name: 'Chengdu',
+        description: null,
+        destination: null,
+        start_date: '2026-12-10',
+        end_date: '2026-12-18',
+        timezone: 'Asia/Shanghai',
+        created_at: 'x',
+        updated_at: 'x',
+        stops: [],
+        todos: [
+          {
+            id: 'todo-1',
+            trip_id: 't1',
+            stop_id: null,
+            activity_id: null,
+            title: 'Book the train',
+            notes: null,
+            url: null,
+            opens_on: '2026-12-01',
+            due_on: null,
+            is_done: false,
+            created_at: 'x',
+            updated_at: 'x',
+          },
+        ],
+      },
+      error: null,
+    });
+    const trip = await fetchTripById('t1');
+    expect(chain.select).toHaveBeenCalledWith('*, stops(*, accommodations(*), activities(*), scenic_waypoints(*)), todos(*)');
+    expect(trip?.todos).toEqual([{ todo_id: 'todo-1', title: 'Book the train', opens_on: '2026-12-01', done: false }]);
   });
 });
 
@@ -405,6 +473,61 @@ describe('supabaseService stop crud + structure', () => {
     await expect(
       applyStopStructure('t1', [{ id: 'a', sort_order: 0, date_from: '2025-12-13', date_to: '2025-12-15' }], '2025-12-13', '2025-12-15')
     ).rejects.toThrow('denied');
+  });
+});
+
+describe('supabaseService todo crud', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mockInsert.mockResolvedValue({ error: null });
+    mockUpdateEq.mockResolvedValue({ error: null });
+    mockDeleteEq.mockResolvedValue({ error: null });
+  });
+
+  it('createTodo inserts under the given id and trip id', async () => {
+    await createTodo('trip-1', 'todo-1', { title: 'Book the train', dueOn: '2026-12-10', stopId: 'chongqing' });
+    expect(fromSpy).toHaveBeenCalledWith('todos');
+    expect(mockInsert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        id: 'todo-1',
+        trip_id: 'trip-1',
+        title: 'Book the train',
+        due_on: '2026-12-10',
+        stop_id: 'chongqing',
+        opens_on: null,
+        is_done: false,
+      })
+    );
+  });
+
+  it('createTodo throws on error', async () => {
+    mockInsert.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(createTodo('trip-1', 'todo-1', { title: 'X' })).rejects.toThrow('denied');
+  });
+
+  it('updateTodo patches the row by id, mapping undefined to null', async () => {
+    await updateTodo('todo-1', { title: 'Renamed', notes: undefined });
+    expect(fromSpy).toHaveBeenCalledWith('todos');
+    expect(mockUpdate).toHaveBeenCalledWith(expect.objectContaining({ title: 'Renamed', notes: null, due_on: null }));
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'todo-1');
+  });
+
+  it('setTodoDone writes only is_done, by id', async () => {
+    await setTodoDone('todo-1', true);
+    expect(fromSpy).toHaveBeenCalledWith('todos');
+    expect(mockUpdate).toHaveBeenCalledWith({ is_done: true });
+    expect(mockUpdateEq).toHaveBeenCalledWith('id', 'todo-1');
+  });
+
+  it('deleteTodo deletes by id', async () => {
+    await deleteTodo('todo-1');
+    expect(fromSpy).toHaveBeenCalledWith('todos');
+    expect(mockDeleteEq).toHaveBeenCalledWith('id', 'todo-1');
+  });
+
+  it('deleteTodo throws on error', async () => {
+    mockDeleteEq.mockResolvedValueOnce({ error: { message: 'denied' } });
+    await expect(deleteTodo('todo-1')).rejects.toThrow('denied');
   });
 });
 

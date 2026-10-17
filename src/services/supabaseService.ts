@@ -1,6 +1,13 @@
 import { getSupabase } from '@/config/supabase';
 import type { TripData, TripSummary } from '@/types/trip';
-import { TRIP_SELECT, TRIP_SUMMARY_SELECT, type TripRowNested, type TripSummaryRow, toTripData, toTripSummary } from './supabaseMappers';
+import {
+  TRIP_DETAIL_SELECT,
+  TRIP_LIBRARY_SELECT,
+  type TripRowNested,
+  type TripSummaryRow,
+  toTripData,
+  toTripSummary,
+} from './supabaseMappers';
 import { insertTripBundle } from './tripBundleInsert';
 import * as writes from './tripWrites';
 
@@ -11,6 +18,7 @@ export type {
   CreateTripInput,
   StopInput,
   StopStructureRow,
+  TodoInput,
   TripMetadataPatch,
   WaypointInput,
 } from './tripWrites';
@@ -20,7 +28,7 @@ export type {
 // signatures that hooks and their tests depend on.
 
 export async function fetchTripById(tripId: string): Promise<TripData | null> {
-  const { data, error } = await getSupabase().from('trips').select(TRIP_SELECT).eq('id', tripId).maybeSingle();
+  const { data, error } = await getSupabase().from('trips').select(TRIP_DETAIL_SELECT).eq('id', tripId).maybeSingle();
   if (error) {
     throw new Error(error.message);
   }
@@ -28,7 +36,7 @@ export async function fetchTripById(tripId: string): Promise<TripData | null> {
 }
 
 export async function fetchTripSummaries(): Promise<TripSummary[]> {
-  const { data, error } = await getSupabase().from('trips').select(TRIP_SUMMARY_SELECT).order('start_date', { ascending: false });
+  const { data, error } = await getSupabase().from('trips').select(TRIP_LIBRARY_SELECT).order('start_date', { ascending: false });
   if (error) {
     throw new Error(error.message);
   }
@@ -67,6 +75,15 @@ export const deleteWaypoint = (waypointId: string): Promise<void> => writes.dele
 
 export const upsertAccommodation = (stopId: string, input: writes.AccommodationInput): Promise<void> =>
   writes.upsertAccommodation(getSupabase(), stopId, input);
+
+export const createTodo = (tripId: string, id: string, input: writes.TodoInput): Promise<void> =>
+  writes.createTodo(getSupabase(), tripId, id, input);
+
+export const updateTodo = (id: string, input: writes.TodoInput): Promise<void> => writes.updateTodo(getSupabase(), id, input);
+
+export const setTodoDone = (id: string, done: boolean): Promise<void> => writes.setTodoDone(getSupabase(), id, done);
+
+export const deleteTodo = (id: string): Promise<void> => writes.deleteById(getSupabase(), 'todos', id);
 
 export const createStop = (tripId: string, sortOrder: number, input: writes.StopInput): Promise<string> =>
   writes.createStop(getSupabase(), tripId, sortOrder, input);

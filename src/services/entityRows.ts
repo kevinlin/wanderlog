@@ -44,6 +44,21 @@ export const ITEM_DONE_COLUMN: ColumnDef = col('done', 'is_done');
 // these defs to its patch defs.
 export const VISIT_COLUMNS: readonly ColumnDef[] = [col('visitedAt', 'visited_at'), col('visitDurationMinutes', 'visit_duration_minutes')];
 
+export const TODO_COLUMNS: readonly ColumnDef[] = [
+  col('title'),
+  col('notes'),
+  col('url'),
+  col('opensOn', 'opens_on'),
+  col('dueOn', 'due_on'),
+  col('stopId', 'stop_id'),
+  col('activityId', 'activity_id'),
+];
+
+// Outside TODO_COLUMNS for the same reason ITEM_DONE_COLUMN sits outside
+// ACTIVITY_COLUMNS: the form writes TODO_COLUMNS densely, so a full-form save
+// would otherwise un-tick the todo. Done is written sparsely, on its own.
+export const TODO_DONE_COLUMN: ColumnDef = col('done', 'is_done');
+
 export const ACCOMMODATION_COLUMNS: readonly ColumnDef[] = [
   col('name'),
   col('address'),
