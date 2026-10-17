@@ -1,6 +1,6 @@
 # Wanderlog Phase 4 - Design Document
 
-Design for [requirements_phase-4.md](requirements_phase-4.md): visit records on check-off, chronological ordering of visited items, agent support, offline capture. Phase 2 ([design_phase-2.md](../phase-2/design_phase-2.md)) and Phase 3 ([design_wanderlog-phase-3.md](../phase-3/design_wanderlog-phase-3.md)) carry over except where amended here.
+Design for [requirements_visit-records.md](requirements_visit-records.md): visit records on check-off, chronological ordering of visited items, agent support, offline capture. Phase 2 ([design_supabase-auth-editing.md](design_supabase-auth-editing.md)) and Phase 3 ([design_ai-trip-agent.md](design_ai-trip-agent.md)) carry over except where amended here.
 
 Revised after an external design review; see the changelog for what moved.
 
@@ -41,7 +41,7 @@ Schema notes:
 - RLS is unchanged: policies are table-level and no table is added.
 - The Phase 2 migration-before-deploy rule applies. Because the change is purely additive, a frontend rolled back to a build that does not know the columns degrades to hiding visit data rather than breaking.
 
-**Domain types.** `Activity` and `ScenicWaypoint` ([src/types/trip.ts](../../../src/types/trip.ts), [src/types/map.ts](../../../src/types/map.ts)) gain `visited_at?: string` and `visit_duration_minutes?: number`; `duration?: string` stays. `ScenicWaypoint` also gains `order?: number`, which `Activity` already has and the waypoint rows already store - the merged ordering in Req 3.6 needs it.
+**Domain types.** `Activity` and `ScenicWaypoint` ([src/types/trip.ts](../../src/types/trip.ts), [src/types/map.ts](../../src/types/map.ts)) gain `visited_at?: string` and `visit_duration_minutes?: number`; `duration?: string` stays. `ScenicWaypoint` also gains `order?: number`, which `Activity` already has and the waypoint rows already store - the merged ordering in Req 3.6 needs it.
 
 `TripData` gains `start_date?: string` and `end_date?: string`. `TRIP_SELECT` already fetches them; `toTripData` simply drops them today. They are optional because the import path builds `TripData` from a file that may not carry trip-level dates; when they are absent the stamp rule returns null rather than guessing (Req 2.3's safe direction).
 
@@ -136,7 +136,7 @@ TripIt import keeps defaulting to the importing device's zone (Req 6.4); this on
 
 ## Agent
 
-Changes to [api/_lib/tools/items.ts](../../../api/_lib/tools/items.ts), [api/_lib/tools/tripFields.ts](../../../api/_lib/tools/tripFields.ts), and [api/_lib/systemPrompt.ts](../../../api/_lib/systemPrompt.ts):
+Changes to [api/_lib/tools/items.ts](../../api/_lib/tools/items.ts), [api/_lib/tools/tripFields.ts](../../api/_lib/tools/tripFields.ts), and [api/_lib/systemPrompt.ts](../../api/_lib/systemPrompt.ts):
 
 - `UPDATE_FIELDS` adds `visited_at` (refined with `isValidTripLocal`, nullable) and `visit_duration_minutes` (non-negative integer). `CREATE_FIELDS` is unchanged - `duration` stays text.
 - `fetchName` widens into `fetchItemContext`, selecting the item's name and `is_done` plus the owning trip's `timezone`, `start_date`, and `end_date` through the stop. This is the query it already ran before every update.
@@ -173,7 +173,7 @@ Changes to [api/_lib/tools/items.ts](../../../api/_lib/tools/items.ts), [api/_li
 
 ## Milestones
 
-Matching the requirements doc. Detailed plans were written just-in-time per milestone and are now sections of [plan_phase-4.md](plan_phase-4.md).
+Matching the requirements doc. Detailed plans were written just-in-time per milestone and are now sections of [plan_visit-records.md](plan_visit-records.md).
 
 1. **M1 - Data model and capture.** Migration, mappers including the trip's stored dates and waypoint order, `visitRecord.ts`, timezone correction in trip metadata, the module-scope visit mutation with resume wiring, `VisitDetailsModal`, `DurationInput`, card rendering, `buster` bump. *Verify: a tick during a live trip stamps trip-local time and a tick outside the window does not; a trip whose timezone differs from the device stamps in the trip's zone; the form saves an out-of-range date with a warning; a note typed offline survives a tab restart, and a failure after that restart rolls back and offers retry.*
 2. **M2 - Visited section.** `partitionByVisit`, `applyPlannedOrder`, panel restructuring, id-based reorder. *Verify: a multi-night stop renders visited items grouped by day in visit order; ticking moves an item between sections; dragging works in planned and is absent in visited; unticking returns an item to its original slot; colliding order values render deterministically.*
@@ -183,10 +183,10 @@ Matching the requirements doc. Detailed plans were written just-in-time per mile
 
 Applied to the Phase 2 and Phase 3 design docs alongside this one:
 
-1. [design_phase-2.md](../phase-2/design_phase-2.md) schema - both item tables gain `visited_at` and `visit_duration_minutes`; `duration` is unchanged.
-2. [design_phase-2.md](../phase-2/design_phase-2.md) data layer - `TRIP_METADATA_COLUMNS` gains `timezone`; `toTripData` carries the trip's stored dates.
-3. [design_phase-2.md](../phase-2/design_phase-2.md) offline - the visit form is exempt from the edit-disable rule.
-4. [design_wanderlog-phase-3.md](../phase-3/design_wanderlog-phase-3.md) tool catalog and system prompt - the item update tools gain two fields and a not-done guard; `update_trip_metadata` gains `timezone`; the prompt carries the current trip-local date-time and trip date range.
+1. [design_supabase-auth-editing.md](design_supabase-auth-editing.md) schema - both item tables gain `visited_at` and `visit_duration_minutes`; `duration` is unchanged.
+2. [design_supabase-auth-editing.md](design_supabase-auth-editing.md) data layer - `TRIP_METADATA_COLUMNS` gains `timezone`; `toTripData` carries the trip's stored dates.
+3. [design_supabase-auth-editing.md](design_supabase-auth-editing.md) offline - the visit form is exempt from the edit-disable rule.
+4. [design_ai-trip-agent.md](design_ai-trip-agent.md) tool catalog and system prompt - the item update tools gain two fields and a not-done guard; `update_trip_metadata` gains `timezone`; the prompt carries the current trip-local date-time and trip date range.
 
 ## Changelog
 

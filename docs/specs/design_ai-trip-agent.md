@@ -1,6 +1,6 @@
 # Wanderlog Phase 3 - Design Document
 
-Design for [requirements_phase-3.md](requirements_phase-3.md): agent mode - natural-language Q&A, itinerary edits, and generative trip creation through a server-side LLM tool-use loop. Phase 2 architecture ([design_phase-2.md](../phase-2/design_phase-2.md)) carries over unchanged; this document adds to it.
+Design for [requirements_ai-trip-agent.md](requirements_ai-trip-agent.md): agent mode - natural-language Q&A, itinerary edits, and generative trip creation through a server-side LLM tool-use loop. Phase 2 architecture ([design_supabase-auth-editing.md](design_supabase-auth-editing.md)) carries over unchanged; this document adds to it.
 
 ## Design Decisions
 
@@ -152,7 +152,7 @@ GOOGLE_GEOCODING_API_KEY=xxx                            # server key; NOT the re
 
 ## Milestones
 
-Risk-ordered; each independently shippable. Detailed plans written just-in-time per the Phase 2 convention (now sections of [plan_phase-3.md](plan_phase-3.md)).
+Risk-ordered; each independently shippable. Detailed plans written just-in-time per the Phase 2 convention (now sections of [plan_ai-trip-agent.md](plan_ai-trip-agent.md)).
 
 1. **M1 - Agent backend + Q&A.** `api/agent.ts` with auth, env config, loop, streaming, read tools only; AgentButton + AgentModal; `/api` rewrite exclusion. Read-only: zero write risk while the pipe (auth → loop → tools → stream → UI) is proven. *Verify: questions answered from modal and curl; unauthenticated rejected; no write tool exists.*
 2. **M2 - Bounded edits.** Write tools (activities, waypoints, accommodation, metadata, stops incl. restructure) with zod validation, delete guard, change events, cache invalidation. *Verify: scripted edit prompts round-trip; delete only on explicit request; partial failure honest.*
@@ -162,6 +162,6 @@ Risk-ordered; each independently shippable. Detailed plans written just-in-time 
 
 - 2026-07-04: Initial design (brainstormed and approved): Vercel-hosted tool-use loop, mirrored CRUD tool surface, immediate writes with delete guard, one-shot prompts, NDJSON/buffered dual rendering, Hermes programmatic access.
 - 2026-07-04: Code-sharing rationale corrected during M1 planning: `src/config/supabase.ts` already runs under Node (migration script); the function's own client exists for the per-request caller token (RLS), not env incompatibility.
-- 2026-07-04: Agent UI layout note added: on `TripPage` the AgentButton and UserMenu are corner-pinned (top-right); the activities panel drops below them (`sm:top-16`) rather than the controls shifting left to dodge it. Tracked in the [plan_phase-3.md changelog](plan_phase-3.md#changelog).
+- 2026-07-04: Agent UI layout note added: on `TripPage` the AgentButton and UserMenu are corner-pinned (top-right); the activities panel drops below them (`sm:top-16`) rather than the controls shifting left to dodge it. Tracked in the [plan_ai-trip-agent.md changelog](plan_ai-trip-agent.md#changelog).
 - 2026-07-04: M3 shipped - contract verified as the stable Hermes integration surface. Contract cross-check added the 405 (non-POST) status code, previously implemented but undocumented.
-- 2026-07-26: Tool catalog and system prompt amended by [requirements_phase-4.md](../phase-4/requirements_phase-4.md): the item update tools accept `visited_at` and `visit_duration_minutes` and refuse visit fields on an item that is not done, `update_trip_metadata` accepts `timezone`, the prompt carries the current trip-local date-time and trip date range, and the check-off stamp rule moves into a shared module used by both the browser toggle and the tool executor.
+- 2026-07-26: Tool catalog and system prompt amended by [requirements_visit-records.md](requirements_visit-records.md): the item update tools accept `visited_at` and `visit_duration_minutes` and refuse visit fields on an item that is not done, `update_trip_metadata` accepts `timezone`, the prompt carries the current trip-local date-time and trip date range, and the check-off stamp rule moves into a shared module used by both the browser toggle and the tool executor.

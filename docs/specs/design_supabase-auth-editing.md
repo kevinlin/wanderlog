@@ -1,6 +1,6 @@
 # Wanderlog Phase 2 - Design Document
 
-Design for [requirements_phase-2.md](requirements_phase-2.md): Supabase backend, auth gate, trip library, itinerary editing, offline read, Vercel hosting. Existing UI behavior carries over per [design_phase-1.md](../phase-1/design_phase-1.md) except where amended here.
+Design for [requirements_supabase-auth-editing.md](requirements_supabase-auth-editing.md): Supabase backend, auth gate, trip library, itinerary editing, offline read, Vercel hosting. Existing UI behavior carries over per [design_travel-journal-map.md](design_travel-journal-map.md) except where amended here.
 
 ## Design Decisions
 
@@ -330,7 +330,7 @@ Excluded: `firebase` stays at 12.6 (decommissioned within this phase). Verificat
 
 ## Requirement Amendments
 
-Applied to [requirements_phase-2.md](requirements_phase-2.md) together with this design:
+Applied to [requirements_supabase-auth-editing.md](requirements_supabase-auth-editing.md) together with this design:
 
 1. Req 1.4 - user modifications become canonical columns (`is_done`, `sort_order`); device view state stays in localStorage.
 2. Req 1.5 - weather cache is client-side (persisted query cache, 6h staleness); no Supabase table.
@@ -342,6 +342,6 @@ Applied to [requirements_phase-2.md](requirements_phase-2.md) together with this
 
 - 2026-07-03: Initial design (brainstormed and approved).
 - 2026-07-04: Trip Import (M3.5) added: file-only create modal, zod validation pipeline, TripIt conversion with geocoding, fresh-id imports, compensation delete (brainstormed and approved).
-- 2026-07-04: Schema doc updated with the M4 `accommodations` columns (`remarks`, `lat`, `lng`); migration-before-deploy ordering rule and schema-drift-tolerant mapper guards added after a production incident (see the Task 6 post-ship fix in [plan_phase-2.md § M4](plan_phase-2.md#m4-itinerary-editing)).
-- 2026-07-04: Authentication section extended with password reset and invitation acceptance (Req 2.8, 2.9): `resetPassword`/`updatePassword` on `AuthContext`, public `/forgot-password` + `/reset-password` routes, one shared landing page for both flows, and the dashboard Redirect-URL / invite-template config. Design decision row added. Tracked in [plan_phase-2.md § M2](plan_phase-2.md#m2-auth-gate) Task 9.
-- 2026-07-26: Schema, data layer, and offline rules amended by [requirements_phase-4.md](../phase-4/requirements_phase-4.md): `activities` and `scenic_waypoints` gain `visited_at` (text, `'YYYY-MM-DD HH:mm'` local to the trip timezone, same rationale as `check_in`/`check_out`) and `visit_duration_minutes` (integer); the existing `duration` text is unchanged. `TRIP_METADATA_COLUMNS` gains `timezone`, and `toTripData` now carries the trip's stored `start_date`/`end_date`. The offline edit-disable rule gains one exemption, the visit-details form.
+- 2026-07-04: Schema doc updated with the M4 `accommodations` columns (`remarks`, `lat`, `lng`); migration-before-deploy ordering rule and schema-drift-tolerant mapper guards added after a production incident (see the Task 6 post-ship fix in [plan_supabase-auth-editing.md § M4](plan_supabase-auth-editing.md#m4-itinerary-editing)).
+- 2026-07-04: Authentication section extended with password reset and invitation acceptance (Req 2.8, 2.9): `resetPassword`/`updatePassword` on `AuthContext`, public `/forgot-password` + `/reset-password` routes, one shared landing page for both flows, and the dashboard Redirect-URL / invite-template config. Design decision row added. Tracked in [plan_supabase-auth-editing.md § M2](plan_supabase-auth-editing.md#m2-auth-gate) Task 9.
+- 2026-07-26: Schema, data layer, and offline rules amended by [requirements_visit-records.md](requirements_visit-records.md): `activities` and `scenic_waypoints` gain `visited_at` (text, `'YYYY-MM-DD HH:mm'` local to the trip timezone, same rationale as `check_in`/`check_out`) and `visit_duration_minutes` (integer); the existing `duration` text is unchanged. `TRIP_METADATA_COLUMNS` gains `timezone`, and `toTripData` now carries the trip's stored `start_date`/`end_date`. The offline edit-disable rule gains one exemption, the visit-details form.

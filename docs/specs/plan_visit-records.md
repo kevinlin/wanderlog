@@ -1,8 +1,8 @@
 # Visit Records (Phase 4) Implementation Plan
 
-Milestone tracker and implementation record for [requirements_phase-4.md](requirements_phase-4.md) (Requirements 1-6) / [design_phase-4.md](design_phase-4.md). Each milestone was independently shippable and its plan was written just-in-time; the three per-milestone plan files are now sections of this file. Tasks restart at 1 in each milestone and are cited as `M<n> Task <k>`.
+Milestone tracker and implementation record for [requirements_visit-records.md](requirements_visit-records.md) (Requirements 1-6) / [design_visit-records.md](design_visit-records.md). Each milestone was independently shippable and its plan was written just-in-time; the three per-milestone plan files are now sections of this file. Tasks restart at 1 in each milestone and are cited as `M<n> Task <k>`.
 
-**Prerequisite:** Phase 2 M4 (itinerary editing, [plan_phase-2.md](../phase-2/plan_phase-2.md)) and Phase 3 M2/M3 (agent write tools and generative creation, [plan_phase-3.md](../phase-3/plan_phase-3.md)) shipped.
+**Prerequisite:** Phase 2 M4 (itinerary editing, [plan_supabase-auth-editing.md](plan_supabase-auth-editing.md)) and Phase 3 M2/M3 (agent write tools and generative creation, [plan_ai-trip-agent.md](plan_ai-trip-agent.md)) shipped.
 
 ## Goal
 
@@ -111,11 +111,11 @@ The name lookup that `update_*` and `delete_*` already ran before every write be
 
 ### M3 Task 4: M3 verification gate
 
-Manual verification on a Vercel preview with live-window and past-window test trips: an explicit time, the stamp matching the UI, no stamp outside the window, the not-done guard, the change list, read-back, and a relative expression. The first run exercised a preview that did not contain the M3 commits, so Steps 1, 2, 4, 6, and 7 failed for that reason; the investigation also found that `duration` and `remarks` carried no field descriptions on the item tools, fixed in [plan_phase-3.md](../phase-3/plan_phase-3.md) M3 Task 8. All steps passed on a preview built from `7a5d632`.
+Manual verification on a Vercel preview with live-window and past-window test trips: an explicit time, the stamp matching the UI, no stamp outside the window, the not-done guard, the change list, read-back, and a relative expression. The first run exercised a preview that did not contain the M3 commits, so Steps 1, 2, 4, 6, and 7 failed for that reason; the investigation also found that `duration` and `remarks` carried no field descriptions on the item tools, fixed in [plan_ai-trip-agent.md](plan_ai-trip-agent.md) M3 Task 8. All steps passed on a preview built from `7a5d632`.
 
 ## Design Decisions
 
-Cross-cutting decisions live in [design_phase-4.md](design_phase-4.md#design-decisions); the entries below are the plan-level ones.
+Cross-cutting decisions live in [design_visit-records.md](design_visit-records.md#design-decisions); the entries below are the plan-level ones.
 
 ### M1 - Data model and capture
 
@@ -199,7 +199,7 @@ The two entries below are the newest. The milestone logs after them keep their o
 
 ### M1 - Data model and capture
 
-- 2026-07-26: Initial plan, written from [requirements_phase-4.md](requirements_phase-4.md) and [design_phase-4.md](design_phase-4.md) after the design review.
+- 2026-07-26: Initial plan, written from [requirements_visit-records.md](requirements_visit-records.md) and [design_visit-records.md](design_visit-records.md) after the design review.
 - 2026-07-26: Tasks 1-8 implemented on `feat/p4m1-visit-records`. Full suite green (60 files, 541 tests); `tsc -b` and the production build clean.
 
   Two plan corrections, both made deliberately:
@@ -243,7 +243,7 @@ The two entries below are the newest. The milestone logs after them keep their o
 
 ### M2 - Visited section
 
-- 2026-07-26: Initial plan, written from [requirements_phase-4.md](requirements_phase-4.md) Requirement 3 and [design_phase-4.md](design_phase-4.md), against the code shipped by M1.
+- 2026-07-26: Initial plan, written from [requirements_visit-records.md](requirements_visit-records.md) Requirement 3 and [design_visit-records.md](design_visit-records.md), against the code shipped by M1.
 - 2026-07-26: Tasks 1-3 implemented on branch `worktree-p4m2-visited-section`. Suite green at 65 files / 567 tests, `tsc -b` clean, Ultracite clean.
 
   Two corrections to the plan as written:
@@ -261,7 +261,7 @@ The two entries below are the newest. The milestone logs after them keep their o
 
 ### M3 - Agent check-off
 
-- 2026-07-26: Initial plan, written from [requirements_phase-4.md](requirements_phase-4.md) Requirement 4 and [design_phase-4.md](design_phase-4.md), against the code shipped by M1 and M2.
+- 2026-07-26: Initial plan, written from [requirements_visit-records.md](requirements_visit-records.md) Requirement 4 and [design_visit-records.md](design_visit-records.md), against the code shipped by M1 and M2.
 - 2026-07-26: Tasks 1-3 implemented on branch `worktree-p4m3-agent-check-off`. Suite green at 65 files / 587 tests, `tsc -b` clean, Ultracite clean. Task 1 landed as written; the pre-read is one round trip returning the item's `is_done` and the trip window.
 
   One correction to the plan as written: Task 3 Step 4 gives the import as `'../src/services/visitRecord.js'`, but `systemPrompt.ts` sits in `api/_lib/`, so the correct specifier is `'../../src/services/visitRecord.js'` — matching the existing `'../../src/types/trip.js'` import in the same file.
@@ -285,7 +285,7 @@ The two entries below are the newest. The milestone logs after them keep their o
 
   Every failure matches pre-M3 behaviour exactly: with no `visited_at` field in the tool schema the model puts "we left at 3" in `remarks`; with no `visit_duration_minutes` it writes `90 minutes` over the planned `duration`; with no `resolveVisitPatch` a `done: true` write carries `is_done` alone; with no clock section the model correctly reports having no clock. Steps 3 and 5 passed because they also pass on pre-M3 code — Step 3 recorded no time for the wrong reason. No code defect accounts for the transcript; a build without M3 accounts for all of it.
 
-  One real defect surfaced anyway, and it survives a redeploy: `duration` and `remarks` carried no `.describe()`, so nothing in the contract told the model that `duration` is the plan rather than the actual time spent, and nothing told it to read back from `visit_duration_minutes`. Fixed as [plan_phase-3.md § M3](../phase-3/plan_phase-3.md#m3-generative-creation) Task 8, since the tool-schema contract is that milestone's: descriptions on both fields, a planned-versus-actual rule in `CORE_RULES` covering the read-back direction, and a new `describe('the schema the model receives')` block asserting against `toAnthropicTools` output — closing a hole where `toAnthropicTools` was only ever tested on `READ_TOOLS`, so an undescribed or dropped write-tool field had no test that would fail. Suite at 65 files / 591 tests, `tsc -b` clean, Ultracite clean.
+  One real defect surfaced anyway, and it survives a redeploy: `duration` and `remarks` carried no `.describe()`, so nothing in the contract told the model that `duration` is the plan rather than the actual time spent, and nothing told it to read back from `visit_duration_minutes`. Fixed as [plan_ai-trip-agent.md § M3](plan_ai-trip-agent.md#m3-generative-creation) Task 8, since the tool-schema contract is that milestone's: descriptions on both fields, a planned-versus-actual rule in `CORE_RULES` covering the read-back direction, and a new `describe('the schema the model receives')` block asserting against `toAnthropicTools` output — closing a hole where `toAnthropicTools` was only ever tested on `READ_TOOLS`, so an undescribed or dropped write-tool field had no test that would fail. Suite at 65 files / 591 tests, `tsc -b` clean, Ultracite clean.
 
   Steps 1, 2, 4, 6, and 7 stay unchecked. Re-running them needs a preview built from this branch's HEAD; confirm the deployment's commit SHA before trusting the result.
 

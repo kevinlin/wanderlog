@@ -1,10 +1,10 @@
 # Wanderlog Phase 3 - Master Plan
 
-Milestone tracker and implementation plans for [design_wanderlog-phase-3.md](design_wanderlog-phase-3.md) / [requirements_phase-3.md](requirements_phase-3.md).
+Milestone tracker and implementation plans for [design_ai-trip-agent.md](design_ai-trip-agent.md) / [requirements_ai-trip-agent.md](requirements_ai-trip-agent.md).
 
 Each milestone is independently shippable. Following the Phase 2 convention, each milestone's plan was authored just-in-time, when the previous milestone shipped; the per-milestone plan files are now sections of this file. A post-M3 data-layer refactor is recorded in [Data layer deepening](#data-layer-deepening-post-m3).
 
-**Prerequisite:** Phase 2 M4 (itinerary editing, [plan_phase-2.md § M4](../phase-2/plan_phase-2.md#m4-itinerary-editing)) shipped. Phase 3 M2's write tools mirror the M4 write path; M1 consumes M4's `useOnlineStatus` hook (`src/hooks/useOnlineStatus.ts`).
+**Prerequisite:** Phase 2 M4 (itinerary editing, [plan_supabase-auth-editing.md § M4](plan_supabase-auth-editing.md#m4-itinerary-editing)) shipped. Phase 3 M2's write tools mirror the M4 write path; M1 consumes M4's `useOnlineStatus` hook (`src/hooks/useOnlineStatus.ts`).
 
 ## Milestones
 
@@ -219,7 +219,7 @@ Configured `GOOGLE_GEOCODING_API_KEY` on Vercel and provisioned the dedicated He
 
 #### Task 8: Field descriptions on the item tools (added 2026-07-26, from the Phase 4 M3 gate)
 
-The Phase 4 M3 gate ([plan_phase-4.md](../phase-4/plan_phase-4.md)) caught the model writing "we spent 90 minutes" into the planned `duration` and reading it back as an actual duration. The root cause is this milestone's contract: `z.toJSONSchema` carries `.describe()` into `input_schema` and `duration`/`remarks` had none, so `CREATE_FIELDS` (inherited by `UPDATE_FIELDS`) in `api/_lib/tools/items.ts` now describes both, and `CORE_RULES` gained the planned-versus-actual rule including the read-back direction. A new `items.test.ts` block asserts against `toAnthropicTools` output, closing a hole where that conversion was only ever tested on `READ_TOOLS`.
+The Phase 4 M3 gate ([plan_visit-records.md](plan_visit-records.md)) caught the model writing "we spent 90 minutes" into the planned `duration` and reading it back as an actual duration. The root cause is this milestone's contract: `z.toJSONSchema` carries `.describe()` into `input_schema` and `duration`/`remarks` had none, so `CREATE_FIELDS` (inherited by `UPDATE_FIELDS`) in `api/_lib/tools/items.ts` now describes both, and `CORE_RULES` gained the planned-versus-actual rule including the read-back direction. A new `items.test.ts` block asserts against `toAnthropicTools` output, closing a hole where that conversion was only ever tested on `READ_TOOLS`.
 
 ### Design Decisions
 
@@ -247,7 +247,7 @@ The Phase 4 M3 gate ([plan_phase-4.md](../phase-4/plan_phase-4.md)) caught the m
 
 ## M4: Design quality
 
-Implements the five recommended actions from the [Trip page critique](../../../.impeccable/critique/20260710_src-pages-trippage-tsx.md) (score 26/40, 0 P0, 3 P1, 2 P2). Each action maps to an `/impeccable` command and addresses specific heuristic gaps. Builds on shipped M3 (generative creation).
+Implements the five recommended actions from the [Trip page critique](../../.impeccable/critique/20260710_src-pages-trippage-tsx.md) (score 26/40, 0 P0, 3 P1, 2 P2). Each action maps to an `/impeccable` command and addresses specific heuristic gaps. Builds on shipped M3 (generative creation).
 
 ### Scope
 
@@ -373,7 +373,7 @@ Landed **Move 1** first and independently — it removed the column/date drift a
 - 2026-07-10 — The M1, M2, and M3 plans (then separate files) were compacted post-implementation: step-by-step tasks, file-by-file diffs, code snippets, test code, and verification command lists removed. The data-layer plan was compacted the same day (Verification section and Files-touched lists removed).
 - 2026-07-04 — M3 shipped - `geocode` + `create_trip` tools over the shared `insertTripBundle` pipeline, creation-sized token cap with truncation error, `result.tripId` + "Open trip" navigation, Hermes contract finalized. Verified on production: buffered Hermes curl session (password grant with the provisioned `hermes@wanderlog.local` account) created a complete 5-day Tokyo trip (tripId set, change event emitted, all stops geocoded); Atlantis negative test produced no trip and no errors; 400/401/405 pre-model status codes confirmed; in-app run rendered the trip with map pins, timeline, and activities. Phase 3 complete.
 - 2026-07-04 — M2 shipped - twelve agent write tools (activities, waypoints, accommodation, trip metadata, stops incl. `restructure_stops` date cascade) with zod validation, delete guard, per-write change events, and the modal change list; verified on preview and production (scripted edits, delete-guard, honest partial failure).
-- 2026-07-04 — **UI: corner-pinned agent button on TripPage.** The `AgentButton` (shipped in M1) dropped its panel-dodge shift (`sm:right-[28rem]`) and stays corner-pinned left of the `UserMenu` (`fixed top-2 right-14 sm:top-4`). The activities panel drops to `sm:top-16` to clear the control row. Files: `src/pages/TripPage.tsx`, `src/components/Activities/ActivitiesPanel.tsx`. Companion UserMenu/panel change logged in the M3 entry of the [plan_phase-2.md changelog](../phase-2/plan_phase-2.md#changelog).
+- 2026-07-04 — **UI: corner-pinned agent button on TripPage.** The `AgentButton` (shipped in M1) dropped its panel-dodge shift (`sm:right-[28rem]`) and stays corner-pinned left of the `UserMenu` (`fixed top-2 right-14 sm:top-4`). The activities panel drops to `sm:top-16` to clear the control row. Files: `src/pages/TripPage.tsx`, `src/components/Activities/ActivitiesPanel.tsx`. Companion UserMenu/panel change logged in the M3 entry of the [plan_supabase-auth-editing.md changelog](plan_supabase-auth-editing.md#changelog).
 - 2026-07-04 — M1 shipped - `/api/agent` (read-only tool loop, NDJSON stream + buffered mode) with agent modal on library and trip pages; verified on preview and production via curl and browser.
 - 2026-07-04 — Created with M1 plan; M2-M3 plans to follow just-in-time.
 - 2026-07-04 — M2 plan written (registry restructure + change-event plumbing, activity/waypoint/accommodation/metadata/stop write tools with zod validation and delete guard, `restructure_stops` date cascade, modal change list). M3 plan written ahead of execution (server-side `geocode` tool, shared `insertTripBundle` extraction, `create_trip` over the import pipeline, creation-sized token cap + `result.tripId`, "Open trip" navigation, Hermes contract finalization). Symbol names in both follow the M1 and Phase 2 M4 plans; verify against shipped code at execution time.

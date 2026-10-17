@@ -72,6 +72,6 @@ Vercel. Push to `main` → test-gated production deploy; PRs get previews (`.git
 
 ## Specs and Design Context
 
-Spec docs live in `docs/specs/` as `<artifact>_<topic>.md` (requirements / design / plan), one folder per phase. Start at [docs/specs/index.md](docs/specs/index.md); [docs/specs/meta/convention.md](docs/specs/meta/convention.md) is the naming source of truth. Phase 1 = map/timeline/activities, Phase 2 = Supabase + auth + editing, Phase 3 = the agent.
+Spec docs live in `docs/specs/` as `<artifact>_<topic>.md` (requirements / design / plan), flat in that folder with one topic name per phase. Start at [docs/specs/index.md](docs/specs/index.md); [docs/specs/meta/convention.md](docs/specs/meta/convention.md) is the naming source of truth. Phase 1 = map/timeline/activities, Phase 2 = Supabase + auth + editing, Phase 3 = the agent, Phase 4 = visit records. Topics: `travel-journal-map`, `supabase-auth-editing`, `ai-trip-agent`, `visit-records`.
 
 Before any UI work read [PRODUCT.md](PRODUCT.md) (register, users, positioning) and [DESIGN.md](DESIGN.md) (visual system). Register: product (a working tool), web, mobile-first. Positioning: a living plan you track as you go, not a static itinerary doc. Principles: the plan is alive; delight in the moments, restraint in the frame; desk and phone as equals; shared and trustworthy; show the trip, not a form.

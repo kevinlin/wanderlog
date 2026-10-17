@@ -2,7 +2,7 @@
 
 Interactive map-based travel journal. React 19 + TypeScript SPA on the front, Supabase (Postgres + Auth + RLS) on the back, one Vercel serverless function for the AI agent. This document is the as-built architecture reference.
 
-For the decision history behind each layer, see the phase specs: [Phase 1 design](../specs/phase-1/design_phase-1.md) (map, timeline, activities), [Phase 2 design](../specs/phase-2/design_phase-2.md) (Supabase, TanStack Query, auth, offline), and [Phase 3 design](../specs/phase-3/design_wanderlog-phase-3.md) (the agent endpoint). The [spec index](../specs/index.md) is the full map.
+For the decision history behind each layer, see the phase specs: [Phase 1 design](../specs/design_travel-journal-map.md) (map, timeline, activities), [Phase 2 design](../specs/design_supabase-auth-editing.md) (Supabase, TanStack Query, auth, offline), and [Phase 3 design](../specs/design_ai-trip-agent.md) (the agent endpoint). The [spec index](../specs/index.md) is the full map.
 
 All five diagrams share one light-theme palette ([light-theme-palette.md](light-theme-palette.md)) so a colour means the same thing in every view: cyan = client / user-facing, green = service or pipeline step, blue = state and cache, violet = persisted data, orange = AI and server-side function, amber = decision, rose = guard or denied role, grey = external. A dashed outline is always a boundary — trust, runtime tier, or module group. Sources are hand-written SVG in [`assets/`](assets/), with a @2x PNG export beside each one.
 
