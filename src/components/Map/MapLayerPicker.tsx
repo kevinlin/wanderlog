@@ -108,7 +108,7 @@ export const MapLayerPicker: React.FC<MapLayerPickerProps> = ({ map, currentMapT
               {MAP_TYPE_OPTIONS.map((option) => (
                 <button
                   className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-left text-sm transition-all ${
-                    currentMapType === option.id ? 'bg-sky-500 text-white shadow-xs' : 'text-gray-700 hover:bg-gray-100'
+                    currentMapType === option.id ? 'bg-sky-700 text-white shadow-xs' : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   key={option.id}
                   onClick={() => handleMapTypeSelect(option.id)}
@@ -128,7 +128,7 @@ export const MapLayerPicker: React.FC<MapLayerPickerProps> = ({ map, currentMapT
               {OVERLAY_OPTIONS.map((option) => (
                 <button
                   className={`flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-sm transition-all ${
-                    overlayLayers[option.id] ? 'bg-emerald-500 text-white shadow-xs' : 'text-gray-700 hover:bg-gray-100'
+                    overlayLayers[option.id] ? 'bg-sky-700 text-white shadow-xs' : 'text-gray-700 hover:bg-gray-100'
                   }`}
                   key={option.id}
                   onClick={() => handleOverlayToggle(option.id)}
@@ -149,7 +149,7 @@ export const MapLayerPicker: React.FC<MapLayerPickerProps> = ({ map, currentMapT
         aria-expanded={isOpen}
         aria-label="Toggle map layers picker"
         className={`flex h-10 w-10 items-center justify-center rounded-xl border shadow-lg backdrop-blur-md transition-all hover:scale-105 active:scale-95 ${
-          isOpen ? 'border-sky-300 bg-sky-500 text-white' : 'border-white/30 bg-white/90 text-gray-700 hover:bg-white'
+          isOpen ? 'border-sky-300 bg-sky-700 text-white' : 'border-white/30 bg-white/90 text-gray-700 hover:bg-white'
         }`}
         onClick={handleToggle}
         title="Map layers"

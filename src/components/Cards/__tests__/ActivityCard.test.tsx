@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 import type { ActivityTodo } from '@/components/Todos/todoSelectors';
 import type { Activity } from '@/types/trip';
@@ -61,5 +61,39 @@ describe('ActivityCard todo chip', () => {
     renderCard(linked({}), true);
 
     expect(screen.getByText('Ready now')).toBeInTheDocument();
+  });
+});
+
+describe('ActivityCard keyboard', () => {
+  const renderWithSelect = () => {
+    const onSelect = vi.fn();
+    render(<ActivityCard activity={activity} isDone={false} isSelected={false} onSelect={onSelect} onToggleDone={vi.fn()} />);
+    return onSelect;
+  };
+
+  it('leaves a Space on the checkbox to the checkbox', () => {
+    const onSelect = renderWithSelect();
+
+    // false would mean the card cancelled the key, which blocks the tick
+    expect(fireEvent.keyDown(screen.getByRole('checkbox'), { key: ' ' })).toBe(true);
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it('selects on Enter when the card itself has focus', () => {
+    const onSelect = renderWithSelect();
+
+    fireEvent.keyDown(screen.getByLabelText('Panda base'), { key: 'Enter' });
+
+    expect(onSelect).toHaveBeenCalledWith('a1');
+  });
+});
+
+describe('ActivityCard missing fields', () => {
+  it('drops the labels and links it has nothing to fill', () => {
+    renderCard();
+
+    expect(screen.getByText('Duration:')).toBeInTheDocument();
+    expect(screen.queryByText('Travel time:')).not.toBeInTheDocument();
+    expect(screen.queryByText(/Details/)).not.toBeInTheDocument();
   });
 });

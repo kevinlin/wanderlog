@@ -204,7 +204,7 @@ Floating chrome, flat content. Content surfaces (cards, panels, modals) are esse
 - **Shape:** Gently rounded (rounded-lg, 8px); the floating agent button is more pill-like (rounded-xl, 12px). Touch targets are ≥44px tall.
 - **Primary:** Deep-teal fill (`bg-alpine-teal-deep`), white text, `font-medium`, padding 8px 16px. Hover lightens to 90% opacity (still 4.7:1), active returns to the solid fill; disabled drops to 50% opacity. This is the main-action button everywhere (sign in, confirm, send).
 - **Secondary / Tinted:** Teal-tint fill (`bg-alpine-teal/10`) with a teal border (`/40`) and deep-teal text (`text-alpine-teal-deep`) — the quieter "add" and toolbar action.
-- **In-card action links:** Small (min-h 30px, rounded-sm), sky border and text, used for Details / Maps / Direction rows. The Direction button is a solid sky fill.
+- **In-card action links:** Small (min-h 30px, rounded-sm), sky-200 border and sky-700 text, used for Details / Maps / Direction rows. A link with nothing to open is left out, not shown dead. The Direction button is a solid sky-700 fill (violet-600 on waypoint cards). White on sky-500 is 2.8:1, so text never sits on the -500 shade.
 - **Icon buttons:** `p-1.5 rounded-md`, gray-400 at rest, tinting to the relevant meaning color on hover (sky for edit, red for delete).
 - **Hover / Focus:** `transition-colors`, ~200ms. Focus-visible must show a ring; keyboard users never lose the focused control.
 

@@ -265,7 +265,7 @@ export const POIModal: React.FC<POIModalProps> = ({ poi, isOpen, loading, error,
                 Close
               </button>
               <button
-                className="min-h-[44px] flex-1 touch-manipulation rounded-sm bg-violet-500 px-3 py-2 font-medium text-white transition-colors hover:bg-violet-600 active:bg-violet-700"
+                className="min-h-[44px] flex-1 touch-manipulation rounded-sm bg-violet-600 px-3 py-2 font-medium text-white transition-colors hover:bg-violet-700 active:bg-violet-800"
                 onClick={handleAddToScenicWaypoints}
                 title="Add as a scenic waypoint"
               >

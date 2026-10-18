@@ -34,6 +34,13 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
     localStorage.setItem('wanderlog_timeline_expanded', JSON.stringify(isExpanded));
   }, [isExpanded]);
 
+  // A phone shows two or three stops at a time, so a stop picked from the map,
+  // a swipe or a reload has to be scrolled into sight
+  useEffect(() => {
+    if (!(isExpanded && currentStopId)) return;
+    timelineRef.current?.querySelector('[aria-current="true"]')?.scrollIntoView?.({ block: 'nearest', inline: 'center' });
+  }, [currentStopId, isExpanded]);
+
   // Toggle handler
   const toggleExpanded = () => {
     setIsExpanded(!isExpanded);
@@ -178,9 +185,10 @@ export const TimelineStrip: React.FC<TimelineStripProps> = ({ stops, currentStop
       className={`absolute left-0 z-20 touch-pan-x select-none overflow-hidden bg-white/30 p-1.5 shadow-md backdrop-blur-sm transition-all duration-300 ease-in-out sm:top-4 sm:left-2 sm:rounded-xl sm:border sm:p-2 ${
         isExpanded
           ? // Full width on a phone, so it drops below the top-right buttons instead of running under them
-            'top-14 right-0 w-full rounded-none border-white/20 border-b sm:right-auto sm:w-auto sm:max-w-[calc(100vw-2rem)]'
-          : 'top-0 w-auto rounded-xl border border-white/20 sm:max-w-[calc(100vw-26rem)]'
-      } ${className}`}
+            'top-14 right-0 w-full rounded-none border-white/20 border-b sm:right-auto sm:w-auto'
+          : 'top-0 w-auto rounded-xl border border-white/20'
+      } sm:max-w-[calc(100vw-26rem)] ${className}`}
+      // From sm up it shares the top row with the buttons and the 24rem panel, so it stops short of both
       onTouchEnd={isExpanded ? handleTouchEnd : undefined}
       onTouchMove={isExpanded ? handleTouchMove : undefined}
       onTouchStart={isExpanded ? handleTouchStart : undefined}

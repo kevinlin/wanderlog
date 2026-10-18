@@ -28,7 +28,9 @@ import { DraggableActivitiesList } from './DraggableActivity';
 
 // Constants for mobile panel resize
 const MOBILE_MIN_PANEL_HEIGHT = 40; // Just the handle visible
-const MOBILE_TIMELINE_HEIGHT = 64; // 4rem = 64px
+// The expanded strip sits at top-14 under the buttons and ends near 125px. A
+// taller sheet would slide its drag handle under the strip, out of reach.
+const MOBILE_TIMELINE_HEIGHT = 128;
 const MOBILE_DEFAULT_PANEL_RATIO = 0.5; // Default to 50% of available height
 
 interface ActivitiesPanelProps {
@@ -69,7 +71,6 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [isScenicWaypointsExpanded, setIsScenicWaypointsExpanded] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const activityRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   // POI Search state from global context
   const { state, dispatch } = useAppStateContext();
@@ -292,29 +293,26 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
     [baseId, tripId, activities.length, createActivityMutation]
   );
 
-  // Auto-expand and scroll to activity when one is selected from map
+  // A marker picked on the map opens the section holding its card and brings the
+  // card into view. Keyed on the selection alone, so collapsing a section while
+  // something is selected stays collapsed.
+  const selectedIsPlannedWaypoint = plannedWaypoints.some((waypoint) => waypoint.activity_id === selectedActivityId);
   useEffect(() => {
-    if (selectedActivityId && !isExpanded) {
+    if (!selectedActivityId) return;
+    if (selectedIsPlannedWaypoint) {
+      setIsScenicWaypointsExpanded(true);
+    } else {
       setIsExpanded(true);
     }
-  }, [selectedActivityId, isExpanded]);
-
-  // Scroll to selected activity when panel is expanded and activity is selected
-  useEffect(() => {
-    if (selectedActivityId && isExpanded && scrollContainerRef.current) {
-      const activityElement = activityRefs.current[selectedActivityId];
-      if (activityElement) {
-        // Small delay to ensure the panel expansion animation has completed
-        setTimeout(() => {
-          activityElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-            inline: 'nearest',
-          });
-        }, 350); // Slightly longer than the 300ms transition
-      }
-    }
-  }, [selectedActivityId, isExpanded]);
+    // Slightly longer than the 300ms expand, so the card is measured where it lands
+    const timer = setTimeout(() => {
+      const card = scrollContainerRef.current?.querySelector(`[data-activity-id="${selectedActivityId}"]`);
+      const reduceMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+      // 'nearest' leaves a card that is already in view alone, so a click in the list doesn't jump
+      card?.scrollIntoView?.({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+    }, 350);
+    return () => clearTimeout(timer);
+  }, [selectedActivityId, selectedIsPlannedWaypoint]);
 
   // Mobile slide-out animation classes
   const mobileClasses = isVisible ? 'translate-y-0' : 'translate-y-full';
