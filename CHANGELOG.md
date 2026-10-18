@@ -4,7 +4,11 @@ Notable changes to Wanderlog, newest first. The format follows [Keep a Changelog
 
 ## [Unreleased]
 
+## [3.2.1] - 2026-10-18
+
 ### Changed
+
+- **Phone layout.** The Agent button is now an icon, like To do. Activities can't be dragged to reorder on a phone any more, so swiping over a card scrolls the panel. Reordering still works on a wider screen.
 
 - **New map markers.** Each kind of place on the map now has its own marker. A stop shows its initials in the same color as its timeline chip. Its look tells you whether it's behind you, today or still ahead. An activity's icon shows what it is: a fork and knife for food, a hiker for a walk. Its marker comes in one of seven colors. Once it's done, it turns muted and gets a green check. Scenic waypoints are small violet diamonds, and search results are white discs until you add them. The first activity you haven't done yet has a "Next" tab.
 - **Arriving at a stop.** When you pick a stop, the map flies there first. Then the stop drops into place, and its places appear one after another.

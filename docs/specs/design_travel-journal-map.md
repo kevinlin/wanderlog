@@ -341,6 +341,7 @@ interface ActivitiesPanelProps {
   - Default State: Shows accommodation card (if available) and draggable resize handle (iOS-style pill)
   - Resizable State: User can drag the resize handle to freely adjust panel height between min (~40px, handle only) and max (calc(100vh - 4rem))
   - Scrolling Architecture: Single unified scrollable container containing all content (accommodation, scenic waypoints, activities, weather, export) with optimized spacing
+  - No activity reorder on mobile (<640px), so a swipe over a card scrolls the list. The resize handle is the only drag target.
 - **Mobile UX**:
   - Reduced padding (px-2), compact spacing (space-y-2), smaller section headers, and consolidated action buttons to maximize content visibility
   - Overscroll containment, momentum scrolling, and touch-none on resize handle for smooth interaction
@@ -402,7 +403,7 @@ interface ActivityCardProps {
 
 **Key Features**:
 - **Full-Width Layout**: Card expands to full container width (w-full) for optimal space utilization
-- **Integrated Drag Functionality**: Optional drag-and-drop capability controlled by isDraggable prop
+- **Integrated Drag Functionality**: Optional drag-and-drop capability controlled by isDraggable prop (desktop and online only)
 - **Optimized Spacing**: Uses individual margins (mb-2) instead of space-y-3 for better visual density
 - **Conditional Layout**: Content padding adjusts based on drag handle presence (pl-8 when draggable)
 - **Header Section**: Checkbox and title positioned at top with thumbnail image on the right
@@ -482,7 +483,7 @@ interface DraggableActivityProps {
 
 **Key Features**:
 - **Merged Component Architecture**: Drag-and-drop functionality integrated directly into ActivityCard component
-- **Conditional Drag Functionality**: isDraggable prop enables/disables drag functionality as needed
+- **Conditional Drag Functionality**: isDraggable prop enables/disables drag functionality. Off when offline and on mobile: a draggable card carries `touch-none`, which blocks native scrolling of the panel under a swipe
 - **Full-Width Layout**: Activity cards expand to full container width for better space utilization
 - **Integrated Drag Handle**: Drag handle positioned inside card at left edge middle for intuitive dragging
 - **Enhanced Touch Targets**: Drag handle sized for mobile accessibility (32px minimum)
@@ -1197,7 +1198,7 @@ The mobile layout prioritizes content visibility over visual spacing through a h
 - **Touch Feedback**: Immediate visual feedback through active states and subtle scale effects
 - **Gesture Support**: 
   - Timeline swipe navigation with proper distance thresholds (50px minimum)
-  - Drag and drop with enhanced activation constraints (10px distance, 100ms delay)
+  - Drag and drop with enhanced activation constraints (10px distance, 100ms delay), desktop only
   - Overscroll containment to prevent unwanted page bouncing
 
 #### Responsive Layout Strategy
@@ -1207,6 +1208,7 @@ The mobile layout prioritizes content visibility over visual spacing through a h
   - Accommodation card always visible in collapsed state
   - Activities accessible through expandable interface
   - Essential actions (navigate, mark done) prominently displayed
+- **Top-right Buttons**: Agent and To do are matching 44px icon buttons on mobile; their text labels appear from `sm:`
 
 #### Mobile Performance Optimizations
 - **Touch Action Optimization**: `touch-action: manipulation` prevents double-tap zoom delays

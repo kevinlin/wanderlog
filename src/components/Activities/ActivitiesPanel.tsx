@@ -485,7 +485,8 @@ export const ActivitiesPanel: React.FC<ActivitiesPanelProps> = ({
                   accommodation={accommodation}
                   activities={planned}
                   emptyMessage={activities.length > 0 ? 'Everything here is ticked off.' : undefined}
-                  isDragDisabled={!isOnline}
+                  // A draggable card is touch-none, which stops a swipe from scrolling the sheet on a phone
+                  isDragDisabled={!isOnline || isMobile}
                   key={baseId}
                   onActivitySelect={onActivitySelect}
                   onDeleteActivity={isOnline ? setDeletingActivity : undefined}

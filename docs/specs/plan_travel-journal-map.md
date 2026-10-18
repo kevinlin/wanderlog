@@ -66,6 +66,8 @@ This document is the worklist for building the Wanderlog Travel Journal applicat
 
 - [x] 26. **Scenic Waypoints Route Integration** — Scenic waypoints added as pass-through points (`stopover: false`) in the Directions request with accommodation kept as stopovers, plus waypoint truncation prioritizing stops when exceeding Google's 25-waypoint limit. Convention: waypoints under a stop are on the way *to* that stop. (Requirements 1.3, 1.3a, 1.3b)
 
+- [x] 27. **Mobile Action Buttons and Panel Scrolling** — The Agent button is icon-only on mobile, matching To do. Activity drag-reorder is disabled on mobile so a swipe over a card scrolls the activities panel; desktop keeps reorder. (Requirements 7.1–7.5, 8.1–8.8)
+
 ## Implementation Notes
 
 - Each task built incrementally on previous tasks.
@@ -77,3 +79,4 @@ This document is the worklist for building the Wanderlog Travel Journal applicat
 ## Changelog
 
 - 2026-07-03 — **Compacted post-implementation.** Collapsed each task's file-by-file implementation bullets into one-line intents while preserving task titles, completion status, and requirement references. Outstanding work (Task 13 and 17.2–17.4) retained as unchecked follow-ups. Full step-by-step detail is recoverable via git history; design and acceptance criteria live in the sibling design/requirements specs.
+- 2026-10-18 — Added Task 27 (v3.2.1).
