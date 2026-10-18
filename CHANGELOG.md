@@ -17,6 +17,7 @@ Notable changes to Wanderlog, newest first. The format follows [Keep a Changelog
 
 ### Fixed
 
+- **pnpm Local commits.** The repo now pins pnpm 10.34.6 in `package.json` (`packageManager`), and CI reads the same pin. On a machine where corepack defaulted to pnpm 11, the pre-commit hook used to fail before running the tests, because pnpm 11 ignores the `pnpm.overrides` field and tried to reinstall.
 - A stop no longer looks finished on its last day. "Today" now follows the trip's own timezone instead of New Zealand time.
 - Ticking off an activity no longer zooms the map out to the whole trip.
 
